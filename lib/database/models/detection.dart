@@ -1,4 +1,4 @@
-import 'package:waste_watchers/database/connection.dart';
+import 'package:waste_watchers/database/model.dart';
 
 class Detection implements Model {
   String preDetectImgLink;

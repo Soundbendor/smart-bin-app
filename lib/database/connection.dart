@@ -2,23 +2,18 @@ import 'dart:async';
 
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:waste_watchers/database/model.dart';
 import 'package:waste_watchers/database/models/detection.dart';
 import 'package:waste_watchers/database/models/device.dart';
 
 // Modify this when making changes to models
 const int databaseVersion = 1;
 
-late Database _database;
-
-abstract class Model {
-  String get tableName;
-  String get schema;
-  Map<String, dynamic> toMap();
-}
+late Database? _database;
 
 Future<void> _createTables(List<Model> models, bool isMigration) async {
   for (Model model in models) {
-    await _database.transaction((txn) async {
+    await _database!.transaction((txn) async {
       String temporaryTableName = "_tmp_${model.tableName}";
       List<Map<String, dynamic>> oldTableAttributes = await txn.rawQuery("""
         PRAGMA table_info(${model.tableName})
@@ -41,12 +36,18 @@ Future<void> _createTables(List<Model> models, bool isMigration) async {
   }
 }
 
+/**
+ * Creates the database connection if it doesn't exist and returns it.
+ */
 Future<Database> getDatabaseConnection() async {
-
   List<Model> models = [
     Device.createDefault(),
     Detection.createDefault(),
   ];
+
+  if (_database != null) {
+    return _database!;
+  }
 
   _database = await openDatabase(
     join(
@@ -61,5 +62,5 @@ Future<Database> getDatabaseConnection() async {
       await _createTables(models, true);
     },
   );
-  return _database;
+  return _database!;
 }
