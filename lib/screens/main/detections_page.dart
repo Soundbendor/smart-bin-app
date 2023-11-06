@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:waste_watchers/widgets/detection_list.dart';
+import 'package:waste_watchers/widgets/detections.dart';
 import 'package:waste_watchers/widgets/heading.dart';
 
 class DetectionsPage extends StatelessWidget {
@@ -14,7 +14,10 @@ class DetectionsPage extends StatelessWidget {
           children: [
             Heading(text: "Detections"),
             DetectionList(
-              detections: [],
+              detections: [
+                DetectionListItem.stub(),
+                DetectionListItem.stub(),
+              ],
             ),
           ],
         ),
