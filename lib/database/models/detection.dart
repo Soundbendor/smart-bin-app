@@ -75,6 +75,7 @@ class Detection extends Model {
   @override
   Future<void> delete() async {
     Database db = await getDatabaseConnection();
-    await db.delete(tableName, where: "preDetectImgLink = ?", whereArgs: [preDetectImgLink]);
+    await db.delete(tableName,
+        where: "preDetectImgLink = ?", whereArgs: [preDetectImgLink]);
   }
 }
