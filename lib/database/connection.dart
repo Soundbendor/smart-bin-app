@@ -36,9 +36,7 @@ Future<void> _createTables(List<Model> models, bool isMigration) async {
   }
 }
 
-/**
- * Creates the database connection if it doesn't exist and returns it.
- */
+/// Creates the database connection if it doesn't exist and returns it.
 Future<Database> getDatabaseConnection() async {
   List<Model> models = [
     Device.createDefault(),
@@ -63,4 +61,11 @@ Future<Database> getDatabaseConnection() async {
     },
   );
   return _database!;
+}
+
+Future<void> closeDatabaseConnection() async {
+  if (_database != null) {
+    await _database!.close();
+    _database = null;
+  }
 }
