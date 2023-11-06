@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class DetectionList extends StatelessWidget {
-
   final List detections;
 
   const DetectionList({
@@ -11,12 +10,19 @@ class DetectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: detections.length,
-      prototypeItem: const ListTile(),
-      itemBuilder: (context, index) {
-        return null;
-      },
-    );
+    if (detections.isEmpty) {
+      return const SizedBox(
+        width: double.infinity,
+        child: Text("No detections yet", textAlign: TextAlign.left)
+      );
+    } else {
+      return ListView.builder(
+        itemCount: detections.length,
+        prototypeItem: const ListTile(),
+        itemBuilder: (context, index) {
+          return null;
+        },
+      );
+    }
   }
 }
