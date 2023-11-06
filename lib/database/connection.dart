@@ -20,7 +20,8 @@ Future<void> _createTables(List<Model> models, bool isMigration) async {
       """);
 
       if (isMigration) {
-        await txn.execute("ALTER TABLE ${model.tableName} RENAME TO $temporaryTableName");
+        await txn.execute(
+            "ALTER TABLE ${model.tableName} RENAME TO $temporaryTableName");
       }
       await txn.execute("""
         CREATE TABLE IF NOT EXISTS ${model.tableName} ${model.schema}

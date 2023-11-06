@@ -1,6 +1,8 @@
+import 'package:sqflite/sqflite.dart';
+import 'package:waste_watchers/database/connection.dart';
 import 'package:waste_watchers/database/model.dart';
 
-class Detection implements Model {
+class Detection extends Model {
   String preDetectImgLink;
   String? postDetectImgLink;
   String? depthMapImgLink;
@@ -27,10 +29,10 @@ class Detection implements Model {
     this.boxes,
   });
 
-  Detection.createDefault() :
-    preDetectImgLink = "",
-    timestamp = DateTime.now(),
-    deviceId = "";
+  Detection.createDefault()
+      : preDetectImgLink = "",
+        timestamp = DateTime.now(),
+        deviceId = "";
 
   @override
   Map<String, dynamic> toMap() {
@@ -70,4 +72,9 @@ class Detection implements Model {
     )
   """;
 
+  @override
+  Future<void> delete() async {
+    Database db = await getDatabaseConnection();
+    await db.delete(tableName, where: "preDetectImgLink = ?", whereArgs: [preDetectImgLink]);
+  }
 }

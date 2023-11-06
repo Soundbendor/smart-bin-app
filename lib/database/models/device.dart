@@ -1,12 +1,13 @@
+import 'package:sqflite/sqflite.dart';
+import 'package:waste_watchers/database/connection.dart';
 import 'package:waste_watchers/database/model.dart';
 
-class Device implements Model {
+class Device extends Model {
   String id;
 
-  Device({ required this.id });
+  Device({required this.id});
 
-  Device.createDefault() :
-    id = "";
+  Device.createDefault() : id = "";
 
   @override
   Map<String, dynamic> toMap() {
@@ -25,4 +26,9 @@ class Device implements Model {
     )
   """;
 
+  @override
+  Future<void> delete() async {
+    Database db = await getDatabaseConnection();
+    await db.delete(tableName, where: "id = ?", whereArgs: [id]);
+  }
 }
