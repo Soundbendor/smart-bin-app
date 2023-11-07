@@ -9,7 +9,7 @@ class SplashPage extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/background.JPG"),
+            image: AssetImage("assets/images/background2.JPG"),
             fit: BoxFit.cover
             ),
             ),
@@ -38,15 +38,18 @@ class SplashPage extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.all(16.0),
-                          textStyle: const TextStyle(fontSize: 20),
-                          backgroundColor: const Color(0xFF15a2cd)
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.all(16.0),
+                            textStyle: const TextStyle(fontSize: 20),
+                            backgroundColor: const Color(0xFF15a2cd)
+                          ),
+                          onPressed: () {},
+                          child: const Text('Continue'),
                         ),
-                        onPressed: () {},
-                        child: const Text('Continue'),
                       ),
                     )
                   ],
