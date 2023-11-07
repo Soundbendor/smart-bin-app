@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:waste_watchers/screens/detections_page.dart';
 import 'package:waste_watchers/screens/home_page.dart';
 import 'package:waste_watchers/screens/stats_page.dart';
+import 'package:waste_watchers/screens/splash_page.dart';
 
 void main() {
   runApp(const MainPage());
@@ -28,6 +29,7 @@ class _MainPageState extends State<MainPage> {
         body: IndexedStack(
           index: index,
           children: const [
+            SplashPage(),
             HomePage(),
             DetectionsPage(),
             StatsPage(),
