@@ -5,7 +5,18 @@ import 'package:waste_watchers/screens/stats_page.dart';
 import 'package:waste_watchers/screens/splash_page.dart';
 
 void main() {
-  runApp(const MainPage());
+  runApp(const WasteWatchersApp());
+}
+
+class WasteWatchersApp extends StatelessWidget {
+  const WasteWatchersApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: MainPage(),
+    );
+  }
 }
 
 class MainPage extends StatefulWidget {
