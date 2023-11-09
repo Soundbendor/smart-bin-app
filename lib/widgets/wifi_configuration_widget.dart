@@ -36,7 +36,6 @@ class _WifiConfigurationWidgetState extends State<WifiConfigurationWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text('Connect to Compost Bin'),
         TextField(
