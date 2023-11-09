@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:waste_watchers/screens/splash/wifi_page.dart';
 
 class SplashPage extends StatelessWidget {
   final void Function(int) changeScreen;
