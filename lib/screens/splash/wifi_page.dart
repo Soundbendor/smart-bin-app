@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:waste_watchers/widgets/wifi_configuration_widget.dart';
 
 class WifiPage extends StatelessWidget {
-  final void Function() changeWifiConnected;
+  final void Function(int) changeScreen;
 
-  const WifiPage({required this.changeWifiConnected, Key? key})
-      : super(key: key);
+  const WifiPage({required this.changeScreen, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(
       children: [
-        WifiConfigurationWidget(changeWifiConnected: changeWifiConnected),
+        WifiConfigurationWidget(changeScreen: changeScreen),
         Container(
           decoration: const BoxDecoration(
             image: DecorationImage(

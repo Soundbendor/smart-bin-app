@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:waste_watchers/screens/splash/pages/wifi_page.dart';
-import 'package:waste_watchers/widgets/wifi_configuration_widget.dart';
+import 'package:waste_watchers/screens/splash/wifi_page.dart';
 
 class SplashPage extends StatelessWidget {
-  final void Function() changeWifiConnected;
+  final void Function(int) changeScreen;
 
-  const SplashPage({required this.changeWifiConnected, Key? key})
-      : super(key: key);
+  const SplashPage({required this.changeScreen, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,13 +48,7 @@ class SplashPage extends StatelessWidget {
                               textStyle: const TextStyle(fontSize: 20),
                               backgroundColor: const Color(0xFF15a2cd)),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => WifiPage(
-                                    changeWifiConnected: changeWifiConnected),
-                              ),
-                            );
+                            changeScreen(1);
                           },
                           child: const Text('Continue'),
                         ),
