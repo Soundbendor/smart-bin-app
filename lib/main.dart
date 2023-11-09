@@ -3,6 +3,7 @@ import 'package:waste_watchers/screens/detections_page.dart';
 import 'package:waste_watchers/screens/home_page.dart';
 import 'package:waste_watchers/screens/stats_page.dart';
 import 'package:waste_watchers/screens/splash_page.dart';
+import 'package:waste_watchers/screens/wifi_page.dart';
 
 void main() {
   runApp(const WasteWatchersApp());
@@ -41,6 +42,7 @@ class _MainPageState extends State<MainPage> {
           index: index,
           children: const [
             SplashPage(),
+            WifiPage(),
             HomePage(),
             DetectionsPage(),
             StatsPage(),
