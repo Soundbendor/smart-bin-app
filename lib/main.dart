@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:waste_watchers/screens/detections_page.dart';
-import 'package:waste_watchers/screens/home_page.dart';
-import 'package:waste_watchers/screens/stats_page.dart';
-import 'package:waste_watchers/screens/splash_page.dart';
-import 'package:waste_watchers/screens/wifi_page.dart';
+// import 'package:waste_watchers/screens/main/detections_page.dart';
+// import 'package:waste_watchers/screens/main/home_page.dart';
+// import 'package:waste_watchers/screens/main/stats_page.dart';
+// import 'package:waste_watchers/screens/splash/screen.dart';
+// import 'package:waste_watchers/screens/splash/pages/wifi_page.dart';
+import 'package:waste_watchers/screens/main/screen.dart';
+import 'package:waste_watchers/screens/splash/screen.dart';
 
 void main() {
   runApp(const WasteWatchersApp());
@@ -29,54 +31,19 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int index = 0;
+  bool isWifiConnected = false;
+
+  void _changeWifiConnected() {
+    setState(() {
+      isWifiConnected = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text("Waste Watchers"),
-          centerTitle: true,
-        ),
-        body: IndexedStack(
-          index: index,
-          children: const [
-            SplashPage(),
-            WifiPage(),
-            HomePage(),
-            DetectionsPage(),
-            StatsPage(),
-          ],
-        ),
-        bottomNavigationBar: NavigationBarTheme(
-          data: const NavigationBarThemeData(
-            labelTextStyle: MaterialStatePropertyAll(
-              TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-            ),
-          ),
-          child: NavigationBar(
-            height: 60,
-            selectedIndex: index,
-            onDestinationSelected: (index) => setState(() {
-              this.index = index;
-            }),
-            destinations: const [
-              NavigationDestination(
-                icon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.batch_prediction),
-                label: 'Detections',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.analytics),
-                label: 'Stats',
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+        home: isWifiConnected
+            ? const MainScreen()
+            : SplashPage(changeWifiConnected: _changeWifiConnected));
   }
 }

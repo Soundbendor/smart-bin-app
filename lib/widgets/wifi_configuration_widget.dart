@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class WifiConfigurationWidget extends StatefulWidget {
-  const WifiConfigurationWidget({super.key});
+  final void Function() changeWifiConnected;
+
+  const WifiConfigurationWidget({required this.changeWifiConnected, Key? key})
+      : super(key: key);
 
   @override
   State<WifiConfigurationWidget> createState() =>
@@ -45,7 +48,10 @@ class _WifiConfigurationWidgetState extends State<WifiConfigurationWidget> {
           decoration: const InputDecoration(labelText: 'Password'),
         ),
         ElevatedButton(
-          onPressed: sendWifiCredentials,
+          onPressed: () {
+            widget.changeWifiConnected();
+            sendWifiCredentials();
+          },
           child: const Text('Connect'),
         ),
       ], // Column children
