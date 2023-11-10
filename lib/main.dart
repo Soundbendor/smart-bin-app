@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:waste_watchers/screens/main/screen.dart';
 import 'package:waste_watchers/screens/splash/screen.dart';
 import 'package:waste_watchers/screens/splash/wifi_page.dart';
+import 'package:waste_watchers/screens/connection/connect_page.dart';
 
 void main() {
   runApp(const WasteWatchersApp());
@@ -42,6 +43,7 @@ class _MainPageState extends State<MainPage> {
         children: [
           SplashPage(changeScreen: _changeScreen),
           WifiPage(changeScreen: _changeScreen),
+          const ConnectPage(),
           const MainScreen(),
         ],
       ),
