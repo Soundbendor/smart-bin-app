@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:waste_watchers/database/model.dart';
@@ -7,6 +8,7 @@ import 'package:waste_watchers/database/models/detection.dart';
 import 'package:waste_watchers/database/models/device.dart';
 
 // Modify this when making changes to models
+// The entire app should be restarted when changing the schema
 const int databaseVersion = 1;
 
 Database? _database;
@@ -21,13 +23,16 @@ Future<void> _createTables(
       """);
 
       if (isMigration) {
+        debugPrint("Migrating ${model.tableName}");
         await txn.execute(
             "ALTER TABLE ${model.tableName} RENAME TO $temporaryTableName");
       }
+      debugPrint("Creating ${model.tableName}");
       await txn.execute("""
         CREATE TABLE IF NOT EXISTS ${model.tableName} ${model.schema}
       """);
       if (isMigration) {
+        debugPrint("Migrating ${model.tableName} - Copying data");
         await txn.execute("""
           INSERT INTO ${model.tableName} (${oldTableAttributes.map((e) => e["name"]).join(", ")})
           SELECT ${oldTableAttributes.map((e) => e["name"]).join(", ")} FROM $temporaryTableName
