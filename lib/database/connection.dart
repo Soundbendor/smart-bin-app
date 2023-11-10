@@ -9,11 +9,12 @@ import 'package:waste_watchers/database/models/device.dart';
 // Modify this when making changes to models
 const int databaseVersion = 1;
 
-late Database? _database;
+Database? _database;
 
-Future<void> _createTables(List<Model> models, bool isMigration) async {
+Future<void> _createTables(
+    Database database, List<Model> models, bool isMigration) async {
   for (Model model in models) {
-    await _database!.transaction((txn) async {
+    await database.transaction((txn) async {
       String temporaryTableName = "_tmp_${model.tableName}";
       List<Map<String, dynamic>> oldTableAttributes = await txn.rawQuery("""
         PRAGMA table_info(${model.tableName})
@@ -55,10 +56,10 @@ Future<Database> getDatabaseConnection() async {
     ),
     version: databaseVersion,
     onCreate: (db, version) async {
-      await _createTables(models, false);
+      await _createTables(db, models, false);
     },
     onUpgrade: (db, oldVersion, newVersion) async {
-      await _createTables(models, true);
+      await _createTables(db, models, true);
     },
   );
   return _database!;
