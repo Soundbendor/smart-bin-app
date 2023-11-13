@@ -10,6 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.3
+  path: ^1.8.3
+  sqflite: ^2.3.0
 
 dev_dependencies:
   flutter_test:
@@ -19,5 +21,4 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-  - assets/images/background.JPG
-  - assets/images/background2.JPG
+    - assets/images/
