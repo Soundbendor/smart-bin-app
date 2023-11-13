@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ConnectPage extends StatelessWidget {
-  const ConnectPage({super.key});
+  final void Function(int) changeScreen;
+
+  const ConnectPage({required this.changeScreen, Key? key}) : super(key: key);
 
   @override
 Widget build(BuildContext context) {
@@ -42,7 +44,7 @@ Widget build(BuildContext context) {
                     subtitle: const Text('Strength:'),
                     trailing: const Icon(Icons.keyboard_arrow_right),
                     onTap: () {
-                      // Add functionality for when a network is tapped
+                      changeScreen(2);
                     }
                     ),
                   );
