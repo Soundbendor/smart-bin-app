@@ -48,7 +48,7 @@ class _WifiConfigurationWidgetState extends State<WifiConfigurationWidget> {
         ),
         ElevatedButton(
           onPressed: () {
-            widget.changeScreen(3);
+            widget.changeScreen(2);
             sendWifiCredentials();
           },
           child: const Text('Connect'),
