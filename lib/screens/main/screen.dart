@@ -17,7 +17,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Waste Watchers"),
+        title: const Text("BiNSIGHT"),
         centerTitle: true,
       ),
       body: IndexedStack(
