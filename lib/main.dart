@@ -4,10 +4,6 @@ import 'package:waste_watchers/screens/splash/screen.dart';
 import 'package:waste_watchers/screens/splash/wifi_page.dart';
 import 'package:waste_watchers/screens/connection/connect_page.dart';
 import 'package:waste_watchers/database/connection.dart';
-import 'package:waste_watchers/screens/main/screen.dart';
-import 'package:waste_watchers/screens/splash/screen.dart';
-import 'package:waste_watchers/screens/splash/wifi_page.dart';
-import 'package:waste_watchers/screens/connection/connect_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
