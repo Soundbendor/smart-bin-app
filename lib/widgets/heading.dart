@@ -19,12 +19,12 @@ class Heading extends StatelessWidget {
         ),
       ),
       margin: const EdgeInsets.only(bottom: 10),
-      child: const Column(
+      child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Detections",
-              style: TextStyle(
+              text,
+              style: const TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
               ),
