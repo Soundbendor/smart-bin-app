@@ -30,9 +30,9 @@ class Detection extends Model {
   });
 
   Detection.createDefault()
-      : preDetectImgLink = "",
+      : preDetectImgLink = "assets/images/placeholder.png",
         timestamp = DateTime.now(),
-        deviceId = "";
+        deviceId = "1";
 
   @override
   Map<String, dynamic> toMap() {

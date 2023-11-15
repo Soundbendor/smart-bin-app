@@ -10,9 +10,9 @@ class DetectionsPage extends StatelessWidget {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(10),
-        child: const Column(
+        child: Column(
           children: [
-            Heading(text: "Detections"),
+            const Heading(text: "Detections"),
             DetectionList(
               detections: [
                 DetectionListItem.stub(),
