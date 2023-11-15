@@ -3,7 +3,6 @@ import 'package:waste_watchers/database/models/detection.dart';
 import 'package:waste_watchers/widgets/heading.dart';
 
 class DetectionPage extends StatelessWidget {
-
   final Detection detection;
 
   const DetectionPage({super.key, required this.detection});
@@ -32,18 +31,23 @@ class DetectionPage extends StatelessWidget {
                 height: 400,
               ),
             ),
+            const SizedBox(height: 16),
             const Column(
               children: [
                 Row(
                   children: [
-                    Expanded(child: Text("Temp: 100°C")),
-                    Expanded(child: Text("Humidity: 50%")),
+                    Expanded(child: Center(child: Text("Temp: 100°C"))),
+                    Expanded(child: Center(child: Text("Humidity: 50%"))),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(child: Center(child: Text("eCO2: 500ppm"))),
+                    Expanded(child: Center(child: Text("tVOC: 500ppm"))),
                   ],
                 )
               ],
             ),
-            const SizedBox(height: 20),
-            const Text("Items detected"),
           ],
         ),
       ),
