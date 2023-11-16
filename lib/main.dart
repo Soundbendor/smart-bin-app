@@ -1,10 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:waste_watchers/screens/detections_page.dart';
-import 'package:waste_watchers/screens/home_page.dart';
-import 'package:waste_watchers/screens/stats_page.dart';
+import 'package:waste_watchers/database/connection.dart';
+import 'package:waste_watchers/screens/main/screen.dart';
+import 'package:waste_watchers/screens/splash/screen.dart';
+import 'package:waste_watchers/screens/splash/wifi_page.dart';
+import 'package:waste_watchers/screens/connection/connect_page.dart';
 
-void main() {
-  runApp(const MainPage());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await getDatabaseConnection();
+  runApp(const WasteWatchersApp());
+}
+
+class WasteWatchersApp extends StatelessWidget {
+  const WasteWatchersApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: MainPage(),
+    );
+  }
 }
 
 class MainPage extends StatefulWidget {
@@ -17,50 +32,23 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int index = 0;
 
+  void _changeScreen(int newIndex) {
+    setState(() {
+      index = newIndex;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text("Waste Watchers"),
-          centerTitle: true,
-        ),
-        body: IndexedStack(
-          index: index,
-          children: const [
-            HomePage(),
-            DetectionsPage(),
-            StatsPage(),
-          ],
-        ),
-        bottomNavigationBar: NavigationBarTheme(
-          data: const NavigationBarThemeData(
-            labelTextStyle: MaterialStatePropertyAll(
-              TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-            ),
-          ),
-          child: NavigationBar(
-            height: 60,
-            selectedIndex: index,
-            onDestinationSelected: (index) => setState(() {
-              this.index = index;
-            }),
-            destinations: const [
-              NavigationDestination(
-                icon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.batch_prediction),
-                label: 'Detections',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.analytics),
-                label: 'Stats',
-              ),
-            ],
-          ),
-        ),
+      home: IndexedStack(
+        index: index,
+        children: [
+          SplashPage(changeScreen: _changeScreen),
+          WifiPage(changeScreen: _changeScreen),
+          const ConnectPage(),
+          const MainScreen(),
+        ],
       ),
     );
   }
