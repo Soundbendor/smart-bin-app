@@ -46,8 +46,23 @@ class _ConnectPageState extends State<ConnectPage> {
     switch (canGetResults) {
       case CanGetScannedResults.yes:
         final accessPoints = await WiFiScan.instance.getScannedResults();
+        // Define regex on wifi ssid
+        RegExp wifiNameCheck = RegExp(r'OSU');
+        // List of wifi access points that will store the filtered, regex'd networks that match our bins
+        List<WiFiAccessPoint> filteredAccessPoints = [];
+        // List of strings that keep track of what access points have been added to our display list
+        List<String> filteredAccessPointsString = [];
+        // Iterate through all scanned access points and only add the ones that meet our criteria 
+        for (var point in accessPoints) {
+          if (wifiNameCheck.hasMatch(point.ssid) && !filteredAccessPointsString.contains(point.ssid)) {
+            filteredAccessPoints.add(point);
+          }
+        
+        filteredAccessPointsString.add(point.ssid);
+        }
+
         setState(() {
-          wifiResults = accessPoints;
+          wifiResults = filteredAccessPoints;
         });
         break;
       case CanGetScannedResults.noLocationServiceDisabled:
@@ -89,7 +104,7 @@ class _ConnectPageState extends State<ConnectPage> {
                   itemCount: wifiResults.length,
                   itemBuilder: (BuildContext context, int index) {
                     final wifiResult = wifiResults[index];
-                    return Card(
+                    return Card( 
                       margin: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 20),
                       shape: RoundedRectangleBorder(
