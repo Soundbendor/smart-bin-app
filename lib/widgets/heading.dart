@@ -4,9 +4,9 @@ class Heading extends StatelessWidget {
   final String text;
 
   const Heading({
-    Key? key,
+    super.key,
     required this.text,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,18 +19,16 @@ class Heading extends StatelessWidget {
         ),
       ),
       margin: const EdgeInsets.only(bottom: 10),
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              text,
-              style: const TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.left,
-            ),
-          ]),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(
+          text,
+          style: const TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.left,
+        ),
+      ]),
     );
   }
 }

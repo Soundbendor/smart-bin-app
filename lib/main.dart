@@ -20,7 +20,7 @@ void main() async {
 }
 
 class BinsightAiApp extends StatelessWidget {
-  const BinsightAiApp({Key? key}) : super(key: key);
+  const BinsightAiApp({super.key});
 
   @override
   Widget build(BuildContext context) {
