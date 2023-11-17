@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 
 class ConnectPage extends StatefulWidget {
-  const ConnectPage({Key? key}) : super(key: key);
+  final void Function(int) changeScreen;
+
+  const ConnectPage({required this.changeScreen, Key? key}) : super(key: key);
 
   @override
   State<ConnectPage> createState() => _ConnectPageState();
@@ -95,10 +97,9 @@ class _ConnectPageState extends State<ConnectPage> {
                       child: ListTile(
                           leading: const Icon(Icons.wifi),
                           title: Text(wifiResult.ssid),
-                          subtitle: const Text('Strength:'),
                           trailing: const Icon(Icons.keyboard_arrow_right),
                           onTap: () {
-                            // Add functionality for when a network is tapped
+                            widget.changeScreen(3);
                           }),
                     );
                   }),
