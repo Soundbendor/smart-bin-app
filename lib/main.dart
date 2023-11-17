@@ -46,7 +46,7 @@ class _MainPageState extends State<MainPage> {
         children: [
           SplashPage(changeScreen: _changeScreen),
           WifiPage(changeScreen: _changeScreen),
-          const ConnectPage(),
+          ConnectPage(changeScreen: _changeScreen),
           const MainScreen(),
         ],
       ),
