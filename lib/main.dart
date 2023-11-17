@@ -20,7 +20,7 @@ void main() async {
 }
 
 class WasteWatchersApp extends StatelessWidget {
-  const WasteWatchersApp({Key? key}) : super(key: key);
+  const WasteWatchersApp({super.key});
 
   @override
   Widget build(BuildContext context) {
