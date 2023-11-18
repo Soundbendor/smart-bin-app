@@ -18,11 +18,11 @@ A cross-platform mobile app built with Flutter/Dart for users of [Soundbendor La
 
 ## Getting Started
 
-To use the Waste Watchers app....
+To use the binsight.ai app....
 
 ## Features
 
-The Waste Watcher app offers the following features and functionalities:
+The binsight.ai app offers the following features and functionalities:
 
 - Stuff here
 
@@ -45,4 +45,4 @@ Development Team:
 
 ## License
 
-What license will Waste Watcher be released under?
+What license will binsight.ai be released under?
