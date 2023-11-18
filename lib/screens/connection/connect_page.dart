@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wifi_scan/wifi_scan.dart';
+import 'package:wifi_iot/wifi_iot.dart';
 
 class ConnectPage extends StatefulWidget {
   final void Function(int) changeScreen;
@@ -17,48 +18,72 @@ class _ConnectPageState extends State<ConnectPage> {
   void initState() {
     super.initState();
     _startScan();
+    _initializeWifiPlugin();
+  }
+
+  Future<void> _initializeWifiPlugin() async {
+    await WiFiForIoTPlugin.forceWifiUsage(true);
+  }
+
+  Future<void> connectToWifi(
+      String ssid, String password, Function(bool) onConnectionResult) async {
+    bool isConnected = await WiFiForIoTPlugin.connect(
+      ssid,
+      password: password,
+      security: NetworkSecurity.WPA, // Replace with the correct security type
+      joinOnce: true,
+      withInternet: false,
+      isHidden: false,
+      timeoutInSeconds: 30,
+    );
+
+    // Invoke the callback with the connection result
+    onConnectionResult(isConnected);
   }
 
   Future<void> _startScan() async {
-    final canStartScan = await WiFiScan.instance.canStartScan(askPermissions: true);
+    final canStartScan =
+        await WiFiScan.instance.canStartScan(askPermissions: true);
 
     switch (canStartScan) {
-    case CanStartScan.yes:
-      final isScanning = await WiFiScan.instance.startScan();
-      if (isScanning) {
-        _getScannedResults();
-      }
-      break;
-    case CanStartScan.failed:
-      // Handle the case where scanning is not possible
-      break;
-    case CanStartScan.notSupported:
-      // Handle the case where the user denied the necessary permissions
-      break;
-    default:
+      case CanStartScan.yes:
+        final isScanning = await WiFiScan.instance.startScan();
+        if (isScanning) {
+          _getScannedResults();
+        }
+        break;
+      case CanStartScan.failed:
+        // Handle the case where scanning is not possible
+        break;
+      case CanStartScan.notSupported:
+        // Handle the case where the user denied the necessary permissions
+        break;
+      default:
       // handle default case
+    }
   }
-}
 
   Future<void> _getScannedResults() async {
-    final canGetResults = await WiFiScan.instance.canGetScannedResults(askPermissions: true);
+    final canGetResults =
+        await WiFiScan.instance.canGetScannedResults(askPermissions: true);
 
     switch (canGetResults) {
       case CanGetScannedResults.yes:
         final accessPoints = await WiFiScan.instance.getScannedResults();
         // Define regex on wifi ssid
-        RegExp wifiNameCheck = RegExp(r'OSU');
+        RegExp wifiNameCheck = RegExp(r'');
         // List of wifi access points that will store the filtered, regex'd networks that match our bins
         List<WiFiAccessPoint> filteredAccessPoints = [];
         // List of strings that keep track of what access points have been added to our display list
         List<String> filteredAccessPointsString = [];
-        // Iterate through all scanned access points and only add the ones that meet our criteria 
+        // Iterate through all scanned access points and only add the ones that meet our criteria
         for (var point in accessPoints) {
-          if (wifiNameCheck.hasMatch(point.ssid) && !filteredAccessPointsString.contains(point.ssid)) {
+          if (wifiNameCheck.hasMatch(point.ssid) &&
+              !filteredAccessPointsString.contains(point.ssid)) {
             filteredAccessPoints.add(point);
           }
-        
-        filteredAccessPointsString.add(point.ssid);
+
+          filteredAccessPointsString.add(point.ssid);
         }
 
         setState(() {
@@ -101,23 +126,31 @@ class _ConnectPageState extends State<ConnectPage> {
             Flexible(
               flex: 5,
               child: ListView.builder(
-                  itemCount: wifiResults.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final wifiResult = wifiResults[index];
-                    return Card( 
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0)),
-                      child: ListTile(
-                          leading: const Icon(Icons.wifi),
-                          title: Text(wifiResult.ssid),
-                          trailing: const Icon(Icons.keyboard_arrow_right),
-                          onTap: () {
+                itemCount: wifiResults.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final wifiResult = wifiResults[index];
+                  return Card(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0)),
+                    child: ListTile(
+                      leading: const Icon(Icons.wifi),
+                      title: Text(wifiResult.ssid),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        connectToWifi(wifiResult.ssid, '', (isConnected) {
+                          if (isConnected) {
                             widget.changeScreen(3);
-                          }),
-                    );
-                  }),
+                          } else {
+                            print('Failed to connect to ${wifiResult.ssid}');
+                          }
+                        });
+                      },
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
