@@ -30,14 +30,13 @@ class _ConnectPageState extends State<ConnectPage> {
     bool isConnected = await WiFiForIoTPlugin.connect(
       ssid,
       password: password,
-      security: NetworkSecurity.WPA, // Replace with the correct security type
+      security: NetworkSecurity.WPA,
       joinOnce: true,
       withInternet: false,
       isHidden: false,
       timeoutInSeconds: 30,
     );
 
-    // Invoke the callback with the connection result
     onConnectionResult(isConnected);
   }
 
@@ -139,11 +138,10 @@ class _ConnectPageState extends State<ConnectPage> {
                       title: Text(wifiResult.ssid),
                       trailing: const Icon(Icons.keyboard_arrow_right),
                       onTap: () {
+                        //TODO: Add popup to prompt password entry
                         connectToWifi(wifiResult.ssid, '', (isConnected) {
                           if (isConnected) {
                             widget.changeScreen(3);
-                          } else {
-                            print('Failed to connect to ${wifiResult.ssid}');
                           }
                         });
                       },
