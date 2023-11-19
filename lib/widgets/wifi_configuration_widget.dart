@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:go_router/go_router.dart';
 
 class WifiConfigurationWidget extends StatefulWidget {
-  final void Function(int) changeScreen;
-
-  const WifiConfigurationWidget({required this.changeScreen, Key? key})
-      : super(key: key);
+  const WifiConfigurationWidget({Key? key}) : super(key: key);
 
   @override
   State<WifiConfigurationWidget> createState() =>
@@ -48,8 +46,8 @@ class _WifiConfigurationWidgetState extends State<WifiConfigurationWidget> {
         ),
         ElevatedButton(
           onPressed: () {
-            widget.changeScreen(2);
             sendWifiCredentials();
+            context.go('/home');
           },
           child: const Text('Connect'),
         ),

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 import 'package:wifi_iot/wifi_iot.dart';
+import 'package:go_router/go_router.dart';
 
 class ConnectPage extends StatefulWidget {
-  final void Function(int) changeScreen;
-
-  const ConnectPage({required this.changeScreen, Key? key}) : super(key: key);
+  const ConnectPage({Key? key}) : super(key: key);
 
   @override
   State<ConnectPage> createState() => _ConnectPageState();
@@ -141,7 +140,7 @@ class _ConnectPageState extends State<ConnectPage> {
                         //TODO: Add popup to prompt password entry
                         connectToWifi(wifiResult.ssid, '', (isConnected) {
                           if (isConnected) {
-                            widget.changeScreen(3);
+                            GoRouter.of(context).go('/wifi');
                           }
                         });
                       },
