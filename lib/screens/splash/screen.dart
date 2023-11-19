@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SplashPage extends StatelessWidget {
-  final void Function(int) changeScreen;
-
-  const SplashPage({required this.changeScreen, Key? key}) : super(key: key);
+  const SplashPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +45,7 @@ class SplashPage extends StatelessWidget {
                               padding: const EdgeInsets.all(16.0),
                               textStyle: const TextStyle(fontSize: 20),
                               backgroundColor: const Color(0xFF15a2cd)),
-                          onPressed: () {
-                            changeScreen(1);
-                          },
+                          onPressed: () => context.go('/bin_connect'),
                           child: const Text('Continue'),
                         ),
                       ),
