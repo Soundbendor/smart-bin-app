@@ -45,4 +45,4 @@ Development Team:
 
 ## License
 
-What license will Waste Watcher be released under?
+What license will binsight.ai be released under?
