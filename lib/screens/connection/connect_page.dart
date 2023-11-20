@@ -140,7 +140,7 @@ class _ConnectPageState extends State<ConnectPage> {
                         //TODO: Add popup to prompt password entry
                         connectToWifi(wifiResult.ssid, '', (isConnected) {
                           if (isConnected) {
-                            GoRouter.of(context).go('/wifi');
+                            GoRouter.of(context).goNamed('wifi');
                           }
                         });
                       },

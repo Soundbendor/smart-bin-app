@@ -45,7 +45,9 @@ class SplashPage extends StatelessWidget {
                               padding: const EdgeInsets.all(16.0),
                               textStyle: const TextStyle(fontSize: 20),
                               backgroundColor: const Color(0xFF15a2cd)),
-                          onPressed: () => context.go('/bin_connect'),
+                          onPressed: () {
+                            context.goNamed('bin_connect');
+                          },
                           child: const Text('Continue'),
                         ),
                       ),

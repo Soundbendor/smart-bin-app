@@ -47,7 +47,7 @@ class _WifiConfigurationWidgetState extends State<WifiConfigurationWidget> {
         ElevatedButton(
           onPressed: () {
             sendWifiCredentials();
-            context.go('/home');
+            context.goNamed('main');
           },
           child: const Text('Connect'),
         ),
