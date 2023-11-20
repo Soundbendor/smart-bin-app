@@ -31,53 +31,65 @@ class WasteWatchersApp extends StatelessWidget {
 }
 
 final GoRouter _router = GoRouter(
-  navigatorKey: _rootNavigatorKey,
+  initialLocation: '/set-up',
   routes: <RouteBase>[
     GoRoute(
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
-        return const SplashPage();
+        return Container();
       },
       routes: <RouteBase>[
-        GoRoute(
-            path: 'wifi',
-            builder: (BuildContext context, GoRouterState state) {
-              return const WifiPage();
-            }),
-        GoRoute(
-            path: 'bin_connect',
-            builder: (BuildContext context, GoRouterState state) {
-              return const ConnectPage();
-            }),
         ShellRoute(
           builder: (BuildContext context, GoRouterState state, Widget child) {
             return BottomNavBar(child: child);
           },
-          navigatorKey: _shellNavigatorKey,
-          routes: <RouteBase>[
+          routes: <GoRoute>[
             GoRoute(
-              path: 'home',
-              builder: (BuildContext context, GoRouterState state) {
-                return const HomePage();
-              },
-            ),
-            GoRoute(
-              path: 'detections',
-              parentNavigatorKey: _shellNavigatorKey,
-              builder: (BuildContext context, GoRouterState state) {
-                return const DetectionsPage();
-              },
-            ),
-            GoRoute(
-              path: 'stats',
-              builder: (BuildContext context, GoRouterState state) {
-                return const StatsPage();
-              },
-            ),
+                name: 'main',
+                path: 'main',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const HomePage();
+                },
+                routes: [
+                  GoRoute(
+                    name: 'detections',
+                    path: 'detections',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const DetectionsPage();
+                    },
+                  ),
+                  GoRoute(
+                    name: 'stats',
+                    path: 'stats',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const StatsPage();
+                    },
+                  ),
+                ]),
           ],
         )
       ],
     ),
+    GoRoute(
+        name: 'set-up',
+        path: '/set-up',
+        builder: (BuildContext conext, GoRouterState state) {
+          return const SplashPage();
+        },
+        routes: [
+          GoRoute(
+              name: 'wifi',
+              path: 'wifi',
+              builder: (BuildContext context, GoRouterState state) {
+                return const WifiPage();
+              }),
+          GoRoute(
+              name: 'bin_connect',
+              path: 'bin_connect',
+              builder: (BuildContext context, GoRouterState state) {
+                return const ConnectPage();
+              })
+        ]),
   ],
 );
 
@@ -120,13 +132,13 @@ class BottomNavBar extends StatelessWidget {
 
   static int _calculateSelectedIndex(BuildContext context) {
     final String location = GoRouterState.of(context).uri.toString();
-    if (location.startsWith('/home')) {
+    if (location == '/main') {
       return 0;
     }
-    if (location.startsWith('/detections')) {
+    if (location == '/main/detections') {
       return 1;
     }
-    if (location.startsWith('/stats')) {
+    if (location == '/main/stats') {
       return 2;
     }
     return 0;
@@ -135,13 +147,13 @@ class BottomNavBar extends StatelessWidget {
   void _onItemTapped(int index, BuildContext context) {
     switch (index) {
       case 0:
-        GoRouter.of(context).go('/home');
+        GoRouter.of(context).go('/main');
         break;
       case 1:
-        GoRouter.of(context).go('/detections');
+        GoRouter.of(context).go('/main/detections');
         break;
       case 2:
-        GoRouter.of(context).go('/stats');
+        GoRouter.of(context).go('/main/stats');
     }
   }
 }
