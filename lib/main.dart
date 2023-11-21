@@ -30,44 +30,88 @@ class WasteWatchersApp extends StatelessWidget {
   }
 }
 
+final routes = [
+  ShellRoute(
+    builder: (BuildContext context, GoRouterState state, Widget child) {
+      return BottomNavBar(child: child);
+    },
+    routes: <GoRoute>[
+      GoRoute(
+          name: 'main',
+          path: 'main',
+          builder: (BuildContext context, GoRouterState state) {
+            return const HomePage();
+          },
+          routes: [
+            GoRoute(
+              name: 'detections',
+              path: 'detections',
+              builder: (BuildContext context, GoRouterState state) {
+                return const DetectionsPage();
+              },
+            ),
+            GoRoute(
+              name: 'stats',
+              path: 'stats',
+              builder: (BuildContext context, GoRouterState state) {
+                return const StatsPage();
+              },
+            ),
+          ]),
+    ],
+  ),
+  GoRoute(
+      name: 'set-up',
+      path: '/set-up',
+      builder: (BuildContext conext, GoRouterState state) {
+        return const SplashPage();
+      },
+      routes: [
+        GoRoute(
+            name: 'wifi',
+            path: 'wifi',
+            builder: (BuildContext context, GoRouterState state) {
+              return const WifiPage();
+            }),
+        GoRoute(
+            name: 'bin_connect',
+            path: 'bin_connect',
+            builder: (BuildContext context, GoRouterState state) {
+              return const ConnectPage();
+            })
+      ]),
+];
+
 final GoRouter _router = GoRouter(
   initialLocation: '/set-up',
-  routes: <RouteBase>[
-    GoRoute(
-      path: '/',
-      builder: (BuildContext context, GoRouterState state) {
-        return Container();
+  routes: [
+    ShellRoute(
+      builder: (BuildContext context, GoRouterState state, Widget child) {
+        return BottomNavBar(child: child);
       },
-      routes: <RouteBase>[
-        ShellRoute(
-          builder: (BuildContext context, GoRouterState state, Widget child) {
-            return BottomNavBar(child: child);
-          },
-          routes: <GoRoute>[
-            GoRoute(
-                name: 'main',
-                path: 'main',
+      routes: <GoRoute>[
+        GoRoute(
+            name: 'main',
+            path: '/main',
+            builder: (BuildContext context, GoRouterState state) {
+              return const HomePage();
+            },
+            routes: [
+              GoRoute(
+                name: 'detections',
+                path: 'detections',
                 builder: (BuildContext context, GoRouterState state) {
-                  return const HomePage();
+                  return const DetectionsPage();
                 },
-                routes: [
-                  GoRoute(
-                    name: 'detections',
-                    path: 'detections',
-                    builder: (BuildContext context, GoRouterState state) {
-                      return const DetectionsPage();
-                    },
-                  ),
-                  GoRoute(
-                    name: 'stats',
-                    path: 'stats',
-                    builder: (BuildContext context, GoRouterState state) {
-                      return const StatsPage();
-                    },
-                  ),
-                ]),
-          ],
-        )
+              ),
+              GoRoute(
+                name: 'stats',
+                path: 'stats',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const StatsPage();
+                },
+              ),
+            ]),
       ],
     ),
     GoRoute(
