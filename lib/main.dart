@@ -31,7 +31,7 @@ class WasteWatchersApp extends StatelessWidget {
 }
 
 final GoRouter _router = GoRouter(
-  initialLocation: '/set-up',
+  initialLocation: '/main',
   routes: <RouteBase>[
     GoRoute(
       path: '/',
