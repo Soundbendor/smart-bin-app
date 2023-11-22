@@ -4,7 +4,7 @@ import 'package:wifi_iot/wifi_iot.dart';
 import 'package:go_router/go_router.dart';
 
 class ConnectPage extends StatefulWidget {
-  const ConnectPage({Key? key}) : super(key: key);
+  const ConnectPage({super.key});
 
   @override
   State<ConnectPage> createState() => _ConnectPageState();
