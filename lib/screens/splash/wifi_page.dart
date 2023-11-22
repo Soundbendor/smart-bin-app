@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:waste_watchers/widgets/wifi_configuration_widget.dart';
+import 'package:binsight_ai/widgets/wifi_configuration_widget.dart';
 
 class WifiPage extends StatelessWidget {
   const WifiPage({Key? key}) : super(key: key);

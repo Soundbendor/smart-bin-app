@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:waste_watchers/database/model.dart';
-import 'package:waste_watchers/database/models/detection.dart';
-import 'package:waste_watchers/database/models/device.dart';
+import 'package:binsight_ai/database/model.dart';
+import 'package:binsight_ai/database/models/detection.dart';
+import 'package:binsight_ai/database/models/device.dart';
 
 // Modify this when making changes to models
 // The entire app should be restarted when changing the schema

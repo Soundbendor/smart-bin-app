@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:waste_watchers/screens/main/detections_page.dart';
-import 'package:waste_watchers/screens/main/home_page.dart';
-import 'package:waste_watchers/screens/main/stats_page.dart';
-import 'package:waste_watchers/screens/splash/screen.dart';
-import 'package:waste_watchers/screens/splash/wifi_page.dart';
-import 'package:waste_watchers/screens/connection/connect_page.dart';
-import 'package:waste_watchers/database/connection.dart';
+import 'package:binsight_ai/screens/main/detections_page.dart';
+import 'package:binsight_ai/screens/main/home_page.dart';
+import 'package:binsight_ai/screens/main/stats_page.dart';
+import 'package:binsight_ai/screens/splash/screen.dart';
+import 'package:binsight_ai/screens/splash/wifi_page.dart';
+import 'package:binsight_ai/screens/connection/connect_page.dart';
+import 'package:binsight_ai/database/connection.dart';
 import 'package:go_router/go_router.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
@@ -16,11 +16,11 @@ final GlobalKey<NavigatorState> _shellNavigatorKey =
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await getDatabaseConnection();
-  runApp(const WasteWatchersApp());
+  runApp(const BinsightAiApp());
 }
 
-class WasteWatchersApp extends StatelessWidget {
-  const WasteWatchersApp({Key? key}) : super(key: key);
+class BinsightAiApp extends StatelessWidget {
+  const BinsightAiApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +149,7 @@ class BottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Waste Watchers"),
+        title: const Text("binsight.ai"),
         centerTitle: true,
       ),
       body: child,
