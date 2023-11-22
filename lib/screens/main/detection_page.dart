@@ -24,30 +24,48 @@ class DetectionPage extends StatelessWidget {
               onTap: () => Navigator.pop(context),
             ),
             const Heading(text: "Detection"),
+            const SizedBox(height: 16),
             Center(
               child: Image.asset(
                 detection.preDetectImgLink,
-                width: 400,
-                height: 400,
+                width: 350,
+                height: 350,
               ),
             ),
             const SizedBox(height: 16),
-            const Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(child: Center(child: Text("Temp: 100°C"))),
-                    Expanded(child: Center(child: Text("Humidity: 50%"))),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(child: Center(child: Text("eCO2: 500ppm"))),
-                    Expanded(child: Center(child: Text("tVOC: 500ppm"))),
-                  ],
-                )
-              ],
-            ),
+            SizedBox(
+              width: 400,
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Temperature:"),
+                          Text("Humidity:"),
+                          Text("eCO2:"),
+                          Text("tVOC:"),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(detection.temperature.toString()),
+                          Text(detection.humidity.toString()),
+                          Text(detection.co2.toString()),
+                          Text(detection.vo2.toString()),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
