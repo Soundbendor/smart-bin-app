@@ -15,8 +15,8 @@ class DetectionsPage extends StatelessWidget {
             const Heading(text: "Detections"),
             DetectionList(
               detections: [
-                DetectionListItem.stub(),
-                DetectionListItem.stub(),
+                DetectionLargeListItem.stub(),
+                DetectionLargeListItem.stub(),
               ],
             ),
           ],

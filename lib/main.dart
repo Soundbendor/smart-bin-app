@@ -83,11 +83,12 @@ final routes = [
 ];
 
 final GoRouter _router = GoRouter(
-  initialLocation: '/set-up',
-  routes: [
-    ShellRoute(
-      builder: (BuildContext context, GoRouterState state, Widget child) {
-        return BottomNavBar(child: child);
+  initialLocation: '/main',
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/',
+      builder: (BuildContext context, GoRouterState state) {
+        return Container();
       },
       routes: <GoRoute>[
         GoRoute(
