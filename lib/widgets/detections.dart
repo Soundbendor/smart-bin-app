@@ -10,7 +10,8 @@ class DetectionLargeListItem extends StatelessWidget {
     required this.detection,
   });
 
-  DetectionLargeListItem.stub({super.key}) : detection = Detection.createDefault();
+  DetectionLargeListItem.stub({super.key})
+      : detection = Detection.createDefault();
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +20,9 @@ class DetectionLargeListItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => DetectionPage(detection: detection))
-          );
+              context,
+              MaterialPageRoute(
+                  builder: (context) => DetectionPage(detection: detection)));
         },
         child: Container(
           decoration: BoxDecoration(
