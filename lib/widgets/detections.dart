@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class DetectionListItem extends StatelessWidget {
   final String title;
@@ -23,6 +24,9 @@ class DetectionListItem extends StatelessWidget {
       leading: Image.asset(image),
       title: Text(title),
       subtitle: Text(subtitle),
+      onTap: () => {
+        context.goNamed('annotation', pathParameters: {'imagePath': image})
+      },
     );
   }
 }
@@ -39,9 +43,8 @@ class DetectionList extends StatelessWidget {
   Widget build(BuildContext context) {
     if (detections.isEmpty) {
       return const SizedBox(
-        width: double.infinity,
-        child: Text("No detections yet", textAlign: TextAlign.left)
-      );
+          width: double.infinity,
+          child: Text("No detections yet", textAlign: TextAlign.left));
     } else {
       return Expanded(
         child: ListView.builder(
