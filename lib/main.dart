@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waste_watchers/screens/main/annotation.dart';
 import 'package:waste_watchers/screens/main/detections_page.dart';
 import 'package:waste_watchers/screens/main/home_page.dart';
 import 'package:waste_watchers/screens/main/stats_page.dart';
@@ -38,18 +39,26 @@ final routes = [
     routes: <GoRoute>[
       GoRoute(
           name: 'main',
-          path: 'main',
+          path: '/main',
           builder: (BuildContext context, GoRouterState state) {
             return const HomePage();
           },
           routes: [
             GoRoute(
-              name: 'detections',
-              path: 'detections',
-              builder: (BuildContext context, GoRouterState state) {
-                return const DetectionsPage();
-              },
-            ),
+                name: 'detections',
+                path: 'detections',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const DetectionsPage();
+                },
+                routes: [
+                  GoRoute(
+                      name: 'annotation',
+                      path: 'annotation:imagePath',
+                      builder: (BuildContext context, GoRouterState state) {
+                        return Annotation(
+                            imagePath: state.pathParameters['imagePath']!);
+                      }),
+                ]),
             GoRoute(
               name: 'stats',
               path: 'stats',
@@ -84,57 +93,7 @@ final routes = [
 
 final GoRouter _router = GoRouter(
   initialLocation: '/set-up',
-  routes: [
-    ShellRoute(
-      builder: (BuildContext context, GoRouterState state, Widget child) {
-        return BottomNavBar(child: child);
-      },
-      routes: <GoRoute>[
-        GoRoute(
-            name: 'main',
-            path: '/main',
-            builder: (BuildContext context, GoRouterState state) {
-              return const HomePage();
-            },
-            routes: [
-              GoRoute(
-                name: 'detections',
-                path: 'detections',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const DetectionsPage();
-                },
-              ),
-              GoRoute(
-                name: 'stats',
-                path: 'stats',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const StatsPage();
-                },
-              ),
-            ]),
-      ],
-    ),
-    GoRoute(
-        name: 'set-up',
-        path: '/set-up',
-        builder: (BuildContext conext, GoRouterState state) {
-          return const SplashPage();
-        },
-        routes: [
-          GoRoute(
-              name: 'wifi',
-              path: 'wifi',
-              builder: (BuildContext context, GoRouterState state) {
-                return const WifiPage();
-              }),
-          GoRoute(
-              name: 'bin_connect',
-              path: 'bin_connect',
-              builder: (BuildContext context, GoRouterState state) {
-                return const ConnectPage();
-              })
-        ]),
-  ],
+  routes: routes,
 );
 
 class BottomNavBar extends StatelessWidget {
