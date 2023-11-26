@@ -55,7 +55,7 @@ final routes = [
                       name: 'annotation',
                       path: 'annotation:imagePath',
                       builder: (BuildContext context, GoRouterState state) {
-                        return Annotation(
+                        return AnnotationPage(
                             imagePath: state.pathParameters['imagePath']!);
                       }),
                 ]),
