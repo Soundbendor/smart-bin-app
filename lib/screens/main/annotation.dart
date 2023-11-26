@@ -1,141 +1,64 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:waste_watchers/widgets/free_draw.dart';
 
-class Annotation extends StatefulWidget {
+class AnnotationPage extends StatefulWidget {
   final String imagePath;
 
-  const Annotation({required this.imagePath, Key? key}) : super(key: key);
+  const AnnotationPage({required this.imagePath, Key? key}) : super(key: key);
 
   @override
-  State<Annotation> createState() => _AnnotationState();
+  State<AnnotationPage> createState() => _AnnotationPageState();
 }
 
-class _AnnotationState extends State<Annotation> {
-  var historyDrawingPoints = <DrawingPoint>[];
-  var drawingPoints = <DrawingPoint>[];
+class _AnnotationPageState extends State<AnnotationPage> {
+  final GlobalKey _captureKey = GlobalKey();
+  Uint8List? capturedImage;
 
-  DrawingPoint? currentDrawingPoint;
-  late GlobalKey imageKey;
-  @override
-  void initState() {
-    super.initState();
-    imageKey = GlobalKey();
+  void captureImage() async {
+    RenderRepaintBoundary boundary =
+        _captureKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    capturedImage = byteData?.buffer.asUint8List();
+
+    print("Captured image size: ${capturedImage?.length} bytes");
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Image.asset(
-          widget.imagePath,
-          key: imageKey,
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height / 2,
-          fit: BoxFit.cover,
-        ),
-        GestureDetector(
-          onPanStart: (details) {
-            setState(() {
-              currentDrawingPoint = DrawingPoint(
-                id: DateTime.now().microsecondsSinceEpoch,
-                offsets: [
-                  details.localPosition,
-                ],
-              );
-
-              if (currentDrawingPoint == null) return;
-              drawingPoints.add(currentDrawingPoint!);
-              historyDrawingPoints = List.of(drawingPoints);
-            });
-          },
-          onPanUpdate: (details) {
-            setState(() {
-              if (currentDrawingPoint == null) return;
-
-              RenderBox renderBox =
-                  imageKey.currentContext!.findRenderObject() as RenderBox;
-              Offset localPosition =
-                  renderBox.globalToLocal(details.globalPosition);
-
-              double customWidth = renderBox.size.width;
-              double customHeight = renderBox.size.height;
-
-              if (localPosition.dx < customWidth &&
-                  localPosition.dy < customHeight) {
-                currentDrawingPoint = currentDrawingPoint?.copyWith(
-                  offsets: currentDrawingPoint!.offsets..add(localPosition),
-                );
-              }
-
-              drawingPoints.last = currentDrawingPoint!;
-              historyDrawingPoints = List.of(drawingPoints);
-            });
-          },
-          onPanEnd: (_) {
-            print(currentDrawingPoint?.offsets);
-            currentDrawingPoint = null;
-          },
-          child: CustomPaint(
-            painter: DrawingPainter(
-              drawingPoints: drawingPoints,
-            ),
-            size: Size(
-              MediaQuery.of(context).size.width,
-              MediaQuery.of(context).size.height / 2,
-            ),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RepaintBoundary(
+                key: _captureKey,
+                child: SizedBox(
+                  width: 300,
+                  height: 300,
+                  child: FreeDraw(imagePath: widget.imagePath),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: captureImage,
+                child: const Text("Save Annotation"),
+              ),
+              if (capturedImage != null)
+                Image.memory(
+                  capturedImage!,
+                  width: 300,
+                  height: 300,
+                  fit: BoxFit.cover,
+                ),
+            ],
           ),
         ),
-      ],
-    );
-  }
-}
-
-class DrawingPainter extends CustomPainter {
-  final List<DrawingPoint> drawingPoints;
-
-  DrawingPainter({
-    required this.drawingPoints,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    for (var drawingPoint in drawingPoints) {
-      final paint = Paint()
-        ..color = Colors.black
-        ..isAntiAlias = true
-        ..strokeWidth = 2.0
-        ..strokeCap = StrokeCap.round;
-
-      for (var i = 0; i < drawingPoint.offsets.length; i++) {
-        var notLastOffset = i != drawingPoint.offsets.length - 1;
-
-        if (notLastOffset) {
-          final current = drawingPoint.offsets[i];
-          final next = drawingPoint.offsets[i + 1];
-          canvas.drawLine(current, next, paint);
-        }
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
-  }
-}
-
-class DrawingPoint {
-  int id;
-  List<Offset> offsets;
-
-  DrawingPoint({
-    this.id = -1,
-    this.offsets = const [],
-  });
-
-  DrawingPoint copyWith({List<Offset>? offsets}) {
-    return DrawingPoint(
-      id: id,
-      offsets: offsets ?? this.offsets,
+      ),
     );
   }
 }
