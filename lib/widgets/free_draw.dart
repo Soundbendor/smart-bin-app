@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 class FreeDraw extends StatefulWidget {
   final String imagePath;
 
-  const FreeDraw({required this.imagePath, Key? key}) : super(key: key);
+  const FreeDraw({
+    required this.imagePath,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<FreeDraw> createState() => _FreeDrawState();
@@ -12,8 +15,10 @@ class FreeDraw extends StatefulWidget {
 class _FreeDrawState extends State<FreeDraw> {
   var historyDrawingPoints = <DrawingPoint>[];
   var drawingPoints = <DrawingPoint>[];
+  String? userInput;
 
   DrawingPoint? currentDrawingPoint;
+  DrawingPoint? tempDrawingPoint;
   late GlobalKey imageKey;
 
   @override
@@ -80,6 +85,27 @@ class _FreeDrawState extends State<FreeDraw> {
         imageKey.currentContext!.findRenderObject() as RenderBox;
     Rect imageBounds = renderBox.paintBounds;
     return imageBounds.contains(point);
+  }
+
+  DrawingPoint? get lastDrawingPoint {
+    return drawingPoints.isNotEmpty ? drawingPoints.last : null;
+  }
+
+  void undo() {
+    setState(() {
+      if (drawingPoints.isNotEmpty && historyDrawingPoints.isNotEmpty) {
+        drawingPoints.removeLast();
+      }
+    });
+  }
+
+  void redo() {
+    setState(() {
+      if (drawingPoints.length < historyDrawingPoints.length) {
+        final index = drawingPoints.length;
+        drawingPoints.add(historyDrawingPoints[index]);
+      }
+    });
   }
 }
 
