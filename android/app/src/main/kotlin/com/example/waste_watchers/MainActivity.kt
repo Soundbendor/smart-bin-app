@@ -1,4 +1,4 @@
-package com.example.waste_watchers
+package com.example.binsight_ai
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:waste_watchers/database/connection.dart';
-import 'package:waste_watchers/database/model.dart';
+import 'package:binsight_ai/database/connection.dart';
+import 'package:binsight_ai/database/model.dart';
 
 class Device extends Model {
   String id;
