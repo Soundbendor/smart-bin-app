@@ -1,12 +1,12 @@
 #  Smart Bin App :herb:
 
-About/Overview about Smart Bin App goes here. 
+About/Overview about Smart Bin App goes here.
 A cross-platform mobile app built with Flutter/Dart for users of [Soundbendor Lab's](https://www.soundbendor.org) Smart Compost Bin. The app enables wifi connectivity for the bin, so participants in a field study will be able to use their bin to track household food waste and follow data trends over time.
 
 ## Table of Contents
 - [Repos](#repos)
 - [Getting Started](#getting-started)
-- [Features](#features) 
+- [Features](#features)
 - [Usage](#usage)
 - [Contributions](#contributions)
 - [License](#license)
@@ -26,7 +26,7 @@ The binsight.ai app offers the following features and functionalities:
 
 - Stuff here
 
-## Usage 
+## Usage
 
 - Stuff here
 
