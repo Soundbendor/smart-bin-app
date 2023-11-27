@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:waste_watchers/screens/main/detections_page.dart';
-import 'package:waste_watchers/screens/main/home_page.dart';
-import 'package:waste_watchers/screens/main/stats_page.dart';
+import 'package:binsight_ai/screens/main/detections_page.dart';
+import 'package:binsight_ai/screens/main/home_page.dart';
+import 'package:binsight_ai/screens/main/stats_page.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

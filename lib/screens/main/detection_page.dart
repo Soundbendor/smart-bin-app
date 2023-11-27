@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:waste_watchers/database/models/detection.dart';
-import 'package:waste_watchers/widgets/heading.dart';
+import 'package:binsight_ai/database/models/detection.dart';
+import 'package:binsight_ai/widgets/heading.dart';
 
 class DetectionPage extends StatelessWidget {
   final Detection detection;

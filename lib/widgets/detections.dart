@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:waste_watchers/database/models/detection.dart';
-import 'package:waste_watchers/screens/main/detection_page.dart';
+import 'package:binsight_ai/database/models/detection.dart';
+import 'package:binsight_ai/screens/main/detection_page.dart';
 
 class DetectionLargeListItem extends StatelessWidget {
   final Detection detection;
