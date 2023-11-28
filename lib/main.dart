@@ -20,7 +20,7 @@ void main() async {
 }
 
 class BinsightAiApp extends StatelessWidget {
-  const BinsightAiApp({Key? key}) : super(key: key);
+  const BinsightAiApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -83,11 +83,12 @@ final routes = [
 ];
 
 final GoRouter _router = GoRouter(
-  initialLocation: '/set-up',
-  routes: [
-    ShellRoute(
-      builder: (BuildContext context, GoRouterState state, Widget child) {
-        return BottomNavBar(child: child);
+  initialLocation: '/main',
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/',
+      builder: (BuildContext context, GoRouterState state) {
+        return Container();
       },
       routes: <GoRoute>[
         GoRoute(
@@ -140,8 +141,8 @@ final GoRouter _router = GoRouter(
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
     required this.child,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Widget child;
 
