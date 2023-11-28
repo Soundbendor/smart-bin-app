@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:binsight_ai/widgets/wifi_configuration_widget.dart';
 
 class WifiPage extends StatelessWidget {
-  const WifiPage({Key? key}) : super(key: key);
+  const WifiPage({super.key});
 
   @override
   Widget build(BuildContext context) {

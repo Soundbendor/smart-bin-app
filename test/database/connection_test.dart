@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:waste_watchers/database/connection.dart';
-import 'package:waste_watchers/database/models/device.dart';
+import 'package:binsight_ai/database/connection.dart';
+import 'package:binsight_ai/database/models/device.dart';
 
 class FakeDatabase implements Database {
   bool isClosed = false;

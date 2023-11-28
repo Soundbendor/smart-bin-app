@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:go_router/go_router.dart';
 
 class WifiConfigurationWidget extends StatefulWidget {
-  const WifiConfigurationWidget({Key? key}) : super(key: key);
+  const WifiConfigurationWidget({super.key});
 
   @override
   State<WifiConfigurationWidget> createState() =>
