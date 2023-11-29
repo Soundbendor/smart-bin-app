@@ -98,7 +98,7 @@ class DetectionSmallListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: const Icon(Icons.food_bank),
+      leading: Image.asset("assets/images/placeholder.png"),
       title: const Text("<Detection Food Names>"),
       subtitle: Text(detection.timestamp.toString()),
       trailing: const Icon(Icons.arrow_forward_ios),
@@ -112,12 +112,16 @@ class DetectionSmallListItem extends StatelessWidget {
   }
 }
 
+enum DetectionListType { large, small }
+
 class DetectionList extends StatelessWidget {
-  final List<DetectionLargeListItem> detections;
+  final List<Detection> detections;
+  final DetectionListType size;
 
   const DetectionList({
     super.key,
     required this.detections,
+    this.size = DetectionListType.small,
   });
 
   @override
@@ -127,16 +131,29 @@ class DetectionList extends StatelessWidget {
           width: double.infinity,
           child: Text("No detections yet", textAlign: TextAlign.left));
     } else {
-      return Expanded(
-        child: ListView.builder(
-          itemCount: detections.length,
-          prototypeItem: DetectionLargeListItem.stub(),
-          scrollDirection: Axis.vertical,
-          itemBuilder: (context, index) {
-            return detections[index];
-          },
-        ),
-      );
+      if (size == DetectionListType.large) {
+        return Expanded(
+          child: ListView.builder(
+            itemCount: detections.length,
+            prototypeItem: DetectionLargeListItem.stub(),
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              return DetectionLargeListItem(detection: detections[index]);
+            },
+          ),
+        );
+      } else {
+        return Expanded(
+          child: ListView.builder(
+            itemCount: detections.length,
+            prototypeItem: DetectionSmallListItem.stub(),
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              return DetectionSmallListItem(detection: detections[index]);
+            },
+          ),
+        );
+      }
     }
   }
 }
