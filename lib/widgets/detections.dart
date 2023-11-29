@@ -38,50 +38,76 @@ class DetectionLargeListItem extends StatelessWidget {
           ),
           child: Padding(
             padding: const EdgeInsets.all(9.0),
-            child: FittedBox(
-              child: Column(
-                children: [
-                  const Text("<Detection Food Names>", textScaleFactor: 1.75),
-                  Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey.shade700,
-                          width: 2,
+            child: Column(
+              children: [
+                const Text("<Detection Food Names>", textScaleFactor: 1.75),
+                Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.grey.shade700,
+                        width: 2,
+                      ),
+                    ),
+                    margin: const EdgeInsets.only(bottom: 12, top: 12),
+                    child: Image.asset("assets/images/placeholder.png",
+                        width: 300, height: 300)),
+                SizedBox(
+                  width: 250,
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Temperature"),
+                            Text("Humidity"),
+                          ],
                         ),
                       ),
-                      margin: const EdgeInsets.only(bottom: 12, top: 12),
-                      child: Image.asset("assets/images/placeholder.png",
-                          width: 200, height: 200)),
-                  SizedBox(
-                    width: 250,
-                    child: Row(
-                      children: [
-                        const Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Temperature"),
-                              Text("Humidity"),
-                            ],
-                          ),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text(detection.temperature.toString()),
+                            Text(detection.humidity.toString()),
+                          ],
                         ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text(detection.temperature.toString()),
-                              Text(detection.humidity.toString()),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class DetectionSmallListItem extends StatelessWidget {
+  final Detection detection;
+
+  const DetectionSmallListItem({
+    super.key,
+    required this.detection,
+  });
+
+  DetectionSmallListItem.stub({super.key})
+      : detection = Detection.createDefault();
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.food_bank),
+      title: const Text("<Detection Food Names>"),
+      subtitle: Text(detection.timestamp.toString()),
+      trailing: const Icon(Icons.arrow_forward_ios),
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DetectionPage(detection: detection)));
+      },
     );
   }
 }
