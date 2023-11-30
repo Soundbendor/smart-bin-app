@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:waste_watchers/widgets/detections.dart';
-import 'package:waste_watchers/widgets/heading.dart';
+import 'package:binsight_ai/widgets/detections.dart';
+import 'package:binsight_ai/widgets/heading.dart';
 
 class DetectionsPage extends StatelessWidget {
   const DetectionsPage({super.key});
@@ -10,13 +10,13 @@ class DetectionsPage extends StatelessWidget {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(10),
-        child: const Column(
+        child: Column(
           children: [
-            Heading(text: "Detections"),
+            const Heading(text: "Detections"),
             DetectionList(
               detections: [
-                DetectionListItem.stub(),
-                DetectionListItem.stub(),
+                DetectionLargeListItem.stub(),
+                DetectionLargeListItem.stub(),
               ],
             ),
           ],
