@@ -38,7 +38,7 @@ final routes = [
     routes: <GoRoute>[
       GoRoute(
           name: 'main',
-          path: 'main',
+          path: '/main',
           builder: (BuildContext context, GoRouterState state) {
             return const HomePage();
           },
@@ -81,61 +81,9 @@ final routes = [
             })
       ]),
 ];
-
 final GoRouter _router = GoRouter(
-  initialLocation: '/main',
-  routes: <RouteBase>[
-    GoRoute(
-      path: '/',
-      builder: (BuildContext context, GoRouterState state) {
-        return Container();
-      },
-      routes: <GoRoute>[
-        GoRoute(
-            name: 'main',
-            path: '/main',
-            builder: (BuildContext context, GoRouterState state) {
-              return const HomePage();
-            },
-            routes: [
-              GoRoute(
-                name: 'detections',
-                path: 'detections',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const DetectionsPage();
-                },
-              ),
-              GoRoute(
-                name: 'stats',
-                path: 'stats',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const StatsPage();
-                },
-              ),
-            ]),
-      ],
-    ),
-    GoRoute(
-        name: 'set-up',
-        path: '/set-up',
-        builder: (BuildContext conext, GoRouterState state) {
-          return const SplashPage();
-        },
-        routes: [
-          GoRoute(
-              name: 'wifi',
-              path: 'wifi',
-              builder: (BuildContext context, GoRouterState state) {
-                return const WifiPage();
-              }),
-          GoRoute(
-              name: 'bin_connect',
-              path: 'bin_connect',
-              builder: (BuildContext context, GoRouterState state) {
-                return const ConnectPage();
-              })
-        ]),
-  ],
+  initialLocation: '/set-up',
+  routes: routes,
 );
 
 class BottomNavBar extends StatelessWidget {
