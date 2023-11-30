@@ -1,55 +1,204 @@
 import 'package:flutter/material.dart';
-import 'package:waste_watchers/database/connection.dart';
-import 'package:waste_watchers/screens/main/screen.dart';
-import 'package:waste_watchers/screens/splash/screen.dart';
-import 'package:waste_watchers/screens/splash/wifi_page.dart';
-import 'package:waste_watchers/screens/connection/connect_page.dart';
+import 'package:binsight_ai/screens/main/detections_page.dart';
+import 'package:binsight_ai/screens/main/home_page.dart';
+import 'package:binsight_ai/screens/main/stats_page.dart';
+import 'package:binsight_ai/screens/splash/screen.dart';
+import 'package:binsight_ai/screens/splash/wifi_page.dart';
+import 'package:binsight_ai/screens/connection/connect_page.dart';
+import 'package:binsight_ai/database/connection.dart';
+import 'package:go_router/go_router.dart';
+
+final GlobalKey<NavigatorState> _rootNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> _shellNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'shell');
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await getDatabaseConnection();
-  runApp(const WasteWatchersApp());
+  runApp(const BinsightAiApp());
 }
 
-class WasteWatchersApp extends StatelessWidget {
-  const WasteWatchersApp({Key? key}) : super(key: key);
+class BinsightAiApp extends StatelessWidget {
+  const BinsightAiApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MainPage(),
+    return MaterialApp.router(
+      routerConfig: _router,
     );
   }
 }
 
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+final routes = [
+  ShellRoute(
+    builder: (BuildContext context, GoRouterState state, Widget child) {
+      return BottomNavBar(child: child);
+    },
+    routes: <GoRoute>[
+      GoRoute(
+          name: 'main',
+          path: 'main',
+          builder: (BuildContext context, GoRouterState state) {
+            return const HomePage();
+          },
+          routes: [
+            GoRoute(
+              name: 'detections',
+              path: 'detections',
+              builder: (BuildContext context, GoRouterState state) {
+                return const DetectionsPage();
+              },
+            ),
+            GoRoute(
+              name: 'stats',
+              path: 'stats',
+              builder: (BuildContext context, GoRouterState state) {
+                return const StatsPage();
+              },
+            ),
+          ]),
+    ],
+  ),
+  GoRoute(
+      name: 'set-up',
+      path: '/set-up',
+      builder: (BuildContext conext, GoRouterState state) {
+        return const SplashPage();
+      },
+      routes: [
+        GoRoute(
+            name: 'wifi',
+            path: 'wifi',
+            builder: (BuildContext context, GoRouterState state) {
+              return const WifiPage();
+            }),
+        GoRoute(
+            name: 'bin_connect',
+            path: 'bin_connect',
+            builder: (BuildContext context, GoRouterState state) {
+              return const ConnectPage();
+            })
+      ]),
+];
 
-  @override
-  State<MainPage> createState() => _MainPageState();
-}
+final GoRouter _router = GoRouter(
+  initialLocation: '/main',
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/',
+      builder: (BuildContext context, GoRouterState state) {
+        return Container();
+      },
+      routes: <GoRoute>[
+        GoRoute(
+            name: 'main',
+            path: '/main',
+            builder: (BuildContext context, GoRouterState state) {
+              return const HomePage();
+            },
+            routes: [
+              GoRoute(
+                name: 'detections',
+                path: 'detections',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const DetectionsPage();
+                },
+              ),
+              GoRoute(
+                name: 'stats',
+                path: 'stats',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const StatsPage();
+                },
+              ),
+            ]),
+      ],
+    ),
+    GoRoute(
+        name: 'set-up',
+        path: '/set-up',
+        builder: (BuildContext conext, GoRouterState state) {
+          return const SplashPage();
+        },
+        routes: [
+          GoRoute(
+              name: 'wifi',
+              path: 'wifi',
+              builder: (BuildContext context, GoRouterState state) {
+                return const WifiPage();
+              }),
+          GoRoute(
+              name: 'bin_connect',
+              path: 'bin_connect',
+              builder: (BuildContext context, GoRouterState state) {
+                return const ConnectPage();
+              })
+        ]),
+  ],
+);
 
-class _MainPageState extends State<MainPage> {
-  int index = 0;
+class BottomNavBar extends StatelessWidget {
+  const BottomNavBar({
+    required this.child,
+    super.key,
+  });
 
-  void _changeScreen(int newIndex) {
-    setState(() {
-      index = newIndex;
-    });
-  }
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: IndexedStack(
-        index: index,
-        children: [
-          SplashPage(changeScreen: _changeScreen),
-          WifiPage(changeScreen: _changeScreen),
-          const ConnectPage(),
-          const MainScreen(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("binsight.ai"),
+        centerTitle: true,
+      ),
+      body: child,
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Detections',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.show_chart),
+            label: 'Stats',
+          ),
         ],
+        currentIndex: _calculateSelectedIndex(context),
+        onTap: (int idx) => _onItemTapped(idx, context),
       ),
     );
+  }
+
+  static int _calculateSelectedIndex(BuildContext context) {
+    final String location = GoRouterState.of(context).uri.toString();
+    if (location == '/main') {
+      return 0;
+    }
+    if (location == '/main/detections') {
+      return 1;
+    }
+    if (location == '/main/stats') {
+      return 2;
+    }
+    return 0;
+  }
+
+  void _onItemTapped(int index, BuildContext context) {
+    switch (index) {
+      case 0:
+        GoRouter.of(context).go('/main');
+        break;
+      case 1:
+        GoRouter.of(context).go('/main/detections');
+        break;
+      case 2:
+        GoRouter.of(context).go('/main/stats');
+    }
   }
 }

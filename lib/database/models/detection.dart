@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:waste_watchers/database/connection.dart';
-import 'package:waste_watchers/database/model.dart';
+import 'package:binsight_ai/database/connection.dart';
+import 'package:binsight_ai/database/model.dart';
 
 class Detection extends Model {
   String preDetectImgLink;
@@ -30,9 +30,9 @@ class Detection extends Model {
   });
 
   Detection.createDefault()
-      : preDetectImgLink = "",
+      : preDetectImgLink = "assets/images/placeholder.png",
         timestamp = DateTime.now(),
-        deviceId = "";
+        deviceId = "1";
 
   @override
   Map<String, dynamic> toMap() {

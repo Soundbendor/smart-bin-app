@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:waste_watchers/database/model.dart';
-import 'package:waste_watchers/database/models/detection.dart';
-import 'package:waste_watchers/database/models/device.dart';
+import 'package:binsight_ai/database/model.dart';
+import 'package:binsight_ai/database/models/detection.dart';
+import 'package:binsight_ai/database/models/device.dart';
 
 // Modify this when making changes to models
 // The entire app should be restarted when changing the schema
@@ -13,7 +13,7 @@ const int databaseVersion = 1;
 
 Database? _database;
 
-Future<void> _createTables(
+Future<void> createTables(
     Database database, List<Model> models, bool isMigration) async {
   for (Model model in models) {
     await database.transaction((txn) async {
@@ -28,9 +28,8 @@ Future<void> _createTables(
             "ALTER TABLE ${model.tableName} RENAME TO $temporaryTableName");
       }
       debugPrint("Creating ${model.tableName}");
-      await txn.execute("""
-        CREATE TABLE IF NOT EXISTS ${model.tableName} ${model.schema}
-      """);
+      await txn.execute(
+          "CREATE TABLE IF NOT EXISTS ${model.tableName} ${model.schema}");
       if (isMigration) {
         debugPrint("Migrating ${model.tableName} - Copying data");
         await txn.execute("""
@@ -44,7 +43,8 @@ Future<void> _createTables(
 }
 
 /// Creates the database connection if it doesn't exist and returns it.
-Future<Database> getDatabaseConnection() async {
+Future<Database> getDatabaseConnection(
+    {String dbName = "application.db"}) async {
   List<Model> models = [
     Device.createDefault(),
     Detection.createDefault(),
@@ -57,14 +57,14 @@ Future<Database> getDatabaseConnection() async {
   _database = await openDatabase(
     join(
       await getDatabasesPath(),
-      "application.db",
+      dbName,
     ),
     version: databaseVersion,
     onCreate: (db, version) async {
-      await _createTables(db, models, false);
+      await createTables(db, models, false);
     },
     onUpgrade: (db, oldVersion, newVersion) async {
-      await _createTables(db, models, true);
+      await createTables(db, models, true);
     },
   );
   return _database!;
@@ -75,4 +75,9 @@ Future<void> closeDatabaseConnection() async {
     await _database!.close();
     _database = null;
   }
+}
+
+// The following are mainly for testing purposes
+void setDatabase(Database db) {
+  _database = db;
 }
