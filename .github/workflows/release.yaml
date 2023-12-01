@@ -5,7 +5,7 @@ on:
       - main
     tags:
       - release-*
-  workflow_dispatch: {}
+  workflow_dispatch:
 
 jobs:
   build-android:
