@@ -22,7 +22,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: app-release-android
-          path: build/app/outputs/apk/release/
+          path: build/app/outputs/apk/release/*.apk
   build-ios:
     name: build ios
     runs-on: macos-latest
@@ -34,8 +34,8 @@ jobs:
           architecture: x64
       - run: flutter pub get
       - run: flutter test
-      - run: flutter build ipa --release --no-codesign --export-method ad-hoc
+      - run: flutter build ipa --release --export-method ad-hoc
       - uses: actions/upload-artifact@v3
         with:
           name: app-release-ios
-          path: build/ios/ipa/
+          path: build/ios/ipa/*.ipa
