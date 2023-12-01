@@ -8,11 +8,6 @@ import 'package:binsight_ai/screens/connection/connect_page.dart';
 import 'package:binsight_ai/database/connection.dart';
 import 'package:go_router/go_router.dart';
 
-final GlobalKey<NavigatorState> _rootNavigatorKey =
-    GlobalKey<NavigatorState>(debugLabel: 'root');
-final GlobalKey<NavigatorState> _shellNavigatorKey =
-    GlobalKey<NavigatorState>(debugLabel: 'shell');
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await getDatabaseConnection();
