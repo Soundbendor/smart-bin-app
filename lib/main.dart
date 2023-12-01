@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waste_watchers/screens/bluetooth/bluetooth_page.dart';
 import 'package:waste_watchers/screens/main/detections_page.dart';
 import 'package:waste_watchers/screens/main/home_page.dart';
 import 'package:waste_watchers/screens/main/stats_page.dart';
@@ -68,6 +69,12 @@ final routes = [
       },
       routes: [
         GoRoute(
+          name: 'bluetooth',
+          path: 'bluetooth',
+          builder: (BuildContext context, GoRouterState state) {
+            return const WifiPage();
+          }),
+        GoRoute(
             name: 'wifi',
             path: 'wifi',
             builder: (BuildContext context, GoRouterState state) {
@@ -121,6 +128,13 @@ final GoRouter _router = GoRouter(
           return const SplashPage();
         },
         routes: [
+          GoRoute(
+            name: 'bluetooth',
+            path: 'bluetooth',
+            builder: (BuildContext context, GoRouterState state) {
+              return const BluetoothPage();
+            }
+            ),
           GoRoute(
               name: 'wifi',
               path: 'wifi',
