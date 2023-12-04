@@ -2,7 +2,12 @@ import 'package:sqflite/sqflite.dart';
 import 'package:binsight_ai/database/connection.dart';
 import 'package:binsight_ai/database/model.dart';
 
+/// The device model.
+///
+/// Represents a device that is connected to the application.
 class Device extends Model {
+
+  /// The device ID.
   String id;
 
   Device({required this.id});
