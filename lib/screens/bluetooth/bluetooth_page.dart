@@ -10,32 +10,36 @@ class BluetoothPage extends StatefulWidget {
 }
 
 class _BluetoothPageState extends State<BluetoothPage> {
-  List<BluetoothDevice> _bluetoothDevices = [];
+  final List<BluetoothDevice> _bluetoothDevices = [];
 
   @override
   void initState() {
     super.initState();
 
     _getScannedResults();
-    
+  
+  // Define regex on bluetooth name
+  RegExp bluetoothNameCheck = RegExp(r'');
+  // List of bluetooth connections names to ensure no duplicates are captured
+  List<String> filteredBluetoothConnectionsString = [];
+    // Start scanning for bluetooth connections
     FlutterBluePlus.scanResults.listen((results) {
-      print(results);
+      // Iterate through all scanned bluetooth connections and only add ones that meet criteria 
       for (ScanResult r in results) {
-        setState(() {
-          _bluetoothDevices.add(r.device);
-        });
+        if (bluetoothNameCheck.hasMatch(r.advertisementData.advName) &&
+        !filteredBluetoothConnectionsString.contains(r.advertisementData.advName)) {
+          setState(() {
+            _bluetoothDevices.add(r.device);
+          });
+          filteredBluetoothConnectionsString.add(r.advertisementData.advName);
+        }
       }
     });
   }
 
   Future<void> _getScannedResults() async {
+    // I need to look into the possibility of adding a "rescan" and/or "stop scanning" button
     FlutterBluePlus.startScan(timeout: const Duration(seconds: 10));
-
-    await Future.delayed(
-      const Duration(
-        seconds: 1,
-        )
-      );
   }
 
   @override
@@ -79,7 +83,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
                         borderRadius: BorderRadius.circular(15.0)),
                     child: ListTile(
                       leading: const Icon(Icons.bluetooth),
-                      title: Text(bluetoothDevice.platformName ?? 'Unknown Device'),
+                      title: Text(bluetoothDevice.platformName != '' ? bluetoothDevice.platformName : 'Unknown Device'),
                       trailing: const Icon(Icons.keyboard_arrow_right),
                       onTap: () {
                         //TODO: Add popup to prompt password entry
