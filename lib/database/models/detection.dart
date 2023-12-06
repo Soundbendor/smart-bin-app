@@ -3,10 +3,12 @@ import 'package:binsight_ai/database/connection.dart';
 import 'package:binsight_ai/database/model.dart';
 
 class Detection extends Model {
+  String imageId;
   String preDetectImgLink;
   String? postDetectImgLink;
   String? depthMapImgLink;
   String? irImgLink;
+  double? weight;
   double? humidity;
   double? temperature;
   double? co2;
@@ -16,12 +18,14 @@ class Detection extends Model {
   String deviceId;
 
   Detection({
+    required this.imageId,
     required this.preDetectImgLink,
     required this.timestamp,
     required this.deviceId,
     this.postDetectImgLink,
     this.depthMapImgLink,
     this.irImgLink,
+    this.weight,
     this.humidity,
     this.temperature,
     this.co2,
@@ -30,17 +34,20 @@ class Detection extends Model {
   });
 
   Detection.createDefault()
-      : preDetectImgLink = "assets/images/placeholder.png",
+      : imageId = "1",
+        preDetectImgLink = "assets/images/placeholder.png",
         timestamp = DateTime.now(),
         deviceId = "1";
 
   @override
   Map<String, dynamic> toMap() {
     return {
+      "imageId": imageId,
       "preDetectImgLink": preDetectImgLink,
       "postDetectImgLink": postDetectImgLink,
       "depthMapImgLink": depthMapImgLink,
       "irImgLink": irImgLink,
+      "weight": weight,
       "humidity": humidity,
       "temperature": temperature,
       "co2": co2,
