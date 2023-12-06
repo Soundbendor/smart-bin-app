@@ -83,7 +83,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
                       trailing: const Icon(Icons.keyboard_arrow_right),
                       onTap: () {
                         //TODO: Add popup to prompt password entry
-                            GoRouter.of(context).goNamed('bin_connect');
+                            GoRouter.of(context).goNamed('wifi');
                       }
                     )
                   );
@@ -91,16 +91,16 @@ class _BluetoothPageState extends State<BluetoothPage> {
               ),
             ),
             TextButton(
-                        style: TextButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.all(16.0),
-                            textStyle: const TextStyle(fontSize: 20),
-                            backgroundColor: const Color(0xFF15a2cd)),
-                        onPressed: () {
-                          context.goNamed('bluetooth');
-                        },
-                        child: const Text('Continue'),
-                      ),
+              style: TextButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.all(16.0),
+                  textStyle: const TextStyle(fontSize: 20),
+                  backgroundColor: const Color(0xFF15a2cd)),
+              onPressed: () {
+                context.goNamed('wifi');
+              },
+              child: const Text('Continue'),
+            ),
         ])
       )
     );
