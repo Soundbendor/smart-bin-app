@@ -10,11 +10,18 @@ import 'package:go_router/go_router.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:binsight_ai/pub_sub/subscriber.dart';
 import 'package:web_socket_channel/io.dart';
+import 'dart:convert';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final Database database = await getDatabaseConnection();
   final channel = IOWebSocketChannel.connect('http://54.214.80.15/subscribe');
+  final subscriptionMessage = {
+    "type": "subscribe",
+    "channel": "1",
+  };
+  channel.sink.add(jsonEncode(subscriptionMessage));
+
   subToSocket(channel, database);
   runApp(const BinsightAiApp());
 }
