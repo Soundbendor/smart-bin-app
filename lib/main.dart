@@ -1,3 +1,4 @@
+import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/screens/main/detections_page.dart';
 import 'package:binsight_ai/screens/main/home_page.dart';
@@ -66,7 +67,7 @@ final routes = [
           name: 'bluetooth',
           path: 'bluetooth',
           builder: (BuildContext context, GoRouterState state) {
-            return const WifiPage();
+            return const BluetoothPage();
           }),
         GoRoute(
             name: 'wifi',
