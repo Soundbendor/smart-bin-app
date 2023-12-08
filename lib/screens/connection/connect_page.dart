@@ -4,7 +4,7 @@ import 'package:wifi_iot/wifi_iot.dart';
 import 'package:go_router/go_router.dart';
 
 class ConnectPage extends StatefulWidget {
-  const ConnectPage({Key? key}) : super(key: key);
+  const ConnectPage({super.key});
 
   @override
   State<ConnectPage> createState() => _ConnectPageState();
@@ -75,7 +75,7 @@ class _ConnectPageState extends State<ConnectPage> {
         // List of strings that keep track of what access points have been added to our display list
         List<String> filteredAccessPointsString = [];
         // Iterate through all scanned access points and only add the ones that meet our criteria
-        for (WiFiAccessPoint point in accessPoints) {
+        for (var point in accessPoints) {
           if (wifiNameCheck.hasMatch(point.ssid) &&
               !filteredAccessPointsString.contains(point.ssid)) {
             filteredAccessPoints.add(point);

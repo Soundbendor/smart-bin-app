@@ -1,27 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:waste_watchers/screens/bluetooth/bluetooth_page.dart';
-import 'package:waste_watchers/screens/main/detections_page.dart';
-import 'package:waste_watchers/screens/main/home_page.dart';
-import 'package:waste_watchers/screens/main/stats_page.dart';
-import 'package:waste_watchers/screens/splash/screen.dart';
-import 'package:waste_watchers/screens/splash/wifi_page.dart';
-import 'package:waste_watchers/screens/connection/connect_page.dart';
-import 'package:waste_watchers/database/connection.dart';
+import 'package:binsight_ai/screens/main/detections_page.dart';
+import 'package:binsight_ai/screens/main/home_page.dart';
+import 'package:binsight_ai/screens/main/stats_page.dart';
+import 'package:binsight_ai/screens/splash/screen.dart';
+import 'package:binsight_ai/screens/splash/wifi_page.dart';
+import 'package:binsight_ai/screens/connection/connect_page.dart';
+import 'package:binsight_ai/database/connection.dart';
 import 'package:go_router/go_router.dart';
-
-final GlobalKey<NavigatorState> _rootNavigatorKey =
-    GlobalKey<NavigatorState>(debugLabel: 'root');
-final GlobalKey<NavigatorState> _shellNavigatorKey =
-    GlobalKey<NavigatorState>(debugLabel: 'shell');
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await getDatabaseConnection();
-  runApp(const WasteWatchersApp());
+  runApp(const BinsightAiApp());
 }
 
-class WasteWatchersApp extends StatelessWidget {
-  const WasteWatchersApp({Key? key}) : super(key: key);
+class BinsightAiApp extends StatelessWidget {
+  const BinsightAiApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +33,7 @@ final routes = [
     routes: <GoRoute>[
       GoRoute(
           name: 'main',
-          path: 'main',
+          path: '/main',
           builder: (BuildContext context, GoRouterState state) {
             return const HomePage();
           },
@@ -91,64 +85,7 @@ final routes = [
 
 final GoRouter _router = GoRouter(
   initialLocation: '/set-up',
-  routes: [
-    ShellRoute(
-      builder: (BuildContext context, GoRouterState state, Widget child) {
-        return BottomNavBar(child: child);
-      },
-      routes: <GoRoute>[
-        GoRoute(
-            name: 'main',
-            path: '/main',
-            builder: (BuildContext context, GoRouterState state) {
-              return const HomePage();
-            },
-            routes: [
-              GoRoute(
-                name: 'detections',
-                path: 'detections',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const DetectionsPage();
-                },
-              ),
-              GoRoute(
-                name: 'stats',
-                path: 'stats',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const StatsPage();
-                },
-              ),
-            ]),
-      ],
-    ),
-    GoRoute(
-        name: 'set-up',
-        path: '/set-up',
-        builder: (BuildContext conext, GoRouterState state) {
-          return const SplashPage();
-        },
-        routes: [
-          GoRoute(
-            name: 'bluetooth',
-            path: 'bluetooth',
-            builder: (BuildContext context, GoRouterState state) {
-              return const BluetoothPage();
-            }
-            ),
-          GoRoute(
-              name: 'wifi',
-              path: 'wifi',
-              builder: (BuildContext context, GoRouterState state) {
-                return const WifiPage();
-              }),
-          GoRoute(
-              name: 'bin_connect',
-              path: 'bin_connect',
-              builder: (BuildContext context, GoRouterState state) {
-                return const ConnectPage();
-              })
-        ]),
-  ],
+  routes: routes
 );
 
 class BottomNavBar extends StatelessWidget {
@@ -163,7 +100,7 @@ class BottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Waste Watchers"),
+        title: const Text("binsight.ai"),
         centerTitle: true,
       ),
       body: child,
