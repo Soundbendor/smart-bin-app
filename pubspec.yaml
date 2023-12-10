@@ -1,5 +1,5 @@
-name: waste_watchers
-description: A new Flutter project.
+name: binsight_ai
+description: A Soundbendor Lab project.
 publish_to: 'none'
 version: 0.1.0
 
@@ -9,17 +9,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http: ^0.13.3
+  http: ^1.1.0
   path: ^1.8.3
   sqflite: ^2.3.0
   wifi_scan: ^0.4.0+2
   wifi_iot: ^0.3.18+1
   go_router: ^12.1.1
+  flutter_blue_plus: ^1.29.8
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 
 flutter:
   uses-material-design: true

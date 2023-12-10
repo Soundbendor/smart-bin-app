@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class FreeDraw extends StatefulWidget {
-  final String imagePath;
+  final String imageLink;
 
   const FreeDraw({
-    required this.imagePath,
+    required this.imageLink,
     Key? key,
   }) : super(key: key);
 
@@ -65,7 +65,7 @@ class _FreeDrawState extends State<FreeDraw> {
         child: Stack(
           children: [
             Image.asset(
-              widget.imagePath,
+              widget.imageLink,
               key: imageKey,
               fit: BoxFit.cover,
             ),
