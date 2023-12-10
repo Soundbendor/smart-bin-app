@@ -1,13 +1,14 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:binsight_ai/widgets/heading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:waste_watchers/widgets/free_draw.dart';
+import 'package:binsight_ai/widgets/free_draw.dart';
 
 class AnnotationPage extends StatefulWidget {
-  final String imagePath;
+  final String imageLink;
 
-  const AnnotationPage({required this.imagePath, Key? key}) : super(key: key);
+  const AnnotationPage({super.key, required this.imageLink});
 
   @override
   State<AnnotationPage> createState() => _AnnotationPageState();
@@ -83,6 +84,24 @@ class _AnnotationPageState extends State<AnnotationPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      child: const Row(
+                        children: [
+                          Icon(Icons.arrow_back_ios),
+                          Text("Back to list"),
+                        ],
+                      ),
+                      onTap: () => Navigator.pop(context),
+                    ),
+                    const Heading(text: "Annotate Your Image"),
+                    const SizedBox(height: 16),
+                  ],
+                ),
+              ),
               RepaintBoundary(
                 key: _captureKey,
                 child: SizedBox(
@@ -90,7 +109,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                   height: 300,
                   child: FreeDraw(
                     key: _freeDrawKey,
-                    imagePath: widget.imagePath,
+                    imageLink: widget.imageLink,
                   ),
                 ),
               ),
