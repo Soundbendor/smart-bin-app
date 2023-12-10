@@ -22,7 +22,7 @@ void main() async {
   };
   channel.sink.add(jsonEncode(subscriptionMessage));
 
-  subToSocket(channel, database);
+  handleMessages(channel, database);
   runApp(const BinsightAiApp());
 }
 

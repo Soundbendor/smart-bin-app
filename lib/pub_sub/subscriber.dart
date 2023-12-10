@@ -4,7 +4,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:convert';
 
-void subToSocket(WebSocketChannel channel, Database database) {
+void handleMessages(WebSocketChannel channel, Database database) {
   channel.stream.listen(
     (data) async {
       final jsonData = jsonDecode(data);
