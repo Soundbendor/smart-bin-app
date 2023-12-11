@@ -10,8 +10,8 @@ PR Title should look like:
 
 <!--
 ## Related Issues
-* References #X
-* Resolves #X
+* References #X // If this PR is related to an issue but doesn't completely resolve it
+* Resolves #X // If this PR resolves an issue completely
 -->
 
 <!--
