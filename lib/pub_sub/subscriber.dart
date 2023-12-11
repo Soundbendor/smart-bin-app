@@ -41,17 +41,18 @@ Future<void> updatePreDetection(
       boxes: data['boxes'] //Update name to name in pydantic model
       );
 
-  Database database = await getDatabaseConnection();
+  database = await getDatabaseConnection();
   await database.insert(detection.tableName, detection.toMap());
 }
 
 Future<void> updatePostDetection(
     Map<String, dynamic> data, Database database) async {
-  List<Map<String, dynamic>> detection = await database.query(
+  List<Map<String, dynamic>> detections = await database.query(
     "detections",
     where: "img_id = ?",
     whereArgs: [data['img_id']],
   );
+  Map<String, dynamic> detection = detections[0];
   if (detection.isNotEmpty) {
     await database.update(
       "detections",
