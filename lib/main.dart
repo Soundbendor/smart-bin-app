@@ -1,3 +1,4 @@
+import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/screens/main/detections_page.dart';
 import 'package:binsight_ai/screens/main/home_page.dart';
@@ -76,6 +77,12 @@ final routes = [
       },
       routes: [
         GoRoute(
+          name: 'bluetooth',
+          path: 'bluetooth',
+          builder: (BuildContext context, GoRouterState state) {
+            return const BluetoothPage();
+          }),
+        GoRoute(
             name: 'wifi',
             path: 'wifi',
             builder: (BuildContext context, GoRouterState state) {
@@ -89,16 +96,17 @@ final routes = [
             })
       ]),
 ];
+
 final GoRouter _router = GoRouter(
   initialLocation: '/set-up',
-  routes: routes,
+  routes: routes
 );
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
     required this.child,
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final Widget child;
 
