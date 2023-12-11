@@ -1,3 +1,4 @@
+import 'package:binsight_ai/screens/main/annotation.dart';
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/heading.dart';
@@ -25,13 +26,19 @@ class DetectionPage extends StatelessWidget {
             ),
             const Heading(text: "Detection"),
             const SizedBox(height: 16),
-            Center(
-              child: Image.asset(
-                detection.preDetectImgLink,
-                width: 350,
-                height: 350,
-              ),
-            ),
+            GestureDetector(
+                child: Center(
+                  child: Image.asset(
+                    detection.preDetectImgLink,
+                    width: 350,
+                    height: 350,
+                  ),
+                ),
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AnnotationPage(
+                            imageLink: detection.preDetectImgLink)))),
             const SizedBox(height: 16),
             SizedBox(
               width: 400,
