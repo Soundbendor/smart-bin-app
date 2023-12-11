@@ -1,0 +1,17 @@
+name: Publish GitHub Pages Docs
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  upload-pages:
+    name: Upload Pages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: doc/api
