@@ -9,7 +9,7 @@ import 'package:binsight_ai/database/models/device.dart';
 
 // Modify this when making changes to models
 // The entire app should be restarted when changing the schema
-const int databaseVersion = 1;
+const int databaseVersion = 2;
 
 Database? _database;
 
