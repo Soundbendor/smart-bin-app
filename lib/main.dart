@@ -34,9 +34,10 @@ void main() async {
   runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
 }
 
+// Also used for testing
+late GoRouter router;
 
 /// The root of the application. Contains the GoRouter and MaterialApp wrappers.
-
 class BinsightAiApp extends StatelessWidget {
   final bool skipSetUp;
 
@@ -44,7 +45,7 @@ class BinsightAiApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GoRouter router = GoRouter(
+    router = GoRouter(
         initialLocation: skipSetUp ? '/main' : '/set-up', routes: routes);
 
     return MaterialApp.router(
@@ -53,12 +54,11 @@ class BinsightAiApp extends StatelessWidget {
   }
 }
 
-
 /// The routes for the application.
 ///
 /// The routes are defined like a tree. There are two top-level routes: 'main' and 'set-up'.
 /// The 'main' route is wrapped in a [ShellRoute] to share the bottom navigation bar.
-final routes = [
+var routes = [
   ShellRoute(
     builder: (BuildContext context, GoRouterState state, Widget child) {
       return BottomNavBar(child: child);
@@ -126,10 +126,13 @@ final routes = [
       ]),
 ];
 
-final GoRouter _router = GoRouter(initialLocation: '/set-up', routes: routes);
-
 
 /// Wrapper containing the title app bar and bottom navigation bar.
+/// Used for testing
+void setRoutes(List<RouteBase> newRoutes) {
+  routes = newRoutes;
+}
+
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
     required this.child,
