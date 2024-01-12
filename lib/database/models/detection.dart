@@ -61,6 +61,7 @@ class Detection extends Model {
     this.boxes,
   });
 
+  /// Creates a blank device for testing or retrieving properties of the model.
   Detection.createDefault()
       : imageId = "1",
         preDetectImgLink = "assets/images/placeholder.png",

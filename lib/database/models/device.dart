@@ -12,6 +12,7 @@ class Device extends Model {
 
   Device({required this.id});
 
+  /// Creates a blank device for testing or retrieving properties of the model.
   Device.createDefault() : id = "";
 
   @override
@@ -37,6 +38,7 @@ class Device extends Model {
     await db.delete(tableName, where: "id = ?", whereArgs: [id]);
   }
 
+  /// Finds a device by its ID.
   static Future<Device?> find(String id) async {
     Database db = await getDatabaseConnection();
     List<Map<String, dynamic>> results = await db.query(
@@ -50,6 +52,7 @@ class Device extends Model {
     return Device(id: results[0]["id"]);
   }
 
+  /// Returns all devices.
   static Future<List<Device>> all() async {
     Database db = await getDatabaseConnection();
     List<Map<String, dynamic>> results = await db.query("devices");
