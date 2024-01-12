@@ -36,4 +36,18 @@ class Device extends Model {
     Database db = await getDatabaseConnection();
     await db.delete(tableName, where: "id = ?", whereArgs: [id]);
   }
+
+  static Future<Device?> find(String id) async {
+    Database db = await getDatabaseConnection();
+    List<Map<String, dynamic>> results = await db.query(
+      "devices",
+      where: "id = ?",
+      whereArgs: [id],
+    );
+    if (results.isEmpty) {
+      return null;
+    }
+    return Device(id: results[0]["id"]);
+  }
+
 }

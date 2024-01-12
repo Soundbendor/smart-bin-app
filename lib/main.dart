@@ -38,8 +38,10 @@ class BinsightAiApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GoRouter router = GoRouter(initialLocation: '/set-up', routes: routes);
+
     return MaterialApp.router(
-      routerConfig: _router,
+      routerConfig: router,
     );
   }
 }
@@ -121,7 +123,6 @@ final GoRouter _router = GoRouter(initialLocation: '/set-up', routes: routes);
 
 
 /// Wrapper containing the title app bar and bottom navigation bar.
-
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
     required this.child,
