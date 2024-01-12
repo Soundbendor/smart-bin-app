@@ -5,8 +5,8 @@ class FreeDraw extends StatefulWidget {
 
   const FreeDraw({
     required this.imageLink,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<FreeDraw> createState() => _FreeDrawState();

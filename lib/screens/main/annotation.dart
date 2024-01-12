@@ -39,10 +39,10 @@ class _AnnotationPageState extends State<AnnotationPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Label Annotation'),
+          title: const Text('Label Annotation'),
           content: Column(
             children: [
-              Text('Enter a name for your annotation:'),
+              const Text('Enter a name for your annotation:'),
               TextField(
                 controller: userInputController,
               ),
@@ -53,7 +53,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
@@ -68,7 +68,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                   print(annotationsList.length);
                 }
               },
-              child: Text('Save'),
+              child: const Text('Save'),
             ),
           ],
         );

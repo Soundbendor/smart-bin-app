@@ -125,8 +125,8 @@ final GoRouter _router = GoRouter(initialLocation: '/set-up', routes: routes);
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
     required this.child,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Widget child;
 
