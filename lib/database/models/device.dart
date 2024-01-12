@@ -50,4 +50,10 @@ class Device extends Model {
     return Device(id: results[0]["id"]);
   }
 
+  static Future<List<Device>> all() async {
+    Database db = await getDatabaseConnection();
+    List<Map<String, dynamic>> results = await db.query("devices");
+    return results.map((result) => Device(id: result["id"])).toList();
+  }
+
 }

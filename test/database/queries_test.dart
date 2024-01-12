@@ -251,6 +251,9 @@ class DeviceDatabase extends FakeDatabase {
         {
           "id": "foo",
         },
+        {
+          "id": "bar",
+        },
       ]);
     } else {
       return Future.value([]);
@@ -275,6 +278,16 @@ void main() async {
 
     Device? device = await Device.find("foo");
     expect(device, isNull);
+  });
+
+  test("Finding all devices", () async {
+    Database db = DeviceDatabase();
+    setDatabase(db);
+
+    List<Device> devices = await Device.all();
+    expect(devices.length, equals(2));
+    expect(devices[0].id, equals("foo"));
+    expect(devices[1].id, equals("bar"));
   });
 
 }
