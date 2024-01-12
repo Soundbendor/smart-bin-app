@@ -13,6 +13,7 @@ const int databaseVersion = 2;
 
 Database? _database;
 
+/// Creates and migrates the tables used internally.
 Future<void> createTables(
     Database database, List<Model> models, bool isMigration) async {
   for (Model model in models) {
