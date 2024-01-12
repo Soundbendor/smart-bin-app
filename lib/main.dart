@@ -1,3 +1,4 @@
+import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:binsight_ai/screens/main/annotation.dart';
 import 'package:flutter/material.dart';
@@ -26,19 +27,25 @@ void main() async {
   // };
   // channel.sink.add(jsonEncode(subscriptionMessage));
 
+  // Determine if there are devices in the database.
+  final devices = await Device.all();
+
   // handleMessages(channel, database);
-  runApp(const BinsightAiApp());
+  runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
 }
 
 
 /// The root of the application. Contains the GoRouter and MaterialApp wrappers.
 
 class BinsightAiApp extends StatelessWidget {
-  const BinsightAiApp({super.key});
+  final bool skipSetUp;
+
+  const BinsightAiApp({super.key, this.skipSetUp = false});
 
   @override
   Widget build(BuildContext context) {
-    final GoRouter router = GoRouter(initialLocation: '/set-up', routes: routes);
+    final GoRouter router = GoRouter(
+        initialLocation: skipSetUp ? '/main' : '/set-up', routes: routes);
 
     return MaterialApp.router(
       routerConfig: router,
