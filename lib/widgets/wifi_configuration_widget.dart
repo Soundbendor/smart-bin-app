@@ -6,6 +6,7 @@ import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'dart:convert';
 
+/// Sends WiFi credentials to the compost bin.
 class WifiConfigurationWidget extends StatefulWidget {
   const WifiConfigurationWidget({super.key, required this.device});
 
