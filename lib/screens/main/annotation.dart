@@ -22,10 +22,14 @@ class _AnnotationPageState extends State<AnnotationPage> {
 
   ///Key for the FreeDraw widget that's used to render and annotate the image
   final GlobalKey<dynamic> _freeDrawKey = GlobalKey();
+
+  ///List of unsigned integers representing the bytes of the captured image
   Uint8List? _capturedImage;
 
   //Points and label for the captured annotation
   DrawingSegment? _capturedPoint;
+
+  ///Input entered by user to label the current annotation
   String? userInput;
 
   ///List of annotations, each annotation having a label and a list of Offsets
@@ -67,7 +71,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
@@ -82,7 +86,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                   print(annotationsList.length);
                 }
               },
-              child: Text('Save'),
+              child: const Text('Save'),
             ),
           ],
         );

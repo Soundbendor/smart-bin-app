@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 ///Widget with logic to annotate and render detection images
 class FreeDraw extends StatefulWidget {
+  ///The link for the image to be annotated
   final String imageLink;
 
   const FreeDraw({
@@ -14,13 +15,16 @@ class FreeDraw extends StatefulWidget {
 }
 
 class _FreeDrawState extends State<FreeDraw> {
-  ///
-  var historyDrawingSegments = <DrawingSegment>[];
+  ///List of DrawingSegments that make up the current annotation
   var annotation = <DrawingSegment>[];
-  String? userInput;
 
+  ///Copy of the annotation list, unaffected by undo/redo operations
+  var historyDrawingSegments = <DrawingSegment>[];
+
+  ///The DrawingSegment being actively updated
   DrawingSegment? currentDrawingSegment;
-  DrawingSegment? tempDrawingSegment;
+
+  ///Key for the Image widget that renders the detection image
   late GlobalKey imageKey;
 
   @override
@@ -164,7 +168,10 @@ class DrawingPainter extends CustomPainter {
 ///When annotating an image, multiple segments can be drawn to make up the
 ///larger annotation. Each continious stroke is registred as one DrawingSegment
 class DrawingSegment {
+  ///Unique identifier for the segment
   int id;
+
+  ///List of x,y Offsets that make up the segment
   List<Offset> offsets;
 
   DrawingSegment({
