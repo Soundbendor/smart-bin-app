@@ -18,7 +18,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final Database database = await getDatabaseConnection();
   final channel =
-      IOWebSocketChannel.connect('http://54.214.80.15/api/model/subscribe');
+      IOWebSocketChannel.connect('ws://54.214.80.15/api/model/subscribe');
   final subscriptionMessage = {
     "type": "subscribe",
     "channel": "1",

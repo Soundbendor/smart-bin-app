@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:binsight_ai/widgets/free_draw.dart';
 
+/// Page used for annotating an individual detection image
 class AnnotationPage extends StatefulWidget {
+  ///The link for the image to be annotated
   final String imageLink;
 
   const AnnotationPage({super.key, required this.imageLink});
@@ -15,13 +17,24 @@ class AnnotationPage extends StatefulWidget {
 }
 
 class _AnnotationPageState extends State<AnnotationPage> {
+  ///Key for the RepaintBoundary widget that's used to capture the annotated image
   final GlobalKey _captureKey = GlobalKey();
+
+  ///Key for the FreeDraw widget that's used to render and annotate the image
   final GlobalKey<dynamic> _freeDrawKey = GlobalKey();
   Uint8List? _capturedImage;
-  DrawingPoint? _capturedPoint;
+
+  //Points and label for the captured annotation
+  DrawingSegment? _capturedPoint;
   String? userInput;
+
+  ///List of annotations, each annotation having a label and a list of Offsets
   List<List<dynamic>> annotationsList = [];
 
+  ///Function to capture the annotated image
+  ///
+  ///Uses the RepaintBoundary's key to obtain the RenderObject, and converts it
+  ///to it into a Uint8List to be used with Image.memory
   void captureImage() async {
     RenderRepaintBoundary boundary =
         _captureKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
@@ -32,6 +45,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
     setState(() {});
   }
 
+  ///Renders the popup that prompts input for a label of the current annotation
   void _showPopup() {
     TextEditingController userInputController = TextEditingController();
 
@@ -39,10 +53,10 @@ class _AnnotationPageState extends State<AnnotationPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Label Annotation'),
+          title: const Text('Label Annotation'),
           content: Column(
             children: [
-              Text('Enter a name for your annotation:'),
+              const Text('Enter a name for your annotation:'),
               TextField(
                 controller: userInputController,
               ),
@@ -126,6 +140,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 },
                 child: const Text("Complete Annotations"),
               ),
+              //
               if (_capturedImage != null)
                 Image.memory(
                   _capturedImage!,
@@ -137,6 +152,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
           ),
         ),
       ),
+      //Undo and redo buttons
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [

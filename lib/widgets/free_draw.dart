@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 
+///Widget with logic to annotate and render detection images
 class FreeDraw extends StatefulWidget {
   final String imageLink;
 
   const FreeDraw({
     required this.imageLink,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<FreeDraw> createState() => _FreeDrawState();
 }
 
 class _FreeDrawState extends State<FreeDraw> {
-  var historyDrawingPoints = <DrawingPoint>[];
-  var drawingPoints = <DrawingPoint>[];
+  ///
+  var historyDrawingSegments = <DrawingSegment>[];
+  var annotation = <DrawingSegment>[];
   String? userInput;
 
-  DrawingPoint? currentDrawingPoint;
-  DrawingPoint? tempDrawingPoint;
+  DrawingSegment? currentDrawingSegment;
+  DrawingSegment? tempDrawingSegment;
   late GlobalKey imageKey;
 
   @override
@@ -33,35 +35,39 @@ class _FreeDrawState extends State<FreeDraw> {
       width: 300,
       height: 300,
       child: GestureDetector(
+        //When first touching within the image, create a single Offset
         onPanStart: (details) {
           setState(() {
             if (_isPointOnImage(details.localPosition)) {
-              currentDrawingPoint = DrawingPoint(
+              currentDrawingSegment = DrawingSegment(
                 id: DateTime.now().microsecondsSinceEpoch,
                 offsets: [details.localPosition],
               );
-              drawingPoints.add(currentDrawingPoint!);
-              historyDrawingPoints = List.of(drawingPoints);
+              annotation.add(currentDrawingSegment!);
+              historyDrawingSegments = List.of(annotation);
             }
           });
         },
+        //When dragging your finger, update the current drawing's offsets to include the new point
+        //Update the most recent segment in the annotation's list of Segments
         onPanUpdate: (details) {
           setState(() {
-            if (currentDrawingPoint != null &&
+            if (currentDrawingSegment != null &&
                 _isPointOnImage(details.localPosition)) {
               Offset localPosition = details.localPosition;
 
-              currentDrawingPoint = currentDrawingPoint?.copyWith(
-                offsets: currentDrawingPoint!.offsets..add(localPosition),
+              currentDrawingSegment = currentDrawingSegment?.copyWith(
+                offsets: currentDrawingSegment!.offsets..add(localPosition),
               );
-              drawingPoints.last = currentDrawingPoint!;
-              historyDrawingPoints = List.of(drawingPoints);
+              annotation.last = currentDrawingSegment!;
+              historyDrawingSegments = List.of(annotation);
             }
           });
         },
         onPanEnd: (_) {
-          currentDrawingPoint = null;
+          currentDrawingSegment = null;
         },
+        //Render the drawing on top of the image
         child: Stack(
           children: [
             Image.asset(
@@ -71,7 +77,7 @@ class _FreeDrawState extends State<FreeDraw> {
             ),
             CustomPaint(
               painter: DrawingPainter(
-                drawingPoints: drawingPoints,
+                drawingSegments: annotation,
               ),
             ),
           ],
@@ -80,6 +86,7 @@ class _FreeDrawState extends State<FreeDraw> {
     );
   }
 
+  ///Checks whether an Offset is within the bounds of the image
   bool _isPointOnImage(Offset point) {
     RenderBox renderBox =
         imageKey.currentContext!.findRenderObject() as RenderBox;
@@ -87,50 +94,59 @@ class _FreeDrawState extends State<FreeDraw> {
     return imageBounds.contains(point);
   }
 
-  DrawingPoint? get lastDrawingPoint {
-    return drawingPoints.isNotEmpty ? drawingPoints.last : null;
+  ///Returns the last DrawingSegment in the annotation list
+  DrawingSegment? get lastDrawingPoint {
+    return annotation.isNotEmpty ? annotation.last : null;
   }
 
+  ///Removes the last DrawingSegment from the annotation list
   void undo() {
     setState(() {
-      if (drawingPoints.isNotEmpty && historyDrawingPoints.isNotEmpty) {
-        drawingPoints.removeLast();
+      if (annotation.isNotEmpty && historyDrawingSegments.isNotEmpty) {
+        annotation.removeLast();
       }
     });
   }
 
+  ///Adds the most recent DrawingSegment to the annotation list, from the history list
   void redo() {
     setState(() {
-      if (drawingPoints.length < historyDrawingPoints.length) {
-        final index = drawingPoints.length;
-        drawingPoints.add(historyDrawingPoints[index]);
+      if (annotation.length < historyDrawingSegments.length) {
+        final index = annotation.length;
+        annotation.add(historyDrawingSegments[index]);
       }
     });
   }
 }
 
+///Implementation of the Custom Painter to provide drawing capabilities
+///
+///To be used as the painter within the CustomPaint widget, providing the
+///implementation of paint, specifying what to paint and what data to use
 class DrawingPainter extends CustomPainter {
-  final List<DrawingPoint> drawingPoints;
+  final List<DrawingSegment> drawingSegments;
 
   DrawingPainter({
-    required this.drawingPoints,
+    required this.drawingSegments,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    for (var drawingPoint in drawingPoints) {
+    //Draws a line between each drawingSegment's Offsets
+    //for each segment in drawingSegments
+    for (var drawingSegment in drawingSegments) {
       final paint = Paint()
         ..color = Colors.black
         ..isAntiAlias = true
         ..strokeWidth = 2.0
         ..strokeCap = StrokeCap.round;
 
-      for (var i = 0; i < drawingPoint.offsets.length; i++) {
-        var notLastOffset = i != drawingPoint.offsets.length - 1;
+      for (var i = 0; i < drawingSegment.offsets.length; i++) {
+        var notLastOffset = i != drawingSegment.offsets.length - 1;
 
         if (notLastOffset) {
-          final current = drawingPoint.offsets[i];
-          final next = drawingPoint.offsets[i + 1];
+          final current = drawingSegment.offsets[i];
+          final next = drawingSegment.offsets[i + 1];
           canvas.drawLine(current, next, paint);
         }
       }
@@ -143,17 +159,23 @@ class DrawingPainter extends CustomPainter {
   }
 }
 
-class DrawingPoint {
+///Represents one continous stroke in an annotation
+///
+///When annotating an image, multiple segments can be drawn to make up the
+///larger annotation. Each continious stroke is registred as one DrawingSegment
+class DrawingSegment {
   int id;
   List<Offset> offsets;
 
-  DrawingPoint({
+  DrawingSegment({
     this.id = -1,
     this.offsets = const [],
   });
 
-  DrawingPoint copyWith({List<Offset>? offsets}) {
-    return DrawingPoint(
+  ///Allows for creation of a new DrawingSegment instance with updated offsets
+  ///but the same id.
+  DrawingSegment copyWith({List<Offset>? offsets}) {
+    return DrawingSegment(
       id: id,
       offsets: offsets ?? this.offsets,
     );
