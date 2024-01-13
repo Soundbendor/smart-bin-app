@@ -40,7 +40,12 @@ class BinsightAiApp extends StatelessWidget {
   }
 }
 
+//Defines the router to be used for the app, with set-up as the initial route
+final GoRouter _router = GoRouter(initialLocation: '/set-up', routes: routes);
+
+//Defines the list of routes to be used in the app
 final routes = [
+  //BottomNavBar element acts as the shell widget for all ShellRoute's subroutes
   ShellRoute(
     builder: (BuildContext context, GoRouterState state, Widget child) {
       return BottomNavBar(child: child);
@@ -106,13 +111,12 @@ final routes = [
       ]),
 ];
 
-final GoRouter _router = GoRouter(initialLocation: '/set-up', routes: routes);
-
+///Constructs the bottom navigation bar that's shared by all screens in the main app
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
     required this.child,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Widget child;
 
@@ -145,6 +149,7 @@ class BottomNavBar extends StatelessWidget {
     );
   }
 
+  ///Calculates the index given the current GoRouter state
   static int _calculateSelectedIndex(BuildContext context) {
     final String location = GoRouterState.of(context).uri.toString();
     if (location == '/main') {
@@ -159,6 +164,7 @@ class BottomNavBar extends StatelessWidget {
     return 0;
   }
 
+  ///Navigates to a uri given an index corresponding to the item tapped
   void _onItemTapped(int index, BuildContext context) {
     switch (index) {
       case 0:
