@@ -33,3 +33,7 @@ flutter_native_splash:
   color: "#ffffff"
   image: assets/images/soundbendor_logo.png
   web: false
+
+  android_12:
+    color: "#ffffff"
+    image: assets/images/soundbendor_logo.png
