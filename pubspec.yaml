@@ -40,3 +40,9 @@ flutter_native_splash:
     color: "#ffffff"
     image: assets/images/app_logo.png
     branding: assets/images/soundbendor_logo.png
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_logo.png"
+  min_sdk_android: 21
