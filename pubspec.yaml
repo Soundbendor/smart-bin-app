@@ -28,3 +28,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/images/soundbendor_logo.png
+  web: false
