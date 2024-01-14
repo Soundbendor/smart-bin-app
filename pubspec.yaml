@@ -17,12 +17,13 @@ dependencies:
   go_router: ^12.1.1
   web_socket_channel: ^2.4.0
   flutter_blue_plus: ^1.29.8
-  flutter_native_splash: ^2.3.9
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.1
+  flutter_native_splash: ^2.3.9
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
@@ -31,9 +32,11 @@ flutter:
 
 flutter_native_splash:
   color: "#ffffff"
-  image: assets/images/soundbendor_logo.png
+  image: assets/images/app_logo.png
+  branding: assets/images/soundbendor_logo.png
   web: false
 
   android_12:
     color: "#ffffff"
-    image: assets/images/soundbendor_logo.png
+    image: assets/images/app_logo.png
+    branding: assets/images/soundbendor_logo.png
