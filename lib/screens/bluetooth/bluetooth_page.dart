@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:sqflite/utils/utils.dart';
 import 'dart:async';
-import 'dart:convert';
 
 /// Writes specified characteristic data to the device.
 Future<void> writeCharacteristic(BluetoothDevice device, Guid characteristicId, List<int> data) async {
