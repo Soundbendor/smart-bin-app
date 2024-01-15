@@ -5,25 +5,32 @@ import 'package:sqflite/utils/utils.dart';
 import 'dart:async';
 import 'dart:convert';
 
+/// Writes specified characteristic data to the device.
 Future<void> writeCharacteristic(BluetoothDevice device, Guid characteristicId, List<int> data) async {
+  // Compile all of the services and characteristics on the device
   List<BluetoothService> services = await device.discoverServices();
   for (BluetoothService service in services) {
     for (BluetoothCharacteristic characteristic in service.characteristics) {
+      // Only write to the specified characteristic
       if (characteristic.uuid == characteristicId) {
         await characteristic.write(
           data,
+          // This line was used for debugging, as we could not get proof-of-concept without it, 
+          // a general error was being consistently thrown and there was no indicator of what was causing it
           withoutResponse: true
         );
-        print('Data written successfully.');
       }
     }
   }
 }
 
+/// Reads specified characteristic data from the device.
 Future<void> readCharacteristic(BluetoothDevice device, Guid characteristicId) async {
+  // Compile all of the services and characteristics on the device
   List<BluetoothService> services = await device.discoverServices();
   for (BluetoothService service in services) {
     for (BluetoothCharacteristic characteristic in service.characteristics) {
+      // Only read the specified characteristic
       if (characteristic.uuid == characteristicId) {
         List<int> value = await characteristic.read();
         print('Read value: $value');
@@ -32,6 +39,7 @@ Future<void> readCharacteristic(BluetoothDevice device, Guid characteristicId) a
   }
 }
 
+/// Displays scanned Bluetooth devices.
 class BluetoothPage extends StatefulWidget {
   const BluetoothPage({super.key});
 
@@ -39,6 +47,7 @@ class BluetoothPage extends StatefulWidget {
   State<BluetoothPage> createState() => _BluetoothPageState();
 }
 
+/// Handles collecting Bluetooth devices to be displayed.
 class _BluetoothPageState extends State<BluetoothPage> {
   final List<BluetoothDevice> _bluetoothDevices = [];
 
@@ -46,31 +55,29 @@ class _BluetoothPageState extends State<BluetoothPage> {
   void initState() {
     super.initState();
 
-    // Opening the page should start a scan
+    // Opening the page should start a scan for devices
     performScan();
   }
 
+  /// Connects to the specified device using Flutter Blue Plus's connect method.
   Future<void> connectToDevice(BluetoothDevice device) async {
     await device.connect();
   }
 
-  Future<void> _getScannedResults() async {
+  /// Starts the Flutter Blue Plus scan and populates the results with found devices.
+  void performScan() {
     // When scanning for devices, continuously update the list and remove old devices
     FlutterBluePlus.startScan(
       continuousUpdates: true,
       removeIfGone: const Duration(seconds: 3),
+      // The below comment can be uncommented when the official device naming convention is decided
       // withKeywords: ["LE"]
     );
-  }
 
-  void performScan() {
-    _getScannedResults();
-
-    // List of bluetooth connections names to ensure no duplicates are captured
+    // Listen to the scan stream to populate the found devices
     List<String> filteredBluetoothConnectionsString = [];
-      // Start scanning for bluetooth connections
       FlutterBluePlus.scanResults.listen((results) {
-        // Iterate through all scanned bluetooth connections and only add ones that meet criteria 
+        // Only add devices that have not already been put into _bluetoothDevices
         for (ScanResult r in results) {
           if (!filteredBluetoothConnectionsString.contains(r.advertisementData.advName)) {
             setState(() {
@@ -108,31 +115,41 @@ class _BluetoothPageState extends State<BluetoothPage> {
                 )
               ),
               Container(
-                color: Colors.white,
-                height: MediaQuery.of(context).size.height / 2,
-                child: ListView.builder(
-                  itemCount: _bluetoothDevices.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final bluetoothDevice = _bluetoothDevices[index];
-                    return Card(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0)),
-                      child: ListTile(
-                        leading: const Icon(Icons.bluetooth),
-                        title: Text(bluetoothDevice.platformName),
-                        trailing: const Icon(Icons.keyboard_arrow_right),
-                        onTap: () async {
-                          FlutterBluePlus.stopScan();
-                          await connectToDevice(bluetoothDevice);
-                          await readCharacteristic(bluetoothDevice, Guid("2AF9"));
-                          print("got past the connection!!L!!!!OOLODOASKDD");
-                          GoRouter.of(context).goNamed('wifi', extra:bluetoothDevice);
-                        }
-                      ),
-                    );
+                color: const Color.fromRGBO(0, 0, 0, 0),
+                height: MediaQuery.of(context).size.height / 2.5,
+                child: ShaderMask(
+                  shaderCallback: (Rect rect) {
+                    return const LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.purple, Colors.transparent, Colors.transparent, Colors.purple],
+                      stops: [0.0, 0.2, 0.6, 1.0],
+                    ).createShader(rect);
                   },
+                  blendMode: BlendMode.dstOut,
+                  child: ListView.builder(
+                    itemCount: _bluetoothDevices.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final bluetoothDevice = _bluetoothDevices[index];
+                      return Card(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0)),
+                        child: ListTile(
+                          leading: const Icon(Icons.bluetooth),
+                          title: Text(bluetoothDevice.platformName),
+                          trailing: const Icon(Icons.keyboard_arrow_right),
+                          onTap: () async {
+                            FlutterBluePlus.stopScan();
+                            await connectToDevice(bluetoothDevice);
+                            await readCharacteristic(bluetoothDevice, Guid("2AF9"));
+                            GoRouter.of(context).goNamed('wifi', extra:bluetoothDevice);
+                          }
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ],

@@ -27,7 +27,6 @@ class _WifiConfigurationWidgetState extends State<WifiConfigurationWidget> {
   Future<void> sendWifiCredentials() async {
       List<int> encodedJsonData = utf8.encode(jsonEncode({"ssid": ssidController.text, "password": passwordController.text}));
       await writeCharacteristic(device, Guid("2AB5"), encodedJsonData);
-      print("it happened");
   }
 
   @override
