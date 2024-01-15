@@ -6,8 +6,8 @@ import 'package:binsight_ai/screens/main/home_page.dart';
 import 'package:binsight_ai/screens/main/stats_page.dart';
 import 'package:binsight_ai/screens/splash/screen.dart';
 import 'package:binsight_ai/screens/splash/wifi_page.dart';
-import 'package:binsight_ai/screens/connection/connect_page.dart';
 import 'package:binsight_ai/database/connection.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:binsight_ai/pub_sub/subscriber.dart';
@@ -95,14 +95,8 @@ final routes = [
             name: 'wifi',
             path: 'wifi',
             builder: (BuildContext context, GoRouterState state) {
-              return const WifiPage();
+              return WifiPage(device: state.extra as BluetoothDevice);
             }),
-        GoRoute(
-            name: 'bin_connect',
-            path: 'bin_connect',
-            builder: (BuildContext context, GoRouterState state) {
-              return const ConnectPage();
-            })
       ]),
 ];
 

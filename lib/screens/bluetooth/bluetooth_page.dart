@@ -3,6 +3,34 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:sqflite/utils/utils.dart';
 import 'dart:async';
+import 'dart:convert';
+
+Future<void> writeCharacteristic(BluetoothDevice device, Guid characteristicId, List<int> data) async {
+  List<BluetoothService> services = await device.discoverServices();
+  for (BluetoothService service in services) {
+    for (BluetoothCharacteristic characteristic in service.characteristics) {
+      if (characteristic.uuid == characteristicId) {
+        await characteristic.write(
+          data,
+          withoutResponse: true
+        );
+        print('Data written successfully.');
+      }
+    }
+  }
+}
+
+Future<void> readCharacteristic(BluetoothDevice device, Guid characteristicId) async {
+  List<BluetoothService> services = await device.discoverServices();
+  for (BluetoothService service in services) {
+    for (BluetoothCharacteristic characteristic in service.characteristics) {
+      if (characteristic.uuid == characteristicId) {
+        List<int> value = await characteristic.read();
+        print('Read value: $value');
+      }
+    }
+  }
+}
 
 class BluetoothPage extends StatefulWidget {
   const BluetoothPage({super.key});
@@ -22,12 +50,16 @@ class _BluetoothPageState extends State<BluetoothPage> {
     performScan();
   }
 
+  Future<void> connectToDevice(BluetoothDevice device) async {
+    await device.connect();
+  }
+
   Future<void> _getScannedResults() async {
     // When scanning for devices, continuously update the list and remove old devices
     FlutterBluePlus.startScan(
       continuousUpdates: true,
       removeIfGone: const Duration(seconds: 3),
-      withKeywords: ["LE"]
+      // withKeywords: ["LE"]
     );
   }
 
@@ -52,71 +84,70 @@ class _BluetoothPageState extends State<BluetoothPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("assets/images/background2.JPG"),
-          fit: BoxFit.cover),
-      ),
-      child: Column(
-        children: [
-          const Center(
-            child: Padding(
-              padding: EdgeInsets.only(top: 180.0, left: 50.0, right: 50.0),
-              child: Text(
+    const textSize = 20.0;
+
+    return Scaffold(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/background2.JPG"),
+            fit: BoxFit.cover
+          ),
+        ),
+        child: Column(
+            children: [
+              SizedBox(
+                height: (MediaQuery.of(context).size.height / 2) - (200 + textSize),
+              ),
+              const Text(
                 "Find your Bin!",
                 style: TextStyle(
-                  fontSize: 40,
-                  color: Color(0xff787878),
-                  fontWeight: FontWeight.bold
+                  fontSize: textSize,
+                )
+              ),
+              Container(
+                color: Colors.white,
+                height: MediaQuery.of(context).size.height / 2,
+                child: ListView.builder(
+                  itemCount: _bluetoothDevices.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final bluetoothDevice = _bluetoothDevices[index];
+                    return Card(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 20),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0)),
+                      child: ListTile(
+                        leading: const Icon(Icons.bluetooth),
+                        title: Text(bluetoothDevice.platformName),
+                        trailing: const Icon(Icons.keyboard_arrow_right),
+                        onTap: () async {
+                          FlutterBluePlus.stopScan();
+                          await connectToDevice(bluetoothDevice);
+                          await readCharacteristic(bluetoothDevice, Guid("2AF9"));
+                          print("got past the connection!!L!!!!OOLODOASKDD");
+                          GoRouter.of(context).goNamed('wifi', extra:bluetoothDevice);
+                        }
+                      ),
+                    );
+                  },
                 ),
               ),
-            ),
-          ),
-          Flex(
-            direction: Axis.vertical,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(30.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xffe3e3e3),
-                    borderRadius: BorderRadius.circular(15.0),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromARGB(255, 150, 150, 150),
-                        blurRadius: 3,
-                        offset: Offset(0, 5),
-                      )
-                    ]
-                  ),
-                  child: ListView.builder(
-                      itemCount: _bluetoothDevices.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final bluetoothDevice = _bluetoothDevices[index];
-                        return Card(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0)),
-                          child: ListTile(
-                            leading: const Icon(Icons.bluetooth),
-                            title: Text(bluetoothDevice.platformName),
-                            trailing: const Icon(Icons.keyboard_arrow_right),
-                            onTap: () {
-                              GoRouter.of(context).goNamed('wifi');
-                            }
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-              ),
-            Container()
             ],
           ),
-        ],
-      ),
-    );
+        ),
+      );
   }
 }
+
+// listen for disconnection
+// var subscription = device.connectionState.listen((BluetoothConnectionState state) async {
+//     if (state == BluetoothConnectionState.disconnected) {
+//         // 1. typically, start a periodic timer that tries to 
+//         //    reconnect, or just call connect() again right now
+//         // 2. you must always re-discover services after disconnection!
+//         print("${device.disconnectReasonCode} ${device.disconnectReasonDescription}");
+//     }
+// });
