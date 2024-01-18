@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Widget for displaying a heading with an underline
 class Heading extends StatelessWidget {
   final String text;
 
@@ -12,6 +13,7 @@ class Heading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
+      // Underline tab indicator decoration
       decoration: const UnderlineTabIndicator(
         borderSide: BorderSide(
           color: Colors.black,
@@ -20,6 +22,7 @@ class Heading extends StatelessWidget {
       ),
       margin: const EdgeInsets.only(bottom: 10),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        // Text displaying the heading
         Text(
           text,
           style: const TextStyle(
