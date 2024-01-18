@@ -10,7 +10,7 @@ class SplashPage extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage("assets/images/background2.JPG"),
+              image: AssetImage("assets/images/background3.JPG"),
               fit: BoxFit.cover),
         ),
         child: Center(
@@ -22,36 +22,41 @@ class SplashPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     const Padding(
-                        padding: EdgeInsets.all(20),
+                        padding: EdgeInsets.only(left: 16, right: 16, bottom: 30, top: 160),
                         child: Text(
                           "Welcome!",
                           style: TextStyle(
-                              fontSize: 40, fontWeight: FontWeight.bold),
-                        )),
-                    const Text(
-                      "Connect your Smart Bin to WiFi to start collecting data",
-                      style: TextStyle(
-                        fontSize: 25,
+                              fontSize: 40, 
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff787878)
+                              ),
+                        )
                       ),
-                      textAlign: TextAlign.center,
+                    const Padding(
+                      padding: EdgeInsets.only(left: 80, right: 80, top: 20, bottom: 20),
+                      child: Text(
+                        "Let's get you connected to your bin.",
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Color(0xff787878),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.all(16.0),
-                              textStyle: const TextStyle(fontSize: 20),
-                              backgroundColor: const Color(0xFF15a2cd)),
-                          onPressed: () {
-                            context.goNamed('bin_connect');
-                          },
-                          child: const Text('Continue'),
-                        ),
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.all(16.0),
+                            textStyle: const TextStyle(fontSize: 20),
+                            backgroundColor: const Color(0xFF15a2cd)),
+                        onPressed: () {
+                          context.goNamed('bluetooth');
+                        },
+                        child: const Text('Continue'),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

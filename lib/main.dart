@@ -1,21 +1,31 @@
+import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
+import 'package:binsight_ai/screens/main/annotation.dart';
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/screens/main/detections_page.dart';
 import 'package:binsight_ai/screens/main/home_page.dart';
 import 'package:binsight_ai/screens/main/stats_page.dart';
 import 'package:binsight_ai/screens/splash/screen.dart';
 import 'package:binsight_ai/screens/splash/wifi_page.dart';
-import 'package:binsight_ai/screens/connection/connect_page.dart';
 import 'package:binsight_ai/database/connection.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:go_router/go_router.dart';
-
-final GlobalKey<NavigatorState> _rootNavigatorKey =
-    GlobalKey<NavigatorState>(debugLabel: 'root');
-final GlobalKey<NavigatorState> _shellNavigatorKey =
-    GlobalKey<NavigatorState>(debugLabel: 'shell');
+import 'package:sqflite/sqflite.dart';
+import 'package:binsight_ai/pub_sub/subscriber.dart';
+import 'package:web_socket_channel/io.dart';
+import 'dart:convert';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await getDatabaseConnection();
+  // WidgetsFlutterBinding.ensureInitialized();
+  // final Database database = await getDatabaseConnection();
+  // final channel =
+  //     IOWebSocketChannel.connect('http://54.214.80.15/api/model/subscribe');
+  // final subscriptionMessage = {
+  //   "type": "subscribe",
+  //   "channel": "1",
+  // };
+  // channel.sink.add(jsonEncode(subscriptionMessage));
+
+  // handleMessages(channel, database);
   runApp(const BinsightAiApp());
 }
 
@@ -44,12 +54,20 @@ final routes = [
           },
           routes: [
             GoRoute(
-              name: 'detections',
-              path: 'detections',
-              builder: (BuildContext context, GoRouterState state) {
-                return const DetectionsPage();
-              },
-            ),
+                name: 'detections',
+                path: 'detections',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const DetectionsPage();
+                },
+                routes: [
+                  GoRoute(
+                      name: 'annotation',
+                      path: 'annotation:imagePath',
+                      builder: (BuildContext context, GoRouterState state) {
+                        return AnnotationPage(
+                            imageLink: state.pathParameters['imagePath']!);
+                      }),
+                ]),
             GoRoute(
               name: 'stats',
               path: 'stats',
@@ -68,29 +86,27 @@ final routes = [
       },
       routes: [
         GoRoute(
+            name: 'bluetooth',
+            path: 'bluetooth',
+            builder: (BuildContext context, GoRouterState state) {
+              return const BluetoothPage();
+            }),
+        GoRoute(
             name: 'wifi',
             path: 'wifi',
             builder: (BuildContext context, GoRouterState state) {
-              return const WifiPage();
+              return WifiPage(device: state.extra as BluetoothDevice);
             }),
-        GoRoute(
-            name: 'bin_connect',
-            path: 'bin_connect',
-            builder: (BuildContext context, GoRouterState state) {
-              return const ConnectPage();
-            })
       ]),
 ];
-final GoRouter _router = GoRouter(
-  initialLocation: '/set-up',
-  routes: routes,
-);
+
+final GoRouter _router = GoRouter(initialLocation: '/set-up', routes: routes);
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
     required this.child,
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final Widget child;
 
