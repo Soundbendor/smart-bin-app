@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// Widget for displaying a heading with an underline
+
+/// Creates a heading with large text and an underline.
+
 class Heading extends StatelessWidget {
   final String text;
 
