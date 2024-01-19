@@ -12,7 +12,6 @@ class DetectionsPage extends StatefulWidget {
 }
 
 class _DetectionsPageState extends State<DetectionsPage> {
-
   /// Whether to display the detections in a large or small format.
   ///
   /// When [sizeToggle] is true, the detections are displayed in a large card format.
@@ -45,7 +44,9 @@ class _DetectionsPageState extends State<DetectionsPage> {
               ],
             ),
             DetectionList(
-              size: sizeToggle ? DetectionListType.large : DetectionListType.small,
+              size: sizeToggle
+                  ? DetectionListType.large
+                  : DetectionListType.small,
               detections: [
                 Detection.createDefault(),
                 Detection.createDefault(),

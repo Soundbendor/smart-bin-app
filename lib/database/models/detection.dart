@@ -2,19 +2,47 @@ import 'package:sqflite/sqflite.dart';
 import 'package:binsight_ai/database/connection.dart';
 import 'package:binsight_ai/database/model.dart';
 
+/// The detection model.
+///
+/// Contains all the information about a detection.
 class Detection extends Model {
+  /// The image ID.
   String imageId;
+
+  /// The link to the pre-detection image.
   String preDetectImgLink;
+
+  /// The link to the post-detection image.
   String? postDetectImgLink;
+
+  /// The link to the depth map image.
   String? depthMapImgLink;
+
+  /// The link to the IR image.
   String? irImgLink;
+
+  // The weight value.
   double? weight;
+
+  /// The humidity value.
   double? humidity;
+
+  /// The temperature value.
   double? temperature;
+
+  /// The CO2 value.
   double? co2;
+
+  /// The VO2 value.
   double? vo2;
+
+  /// The bounding boxes, in JSON format.
   String? boxes;
+
+  /// The timestamp of the detection.
   DateTime timestamp;
+
+  /// The device ID.
   String deviceId;
 
   Detection({
@@ -33,6 +61,7 @@ class Detection extends Model {
     this.boxes,
   });
 
+  /// Creates a blank device for testing or retrieving properties of the model.
   Detection.createDefault()
       : imageId = "1",
         preDetectImgLink = "assets/images/placeholder.png",

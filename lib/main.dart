@@ -1,3 +1,4 @@
+import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:binsight_ai/screens/main/annotation.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +11,6 @@ import 'package:binsight_ai/database/connection.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:binsight_ai/pub_sub/subscriber.dart';
-import 'package:web_socket_channel/io.dart';
-import 'dart:convert';
 
 /// Entry point of the application
 void main() async {
@@ -26,30 +24,38 @@ void main() async {
   // };
   // channel.sink.add(jsonEncode(subscriptionMessage));
 
+  // Determine if there are devices in the database.
+  final devices = await Device.all();
+
   // handleMessages(channel, database);
-  runApp(const BinsightAiApp());
+  runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
 }
 
+// Also used for testing
+late GoRouter router;
 
 /// The root of the application. Contains the GoRouter and MaterialApp wrappers.
-
 class BinsightAiApp extends StatelessWidget {
-  const BinsightAiApp({super.key});
+  final bool skipSetUp;
+
+  const BinsightAiApp({super.key, this.skipSetUp = false});
 
   @override
   Widget build(BuildContext context) {
+    router = GoRouter(
+        initialLocation: skipSetUp ? '/main' : '/set-up', routes: routes);
+
     return MaterialApp.router(
-      routerConfig: _router,
+      routerConfig: router,
     );
   }
 }
-
 
 /// The routes for the application.
 ///
 /// The routes are defined like a tree. There are two top-level routes: 'main' and 'set-up'.
 /// The 'main' route is wrapped in a [ShellRoute] to share the bottom navigation bar.
-final routes = [
+var routes = [
   ShellRoute(
     builder: (BuildContext context, GoRouterState state, Widget child) {
       return BottomNavBar(child: child);
@@ -117,16 +123,17 @@ final routes = [
       ]),
 ];
 
-final GoRouter _router = GoRouter(initialLocation: '/set-up', routes: routes);
-
-
 /// Wrapper containing the title app bar and bottom navigation bar.
+/// Used for testing
+void setRoutes(List<RouteBase> newRoutes) {
+  routes = newRoutes;
+}
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
     required this.child,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Widget child;
 
