@@ -1,7 +1,6 @@
 import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:binsight_ai/screens/main/annotation.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/screens/main/detections_page.dart';
 import 'package:binsight_ai/screens/main/home_page.dart';
@@ -12,9 +11,6 @@ import 'package:binsight_ai/database/connection.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:binsight_ai/pub_sub/subscriber.dart';
-import 'package:web_socket_channel/io.dart';
-import 'dart:convert';
 
 /// Entry point of the application
 void main() async {
