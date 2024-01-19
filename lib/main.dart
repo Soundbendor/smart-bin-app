@@ -14,6 +14,7 @@ import 'package:binsight_ai/pub_sub/subscriber.dart';
 import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
 
+/// Entry point of the application
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
   // final Database database = await getDatabaseConnection();
@@ -29,7 +30,9 @@ void main() async {
   runApp(const BinsightAiApp());
 }
 
+
 /// The root of the application. Contains the GoRouter and MaterialApp wrappers.
+
 class BinsightAiApp extends StatelessWidget {
   const BinsightAiApp({super.key});
 
@@ -40,6 +43,7 @@ class BinsightAiApp extends StatelessWidget {
     );
   }
 }
+
 
 /// The routes for the application.
 ///
@@ -115,7 +119,9 @@ final routes = [
 
 final GoRouter _router = GoRouter(initialLocation: '/set-up', routes: routes);
 
+
 /// Wrapper containing the title app bar and bottom navigation bar.
+
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
     required this.child,
@@ -153,6 +159,7 @@ class BottomNavBar extends StatelessWidget {
     );
   }
 
+  // Calculate the index of the bottom navigation bar based on the current route
   static int _calculateSelectedIndex(BuildContext context) {
     final String location = GoRouterState.of(context).uri.toString();
     if (location == '/main') {
@@ -167,6 +174,7 @@ class BottomNavBar extends StatelessWidget {
     return 0;
   }
 
+  // Function to handle navigation when an item is tapped
   void _onItemTapped(int index, BuildContext context) {
     switch (index) {
       case 0:
