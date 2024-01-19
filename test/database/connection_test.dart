@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:binsight_ai/database/connection.dart';
 import 'package:binsight_ai/database/models/device.dart';
-import '../_shared.dart';
+import '../shared.dart';
 
 void main() async {
   test("database connection is closed", () async {

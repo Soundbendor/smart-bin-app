@@ -3,7 +3,6 @@ import 'package:binsight_ai/database/connection.dart';
 
 /// The base class for models.
 abstract class Model {
-
   /// The table name.
   String get tableName;
 

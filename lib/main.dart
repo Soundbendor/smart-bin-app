@@ -127,7 +127,6 @@ var routes = [
       ]),
 ];
 
-
 /// Wrapper containing the title app bar and bottom navigation bar.
 /// Used for testing
 void setRoutes(List<RouteBase> newRoutes) {

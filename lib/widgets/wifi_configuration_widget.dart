@@ -5,7 +5,6 @@ import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'dart:convert';
 
-
 /// Widget for configuring the wifi credentials of the compost bin
 
 class WifiConfigurationWidget extends StatefulWidget {
@@ -26,12 +25,12 @@ class _WifiConfigurationWidgetState extends State<WifiConfigurationWidget> {
   TextEditingController passwordController = TextEditingController();
   final BluetoothDevice device;
 
-
   /// Function to send WiFi credentials to the Bluetooth connected Compost Bin
   Future<void> sendWifiCredentials() async {
-      // Encode WiFi credentials as JSON and convert to bytes
-      List<int> encodedJsonData = utf8.encode(jsonEncode({"ssid": ssidController.text, "password": passwordController.text}));
-      await writeCharacteristic(device, Guid("2AB5"), encodedJsonData);
+    // Encode WiFi credentials as JSON and convert to bytes
+    List<int> encodedJsonData = utf8.encode(jsonEncode(
+        {"ssid": ssidController.text, "password": passwordController.text}));
+    await writeCharacteristic(device, Guid("2AB5"), encodedJsonData);
   }
 
   @override

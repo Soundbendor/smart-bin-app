@@ -6,7 +6,6 @@ import 'package:binsight_ai/database/model.dart';
 ///
 /// Represents a device that is connected to the application.
 class Device extends Model {
-
   /// The device ID.
   String id;
 
@@ -58,5 +57,4 @@ class Device extends Model {
     List<Map<String, dynamic>> results = await db.query("devices");
     return results.map((result) => Device(id: result["id"])).toList();
   }
-
 }
