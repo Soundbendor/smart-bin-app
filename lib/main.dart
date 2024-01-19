@@ -29,6 +29,7 @@ void main() async {
   runApp(const BinsightAiApp());
 }
 
+/// The root of the application. Contains the GoRouter and MaterialApp wrappers.
 class BinsightAiApp extends StatelessWidget {
   const BinsightAiApp({super.key});
 
@@ -40,12 +41,17 @@ class BinsightAiApp extends StatelessWidget {
   }
 }
 
+/// The routes for the application.
+///
+/// The routes are defined like a tree. There are two top-level routes: 'main' and 'set-up'.
+/// The 'main' route is wrapped in a [ShellRoute] to share the bottom navigation bar.
 final routes = [
   ShellRoute(
     builder: (BuildContext context, GoRouterState state, Widget child) {
       return BottomNavBar(child: child);
     },
     routes: <GoRoute>[
+      // `/main` - home page
       GoRoute(
           name: 'main',
           path: '/main',
@@ -53,6 +59,7 @@ final routes = [
             return const HomePage();
           },
           routes: [
+            // `/main/detections` - list of detections
             GoRoute(
                 name: 'detections',
                 path: 'detections',
@@ -60,6 +67,8 @@ final routes = [
                   return const DetectionsPage();
                 },
                 routes: [
+                  // `/main/detections/annotation` - annotation page
+                  // [imagePath] is the id of the detection to annotate.
                   GoRoute(
                       name: 'annotation',
                       path: 'annotation:imagePath',
@@ -68,6 +77,7 @@ final routes = [
                             imageLink: state.pathParameters['imagePath']!);
                       }),
                 ]),
+            // `/main/stats` - usage and statistics page
             GoRoute(
               name: 'stats',
               path: 'stats',
@@ -78,6 +88,7 @@ final routes = [
           ]),
     ],
   ),
+  // `/set-up` - set up / welcome page
   GoRoute(
       name: 'set-up',
       path: '/set-up',
@@ -85,12 +96,14 @@ final routes = [
         return const SplashPage();
       },
       routes: [
+        // `/set-up/bluetooth` - bluetooth set up page
         GoRoute(
             name: 'bluetooth',
             path: 'bluetooth',
             builder: (BuildContext context, GoRouterState state) {
               return const BluetoothPage();
             }),
+        // `/set-up/wifi` - selecting wifi page
         GoRoute(
             name: 'wifi',
             path: 'wifi',
@@ -102,6 +115,7 @@ final routes = [
 
 final GoRouter _router = GoRouter(initialLocation: '/set-up', routes: routes);
 
+/// Wrapper containing the title app bar and bottom navigation bar.
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
     required this.child,

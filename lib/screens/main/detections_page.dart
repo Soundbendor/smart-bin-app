@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:binsight_ai/widgets/detections.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 
+/// Displays the detections with padding and a size toggle button.
 class DetectionsPage extends StatefulWidget {
   const DetectionsPage({super.key});
 
@@ -12,6 +13,10 @@ class DetectionsPage extends StatefulWidget {
 
 class _DetectionsPageState extends State<DetectionsPage> {
 
+  /// Whether to display the detections in a large or small format.
+  ///
+  /// When [sizeToggle] is true, the detections are displayed in a large card format.
+  /// When [sizeToggle] is false, the detections are displayed in a small list format.
   bool sizeToggle = false;
 
   @override
