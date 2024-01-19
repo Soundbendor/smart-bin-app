@@ -1,12 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:go_router/go_router.dart';
 import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'dart:convert';
 
-/// Sends WiFi credentials to the compost bin.
+
+/// Widget for configuring the wifi credentials of the compost bin
+
 class WifiConfigurationWidget extends StatefulWidget {
   const WifiConfigurationWidget({super.key, required this.device});
 
@@ -17,6 +18,7 @@ class WifiConfigurationWidget extends StatefulWidget {
       _WifiConfigurationWidgetState(device: device);
 }
 
+/// State class for WifiConfigurationWidget
 class _WifiConfigurationWidgetState extends State<WifiConfigurationWidget> {
   _WifiConfigurationWidgetState({required this.device});
 
@@ -25,7 +27,9 @@ class _WifiConfigurationWidgetState extends State<WifiConfigurationWidget> {
   final BluetoothDevice device;
 
 
+  /// Function to send WiFi credentials to the Bluetooth connected Compost Bin
   Future<void> sendWifiCredentials() async {
+      // Encode WiFi credentials as JSON and convert to bytes
       List<int> encodedJsonData = utf8.encode(jsonEncode({"ssid": ssidController.text, "password": passwordController.text}));
       await writeCharacteristic(device, Guid("2AB5"), encodedJsonData);
   }
@@ -45,7 +49,9 @@ class _WifiConfigurationWidgetState extends State<WifiConfigurationWidget> {
         ),
         ElevatedButton(
           onPressed: () {
+            // Call function to send WiFi credentials to the Compost Bin
             sendWifiCredentials();
+            // Navigate to the 'main' route using GoRouter
             context.goNamed('main');
           },
           child: const Text('Connect'),
