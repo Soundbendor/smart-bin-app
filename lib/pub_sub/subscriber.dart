@@ -7,12 +7,18 @@ import 'dart:convert';
 void handleMessages(WebSocketChannel channel, Database database) {
   channel.stream.listen(
     (data) async {
-      final jsonData = jsonDecode(data);
-      final messageType = jsonData['type'];
-      if (messageType == 'pre_detection') {
-        await updatePreDetection(jsonData["pre_detection"], database);
-      } else if (messageType == 'post_detection') {
-        await updatePostDetection(jsonData["post_detection"], database);
+      try {
+        final jsonData = await jsonDecode(data);
+        final messageType = jsonData['type'];
+        if (messageType == 'pre_detection') {
+          print('Emitted predetection was received');
+          // await updatePreDetection(jsonData["pre_detection"], database);
+        } else if (messageType == 'post_detection') {
+          print('Emitted postdetection was received');
+          // await updatePostDetection(jsonData["post_detection"], database);
+        }
+      } catch (e) {
+        print('Error decoding JSON: $e');
       }
     },
     onDone: () {
