@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/screens/main/detection_page.dart';
 
+/// Displays a detection item in a large card format.
 class DetectionLargeListItem extends StatelessWidget {
   final Detection detection;
 
@@ -84,6 +85,7 @@ class DetectionLargeListItem extends StatelessWidget {
   }
 }
 
+/// Displays a detection item in a small list format.
 class DetectionSmallListItem extends StatelessWidget {
   final Detection detection;
 
@@ -112,8 +114,10 @@ class DetectionSmallListItem extends StatelessWidget {
   }
 }
 
+/// Enum used to control the size style of the detection list items.
 enum DetectionListType { large, small }
 
+/// Displays a list of detections.
 class DetectionList extends StatelessWidget {
   final List<Detection> detections;
   final DetectionListType size;

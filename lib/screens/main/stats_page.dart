@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// The usage and statistics page
+// TODO: Complete
+// Meant to show the user their usage and statistics in a pretty way.
 class StatsPage extends StatelessWidget {
   const StatsPage({super.key});
 
