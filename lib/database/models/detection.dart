@@ -110,8 +110,9 @@ class Detection extends Model {
 
   @override
   String get schema => """
-    (
-      preDetectImgLink TEXT PRIMARY KEY,
+    ( 
+      imageId TEXT PRIMARY KEY,
+      preDetectImgLink TEXT,
       postDetectImgLink TEXT,
       depthMapImgLink TEXT,
       irImgLink TEXT,
@@ -127,9 +128,15 @@ class Detection extends Model {
   """;
 
   @override
+  Future<void> update() async {
+    Database db = await getDatabaseConnection();
+    await db
+        .update(tableName, toMap(), where: "imageId = ?", whereArgs: [imageId]);
+  }
+
+  @override
   Future<void> delete() async {
     Database db = await getDatabaseConnection();
-    await db.delete(tableName,
-        where: "preDetectImgLink = ?", whereArgs: [preDetectImgLink]);
+    await db.delete(tableName, where: "imageId = ?", whereArgs: [imageId]);
   }
 }

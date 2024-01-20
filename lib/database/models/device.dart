@@ -32,6 +32,12 @@ class Device extends Model {
   """;
 
   @override
+  Future<void> update() async {
+    Database db = await getDatabaseConnection();
+    await db.update(tableName, toMap(), where: "id = ?", whereArgs: [id]);
+  }
+
+  @override
   Future<void> delete() async {
     Database db = await getDatabaseConnection();
     await db.delete(tableName, where: "id = ?", whereArgs: [id]);

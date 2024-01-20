@@ -24,10 +24,7 @@ abstract class Model {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<void> update() async {
-    Database db = await getDatabaseConnection();
-    await db.update(tableName, toMap());
-  }
+  Future<void> update();
 
   /// Deletes the model record from the database.
   Future<void> delete();

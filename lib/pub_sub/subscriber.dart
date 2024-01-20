@@ -53,9 +53,10 @@ Future<void> addPostDetectionLink(Map<String, dynamic> postDetectionData) async 
   Database db = await getDatabaseConnection();
   List<Map<String, dynamic>> detections = await db.query(
     "detections",
-    where: "img_id = ?",
-    whereArgs: [postDetectionData['img_id']],
+    where: "imageId = ?",
+    whereArgs: [postDetectionData['imageId']],
   );
+
   if (detections[0].isNotEmpty) {
     Detection detection = Detection.fromMap(detections[0]);
     detection.postDetectImgLink = postDetectionData['img_link'];
