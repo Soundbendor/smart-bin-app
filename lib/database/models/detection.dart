@@ -87,13 +87,32 @@ class Detection extends Model {
     };
   }
 
+  static Detection fromMap(Map<String, dynamic> map) {
+    return Detection(
+      imageId: map['imageId'],
+      preDetectImgLink: map['preDetectImgLink'],
+      timestamp: DateTime.parse(map['timestamp']),
+      deviceId: map['deviceId'],
+      postDetectImgLink: map['postDetectImgLink'],
+      depthMapImgLink: map['depthMapImgLink'],
+      irImgLink: map['irImgLink'],
+      weight: map['weight']?.toDouble(),
+      humidity: map['humidity']?.toDouble(),
+      temperature: map['temperature']?.toDouble(),
+      co2: map['co2']?.toDouble(),
+      vo2: map['vo2']?.toDouble(),
+      boxes: map['boxes'],
+    );
+  }
+
   @override
   String get tableName => "detections";
 
   @override
   String get schema => """
-    (
-      preDetectImgLink TEXT PRIMARY KEY,
+    ( 
+      imageId TEXT PRIMARY KEY,
+      preDetectImgLink TEXT,
       postDetectImgLink TEXT,
       depthMapImgLink TEXT,
       irImgLink TEXT,
@@ -109,9 +128,15 @@ class Detection extends Model {
   """;
 
   @override
+  Future<void> update() async {
+    Database db = await getDatabaseConnection();
+    await db
+        .update(tableName, toMap(), where: "imageId = ?", whereArgs: [imageId]);
+  }
+
+  @override
   Future<void> delete() async {
     Database db = await getDatabaseConnection();
-    await db.delete(tableName,
-        where: "preDetectImgLink = ?", whereArgs: [preDetectImgLink]);
+    await db.delete(tableName, where: "imageId = ?", whereArgs: [imageId]);
   }
 }

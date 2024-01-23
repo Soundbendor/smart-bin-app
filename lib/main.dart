@@ -15,7 +15,6 @@ import 'package:sqflite/sqflite.dart';
 /// Entry point of the application
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Database database = await getDatabaseConnection();
   // final channel =
   //     IOWebSocketChannel.connect('http://54.214.80.15/api/model/subscribe');
   // final subscriptionMessage = {
@@ -23,11 +22,9 @@ void main() async {
   //   "channel": "1",
   // };
   // channel.sink.add(jsonEncode(subscriptionMessage));
-
+  // handleMessages(channel);
   // Determine if there are devices in the database.
   final devices = await Device.all();
-
-  // handleMessages(channel, database);
   runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
 }
 
