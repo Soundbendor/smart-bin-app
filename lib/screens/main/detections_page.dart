@@ -17,7 +17,11 @@ class _DetectionsPageState extends State<DetectionsPage> {
   /// When [sizeToggle] is true, the detections are displayed in a large card format.
   /// When [sizeToggle] is false, the detections are displayed in a small list format.
   bool sizeToggle = false;
+
+  /// The list of detections to display.
   List<Detection> detections = [];
+
+  /// A future that loads the initial list of detections.
   late Future loadDetectionFuture;
 
   @override

@@ -1,4 +1,18 @@
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+
+/// Allows for the creation of a testable widget
+///
+/// Provides a [MediaQuery] with a given size and a [Scaffold] with a given child for testing.
+/// This avoids errors related to the lack of a [Material] ancestor.
+Widget makeTestableWidget({required Widget child, required Size size}) {
+  return MaterialApp(
+    home: MediaQuery(
+      data: MediaQueryData(size: size),
+      child: Scaffold(body: child),
+    ),
+  );
+}
 
 class FakeDatabase implements Database {
   bool isClosed = false;
