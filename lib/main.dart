@@ -213,15 +213,19 @@ class BottomNavBar extends StatelessWidget {
 
   // Calculate the index of the bottom navigation bar based on the current route
   static int _calculateSelectedIndex(BuildContext context) {
-    final String location = GoRouterState.of(context).uri.toString();
-    if (location == '/main') {
+    try {
+      final String location = GoRouterState.of(context).uri.toString();
+      if (location == '/main') {
+        return 0;
+      }
+      if (location == '/main/detections') {
+        return 1;
+      }
+      if (location == '/main/stats') {
+        return 2;
+      }
+    } catch (e) {
       return 0;
-    }
-    if (location == '/main/detections') {
-      return 1;
-    }
-    if (location == '/main/stats') {
-      return 2;
     }
     return 0;
   }
