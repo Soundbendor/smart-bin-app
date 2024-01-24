@@ -126,6 +126,7 @@ void setRoutes(List<RouteBase> newRoutes) {
   routes = newRoutes;
 }
 
+///
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
     required this.child,
