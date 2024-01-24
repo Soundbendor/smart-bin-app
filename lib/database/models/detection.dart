@@ -110,12 +110,13 @@ class Detection extends Model {
 
   @override
   String get schema => """
-    ( 
+    (
       imageId TEXT PRIMARY KEY,
       preDetectImgLink TEXT,
       postDetectImgLink TEXT,
       depthMapImgLink TEXT,
       irImgLink TEXT,
+      weight DOUBLE,
       humidity DOUBLE,
       temperature DOUBLE,
       co2 DOUBLE,
@@ -138,5 +139,16 @@ class Detection extends Model {
   Future<void> delete() async {
     Database db = await getDatabaseConnection();
     await db.delete(tableName, where: "imageId = ?", whereArgs: [imageId]);
+  }
+
+  /// Returns all detections.
+  static Future<List<Detection>> all() async {
+    Database db = await getDatabaseConnection();
+    List<Map<String, dynamic>> results = await db.query("detections");
+    return results
+        .map((result) => Detection.fromMap(
+              result,
+            ))
+        .toList();
   }
 }

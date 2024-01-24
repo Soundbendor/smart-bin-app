@@ -1,6 +1,8 @@
+import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:binsight_ai/screens/main/annotation.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/screens/main/detections_page.dart';
 import 'package:binsight_ai/screens/main/home_page.dart';
@@ -25,6 +27,52 @@ void main() async {
   // handleMessages(channel);
   // Determine if there are devices in the database.
   final devices = await Device.all();
+
+  if (kDebugMode) {
+    final db = await getDatabaseConnection();
+    // development code to add fake data
+    if (devices.isEmpty) {
+      await db.insert("devices", {"id": "test"});
+    }
+
+    final detections = await Detection.all();
+    if (detections.isEmpty) {
+      final fakeDetections = [
+        Detection(
+          imageId: "test-1",
+          preDetectImgLink: "https://placehold.co/512x512",
+          timestamp: DateTime.now(),
+          deviceId: "test",
+          postDetectImgLink: "https://placehold.co/513x513",
+          depthMapImgLink: "https://placehold.co/514x514",
+          irImgLink: "https://placehold.co/515x515",
+          weight: 12.0,
+          humidity: 0.5,
+          temperature: 20.0,
+          co2: 0.5,
+          vo2: 0.5,
+          boxes: "[]",
+        ),
+        Detection(
+          imageId: "test-2",
+          preDetectImgLink: "https://placehold.co/512x512",
+          timestamp: DateTime.now(),
+          deviceId: "test",
+          depthMapImgLink: "https://placehold.co/514x514",
+          irImgLink: "https://placehold.co/515x515",
+          weight: 12.0,
+          humidity: 0.5,
+          temperature: 20.0,
+          co2: 0.5,
+          vo2: 0.5,
+        ),
+      ];
+      for (final detection in fakeDetections) {
+        await detection.save();
+      }
+    }
+  }
+
   runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
 }
 
