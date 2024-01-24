@@ -1,16 +1,21 @@
+// Flutter imports:
+import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+
+// Package imports:
+import 'package:go_router/go_router.dart';
+// import 'package:sqflite/sqflite.dart';
+
+// Project imports:
 import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:binsight_ai/screens/main/annotation.dart';
-import 'package:flutter/material.dart';
 import 'package:binsight_ai/screens/main/detections_page.dart';
 import 'package:binsight_ai/screens/main/home_page.dart';
 import 'package:binsight_ai/screens/main/stats_page.dart';
 import 'package:binsight_ai/screens/splash/screen.dart';
 import 'package:binsight_ai/screens/splash/wifi_page.dart';
-import 'package:binsight_ai/database/connection.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:go_router/go_router.dart';
-import 'package:sqflite/sqflite.dart';
+// import 'package:binsight_ai/database/connection.dart';
 
 /// Entry point of the application
 void main() async {
@@ -28,10 +33,8 @@ void main() async {
   runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
 }
 
-// Also used for testing
-late GoRouter router;
-
-/// The root of the application. Contains the GoRouter and MaterialApp wrappers.
+/// The root of the application.
+/// Contains the GoRouter and MaterialApp wrappers.
 class BinsightAiApp extends StatelessWidget {
   final bool skipSetUp;
 
@@ -47,6 +50,9 @@ class BinsightAiApp extends StatelessWidget {
     );
   }
 }
+
+// Also used for testing
+late GoRouter router;
 
 /// The routes for the application.
 ///
@@ -126,7 +132,7 @@ void setRoutes(List<RouteBase> newRoutes) {
   routes = newRoutes;
 }
 
-///
+/// Bottom navigation bar widget with an app bar and tab icons.
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
     required this.child,
@@ -138,10 +144,6 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("binsight.ai"),
-        centerTitle: true,
-      ),
       body: child,
       bottomNavigationBar: BottomNavigationBar(
         items: const [
