@@ -13,6 +13,7 @@ import 'package:binsight_ai/screens/main/annotation.dart';
 import 'package:binsight_ai/screens/main/detections_page.dart';
 import 'package:binsight_ai/screens/main/home_page.dart';
 import 'package:binsight_ai/screens/main/stats_page.dart';
+import 'package:binsight_ai/screens/main/help_page.dart';
 import 'package:binsight_ai/screens/splash/screen.dart';
 import 'package:binsight_ai/screens/splash/wifi_page.dart';
 import 'package:binsight_ai/widgets/navigation_shell.dart';
@@ -101,6 +102,13 @@ var routes = [
               path: 'stats',
               builder: (BuildContext context, GoRouterState state) {
                 return const StatsPage();
+              },
+            ),
+            GoRoute(
+              name: 'help',
+              path: 'help',
+              builder: (BuildContext context, GoRouterState state) {
+                return const HelpPage();
               },
             ),
           ]),

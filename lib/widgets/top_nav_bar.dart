@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// Top navigation bar widget burger menu with slide out drawer functionality.
 class TopNavBar extends StatefulWidget {
@@ -12,7 +13,6 @@ class TopNavBar extends StatefulWidget {
 
 /// State class for the top navigation bar widget.
 class _TopNavBarState extends State<TopNavBar> {
-
   // Set default selection in the navigation bar to the home page.
   int _selectedIndex = 0;
 
@@ -41,7 +41,6 @@ class _TopNavBarState extends State<TopNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    
     // When user opens the drawer, it is added to the navigation stack.
     return Drawer(
       // Add a ListView to the drawer. This ensures the user can scroll
@@ -89,6 +88,7 @@ class _TopNavBarState extends State<TopNavBar> {
             selected: _selectedIndex == 2,
             onTap: () {
               _onItemTapped(2);
+              GoRouter.of(context).goNamed('help');
               Navigator.pop(context);
             },
           ),

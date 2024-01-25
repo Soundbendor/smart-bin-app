@@ -54,6 +54,7 @@ class NavigationShell extends StatelessWidget {
       if (location == '/main/stats') {
         return 2;
       }
+      // Default to home page
       return 0;
     } catch (e) {
       return 0;
