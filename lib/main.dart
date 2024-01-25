@@ -15,7 +15,7 @@ import 'package:binsight_ai/screens/main/home_page.dart';
 import 'package:binsight_ai/screens/main/stats_page.dart';
 import 'package:binsight_ai/screens/splash/screen.dart';
 import 'package:binsight_ai/screens/splash/wifi_page.dart';
-import 'package:binsight_ai/ui_components/bottom_nav_bar.dart';
+import 'package:binsight_ai/routes/app_shell.dart';
 // import 'package:binsight_ai/database/connection.dart';
 
 /// Entry point of the application
@@ -29,6 +29,7 @@ void main() async {
   // };
   // channel.sink.add(jsonEncode(subscriptionMessage));
   // handleMessages(channel);
+
   // Determine if there are devices in the database.
   final devices = await Device.all();
   runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
@@ -38,6 +39,7 @@ void main() async {
 /// Contains the GoRouter and MaterialApp wrappers.
 class BinsightAiApp extends StatelessWidget {
   final bool skipSetUp;
+  // static const appTitle = 'binsight.ai';
 
   const BinsightAiApp({super.key, this.skipSetUp = false});
 
@@ -47,6 +49,7 @@ class BinsightAiApp extends StatelessWidget {
         initialLocation: skipSetUp ? '/main' : '/set-up', routes: routes);
 
     return MaterialApp.router(
+      // title: appTitle,
       routerConfig: router,
     );
   }
@@ -59,11 +62,13 @@ late GoRouter router;
 ///
 /// The routes are defined like a tree. There are two top-level routes: 'main' and 'set-up'.
 /// The 'main' route is wrapped in a [ShellRoute] to share the bottom navigation bar.
+/// The ShellRoute returns an [AppShell] widget, which contains the top navigation bar.
 var routes = [
   ShellRoute(
     builder: (BuildContext context, GoRouterState state, Widget child) {
-      return BottomNavBar(child: child);
+      return AppShell(child: child);
     },
+    
     routes: <GoRoute>[
       // `/main` - home page
       GoRoute(
