@@ -6,38 +6,13 @@ import 'package:binsight_ai/widgets/heading.dart';
 import 'package:go_router/go_router.dart';
 
 /// Displays information about a single detection.
-class DetectionPage extends StatefulWidget {
-  final Detection? detection;
-  final String? detectionId;
+class DetectionPage extends StatelessWidget {
+  final Future<Detection?> detectionFuture;
 
-  const DetectionPage({super.key, required this.detection})
-      : detectionId = null;
-  const DetectionPage.fromId({super.key, required String this.detectionId})
-      : detection = null;
-
-  @override
-  State<DetectionPage> createState() {
-    return _DetectionPageState();
-  }
-}
-
-class _DetectionPageState extends State<DetectionPage> {
-  Detection? detection;
-  Future? detectionFuture;
-
-  @override
-  void initState() {
-    if (widget.detection != null) {
-      detection = widget.detection;
-    } else if (widget.detectionId != null) {
-      detectionFuture = Detection.find(widget.detectionId!).then((value) {
-        setState(() {
-          detection = value;
-        });
-      });
-    }
-    super.initState();
-  }
+  DetectionPage({super.key, required Detection detection})
+      : detectionFuture = Future.value(detection);
+  DetectionPage.fromId({super.key, required String detectionId})
+      : detectionFuture = Detection.find(detectionId);
 
   @override
   Widget build(BuildContext context) {
@@ -55,17 +30,25 @@ class _DetectionPageState extends State<DetectionPage> {
               ),
               onTap: () => context.goNamed('detections'),
             ),
-            Heading(
-                text: detection == null
-                    ? "Loading..."
-                    : formatDetectionTitle(detection!)),
+            FutureBuilder(
+                future: detectionFuture,
+                builder:
+                    (BuildContext context, AsyncSnapshot<Detection?> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Heading(text: "Loading...");
+                  } else {
+                    return Heading(text: formatDetectionTitle(snapshot.data!));
+                  }
+                }),
             const SizedBox(height: 16),
             FutureBuilder(
               future: detectionFuture,
-              builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+              builder:
+                  (BuildContext context, AsyncSnapshot<Detection?> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
                 } else {
+                  final detection = snapshot.data!;
                   return Column(children: [
                     GestureDetector(
                         child: Center(
