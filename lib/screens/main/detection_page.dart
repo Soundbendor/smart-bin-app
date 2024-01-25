@@ -1,7 +1,9 @@
 import 'package:binsight_ai/screens/main/annotation.dart';
+import 'package:binsight_ai/widgets/detections.dart';
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/heading.dart';
+import 'package:go_router/go_router.dart';
 
 /// Displays information about a single detection.
 class DetectionPage extends StatefulWidget {
@@ -51,9 +53,9 @@ class _DetectionPageState extends State<DetectionPage> {
                   Text("Back to list"),
                 ],
               ),
-              onTap: () => Navigator.pop(context),
+              onTap: () => context.goNamed('detections'),
             ),
-            const Heading(text: "Detection"),
+            Heading(text: formatDetectionTitle(detection!)),
             const SizedBox(height: 16),
             FutureBuilder(
               future: detectionFuture,
