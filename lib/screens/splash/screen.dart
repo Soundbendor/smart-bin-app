@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+/// The splash screen prompting the user to continue setting up their application.
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
 
@@ -22,18 +23,18 @@ class SplashPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     const Padding(
-                        padding: EdgeInsets.only(left: 16, right: 16, bottom: 30, top: 160),
+                        padding: EdgeInsets.only(
+                            left: 16, right: 16, bottom: 30, top: 160),
                         child: Text(
                           "Welcome!",
                           style: TextStyle(
-                              fontSize: 40, 
+                              fontSize: 40,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xff787878)
-                              ),
-                        )
-                      ),
+                              color: Color(0xff787878)),
+                        )),
                     const Padding(
-                      padding: EdgeInsets.only(left: 80, right: 80, top: 20, bottom: 20),
+                      padding: EdgeInsets.only(
+                          left: 80, right: 80, top: 20, bottom: 20),
                       child: Text(
                         "Let's get you connected to your bin.",
                         style: TextStyle(

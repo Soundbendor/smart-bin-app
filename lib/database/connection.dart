@@ -9,10 +9,11 @@ import 'package:binsight_ai/database/models/device.dart';
 
 // Modify this when making changes to models
 // The entire app should be restarted when changing the schema
-const int databaseVersion = 2;
+const int databaseVersion = 3;
 
 Database? _database;
 
+/// Creates and migrates the tables used internally.
 Future<void> createTables(
     Database database, List<Model> models, bool isMigration) async {
   for (Model model in models) {

@@ -1,3 +1,4 @@
+import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:binsight_ai/screens/main/annotation.dart';
 import 'package:flutter/material.dart';
@@ -6,51 +7,61 @@ import 'package:binsight_ai/screens/main/home_page.dart';
 import 'package:binsight_ai/screens/main/stats_page.dart';
 import 'package:binsight_ai/screens/splash/screen.dart';
 import 'package:binsight_ai/screens/splash/wifi_page.dart';
-import 'package:binsight_ai/screens/connection/connect_page.dart';
 import 'package:binsight_ai/database/connection.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:binsight_ai/pub_sub/subscriber.dart';
-import 'package:web_socket_channel/io.dart';
-import 'dart:convert';
 
+/// Entry point of the application
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Database database = await getDatabaseConnection();
-  final channel =
-      IOWebSocketChannel.connect('ws://54.214.80.15/api/model/subscribe');
-  final subscriptionMessage = {
-    "type": "subscribe",
-    "channel": "1",
-  };
-  channel.sink.add(jsonEncode(subscriptionMessage));
+  // final channel =
+  //     IOWebSocketChannel.connect('http://54.214.80.15/api/model/subscribe');
+  // final subscriptionMessage = {
+  //   "type": "subscribe",
+  //   "channel": "1",
+  // };
+  // channel.sink.add(jsonEncode(subscriptionMessage));
+  // handleMessages(channel);
+  // Determine if there are devices in the database.
+  final devices = await Device.all();
+  runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
 
-  handleMessages(channel, database);
-  runApp(const BinsightAiApp());
 }
 
+// Also used for testing
+late GoRouter router;
+
+/// The root of the application. Contains the GoRouter and MaterialApp wrappers.
 class BinsightAiApp extends StatelessWidget {
-  const BinsightAiApp({super.key});
+  final bool skipSetUp;
+
+  const BinsightAiApp({super.key, this.skipSetUp = false});
 
   @override
   Widget build(BuildContext context) {
+    //Defines the router to be used for the app, with set-up as the initial route
+    router = GoRouter(
+        initialLocation: skipSetUp ? '/main' : '/set-up', routes: routes);
+
     return MaterialApp.router(
-      routerConfig: _router,
+      routerConfig: router,
     );
   }
 }
 
-//Defines the router to be used for the app, with set-up as the initial route
-final GoRouter _router = GoRouter(initialLocation: '/set-up', routes: routes);
 
-//Defines the list of routes to be used in the app
-final routes = [
-  //BottomNavBar element acts as the shell widget for all ShellRoute's subroutes
+/// The routes for the application.
+///
+/// The routes are defined like a tree. There are two top-level routes: 'main' and 'set-up'.
+/// The 'main' route is wrapped in a [ShellRoute] to share the bottom navigation bar, [BottomNavBar].
+var routes = [
   ShellRoute(
     builder: (BuildContext context, GoRouterState state, Widget child) {
       return BottomNavBar(child: child);
     },
     routes: <GoRoute>[
+      // `/main` - home page
       GoRoute(
           name: 'main',
           path: '/main',
@@ -58,6 +69,7 @@ final routes = [
             return const HomePage();
           },
           routes: [
+            // `/main/detections` - list of detections
             GoRoute(
                 name: 'detections',
                 path: 'detections',
@@ -65,6 +77,8 @@ final routes = [
                   return const DetectionsPage();
                 },
                 routes: [
+                  // `/main/detections/annotation` - annotation page
+                  // [imagePath] is the id of the detection to annotate.
                   GoRoute(
                       name: 'annotation',
                       path: 'annotation:imagePath',
@@ -73,6 +87,7 @@ final routes = [
                             imageLink: state.pathParameters['imagePath']!);
                       }),
                 ]),
+            // `/main/stats` - usage and statistics page
             GoRoute(
               name: 'stats',
               path: 'stats',
@@ -83,6 +98,7 @@ final routes = [
           ]),
     ],
   ),
+  // `/set-up` - set up / welcome page
   GoRoute(
       name: 'set-up',
       path: '/set-up',
@@ -90,28 +106,29 @@ final routes = [
         return const SplashPage();
       },
       routes: [
+        // `/set-up/bluetooth` - bluetooth set up page
         GoRoute(
             name: 'bluetooth',
             path: 'bluetooth',
             builder: (BuildContext context, GoRouterState state) {
               return const BluetoothPage();
             }),
+        // `/set-up/wifi` - selecting wifi page
         GoRoute(
             name: 'wifi',
             path: 'wifi',
             builder: (BuildContext context, GoRouterState state) {
-              return const WifiPage();
+              return WifiPage(device: state.extra as BluetoothDevice);
             }),
-        GoRoute(
-            name: 'bin_connect',
-            path: 'bin_connect',
-            builder: (BuildContext context, GoRouterState state) {
-              return const ConnectPage();
-            })
       ]),
 ];
 
-///Constructs the bottom navigation bar that's shared by all screens in the main app
+
+/// Wrapper containing the title app bar and bottom navigation bar.
+/// Used for testing
+void setRoutes(List<RouteBase> newRoutes) {
+  routes = newRoutes;
+}
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
     required this.child,
@@ -149,7 +166,7 @@ class BottomNavBar extends StatelessWidget {
     );
   }
 
-  ///Calculates the index given the current GoRouter state
+  // Calculate the index of the bottom navigation bar based on the current route
   static int _calculateSelectedIndex(BuildContext context) {
     final String location = GoRouterState.of(context).uri.toString();
     if (location == '/main') {
@@ -163,6 +180,7 @@ class BottomNavBar extends StatelessWidget {
     }
     return 0;
   }
+
 
   ///Navigates to a uri given an index corresponding to the item tapped
   void _onItemTapped(int index, BuildContext context) {

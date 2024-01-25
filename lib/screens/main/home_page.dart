@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// Displays the home page.
+// TODO: Add content to the home page
+// Should show some recent scans, stats, and other information.
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
