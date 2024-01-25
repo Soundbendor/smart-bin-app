@@ -58,6 +58,7 @@ void main() {
       size: const Size(800, 600),
       child: DetectionPage(detection: detection)
     ));
+    await widgetTester.pumpAndSettle();
     expect(find.text("Detection foo: pineapple, chicken"), findsOneWidget);
     FlutterError.onError = originalErrorHandler;
   });
