@@ -48,18 +48,18 @@ class DetectionPage extends StatelessWidget {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
                 } else {
-                  final detection = snapshot.data!;
+                  final detection = snapshot.data;
                   return Column(children: [
                     GestureDetector(
                         child: Center(
                           child: detection!.preDetectImgLink.startsWith("http")
                               ? Image.network(
-                                  detection!.preDetectImgLink,
+                                  detection.preDetectImgLink,
                                   width: 350,
                                   height: 350,
                                 )
                               : Image.asset(
-                                  detection!.preDetectImgLink,
+                                  detection.preDetectImgLink,
                                   width: 350,
                                   height: 350,
                                 ),
@@ -68,7 +68,7 @@ class DetectionPage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AnnotationPage(
-                                    imageLink: detection!.preDetectImgLink)))),
+                                    imageLink: detection.preDetectImgLink)))),
                     const SizedBox(height: 16),
                     SizedBox(
                       width: 400,
@@ -92,10 +92,10 @@ class DetectionPage extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(detection!.temperature.toString()),
-                                  Text(detection!.humidity.toString()),
-                                  Text(detection!.co2.toString()),
-                                  Text(detection!.vo2.toString()),
+                                  Text(detection.temperature.toString()),
+                                  Text(detection.humidity.toString()),
+                                  Text(detection.co2.toString()),
+                                  Text(detection.vo2.toString()),
                                 ],
                               ),
                             ),

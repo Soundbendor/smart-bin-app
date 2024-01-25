@@ -10,7 +10,8 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets("Incomplete detection displays pending title", (widgetTester) async {
-    FlutterError.onError = ignoreOverflowErrors;
+    final originalErrorHandler = FlutterError.onError;
+    FlutterError.onError = ignoreOverflowErrors(originalErrorHandler);
     final detection = Detection.fromMap({
       "imageId": "bar",
       "preDetectImgLink": "assets/images/placeholder.png",
@@ -29,11 +30,14 @@ void main() {
       size: const Size(800, 600),
       child: DetectionPage(detection: detection)
     ));
+    await widgetTester.pumpAndSettle();
     expect(find.text("Detection bar: pending analysis..."), findsOneWidget);
+    FlutterError.onError = originalErrorHandler;
   });
 
   testWidgets("Complete detection displays correct title", (widgetTester) async {
-    FlutterError.onError = ignoreOverflowErrors;
+    final originalErrorHandler = FlutterError.onError;
+    FlutterError.onError = ignoreOverflowErrors(originalErrorHandler);
     final detection = Detection.fromMap({
       "imageId": "foo",
       "preDetectImgLink": "assets/images/placeholder.png",
@@ -55,5 +59,6 @@ void main() {
       child: DetectionPage(detection: detection)
     ));
     expect(find.text("Detection foo: pineapple, chicken"), findsOneWidget);
+    FlutterError.onError = originalErrorHandler;
   });
 }
