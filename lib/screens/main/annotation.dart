@@ -144,7 +144,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 },
                 child: const Text("Complete Annotations"),
               ),
-              //
               if (_capturedImage != null)
                 Image.memory(
                   _capturedImage!,
