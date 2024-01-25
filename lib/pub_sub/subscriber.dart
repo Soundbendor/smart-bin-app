@@ -4,6 +4,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:convert';
 
+/// Handles messages from the WebSocket channel.
 void handleMessages(WebSocketChannel channel) {
   channel.stream.listen(
     (data) async {
@@ -30,6 +31,7 @@ void handleMessages(WebSocketChannel channel) {
   );
 }
 
+/// Creates a detection with updated data and saves it to the database.
 Future<void> updatePreDetection(Map<String, dynamic> data) async {
   Detection detection = Detection(
       imageId: data['img_id'],
@@ -49,6 +51,7 @@ Future<void> updatePreDetection(Map<String, dynamic> data) async {
   await detection.save();
 }
 
+/// Updates the post detection link in the database.
 Future<void> addPostDetectionLink(
     Map<String, dynamic> postDetectionData) async {
   Database db = await getDatabaseConnection();
