@@ -87,6 +87,10 @@ class Detection extends Model {
     };
   }
 
+  static Future<Detection> find(String imageId) async {
+    return Detection.createDefault();
+  }
+
   static Detection fromMap(Map<String, dynamic> map) {
     return Detection(
       imageId: map['imageId'],

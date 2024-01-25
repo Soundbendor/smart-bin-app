@@ -2,6 +2,7 @@ import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:binsight_ai/screens/main/annotation.dart';
+import 'package:binsight_ai/screens/main/detection_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/screens/main/detections_page.dart';
@@ -131,6 +132,13 @@ var routes = [
                             imageLink: state.pathParameters['imagePath']!);
                       }),
                 ]),
+            // `/main/detection/:detectionId` - detection page with detailed information
+            GoRoute(
+                path: 'detection/:detectionId',
+                builder: (BuildContext context, GoRouterState state) {
+                  return DetectionPage.fromId(
+                      detectionId: state.pathParameters['detectionId']!);
+                }),
             // `/main/stats` - usage and statistics page
             GoRoute(
               name: 'stats',

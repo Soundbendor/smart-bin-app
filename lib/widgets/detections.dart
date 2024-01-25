@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/database/models/detection.dart';
-import 'package:binsight_ai/screens/main/detection_page.dart';
+import 'package:go_router/go_router.dart';
 
 String formatDetectionTitle(Detection detection) {
   if (detection.boxes != null) {
@@ -15,6 +15,10 @@ String formatDetectionTitle(Detection detection) {
   } else {
     return "Detection ${detection.imageId}: pending analysis...";
   }
+}
+
+void _onTileTap(BuildContext context, Detection detection) {
+  context.go("/main/detection/${detection.imageId}");
 }
 
 /// Displays a detection item in a large card format.
@@ -34,12 +38,7 @@ class DetectionLargeListItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => DetectionPage(detection: detection)));
-        },
+        onTap: () => _onTileTap(context, detection),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
@@ -125,12 +124,7 @@ class DetectionSmallListItem extends StatelessWidget {
       title: Text(formatDetectionTitle(detection)),
       subtitle: Text(detection.timestamp.toString()),
       trailing: const Icon(Icons.arrow_forward_ios),
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => DetectionPage(detection: detection)));
-      },
+      onTap: () => _onTileTap(context, detection),
     );
   }
 }
