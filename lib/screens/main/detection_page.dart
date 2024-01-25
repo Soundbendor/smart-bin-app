@@ -55,7 +55,10 @@ class _DetectionPageState extends State<DetectionPage> {
               ),
               onTap: () => context.goNamed('detections'),
             ),
-            Heading(text: formatDetectionTitle(detection!)),
+            Heading(
+                text: detection == null
+                    ? "Loading..."
+                    : formatDetectionTitle(detection!)),
             const SizedBox(height: 16),
             FutureBuilder(
               future: detectionFuture,
@@ -66,11 +69,17 @@ class _DetectionPageState extends State<DetectionPage> {
                   return Column(children: [
                     GestureDetector(
                         child: Center(
-                          child: Image.asset(
-                            detection!.preDetectImgLink,
-                            width: 350,
-                            height: 350,
-                          ),
+                          child: detection!.preDetectImgLink.startsWith("http")
+                              ? Image.network(
+                                  detection!.preDetectImgLink,
+                                  width: 350,
+                                  height: 350,
+                                )
+                              : Image.asset(
+                                  detection!.preDetectImgLink,
+                                  width: 350,
+                                  height: 350,
+                                ),
                         ),
                         onTap: () => Navigator.push(
                             context,

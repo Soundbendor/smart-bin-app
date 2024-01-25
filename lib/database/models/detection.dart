@@ -87,8 +87,14 @@ class Detection extends Model {
     };
   }
 
-  static Future<Detection> find(String imageId) async {
-    return Detection.createDefault();
+  static Future<Detection?> find(String imageId) async {
+    Database db = await getDatabaseConnection();
+    List<Map<String, dynamic>> results = await db.query("detections",
+        where: "imageId = ?", whereArgs: [imageId], limit: 1);
+    if (results.isEmpty) {
+      return null;
+    }
+    return Detection.fromMap(results.first);
   }
 
   static Detection fromMap(Map<String, dynamic> map) {
