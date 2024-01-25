@@ -10,12 +10,12 @@ void main() {
       (widgetTester) async {
     final detection = Detection.fromMap({
       "imageId": "bar",
-      "preDetectImgLink": "http://example.com/bar.jpg",
+      "preDetectImgLink": "example.com/bar.jpg",
       "timestamp": DateTime.now().toIso8601String(),
       "deviceId": "bar",
       // "postDetectImgLink": "http://example.com/bar-post.jpg",
-      "depthMapImgLink": "http://example.com/bar-depth.jpg",
-      "irImgLink": "http://example.com/bar-ir.jpg",
+      "depthMapImgLink": "example.com/bar-depth.jpg",
+      "irImgLink": "example.com/bar-ir.jpg",
       "weight": 1.0,
       "humidity": 0.5,
       "temperature": 20.0,

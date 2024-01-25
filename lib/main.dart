@@ -12,7 +12,6 @@ import 'package:binsight_ai/screens/splash/wifi_page.dart';
 import 'package:binsight_ai/database/connection.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sqflite/sqflite.dart';
 
 /// Entry point of the application
 void main() async {
@@ -40,12 +39,12 @@ void main() async {
       final fakeDetections = [
         Detection(
           imageId: "test-1",
-          preDetectImgLink: "https://placehold.co/512x512",
+          preDetectImgLink: "https://placehold.co/512x512.png",
           timestamp: DateTime.now(),
           deviceId: "test",
-          postDetectImgLink: "https://placehold.co/513x513",
-          depthMapImgLink: "https://placehold.co/514x514",
-          irImgLink: "https://placehold.co/515x515",
+          postDetectImgLink: "https://placehold.co/513x513.png",
+          depthMapImgLink: "https://placehold.co/514x514.png",
+          irImgLink: "https://placehold.co/515x515.png",
           weight: 12.0,
           humidity: 0.5,
           temperature: 20.0,
@@ -55,11 +54,11 @@ void main() async {
         ),
         Detection(
           imageId: "test-2",
-          preDetectImgLink: "https://placehold.co/512x512",
+          preDetectImgLink: "https://placehold.co/512x512.png",
           timestamp: DateTime.now(),
           deviceId: "test",
-          depthMapImgLink: "https://placehold.co/514x514",
-          irImgLink: "https://placehold.co/515x515",
+          depthMapImgLink: "https://placehold.co/514x514.png",
+          irImgLink: "https://placehold.co/515x515.png",
           weight: 12.0,
           humidity: 0.5,
           temperature: 20.0,

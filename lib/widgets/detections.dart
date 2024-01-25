@@ -41,7 +41,8 @@ class DetectionLargeListItem extends StatelessWidget {
             padding: const EdgeInsets.all(9.0),
             child: Column(
               children: [
-                const Text("<Detection Food Names>", textScaleFactor: 1.75),
+                Text("Detection ${detection.imageId}: pending analysis...",
+                    textScaler: const TextScaler.linear(1.75)),
                 Container(
                     decoration: BoxDecoration(
                       border: Border.all(
@@ -50,8 +51,11 @@ class DetectionLargeListItem extends StatelessWidget {
                       ),
                     ),
                     margin: const EdgeInsets.only(bottom: 12, top: 12),
-                    child: Image.asset("assets/images/placeholder.png",
-                        width: 300, height: 300)),
+                    child: detection.preDetectImgLink.startsWith("http")
+                        ? Image.network(detection.preDetectImgLink,
+                            width: 300, height: 300)
+                        : Image.asset("assets/images/placeholder.png",
+                            width: 300, height: 300)),
                 SizedBox(
                   width: 250,
                   child: Row(
@@ -100,8 +104,10 @@ class DetectionSmallListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Image.asset("assets/images/placeholder.png"),
-      title: const Text("<Detection Food Names>"),
+      leading: detection.preDetectImgLink.startsWith("http")
+          ? Image.network(detection.preDetectImgLink)
+          : Image.asset("assets/images/placeholder.png"),
+      title: Text("Detection ${detection.imageId}: pending analysis..."),
       subtitle: Text(detection.timestamp.toString()),
       trailing: const Icon(Icons.arrow_forward_ios),
       onTap: () {
@@ -139,7 +145,6 @@ class DetectionList extends StatelessWidget {
         return Expanded(
           child: ListView.builder(
             itemCount: detections.length,
-            prototypeItem: DetectionLargeListItem.stub(),
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
               return DetectionLargeListItem(detection: detections[index]);
@@ -150,7 +155,6 @@ class DetectionList extends StatelessWidget {
         return Expanded(
           child: ListView.builder(
             itemCount: detections.length,
-            prototypeItem: DetectionSmallListItem.stub(),
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
               return DetectionSmallListItem(detection: detections[index]);
