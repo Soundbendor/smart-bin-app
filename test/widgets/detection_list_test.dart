@@ -36,4 +36,35 @@ void main() {
     ));
     expect(find.text("Detection bar: pending analysis..."), findsOneWidget);
   });
+
+  testWidgets("Detection list (complete) displays correct title",
+      (widgetTester) async {
+    final detection = Detection.fromMap({
+      "imageId": "foo",
+      "preDetectImgLink": "example.com/foo.jpg",
+      "timestamp": DateTime.now().toIso8601String(),
+      "deviceId": "foo",
+      "postDetectImgLink": "example.com/foo-post.jpg",
+      "depthMapImgLink": "example.com/foo-depth.jpg",
+      "irImgLink": "example.com/foo-ir.jpg",
+      "weight": 10.0,
+      "humidity": 1.5,
+      "temperature": 20.0,
+      "co2": 0.5,
+      "vo2": 0.5,
+      "boxes": '[{"pineapple":0.6},{"chicken":0.8}]',
+    });
+
+    await widgetTester.pumpWidget(makeTestableWidget(
+      size: const Size(800, 600),
+      child: DetectionSmallListItem(detection: detection),
+    ));
+    expect(find.text("Detection foo: pineapple, chicken"), findsOneWidget);
+
+    await widgetTester.pumpWidget(makeTestableWidget(
+      size: const Size(800, 600),
+      child: DetectionLargeListItem(detection: detection),
+    ));
+    expect(find.text("Detection foo: pineapple, chicken"), findsOneWidget);
+  });
 }
