@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:binsight_ai/widgets/top_nav_bar.dart';
 
 /// Bottom navigation bar widget with an app bar and tab icons.
-class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({
+class NavigationShell extends StatelessWidget {
+  const NavigationShell({
     required this.child,
     super.key,
   });
@@ -13,7 +14,12 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('binsight.ai'),
+        centerTitle: true,
+      ),
       body: child,
+      drawer: const TopNavBar(),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
@@ -37,17 +43,21 @@ class BottomNavBar extends StatelessWidget {
 
   // Calculate the index of the bottom navigation bar based on the current route
   static int _calculateSelectedIndex(BuildContext context) {
-    final String location = GoRouterState.of(context).uri.toString();
-    if (location == '/main') {
+    try {
+      final String location = GoRouterState.of(context).uri.toString();
+      if (location == '/main') {
+        return 0;
+      }
+      if (location == '/main/detections') {
+        return 1;
+      }
+      if (location == '/main/stats') {
+        return 2;
+      }
+      return 0;
+    } catch (e) {
       return 0;
     }
-    if (location == '/main/detections') {
-      return 1;
-    }
-    if (location == '/main/stats') {
-      return 2;
-    }
-    return 0;
   }
 
   // Function to handle navigation when an item is tapped

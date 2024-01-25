@@ -15,7 +15,7 @@ import 'package:binsight_ai/screens/main/home_page.dart';
 import 'package:binsight_ai/screens/main/stats_page.dart';
 import 'package:binsight_ai/screens/splash/screen.dart';
 import 'package:binsight_ai/screens/splash/wifi_page.dart';
-import 'package:binsight_ai/routes/app_shell.dart';
+import 'package:binsight_ai/widgets/navigation_shell.dart';
 // import 'package:binsight_ai/database/connection.dart';
 
 /// Entry point of the application
@@ -46,7 +46,7 @@ class BinsightAiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     router = GoRouter(
-        initialLocation: skipSetUp ? '/main' : '/set-up', routes: routes);
+        initialLocation: skipSetUp ? '/main' : '/main', routes: routes);
 
     return MaterialApp.router(
       // title: appTitle,
@@ -66,9 +66,8 @@ late GoRouter router;
 var routes = [
   ShellRoute(
     builder: (BuildContext context, GoRouterState state, Widget child) {
-      return AppShell(child: child);
+      return NavigationShell(child: child);
     },
-    
     routes: <GoRoute>[
       // `/main` - home page
       GoRoute(
@@ -138,4 +137,3 @@ var routes = [
 void setRoutes(List<RouteBase> newRoutes) {
   routes = newRoutes;
 }
-
