@@ -1,6 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/screens/main/detection_page.dart';
+
+String formatDetectionTitle(Detection detection) {
+  if (detection.boxes != null) {
+    final boxData = jsonDecode(detection.boxes!);
+    final List<String> keys = [];
+    for (final box in boxData) {
+      keys.add(box.keys.first);
+    }
+    return "Detection ${detection.imageId}: ${keys.join(", ")}";
+  } else {
+    return "Detection ${detection.imageId}: pending analysis...";
+  }
+}
 
 /// Displays a detection item in a large card format.
 class DetectionLargeListItem extends StatelessWidget {
@@ -41,7 +56,7 @@ class DetectionLargeListItem extends StatelessWidget {
             padding: const EdgeInsets.all(9.0),
             child: Column(
               children: [
-                Text("Detection ${detection.imageId}: pending analysis...",
+                Text(formatDetectionTitle(detection),
                     textScaler: const TextScaler.linear(1.75)),
                 Container(
                     decoration: BoxDecoration(
@@ -107,7 +122,7 @@ class DetectionSmallListItem extends StatelessWidget {
       leading: detection.preDetectImgLink.startsWith("http")
           ? Image.network(detection.preDetectImgLink)
           : Image.asset("assets/images/placeholder.png"),
-      title: Text("Detection ${detection.imageId}: pending analysis..."),
+      title: Text(formatDetectionTitle(detection)),
       subtitle: Text(detection.timestamp.toString()),
       trailing: const Icon(Icons.arrow_forward_ios),
       onTap: () {

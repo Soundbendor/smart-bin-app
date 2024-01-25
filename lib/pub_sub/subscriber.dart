@@ -49,7 +49,8 @@ Future<void> updatePreDetection(Map<String, dynamic> data) async {
   await detection.save();
 }
 
-Future<void> addPostDetectionLink(Map<String, dynamic> postDetectionData) async {
+Future<void> addPostDetectionLink(
+    Map<String, dynamic> postDetectionData) async {
   Database db = await getDatabaseConnection();
   List<Map<String, dynamic>> detections = await db.query(
     "detections",
