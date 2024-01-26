@@ -1,18 +1,25 @@
-import 'package:binsight_ai/database/models/detection.dart';
+// Flutter imports:
+import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:flutter/foundation.dart';
+
+// Package imports:
+import 'package:go_router/go_router.dart';
+
+// Project imports:
 import 'package:binsight_ai/database/models/device.dart';
+import 'package:binsight_ai/screens/main/detections_page.dart';
 import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:binsight_ai/screens/main/annotation.dart';
+import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/screens/main/detection_page.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:binsight_ai/screens/main/detections_page.dart';
 import 'package:binsight_ai/screens/main/home_page.dart';
 import 'package:binsight_ai/screens/main/stats_page.dart';
+import 'package:binsight_ai/screens/main/help_page.dart';
 import 'package:binsight_ai/screens/splash/screen.dart';
 import 'package:binsight_ai/screens/splash/wifi_page.dart';
+import 'package:binsight_ai/widgets/navigation_shell.dart';
 import 'package:binsight_ai/database/connection.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:go_router/go_router.dart';
 
 /// Entry point of the application
 void main() async {
@@ -25,6 +32,7 @@ void main() async {
   // };
   // channel.sink.add(jsonEncode(subscriptionMessage));
   // handleMessages(channel);
+
   // Determine if there are devices in the database.
   final devices = await Device.all();
 
@@ -74,15 +82,13 @@ void main() async {
   }
 
   runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
-
 }
 
-// Also used for testing
-late GoRouter router;
-
-/// The root of the application. Contains the GoRouter and MaterialApp wrappers.
+/// The root of the application.
+/// Contains the GoRouter and MaterialApp wrappers.
 class BinsightAiApp extends StatelessWidget {
   final bool skipSetUp;
+  // static const appTitle = 'binsight.ai';
 
   const BinsightAiApp({super.key, this.skipSetUp = false});
 
@@ -93,20 +99,24 @@ class BinsightAiApp extends StatelessWidget {
         initialLocation: skipSetUp ? '/main' : '/set-up', routes: routes);
 
     return MaterialApp.router(
+      // title: appTitle,
       routerConfig: router,
     );
   }
 }
 
+// Also used for testing
+late GoRouter router;
 
 /// The routes for the application.
 ///
 /// The routes are defined like a tree. There are two top-level routes: 'main' and 'set-up'.
-/// The 'main' route is wrapped in a [ShellRoute] to share the bottom navigation bar, [BottomNavBar].
+/// The 'main' route is wrapped in a [ShellRoute] to share the bottom navigation bar.
+/// The ShellRoute returns an [AppShell] widget, which contains the top navigation bar.
 var routes = [
   ShellRoute(
     builder: (BuildContext context, GoRouterState state, Widget child) {
-      return BottomNavBar(child: child);
+      return NavigationShell(child: child);
     },
     routes: <GoRoute>[
       // `/main` - home page
@@ -150,9 +160,17 @@ var routes = [
                 return const StatsPage();
               },
             ),
+            GoRoute(
+              name: 'help',
+              path: 'help',
+              builder: (BuildContext context, GoRouterState state) {
+                return const HelpPage();
+              },
+            ),
           ]),
     ],
   ),
+
   // `/set-up` - set up / welcome page
   GoRoute(
       name: 'set-up',
@@ -178,80 +196,8 @@ var routes = [
       ]),
 ];
 
-
 /// Wrapper containing the title app bar and bottom navigation bar.
 /// Used for testing
 void setRoutes(List<RouteBase> newRoutes) {
   routes = newRoutes;
-}
-class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({
-    required this.child,
-    super.key,
-  });
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("binsight.ai"),
-        centerTitle: true,
-      ),
-      body: child,
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Detections',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.show_chart),
-            label: 'Stats',
-          ),
-        ],
-        currentIndex: _calculateSelectedIndex(context),
-        onTap: (int idx) => _onItemTapped(idx, context),
-      ),
-    );
-  }
-
-  // Calculate the index of the bottom navigation bar based on the current route
-  static int _calculateSelectedIndex(BuildContext context) {
-    try {
-      final String location = GoRouterState.of(context).uri.toString();
-      if (location == '/main') {
-        return 0;
-      }
-      if (location == '/main/detections') {
-        return 1;
-      }
-      if (location == '/main/stats') {
-        return 2;
-      }
-    } catch (e) {
-      return 0;
-    }
-    return 0;
-  }
-
-
-  ///Navigates to a uri given an index corresponding to the item tapped
-  void _onItemTapped(int index, BuildContext context) {
-    switch (index) {
-      case 0:
-        GoRouter.of(context).go('/main');
-        break;
-      case 1:
-        GoRouter.of(context).go('/main/detections');
-        break;
-      case 2:
-        GoRouter.of(context).go('/main/stats');
-    }
-  }
 }
