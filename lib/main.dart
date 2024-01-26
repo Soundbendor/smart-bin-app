@@ -74,6 +74,7 @@ void main() async {
   }
 
   runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
+
 }
 
 // Also used for testing
@@ -87,6 +88,7 @@ class BinsightAiApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Defines the router to be used for the app, with set-up as the initial route
     router = GoRouter(
         initialLocation: skipSetUp ? '/main' : '/set-up', routes: routes);
 
@@ -96,10 +98,11 @@ class BinsightAiApp extends StatelessWidget {
   }
 }
 
+
 /// The routes for the application.
 ///
 /// The routes are defined like a tree. There are two top-level routes: 'main' and 'set-up'.
-/// The 'main' route is wrapped in a [ShellRoute] to share the bottom navigation bar.
+/// The 'main' route is wrapped in a [ShellRoute] to share the bottom navigation bar, [BottomNavBar].
 var routes = [
   ShellRoute(
     builder: (BuildContext context, GoRouterState state, Widget child) {
@@ -175,12 +178,12 @@ var routes = [
       ]),
 ];
 
+
 /// Wrapper containing the title app bar and bottom navigation bar.
 /// Used for testing
 void setRoutes(List<RouteBase> newRoutes) {
   routes = newRoutes;
 }
-
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
     required this.child,
@@ -237,7 +240,8 @@ class BottomNavBar extends StatelessWidget {
     return 0;
   }
 
-  // Function to handle navigation when an item is tapped
+
+  ///Navigates to a uri given an index corresponding to the item tapped
   void _onItemTapped(int index, BuildContext context) {
     switch (index) {
       case 0:
