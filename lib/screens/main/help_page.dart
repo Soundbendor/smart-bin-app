@@ -20,3 +20,14 @@ class HelpPage extends StatelessWidget {
     );
   }
 }
+
+asyncExample() async {
+  print("Fetching data...");
+  var data = await fetchData();
+  print("Data received: $data");
+}
+
+Future<String> fetchData() async {
+  await Future.delayed(Duration(seconds: 2));
+  return "Sample Data";
+}

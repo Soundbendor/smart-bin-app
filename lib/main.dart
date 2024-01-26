@@ -47,7 +47,7 @@ class BinsightAiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     router = GoRouter(
-        initialLocation: skipSetUp ? '/main' : '/main', routes: routes);
+        initialLocation: skipSetUp ? '/main' : '/set-up', routes: routes);
 
     return MaterialApp.router(
       // title: appTitle,
