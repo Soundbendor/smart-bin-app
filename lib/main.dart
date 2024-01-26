@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/device.dart';
+import 'package:binsight_ai/screens/main/detections_page.dart';
 import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:binsight_ai/screens/main/annotation.dart';
 import 'package:binsight_ai/database/models/detection.dart';
@@ -81,7 +82,6 @@ void main() async {
   }
 
   runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
-
 }
 
 /// The root of the application.
@@ -195,7 +195,6 @@ var routes = [
             }),
       ]),
 ];
-
 
 /// Wrapper containing the title app bar and bottom navigation bar.
 /// Used for testing
