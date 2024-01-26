@@ -1,6 +1,9 @@
+import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:binsight_ai/screens/main/annotation.dart';
+import 'package:binsight_ai/screens/main/detection_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/screens/main/detections_page.dart';
 import 'package:binsight_ai/screens/main/home_page.dart';
@@ -10,7 +13,6 @@ import 'package:binsight_ai/screens/splash/wifi_page.dart';
 import 'package:binsight_ai/database/connection.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sqflite/sqflite.dart';
 
 /// Entry point of the application
 void main() async {
@@ -25,6 +27,52 @@ void main() async {
   // handleMessages(channel);
   // Determine if there are devices in the database.
   final devices = await Device.all();
+
+  if (kDebugMode) {
+    final db = await getDatabaseConnection();
+    // development code to add fake data
+    if (devices.isEmpty) {
+      await db.insert("devices", {"id": "test"});
+    }
+
+    final detections = await Detection.all();
+    if (detections.isEmpty) {
+      final fakeDetections = [
+        Detection(
+          imageId: "test-1",
+          preDetectImgLink: "https://placehold.co/512x512.png",
+          timestamp: DateTime.now(),
+          deviceId: "test",
+          postDetectImgLink: "https://placehold.co/513x513.png",
+          depthMapImgLink: "https://placehold.co/514x514.png",
+          irImgLink: "https://placehold.co/515x515.png",
+          weight: 12.0,
+          humidity: 0.5,
+          temperature: 20.0,
+          co2: 0.5,
+          vo2: 0.5,
+          boxes: "[]",
+        ),
+        Detection(
+          imageId: "test-2",
+          preDetectImgLink: "https://placehold.co/512x512.png",
+          timestamp: DateTime.now(),
+          deviceId: "test",
+          depthMapImgLink: "https://placehold.co/514x514.png",
+          irImgLink: "https://placehold.co/515x515.png",
+          weight: 12.0,
+          humidity: 0.5,
+          temperature: 20.0,
+          co2: 0.5,
+          vo2: 0.5,
+        ),
+      ];
+      for (final detection in fakeDetections) {
+        await detection.save();
+      }
+    }
+  }
+
   runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
 
 }
@@ -87,6 +135,13 @@ var routes = [
                             imageLink: state.pathParameters['imagePath']!);
                       }),
                 ]),
+            // `/main/detection/:detectionId` - detection page with detailed information
+            GoRoute(
+                path: 'detection/:detectionId',
+                builder: (BuildContext context, GoRouterState state) {
+                  return DetectionPage.fromId(
+                      detectionId: state.pathParameters['detectionId']!);
+                }),
             // `/main/stats` - usage and statistics page
             GoRoute(
               name: 'stats',
@@ -168,15 +223,19 @@ class BottomNavBar extends StatelessWidget {
 
   // Calculate the index of the bottom navigation bar based on the current route
   static int _calculateSelectedIndex(BuildContext context) {
-    final String location = GoRouterState.of(context).uri.toString();
-    if (location == '/main') {
+    try {
+      final String location = GoRouterState.of(context).uri.toString();
+      if (location == '/main') {
+        return 0;
+      }
+      if (location == '/main/detections') {
+        return 1;
+      }
+      if (location == '/main/stats') {
+        return 2;
+      }
+    } catch (e) {
       return 0;
-    }
-    if (location == '/main/detections') {
-      return 1;
-    }
-    if (location == '/main/stats') {
-      return 2;
     }
     return 0;
   }
