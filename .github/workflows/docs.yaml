@@ -1,0 +1,36 @@
+name: Generate Docs
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  build:
+    if: github.repository_owner == 'Soundbendor'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup dart
+        uses: dart-lang/setup-dart@v1
+      - name: Install dependencies
+        run: dart pub get
+      - name: Generate docs
+        run: dart doc -o docs
+      - name: Commit any changes
+        run: |
+          git add .;
+          if git diff-index --quiet HEAD --; then
+            exit 0;
+          else
+            git config --local user.email "${GITHUB_EMAIL}";
+            git config --local user.name "${GITHUB_USER}";
+            branch=chore-autodocs-`date +%F-%H-%M`;
+            git checkout -b $branch;
+            git commit -sam "Docs: update docs";
+            git push -u origin $branch;
+            gh pr create --fill --base dev --head $branch --title "Docs: Update docs" --body "*beep boop* I've updated the docs...";
+          fi
+        env:
+          GITHUB_USER: Soundbendor Automation
+          GITHUB_EMAIL: auto@soundbendor.org
+          GH_TOKEN: ${{ secrets.AUTO_TOKEN }}
