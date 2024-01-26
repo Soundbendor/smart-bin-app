@@ -1,5 +1,9 @@
 PODS:
   - Flutter (1.0.0)
+  - flutter_blue_plus (0.0.1):
+    - Flutter
+  - flutter_native_splash (0.0.1):
+    - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -13,6 +17,8 @@ PODS:
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - flutter_blue_plus (from `.symlinks/plugins/flutter_blue_plus/ios`)
+  - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - wifi_iot (from `.symlinks/plugins/wifi_iot/ios`)
   - wifi_scan (from `.symlinks/plugins/wifi_scan/ios`)
@@ -24,6 +30,10 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  flutter_blue_plus:
+    :path: ".symlinks/plugins/flutter_blue_plus/ios"
+  flutter_native_splash:
+    :path: ".symlinks/plugins/flutter_native_splash/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   wifi_iot:
@@ -32,12 +42,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wifi_scan/ios"
 
 SPEC CHECKSUMS:
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_blue_plus: 4837da7d00cf5d441fdd6635b3a57f936778ea96
+  flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   wifi_iot: b5aafd6f9b52f8a357383a1deabab45f31cd602d
   wifi_scan: 6d20b3b4f59bbad1ddcf3e241560f3acd62f6cbe
 
-PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
+PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
 
 COCOAPODS: 1.14.2
