@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 /// Creates a heading with large text and an underline.
-
 class Heading extends StatelessWidget {
   final String text;
 

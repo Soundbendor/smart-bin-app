@@ -18,12 +18,23 @@ class _DetectionsPageState extends State<DetectionsPage> {
   /// When [sizeToggle] is false, the detections are displayed in a small list format.
   bool sizeToggle = false;
 
+  /// The list of detections to display.
+  List<Detection> detections = [];
+
+  /// A future that loads the initial list of detections.
+  late Future loadDetectionFuture;
+
   @override
   void initState() {
+    loadDetectionFuture = Detection.all().then((value) async {
+      setState(() {
+        detections = value;
+      });
+    });
     super.initState();
   }
 
-  void onChanged(bool value) {
+  void onToggleSwitch(bool value) {
     setState(() {
       sizeToggle = value;
     });
@@ -39,19 +50,22 @@ class _DetectionsPageState extends State<DetectionsPage> {
             Row(
               children: [
                 const Expanded(child: Heading(text: "Detections")),
-                Switch(value: sizeToggle, onChanged: onChanged),
+                Switch(value: sizeToggle, onChanged: onToggleSwitch),
                 const Text("Toggle Size"),
               ],
             ),
-            DetectionList(
-              size: sizeToggle
-                  ? DetectionListType.large
-                  : DetectionListType.small,
-              detections: [
-                Detection.createDefault(),
-                Detection.createDefault(),
-              ],
-            ),
+            FutureBuilder(
+                future: loadDetectionFuture,
+                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                  return snapshot.connectionState == ConnectionState.waiting
+                      ? const CircularProgressIndicator()
+                      : DetectionList(
+                          size: sizeToggle
+                              ? DetectionListType.large
+                              : DetectionListType.small,
+                          detections: detections,
+                        );
+                })
           ],
         ),
       ),

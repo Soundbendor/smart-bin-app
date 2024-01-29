@@ -1,6 +1,25 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/database/models/detection.dart';
-import 'package:binsight_ai/screens/main/detection_page.dart';
+import 'package:go_router/go_router.dart';
+
+String formatDetectionTitle(Detection detection) {
+  if (detection.boxes != null) {
+    final boxData = jsonDecode(detection.boxes!);
+    final List<String> keys = [];
+    for (final box in boxData) {
+      keys.add(box.keys.first);
+    }
+    return "Detection ${detection.imageId}: ${keys.join(", ")}";
+  } else {
+    return "Detection ${detection.imageId}: pending analysis...";
+  }
+}
+
+void _onTileTap(BuildContext context, Detection detection) {
+  context.go("/main/detection/${detection.imageId}");
+}
 
 /// Displays a detection item in a large card format.
 class DetectionLargeListItem extends StatelessWidget {
@@ -19,12 +38,7 @@ class DetectionLargeListItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => DetectionPage(detection: detection)));
-        },
+        onTap: () => _onTileTap(context, detection),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
@@ -41,7 +55,8 @@ class DetectionLargeListItem extends StatelessWidget {
             padding: const EdgeInsets.all(9.0),
             child: Column(
               children: [
-                const Text("<Detection Food Names>", textScaleFactor: 1.75),
+                Text(formatDetectionTitle(detection),
+                    textScaler: const TextScaler.linear(1.75)),
                 Container(
                     decoration: BoxDecoration(
                       border: Border.all(
@@ -50,8 +65,11 @@ class DetectionLargeListItem extends StatelessWidget {
                       ),
                     ),
                     margin: const EdgeInsets.only(bottom: 12, top: 12),
-                    child: Image.asset("assets/images/placeholder.png",
-                        width: 300, height: 300)),
+                    child: detection.preDetectImgLink.startsWith("http")
+                        ? Image.network(detection.preDetectImgLink,
+                            width: 300, height: 300)
+                        : Image.asset("assets/images/placeholder.png",
+                            width: 300, height: 300)),
                 SizedBox(
                   width: 250,
                   child: Row(
@@ -100,16 +118,13 @@ class DetectionSmallListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Image.asset("assets/images/placeholder.png"),
-      title: const Text("<Detection Food Names>"),
+      leading: detection.preDetectImgLink.startsWith("http")
+          ? Image.network(detection.preDetectImgLink)
+          : Image.asset("assets/images/placeholder.png"),
+      title: Text(formatDetectionTitle(detection)),
       subtitle: Text(detection.timestamp.toString()),
       trailing: const Icon(Icons.arrow_forward_ios),
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => DetectionPage(detection: detection)));
-      },
+      onTap: () => _onTileTap(context, detection),
     );
   }
 }
@@ -139,7 +154,6 @@ class DetectionList extends StatelessWidget {
         return Expanded(
           child: ListView.builder(
             itemCount: detections.length,
-            prototypeItem: DetectionLargeListItem.stub(),
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
               return DetectionLargeListItem(detection: detections[index]);
@@ -150,7 +164,6 @@ class DetectionList extends StatelessWidget {
         return Expanded(
           child: ListView.builder(
             itemCount: detections.length,
-            prototypeItem: DetectionSmallListItem.stub(),
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
               return DetectionSmallListItem(detection: detections[index]);
