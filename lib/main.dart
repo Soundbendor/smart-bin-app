@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:binsight_ai/database/models/device.dart';
+import 'package:binsight_ai/pub_sub/subscriber.dart';
 import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:binsight_ai/screens/main/annotation.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +10,9 @@ import 'package:binsight_ai/screens/main/home_page.dart';
 import 'package:binsight_ai/screens/main/stats_page.dart';
 import 'package:binsight_ai/screens/splash/screen.dart';
 import 'package:binsight_ai/screens/splash/wifi_page.dart';
-import 'package:binsight_ai/database/connection.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:web_socket_channel/io.dart';
 
 /// Entry point of the application
 void main() async {
@@ -32,15 +34,62 @@ void main() async {
 late GoRouter router;
 
 /// The root of the application. Contains the GoRouter and MaterialApp wrappers.
-class BinsightAiApp extends StatelessWidget {
+class BinsightAiApp extends StatefulWidget {
   final bool skipSetUp;
 
   const BinsightAiApp({super.key, this.skipSetUp = false});
 
   @override
+  State<BinsightAiApp> createState() => _BinsightAiAppState();
+}
+
+class _BinsightAiAppState extends State<BinsightAiApp>
+    with WidgetsBindingObserver {
+  late IOWebSocketChannel channel;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    initWebSocket();
+  }
+
+  void initWebSocket() {
+    // Initialize WebSocket channel and subscribe
+    channel = IOWebSocketChannel.connect('ws://10.0.2.2:8000/subscribe');
+    final subscriptionMessage = {"type": "subscribe", "channel": "1"};
+    channel.sink.add(jsonEncode(subscriptionMessage));
+
+    handleMessages(channel);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    //Minimized
+    if (state == AppLifecycleState.paused) {
+      print("closed");
+    }
+    //Reopened
+    else if (state == AppLifecycleState.resumed) {
+      print("Opened");
+      if (channel.closeCode != null) {
+        initWebSocket();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    channel.sink.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     router = GoRouter(
-        initialLocation: skipSetUp ? '/main' : '/set-up', routes: routes);
+        initialLocation: widget.skipSetUp ? '/main' : '/set-up',
+        routes: routes);
 
     return MaterialApp.router(
       routerConfig: router,
