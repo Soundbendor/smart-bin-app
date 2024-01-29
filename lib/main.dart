@@ -85,7 +85,7 @@ void main() async {
     }
   }
 
-  runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
+  runApp(BinsightAiApp(skipSetUp: true));
 }
 
 // Also used for testing

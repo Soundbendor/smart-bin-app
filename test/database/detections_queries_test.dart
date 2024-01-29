@@ -2,6 +2,7 @@ import 'package:binsight_ai/database/connection.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import '../shared.dart';
 
 class DetectionDatabase extends FakeDatabase {
@@ -24,13 +25,15 @@ class DetectionDatabase extends FakeDatabase {
       {
         "imageId": "foo-1",
         "preDetectImgLink": "https://placehold.co/512x512",
-        "timestamp": DateTime.now().toIso8601String(),
+        "timestamp":
+            DateTime.now().subtract(const Duration(days: 2)).toIso8601String(),
         "deviceId": "foo",
       },
       {
         "imageId": "foo-2",
         "preDetectImgLink": "https://placehold.co/512x512",
-        "timestamp": DateTime.now().toIso8601String(),
+        "timestamp":
+            DateTime.now().subtract(const Duration(days: 1)).toIso8601String(),
         "deviceId": "bar",
         "postDetectImgLink": "https://placehold.co/512x512",
         "depthMapImgLink": "https://placehold.co/512x512",
@@ -74,14 +77,38 @@ class DetectionDatabase extends FakeDatabase {
 }
 
 void main() async {
+  sqfliteFfiInit();
+  databaseFactory = databaseFactoryFfi;
   test("Finding all devices", () async {
     Database db = DetectionDatabase(datatype: 4);
     setDatabase(db);
 
-    final devices = await Detection.all();
-    expect(devices.length, equals(3));
-    expect(devices[0].imageId, equals("foo-1"));
-    expect(devices[1].imageId, equals("foo-2"));
-    expect(devices[2].imageId, equals("foo-3"));
+    final detections = await Detection.all();
+    expect(detections.length, equals(3));
+    expect(detections[0].imageId, equals("foo-1"));
+    expect(detections[1].imageId, equals("foo-2"));
+    expect(detections[2].imageId, equals("foo-3"));
+  });
+
+  test("Finding latest detection", () async {
+    setDatabase(null);
+    await getDatabaseConnection(dbName: "test_database.db");
+
+    final Detection detection_1 = Detection.createDefault();
+    detection_1.timestamp = DateTime.now().subtract(const Duration(days: 2));
+    detection_1.save();
+
+    final Detection detection_2 = Detection.createDefault();
+    detection_2.timestamp = DateTime.now().subtract(const Duration(days: 1));
+    detection_2.imageId = "2";
+    detection_2.save();
+
+    final Detection detection_3 = Detection.createDefault();
+    detection_3.timestamp = DateTime.now();
+    detection_3.imageId = "3";
+    detection_3.save();
+
+    final detection = await Detection.latest();
+    expect(detection.imageId, equals("3"));
   });
 }
