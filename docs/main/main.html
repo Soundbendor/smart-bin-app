@@ -88,8 +88,55 @@
   &#47;&#47; };
   &#47;&#47; channel.sink.add(jsonEncode(subscriptionMessage));
   &#47;&#47; handleMessages(channel);
+
   &#47;&#47; Determine if there are devices in the database.
   final devices = await Device.all();
+
+  if (kDebugMode) {
+    final db = await getDatabaseConnection();
+    &#47;&#47; development code to add fake data
+    if (devices.isEmpty) {
+      await db.insert(&quot;devices&quot;, {&quot;id&quot;: &quot;test&quot;});
+    }
+
+    final detections = await Detection.all();
+    if (detections.isEmpty) {
+      final fakeDetections = [
+        Detection(
+          imageId: &quot;test-1&quot;,
+          preDetectImgLink: &quot;https:&#47;&#47;placehold.co&#47;512x512.png&quot;,
+          timestamp: DateTime.now(),
+          deviceId: &quot;test&quot;,
+          postDetectImgLink: &quot;https:&#47;&#47;placehold.co&#47;513x513.png&quot;,
+          depthMapImgLink: &quot;https:&#47;&#47;placehold.co&#47;514x514.png&quot;,
+          irImgLink: &quot;https:&#47;&#47;placehold.co&#47;515x515.png&quot;,
+          weight: 12.0,
+          humidity: 0.5,
+          temperature: 20.0,
+          co2: 0.5,
+          vo2: 0.5,
+          boxes: &quot;[]&quot;,
+        ),
+        Detection(
+          imageId: &quot;test-2&quot;,
+          preDetectImgLink: &quot;https:&#47;&#47;placehold.co&#47;512x512.png&quot;,
+          timestamp: DateTime.now(),
+          deviceId: &quot;test&quot;,
+          depthMapImgLink: &quot;https:&#47;&#47;placehold.co&#47;514x514.png&quot;,
+          irImgLink: &quot;https:&#47;&#47;placehold.co&#47;515x515.png&quot;,
+          weight: 12.0,
+          humidity: 0.5,
+          temperature: 20.0,
+          co2: 0.5,
+          vo2: 0.5,
+        ),
+      ];
+      for (final detection in fakeDetections) {
+        await detection.save();
+      }
+    }
+  }
+
   runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
 }</code></pre>
 </section>
