@@ -118,10 +118,12 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
+  &#47;&#47;Defines the router to be used for the app, with set-up as the initial route
   router = GoRouter(
       initialLocation: skipSetUp ? &#39;&#47;main&#39; : &#39;&#47;set-up&#39;, routes: routes);
 
   return MaterialApp.router(
+    &#47;&#47; title: appTitle,
     routerConfig: router,
   );
 }</code></pre>
