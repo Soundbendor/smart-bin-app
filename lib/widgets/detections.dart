@@ -35,32 +35,23 @@ class DetectionLargeListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () => _onTileTap(context, detection),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.shade500,
-                blurRadius: 8,
-                offset: const Offset(0, 3),
-              ),
-            ],
-            color: Colors.white,
-          ),
+        child: Card(
           child: Padding(
             padding: const EdgeInsets.all(9.0),
             child: Column(
               children: [
                 Text(formatDetectionTitle(detection),
-                    textScaler: const TextScaler.linear(1.75)),
+                    style: textTheme.headlineSmall),
                 Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Colors.grey.shade700,
+                        color: colorScheme.onSurface,
                         width: 2,
                       ),
                     ),
@@ -74,20 +65,22 @@ class DetectionLargeListItem extends StatelessWidget {
                   width: 250,
                   child: Row(
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Temperature"),
-                            Text("Humidity"),
+                            Text("Temperature", style: textTheme.labelLarge),
+                            Text("Humidity", style: textTheme.labelLarge),
                           ],
                         ),
                       ),
                       Expanded(
                         child: Column(
                           children: [
-                            Text(detection.temperature.toString()),
-                            Text(detection.humidity.toString()),
+                            Text(detection.temperature.toString(),
+                                style: textTheme.bodyMedium),
+                            Text(detection.humidity.toString(),
+                                style: textTheme.bodyMedium),
                           ],
                         ),
                       ),
@@ -117,12 +110,15 @@ class DetectionSmallListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return ListTile(
       leading: detection.preDetectImgLink.startsWith("http")
           ? Image.network(detection.preDetectImgLink)
           : Image.asset("assets/images/placeholder.png"),
-      title: Text(formatDetectionTitle(detection)),
-      subtitle: Text(detection.timestamp.toString()),
+      title:
+          Text(formatDetectionTitle(detection), style: textTheme.titleMedium),
+      subtitle:
+          Text(detection.timestamp.toString(), style: textTheme.bodyMedium),
       trailing: const Icon(Icons.arrow_forward_ios),
       onTap: () => _onTileTap(context, detection),
     );

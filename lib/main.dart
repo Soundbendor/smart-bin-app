@@ -172,8 +172,16 @@ class _BinsightAiAppState extends State<BinsightAiApp>
         ),
         textTheme: const TextTheme(
           headlineLarge: TextStyle(
-            fontSize: 24,
+            fontSize: 30,
             fontWeight: FontWeight.bold,
+          ),
+        ),
+        cardTheme: CardTheme(
+          surfaceTintColor: Theme.of(context).colorScheme.onSurface,
+          shadowColor: Colors.black,
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
           ),
         ),
       ),
