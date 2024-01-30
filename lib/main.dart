@@ -1,10 +1,13 @@
 // Flutter imports:
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter/foundation.dart';
 
 // Package imports:
 import 'package:go_router/go_router.dart';
+import 'package:web_socket_channel/io.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/device.dart';
@@ -20,6 +23,7 @@ import 'package:binsight_ai/screens/splash/screen.dart';
 import 'package:binsight_ai/screens/splash/wifi_page.dart';
 import 'package:binsight_ai/widgets/navigation_shell.dart';
 import 'package:binsight_ai/database/connection.dart';
+import 'package:binsight_ai/pub_sub/subscriber.dart';
 
 /// Entry point of the application
 void main() async {
@@ -84,19 +88,68 @@ void main() async {
   runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
 }
 
-/// The root of the application.
-/// Contains the GoRouter and MaterialApp wrappers.
-class BinsightAiApp extends StatelessWidget {
+// Also used for testing
+late GoRouter router;
+
+/// The root of the application. Contains the GoRouter and MaterialApp wrappers.
+class BinsightAiApp extends StatefulWidget {
   final bool skipSetUp;
   // static const appTitle = 'binsight.ai';
 
   const BinsightAiApp({super.key, this.skipSetUp = false});
 
   @override
+  State<BinsightAiApp> createState() => _BinsightAiAppState();
+}
+
+class _BinsightAiAppState extends State<BinsightAiApp>
+    with WidgetsBindingObserver {
+  late IOWebSocketChannel channel;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    initWebSocket();
+  }
+
+  void initWebSocket() {
+    // Initialize WebSocket channel and subscribe
+    channel = IOWebSocketChannel.connect('ws://10.0.2.2:8000/subscribe');
+    final subscriptionMessage = {"type": "subscribe", "channel": "1"};
+    channel.sink.add(jsonEncode(subscriptionMessage));
+
+    handleMessages(channel);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    //Minimized
+    if (state == AppLifecycleState.paused) {
+      print("closed");
+    }
+    //Reopened
+    else if (state == AppLifecycleState.resumed) {
+      print("Opened");
+      if (channel.closeCode != null) {
+        initWebSocket();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    channel.sink.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     //Defines the router to be used for the app, with set-up as the initial route
     router = GoRouter(
-        initialLocation: skipSetUp ? '/main' : '/set-up', routes: routes);
+        initialLocation: widget.skipSetUp ? '/main' : '/set-up',
+        routes: routes);
 
     return MaterialApp.router(
       // title: appTitle,
@@ -104,9 +157,6 @@ class BinsightAiApp extends StatelessWidget {
     );
   }
 }
-
-// Also used for testing
-late GoRouter router;
 
 /// The routes for the application.
 ///
