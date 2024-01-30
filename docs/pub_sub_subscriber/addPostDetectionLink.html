@@ -71,12 +71,16 @@
 
     </section>
     
+<section class="desc markdown">
+  <p>Updates the post detection link in the database.</p>
+</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; addPostDetectionLink(Map&lt;String, dynamic&gt; postDetectionData) async {
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; addPostDetectionLink(
+    Map&lt;String, dynamic&gt; postDetectionData) async {
   Database db = await getDatabaseConnection();
   List&lt;Map&lt;String, dynamic&gt;&gt; detections = await db.query(
     &quot;detections&quot;,
