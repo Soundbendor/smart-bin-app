@@ -51,15 +51,23 @@ class _DetectionsPageState extends State<DetectionsPage> {
               children: [
                 const Expanded(child: Heading(text: "Detections")),
                 Switch(
-                  value: sizeToggle,
-                  onChanged: onToggleSwitch,
-                  thumbColor: MaterialStateProperty.all(
-                    Theme.of(context).colorScheme.onPrimary,
-                  ),
-                  trackOutlineColor: MaterialStateProperty.all(
-                    Theme.of(context).colorScheme.onBackground,
-                  ),
-                ),
+                    value: sizeToggle,
+                    onChanged: onToggleSwitch,
+                    thumbColor: MaterialStateProperty.resolveWith((states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return Theme.of(context).colorScheme.onPrimary;
+                      }
+                      return Theme.of(context).colorScheme.onSurface;
+                    }),
+                    trackOutlineColor: MaterialStatePropertyAll(
+                      Theme.of(context).colorScheme.onBackground,
+                    ),
+                    trackColor: MaterialStateProperty.resolveWith((states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return Theme.of(context).colorScheme.primary;
+                      }
+                      return Theme.of(context).colorScheme.surface;
+                    })),
                 Text(
                   "Toggle Size",
                   style: Theme.of(context).textTheme.labelMedium,

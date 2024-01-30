@@ -159,15 +159,15 @@ class _BinsightAiAppState extends State<BinsightAiApp>
       theme: ThemeData(
         colorScheme: ColorScheme(
           primary: Colors.blue,
-          onPrimary: Colors.blue.shade700,
+          onPrimary: Colors.white,
           secondary: Colors.blueAccent,
-          onSecondary: Colors.blue.shade700,
+          onSecondary: Colors.white,
           error: Colors.red,
           onError: Colors.red.shade700,
           background: Colors.white,
           onBackground: Colors.black,
           brightness: Brightness.light,
-          surface: Colors.white60,
+          surface: Colors.grey.shade300,
           onSurface: Colors.black,
         ),
         textTheme: const TextTheme(
