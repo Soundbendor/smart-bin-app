@@ -156,6 +156,20 @@ class _BinsightAiAppState extends State<BinsightAiApp>
 
     return MaterialApp.router(
       routerConfig: router,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.blue,
+          errorColor: Colors.red,
+          backgroundColor: Colors.white,
+          brightness: Brightness.light,
+        ),
+        textTheme: const TextTheme(
+          headlineLarge: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -164,7 +178,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
 ///
 /// The routes are defined like a tree. There are two top-level routes: 'main' and 'set-up'.
 /// The 'main' route is wrapped in a [ShellRoute] to share the bottom navigation bar.
-/// The ShellRoute returns an [AppShell] widget, which contains the top navigation bar.
+/// The ShellRoute returns an [NavigationShell] widget, which contains the top navigation bar.
 var routes = [
   ShellRoute(
     builder: (BuildContext context, GoRouterState state, Widget child) {

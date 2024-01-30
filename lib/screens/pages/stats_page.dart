@@ -8,9 +8,12 @@ class StatsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text("Stats Page Content"),
+        child: Text(
+          "Stats Page Content",
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
       ),
     );
   }

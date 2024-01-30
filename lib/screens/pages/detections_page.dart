@@ -51,7 +51,10 @@ class _DetectionsPageState extends State<DetectionsPage> {
               children: [
                 const Expanded(child: Heading(text: "Detections")),
                 Switch(value: sizeToggle, onChanged: onToggleSwitch),
-                const Text("Toggle Size"),
+                Text(
+                  "Toggle Size",
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
               ],
             ),
             FutureBuilder(
