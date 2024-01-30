@@ -147,6 +147,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
                             await connectToDevice(bluetoothDevice);
                             await readCharacteristic(
                                 bluetoothDevice, Guid("2AF9"));
+                            if (!mounted) return;
                             GoRouter.of(context)
                                 .goNamed('wifi', extra: bluetoothDevice);
                           }),
