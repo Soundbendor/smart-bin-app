@@ -1,13 +1,13 @@
 // Flutter imports:
 import 'dart:convert';
 
-import 'package:binsight_ai/pub_sub/subscriber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter/foundation.dart';
 
 // Package imports:
 import 'package:go_router/go_router.dart';
+import 'package:web_socket_channel/io.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/device.dart';
@@ -23,7 +23,7 @@ import 'package:binsight_ai/screens/splash/screen.dart';
 import 'package:binsight_ai/screens/splash/wifi_page.dart';
 import 'package:binsight_ai/widgets/navigation_shell.dart';
 import 'package:binsight_ai/database/connection.dart';
-import 'package:web_socket_channel/io.dart';
+import 'package:binsight_ai/pub_sub/subscriber.dart';
 
 /// Entry point of the application
 void main() async {
@@ -85,7 +85,7 @@ void main() async {
     }
   }
 
-  runApp(BinsightAiApp(skipSetUp: true));
+  runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
 }
 
 // Also used for testing
