@@ -50,7 +50,16 @@ class _DetectionsPageState extends State<DetectionsPage> {
             Row(
               children: [
                 const Expanded(child: Heading(text: "Detections")),
-                Switch(value: sizeToggle, onChanged: onToggleSwitch),
+                Switch(
+                  value: sizeToggle,
+                  onChanged: onToggleSwitch,
+                  thumbColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.onPrimary,
+                  ),
+                  trackOutlineColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.onBackground,
+                  ),
+                ),
                 Text(
                   "Toggle Size",
                   style: Theme.of(context).textTheme.labelMedium,

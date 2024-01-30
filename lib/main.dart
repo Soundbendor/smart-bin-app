@@ -157,11 +157,18 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     return MaterialApp.router(
       routerConfig: router,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.blue,
-          errorColor: Colors.red,
-          backgroundColor: Colors.white,
+        colorScheme: ColorScheme(
+          primary: Colors.blue,
+          onPrimary: Colors.blue.shade700,
+          secondary: Colors.blueAccent,
+          onSecondary: Colors.blue.shade700,
+          error: Colors.red,
+          onError: Colors.red.shade700,
+          background: Colors.white,
+          onBackground: Colors.black,
           brightness: Brightness.light,
+          surface: Colors.white60,
+          onSurface: Colors.black,
         ),
         textTheme: const TextTheme(
           headlineLarge: TextStyle(
