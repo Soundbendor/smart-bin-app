@@ -17,6 +17,7 @@ dependencies:
   go_router: ^13.0.1
   web_socket_channel: ^2.4.0
   flutter_blue_plus: ^1.29.8
+  sqflite_common_ffi: ^2.3.2
 
 dev_dependencies:
   flutter_test:

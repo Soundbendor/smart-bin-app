@@ -79,6 +79,6 @@ Future<void> closeDatabaseConnection() async {
 }
 
 // The following are mainly for testing purposes
-void setDatabase(Database db) {
+void setDatabase(Database? db) {
   _database = db;
 }

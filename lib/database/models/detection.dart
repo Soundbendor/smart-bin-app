@@ -68,6 +68,12 @@ class Detection extends Model {
         timestamp = DateTime.now(),
         deviceId = "1";
 
+  Detection.notFound()
+      : imageId = "-1",
+        preDetectImgLink = "assets/images/placeholder.png",
+        timestamp = DateTime.now(),
+        deviceId = "-1";
+
   @override
   Map<String, dynamic> toMap() {
     return {
@@ -160,5 +166,16 @@ class Detection extends Model {
               result,
             ))
         .toList();
+  }
+
+  static Future<Detection> latest() async {
+    Database db = await getDatabaseConnection();
+    List<Map<String, dynamic>> results =
+        await db.query("detections", orderBy: "timestamp DESC");
+    if (results.isNotEmpty) {
+      return Detection.fromMap(results.first);
+    } else {
+      return Detection.notFound();
+    }
   }
 }
