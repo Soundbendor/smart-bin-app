@@ -58,6 +58,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
       context: context,
       builder: (BuildContext context) {
         final textTheme = Theme.of(context).textTheme;
+        final colorScheme = Theme.of(context).colorScheme;
         return AlertDialog(
           title: Text('Label Annotation', style: textTheme.headlineLarge),
           content: Column(
@@ -77,7 +78,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
               },
               child: Text('Cancel',
                   style: textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
+                    color: colorScheme.onPrimary,
                   )),
             ),
             TextButton(
@@ -95,7 +96,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
               },
               child: Text('Save',
                   style: textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   )),
             ),
           ],
@@ -148,7 +149,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                   },
                   child: Text("Label Annotation",
                       style: textTheme.labelLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.onPrimary,
                       ))),
               ElevatedButton(
                   onPressed: () {
@@ -157,7 +158,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                   },
                   child: Text("Complete Annotations",
                       style: textTheme.labelLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.onPrimary,
                       ))),
               if (_capturedImage != null)
                 Image.memory(
