@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 
-/// Displays the Help page.
-// TODO: Add FAQ/User Guide/Help information and email contact form.
+/// Displays the Help page with dropdown sections for FAQ, User Guide, Help, and Contact Us form.
 class HelpPage extends StatelessWidget {
   const HelpPage({super.key});
   @override
@@ -11,13 +10,13 @@ class HelpPage extends StatelessWidget {
       body: Container(
         padding: const EdgeInsets.all(10),
         child: ListView(
-          children: [
+          children: const [
             Expanded(
               child: ExpansionTile(
                 title: Heading(text: "FAQ"),
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(8.0),
                     child: Text("FAQ Content"),
                   ),
                 ],
@@ -28,7 +27,7 @@ class HelpPage extends StatelessWidget {
                 title: Heading(text: "User Guide"),
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(8.0),
                     child: Text("User Guide Content"),
                   ),
                 ],
@@ -39,7 +38,7 @@ class HelpPage extends StatelessWidget {
                 title: Heading(text: "Help"),
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(8.0),
                     child: Text("Help Content"),
                   ),
                 ],
@@ -50,8 +49,8 @@ class HelpPage extends StatelessWidget {
                 title: Heading(text: "Contact Us"),
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ContactForm(),
+                    padding: EdgeInsets.all(8.0),
+                    child: _ContactForm(),
                   ),
                 ],
               ),
@@ -63,39 +62,42 @@ class HelpPage extends StatelessWidget {
   }
 }
 
-class ContactForm extends StatefulWidget {
-  const ContactForm({super.key});
+/// State class for the contact form widget.
+class _ContactForm extends StatefulWidget {
+  const _ContactForm();
 
   @override
   _ContactFormState createState() => _ContactFormState();
 }
 
-class _ContactFormState extends State<ContactForm> {
+/// Displays a form for users to submit a contact request.
+class _ContactFormState extends State<_ContactForm> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController messageController = TextEditingController();
 
+  // TODO add form validation and error checking
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         TextField(
           controller: emailController,
-          decoration: InputDecoration(labelText: 'Email'),
+          decoration: const InputDecoration(labelText: 'Email'),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         TextField(
           controller: messageController,
-          decoration: InputDecoration(labelText: 'Message'),
-          maxLines: 3,
+          decoration: const InputDecoration(labelText: 'Message'),
+          maxLines: 15,
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         ElevatedButton(
           onPressed: () {
-            // Add logic to handle form submission
+            // TODO logic to handle form submission
             print('Email: ${emailController.text}');
             print('Message: ${messageController.text}');
           },
-          child: Text('Submit'),
+          child: const Text('Submit'),
         ),
       ],
     );
