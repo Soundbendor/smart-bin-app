@@ -10,7 +10,7 @@ class HelpPage extends StatelessWidget {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(10),
-        child: const Column(
+        child: ListView(
           children: [
             Expanded(
               child: ExpansionTile(
@@ -45,9 +45,59 @@ class HelpPage extends StatelessWidget {
                 ],
               ),
             ),
+            Expanded(
+              child: ExpansionTile(
+                title: Heading(text: "Contact Us"),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ContactForm(),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class ContactForm extends StatefulWidget {
+  const ContactForm({super.key});
+
+  @override
+  _ContactFormState createState() => _ContactFormState();
+}
+
+class _ContactFormState extends State<ContactForm> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController messageController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextField(
+          controller: emailController,
+          decoration: InputDecoration(labelText: 'Email'),
+        ),
+        SizedBox(height: 10),
+        TextField(
+          controller: messageController,
+          decoration: InputDecoration(labelText: 'Message'),
+          maxLines: 3,
+        ),
+        SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: () {
+            // Add logic to handle form submission
+            print('Email: ${emailController.text}');
+            print('Message: ${messageController.text}');
+          },
+          child: Text('Submit'),
+        ),
+      ],
     );
   }
 }
