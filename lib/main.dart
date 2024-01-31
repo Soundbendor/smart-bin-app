@@ -11,14 +11,14 @@ import 'package:web_socket_channel/io.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/device.dart';
-import 'package:binsight_ai/screens/main/detections_page.dart';
-import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
-import 'package:binsight_ai/screens/main/annotation.dart';
+import 'package:binsight_ai/screens/pages/detections_page.dart';
+import 'package:binsight_ai/screens/pages/bluetooth_page.dart';
+import 'package:binsight_ai/screens/pages/annotation.dart';
 import 'package:binsight_ai/database/models/detection.dart';
-import 'package:binsight_ai/screens/main/detection_page.dart';
-import 'package:binsight_ai/screens/main/home_page.dart';
-import 'package:binsight_ai/screens/main/stats_page.dart';
-import 'package:binsight_ai/screens/main/help_page.dart';
+import 'package:binsight_ai/screens/pages/detection_page.dart';
+import 'package:binsight_ai/screens/pages/home_page.dart';
+import 'package:binsight_ai/screens/pages/stats_page.dart';
+import 'package:binsight_ai/screens/pages/help_page.dart';
 import 'package:binsight_ai/screens/splash/screen.dart';
 import 'package:binsight_ai/screens/splash/wifi_page.dart';
 import 'package:binsight_ai/widgets/navigation_shell.dart';

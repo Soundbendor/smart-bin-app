@@ -1,5 +1,5 @@
 import 'package:binsight_ai/database/models/detection.dart';
-import 'package:binsight_ai/screens/main/detection_page.dart';
+import 'package:binsight_ai/screens/pages/detection_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
