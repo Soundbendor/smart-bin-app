@@ -135,7 +135,7 @@ var routes = [
             name: 'wifi-scan',
             path: 'wifi-scan',
             builder: (BuildContext context, GoRouterState state) {
-              return WifiScanPage(device: state.extra as BluetoothDevice);
+              return const WifiScanPage();
             }),
         // `/set-up/wifi` - selecting wifi page
         GoRoute(
