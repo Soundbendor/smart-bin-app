@@ -34,9 +34,21 @@ class _WifiScanWidgetState extends State<WifiScanWidget> {
     final canStartScan =
         await WiFiScan.instance.canStartScan(askPermissions: true);
     // Switch statement should go here
-    final isScanning = await WiFiScan.instance.startScan();
-    if (isScanning) {
-      _getScannedResults();
+    switch (canStartScan) {
+      case CanStartScan.yes:
+        final isScanning = await WiFiScan.instance.startScan();
+        if (isScanning) {
+          _getScannedResults();
+        }
+        break;
+      case CanStartScan.failed:
+        // Handle the case where scanning is not possible
+        break;
+      case CanStartScan.notSupported:
+        // Handle the case where the user denied the necessary permissions
+        break;
+      default:
+      // handle default case
     }
   }
 
@@ -61,9 +73,7 @@ class _WifiScanWidgetState extends State<WifiScanWidget> {
       filteredAccessPointsString.add(point.ssid);
     }
 
-    setState(() {
-      wifiResults = filteredAccessPoints;
-    });
+    wifiResults = filteredAccessPoints;
   }
 
   @override
@@ -76,9 +86,10 @@ class _WifiScanWidgetState extends State<WifiScanWidget> {
       ),
       child: Column(
         children: [
-          const Flexible(
-            flex: 1,
-            child: Center(
+          const Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
               child: Text(
                 "Connect to your Bin!",
                 style: TextStyle(
@@ -86,9 +97,10 @@ class _WifiScanWidgetState extends State<WifiScanWidget> {
                 ),
               ),
             ),
+            ],
           ),
-          Flexible(
-            flex: 5,
+          SizedBox(
+            height: 200,
             child: ListView.builder(
               itemCount: wifiResults.length,
               itemBuilder: (BuildContext context, int index) {
@@ -104,7 +116,7 @@ class _WifiScanWidgetState extends State<WifiScanWidget> {
                       trailing: const Icon(Icons.keyboard_arrow_right),
                       onTap: () {
                         GoRouter.of(context)
-                            .goNamed('wifi', extra: {device, wifiResult.ssid});
+                            .goNamed('wifi-page', extra: {device, wifiResult.ssid});
                       }),
                 );
               },
