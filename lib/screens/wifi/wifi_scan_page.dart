@@ -11,13 +11,13 @@ class WifiScanPage extends StatefulWidget {
 
 
   @override
-  State<WifiScanPage> createState() => 
+  State<WifiScanPage> createState() =>
   _WifiScanPageState();
 }
 
 class _WifiScanPageState extends State<WifiScanPage> {
   // _WifiScanPageState();
-  
+
 List<WiFiAccessPoint> wifiResults = [];
 
   @override
