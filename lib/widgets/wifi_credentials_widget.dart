@@ -7,22 +7,25 @@ import 'dart:convert';
 /// Widget for configuring the wifi credentials of the compost bin
 
 class WifiConfigurationWidget extends StatefulWidget {
-  const WifiConfigurationWidget({super.key, required this.device});
+  const WifiConfigurationWidget({super.key, required this.device, required this.ssid});
 
   final BluetoothDevice device;
+  final String ssid;
 
   @override
   State<WifiConfigurationWidget> createState() =>
-      _WifiConfigurationWidgetState(device: device);
+    _WifiConfigurationWidgetState(device: device, ssid: ssid);
 }
 
 /// State class for WifiConfigurationWidget
 class _WifiConfigurationWidgetState extends State<WifiConfigurationWidget> {
-  _WifiConfigurationWidgetState({required this.device});
+  _WifiConfigurationWidgetState({required this.device, required this.ssid});
+  
 
   TextEditingController ssidController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final BluetoothDevice device;
+  final String ssid;
 
   /// Function to send WiFi credentials to the Bluetooth connected Compost Bin
   Future<void> sendWifiCredentials() async {
@@ -38,7 +41,7 @@ class _WifiConfigurationWidgetState extends State<WifiConfigurationWidget> {
       children: [
         const Text('Connect to Compost Bin'),
         TextField(
-          controller: ssidController,
+          controller: ssidController..text = ssid,
           decoration: const InputDecoration(labelText: 'SSID'),
         ),
         TextField(

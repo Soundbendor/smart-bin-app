@@ -1,16 +1,18 @@
-import 'package:binsight_ai/database/models/device.dart';
+import 'package:binsight_ai/widgets/wifi_credentials_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:binsight_ai/screens/main/annotation.dart';
-import 'package:flutter/material.dart';
 import 'package:binsight_ai/screens/main/detections_page.dart';
 import 'package:binsight_ai/screens/main/home_page.dart';
 import 'package:binsight_ai/screens/main/stats_page.dart';
 import 'package:binsight_ai/screens/splash/screen.dart';
 import 'package:binsight_ai/screens/splash/wifi_page.dart';
+import 'package:binsight_ai/screens/wifi/wifi_scan_page.dart';
+import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/database/connection.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:go_router/go_router.dart';
-import 'package:sqflite/sqflite.dart';
 
 /// Entry point of the application
 void main() async {
@@ -40,7 +42,7 @@ class BinsightAiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     router = GoRouter(
-        initialLocation: skipSetUp ? '/main' : '/set-up', routes: routes);
+        initialLocation: skipSetUp ? '/main' : '/main', routes: routes);
 
     return MaterialApp.router(
       routerConfig: router,
@@ -110,12 +112,18 @@ var routes = [
             builder: (BuildContext context, GoRouterState state) {
               return const BluetoothPage();
             }),
+        GoRoute(
+            name: 'wifi-scan',
+            path: 'wifi-scan',
+            builder: (BuildContext context, GoRouterState state) {
+              return WifiScanPage(device: state.extra as BluetoothDevice);
+            }),
         // `/set-up/wifi` - selecting wifi page
         GoRoute(
             name: 'wifi',
             path: 'wifi',
             builder: (BuildContext context, GoRouterState state) {
-              return WifiPage(device: state.extra as BluetoothDevice);
+              return WifiPage(device: state.extra as BluetoothDevice, ssid: state.extra as String);
             }),
       ]),
 ];

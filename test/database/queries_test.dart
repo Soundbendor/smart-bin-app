@@ -34,6 +34,12 @@ class DeviceDatabase extends FakeDatabase {
       return Future.value([]);
     }
   }
+  
+  @override
+  Future<T> readTransaction<T>(Future<T> Function(Transaction txn) action) {
+    // TODO: implement readTransaction
+    throw UnimplementedError();
+  }
 }
 
 void main() async {

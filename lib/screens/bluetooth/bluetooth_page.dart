@@ -144,11 +144,11 @@ class _BluetoothPageState extends State<BluetoothPage> {
                           trailing: const Icon(Icons.keyboard_arrow_right),
                           onTap: () async {
                             FlutterBluePlus.stopScan();
-                            await connectToDevice(bluetoothDevice);
-                            await readCharacteristic(
-                                bluetoothDevice, Guid("2AF9"));
+                            // await connectToDevice(bluetoothDevice);
+                            // await readCharacteristic(
+                            //     bluetoothDevice, Guid("2AF9"));
                             GoRouter.of(context)
-                                .goNamed('wifi', extra: bluetoothDevice);
+                                .goNamed('wifi-scan', extra: bluetoothDevice);
                           }),
                     );
                   },

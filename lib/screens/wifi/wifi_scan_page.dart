@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:binsight_ai/widgets/wifi_credentials_widget.dart';
+import 'package:binsight_ai/widgets/wifi_scan_widget.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 /// Displays the WiFi configuration page with background and padding.
-class WifiPage extends StatefulWidget {
-  const WifiPage({super.key, required this.device, required this.ssid});
+class WifiScanPage extends StatefulWidget {
+  const WifiScanPage({super.key, required this.device});
 
   final BluetoothDevice device;
-  final String ssid;
 
   @override
-  State<WifiPage> createState() => 
-  _WifiPageState(device: device, ssid: ssid);
+  State<WifiScanPage> createState() => 
+  _WifiScanPageState(device: device);
 }
 
-class _WifiPageState extends State<WifiPage> {
-  _WifiPageState({required this.device, required this.ssid});
+class _WifiScanPageState extends State<WifiScanPage> {
+  _WifiScanPageState({required this.device});
 
   final BluetoothDevice device;
-  final String ssid;
-
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +33,7 @@ class _WifiPageState extends State<WifiPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                WifiConfigurationWidget(device: device, ssid: ssid),
-                const Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: Text("Wifi Page Content"),
-                )
+                WifiScanWidget(device: device),
               ],
             ),
           ),
