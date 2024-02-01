@@ -178,6 +178,7 @@ class FakeDatabase implements Database {
       ConflictAlgorithm? conflictAlgorithm}) {
     throw UnimplementedError();
   }
+
   @override
   Future<T> readTransaction<T>(Future<T> Function(Transaction txn) action) {
     // TODO: implement readTransaction
