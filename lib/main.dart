@@ -85,8 +85,11 @@ void main() async {
     }
   }
 
-  runApp(BinsightAiApp(skipSetUp: true));
-  // runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
+  // Run the app without the bluetooth set up
+  // runApp(BinsightAiApp(skipSetUp: true));
+
+  // Run the app with the bluetooth set up
+  runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
 }
 
 // Also used for testing
@@ -95,7 +98,6 @@ late GoRouter router;
 /// The root of the application. Contains the GoRouter and MaterialApp wrappers.
 class BinsightAiApp extends StatefulWidget {
   final bool skipSetUp;
-  // static const appTitle = 'binsight.ai';
 
   const BinsightAiApp({super.key, this.skipSetUp = false});
 
@@ -153,7 +155,6 @@ class _BinsightAiAppState extends State<BinsightAiApp>
         routes: routes);
 
     return MaterialApp.router(
-      // title: appTitle,
       routerConfig: router,
     );
   }
