@@ -1,22 +1,21 @@
+import 'package:binsight_ai/main.dart';
 import 'package:flutter/material.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 class WifiScanWidget extends StatefulWidget {
-  const WifiScanWidget({super.key, required this.device});
-
-  final BluetoothDevice device;
+  const WifiScanWidget({super.key});
 
   @override
-  State<WifiScanWidget> createState() => _WifiScanWidgetState(device: device);
+  State<WifiScanWidget> createState() => _WifiScanWidgetState();
 }
 
 class _WifiScanWidgetState extends State<WifiScanWidget> {
-  _WifiScanWidgetState({required this.device});
+  _WifiScanWidgetState();
 
-  final BluetoothDevice device;
   List<WiFiAccessPoint> wifiResults = [];
 
   @override
@@ -90,17 +89,18 @@ class _WifiScanWidgetState extends State<WifiScanWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Center(
-              child: Text(
-                "Connect to your Bin!",
-                style: TextStyle(
-                  fontSize: 30,
+                child: Text(
+                  "Connect to your Bin!",
+                  style: TextStyle(
+                    fontSize: 30,
+                  ),
                 ),
               ),
-            ),
             ],
           ),
           SizedBox(
-            height: 200,
+            height: MediaQuery.of(context).size.height / 2,
+            width: MediaQuery.of(context).size.width / 2,
             child: ListView.builder(
               itemCount: wifiResults.length,
               itemBuilder: (BuildContext context, int index) {
@@ -115,8 +115,11 @@ class _WifiScanWidgetState extends State<WifiScanWidget> {
                       title: Text(wifiResult.ssid),
                       trailing: const Icon(Icons.keyboard_arrow_right),
                       onTap: () {
-                        GoRouter.of(context)
-                            .goNamed('wifi-page', extra: {device, wifiResult.ssid});
+                        GoRouter.of(context).goNamed('wifi-page', extra: {
+                          Provider.of<DeviceNotifier>(context, listen: false)
+                              .getDevice,
+                          wifiResult.ssid
+                        });
                       }),
                 );
               },
