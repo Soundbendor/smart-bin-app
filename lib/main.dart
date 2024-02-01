@@ -1,15 +1,18 @@
 import 'package:binsight_ai/widgets/wifi_credentials_widget.dart';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
 import 'package:binsight_ai/screens/main/annotation.dart';
 import 'package:binsight_ai/screens/main/detections_page.dart';
 import 'package:binsight_ai/screens/main/home_page.dart';
 import 'package:binsight_ai/screens/main/stats_page.dart';
 import 'package:binsight_ai/screens/splash/screen.dart';
-import 'package:binsight_ai/screens/splash/wifi_page.dart';
+import 'package:binsight_ai/screens/splash/wifi_credentials_page.dart';
 import 'package:binsight_ai/screens/wifi/wifi_scan_page.dart';
 import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/database/connection.dart';
@@ -30,22 +33,38 @@ void main() async {
   runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
 }
 
+class DeviceNotifier with ChangeNotifier {
+  BluetoothDevice? device;
+  BluetoothDevice? getDevice() {
+    return device;
+  }
+
+  void setDevice(BluetoothDevice newDevice) {
+    device = newDevice;
+    notifyListeners();
+  }
+}
+
 // Also used for testing
 late GoRouter router;
 
 /// The root of the application. Contains the GoRouter and MaterialApp wrappers.
 class BinsightAiApp extends StatelessWidget {
   final bool skipSetUp;
+  late DeviceNotifier deviceNotifier = DeviceNotifier();
 
-  const BinsightAiApp({super.key, this.skipSetUp = false});
+  BinsightAiApp({super.key, this.skipSetUp = false});
 
   @override
   Widget build(BuildContext context) {
     router = GoRouter(
-        initialLocation: skipSetUp ? '/main' : '/main', routes: routes);
+        initialLocation: skipSetUp ? '/main' : '/set-up', routes: routes);
 
-    return MaterialApp.router(
-      routerConfig: router,
+    return ChangeNotifierProvider(
+      create: (_) => DeviceNotifier(),
+      child: MaterialApp.router(
+        routerConfig: router,
+      ),
     );
   }
 }
@@ -101,7 +120,7 @@ var routes = [
   GoRoute(
       name: 'set-up',
       path: '/set-up',
-      builder: (BuildContext conext, GoRouterState state) {
+      builder: (BuildContext context, GoRouterState state) {
         return const SplashPage();
       },
       routes: [
@@ -123,10 +142,13 @@ var routes = [
             name: 'wifi',
             path: 'wifi',
             builder: (BuildContext context, GoRouterState state) {
-              return WifiPage(device: state.extra as BluetoothDevice, ssid: state.extra as String);
+              return WifiPage(
+                  device: state.extra as BluetoothDevice,
+                  ssid: state.extra as String);
             }),
       ]),
 ];
+
 
 /// Wrapper containing the title app bar and bottom navigation bar.
 /// Used for testing

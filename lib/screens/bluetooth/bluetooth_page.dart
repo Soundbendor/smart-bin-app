@@ -1,4 +1,6 @@
+import 'package:binsight_ai/main.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'dart:async';
@@ -144,6 +146,8 @@ class _BluetoothPageState extends State<BluetoothPage> {
                           trailing: const Icon(Icons.keyboard_arrow_right),
                           onTap: () async {
                             FlutterBluePlus.stopScan();
+                            Provider.of<DeviceNotifier>(context, listen:false).setDevice(bluetoothDevice);
+                            print(Provider.of<DeviceNotifier>(context, listen:false).getDevice());
                             // await connectToDevice(bluetoothDevice);
                             // await readCharacteristic(
                             //     bluetoothDevice, Guid("2AF9"));
