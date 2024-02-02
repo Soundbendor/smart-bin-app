@@ -118,12 +118,14 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
+  final colorScheme = Theme.of(context).colorScheme;
+  final textTheme = Theme.of(context).textTheme;
   return Container(
     width: double.infinity,
     &#47;&#47; Underline tab indicator decoration
-    decoration: const UnderlineTabIndicator(
+    decoration: UnderlineTabIndicator(
       borderSide: BorderSide(
-        color: Colors.black,
+        color: colorScheme.onBackground,
         width: 2,
       ),
     ),
@@ -132,10 +134,7 @@ Widget build(BuildContext context) {
       &#47;&#47; Text displaying the heading
       Text(
         text,
-        style: const TextStyle(
-          fontSize: 30,
-          fontWeight: FontWeight.bold,
-        ),
+        style: textTheme.headlineLarge,
         textAlign: TextAlign.left,
       ),
     ]),
