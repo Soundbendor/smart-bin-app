@@ -24,7 +24,7 @@ class _TopNavBarState extends State<TopNavBar> {
       style: optionStyle,
     ),
     Text(
-      'Index 1: Profile',
+      'Index 1: My Bin',
       style: optionStyle,
     ),
     Text(
@@ -52,7 +52,7 @@ class _TopNavBarState extends State<TopNavBar> {
         children: [
           const DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Color.fromARGB(255, 25, 192, 147),
             ),
             child: Text(
               'Binsight.ai',
@@ -69,13 +69,14 @@ class _TopNavBarState extends State<TopNavBar> {
             onTap: () {
               // Update the state of the app.
               _onItemTapped(0);
+              GoRouter.of(context).goNamed('main');
               // Then close the drawer.
               Navigator.pop(context);
             },
           ),
           ListTile(
             leading: const Icon(Icons.person_2_outlined),
-            title: const Text('Profile'),
+            title: const Text('My Bin'),
             selected: _selectedIndex == 1,
             onTap: () {
               _onItemTapped(1);
