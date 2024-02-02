@@ -12,30 +12,28 @@ class WifiConfigurationWidget extends StatefulWidget {
 
   @override
   State<WifiConfigurationWidget> createState() =>
-      _WifiConfigurationWidgetState(device: device);
+      _WifiConfigurationWidgetState();
 }
 
 /// State class for WifiConfigurationWidget
 class _WifiConfigurationWidgetState extends State<WifiConfigurationWidget> {
-  _WifiConfigurationWidgetState({required this.device});
-
   TextEditingController ssidController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  final BluetoothDevice device;
 
   /// Function to send WiFi credentials to the Bluetooth connected Compost Bin
   Future<void> sendWifiCredentials() async {
     // Encode WiFi credentials as JSON and convert to bytes
     List<int> encodedJsonData = utf8.encode(jsonEncode(
         {"ssid": ssidController.text, "password": passwordController.text}));
-    await writeCharacteristic(device, Guid("2AB5"), encodedJsonData);
+    await writeCharacteristic(widget.device, Guid("2AB5"), encodedJsonData);
   }
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
-        const Text('Connect to Compost Bin'),
+        Text('Connect to Compost Bin', style: textTheme.headlineMedium),
         TextField(
           controller: ssidController,
           decoration: const InputDecoration(labelText: 'SSID'),
@@ -51,7 +49,10 @@ class _WifiConfigurationWidgetState extends State<WifiConfigurationWidget> {
             // Navigate to the 'main' route using GoRouter
             context.goNamed('main');
           },
-          child: const Text('Connect'),
+          child: Text('Connect',
+              style: textTheme.labelLarge!.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+              )),
         ),
       ], // Column children
     );

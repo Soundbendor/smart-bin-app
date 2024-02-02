@@ -11,12 +11,14 @@ class Heading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     return Container(
       width: double.infinity,
       // Underline tab indicator decoration
-      decoration: const UnderlineTabIndicator(
+      decoration: UnderlineTabIndicator(
         borderSide: BorderSide(
-          color: Colors.black,
+          color: colorScheme.onBackground,
           width: 2,
         ),
       ),
@@ -25,10 +27,7 @@ class Heading extends StatelessWidget {
         // Text displaying the heading
         Text(
           text,
-          style: const TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-          ),
+          style: textTheme.headlineLarge,
           textAlign: TextAlign.left,
         ),
       ]),

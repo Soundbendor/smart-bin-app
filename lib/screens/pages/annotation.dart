@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/widgets/free_draw.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 
@@ -56,13 +57,17 @@ class _AnnotationPageState extends State<AnnotationPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        final textTheme = Theme.of(context).textTheme;
+        final colorScheme = Theme.of(context).colorScheme;
         return AlertDialog(
-          title: const Text('Label Annotation'),
+          title: Text('Label Annotation', style: textTheme.headlineLarge),
           content: Column(
             children: [
-              const Text('Enter a name for your annotation:'),
+              Text('Enter a name for your annotation:',
+                  style: textTheme.bodyMedium),
               TextField(
                 controller: userInputController,
+                style: textTheme.bodyMedium,
               ),
             ],
           ),
@@ -71,7 +76,10 @@ class _AnnotationPageState extends State<AnnotationPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: Text('Cancel',
+                  style: textTheme.labelLarge!.copyWith(
+                    color: colorScheme.onPrimary,
+                  )),
             ),
             TextButton(
               onPressed: () {
@@ -86,7 +94,10 @@ class _AnnotationPageState extends State<AnnotationPage> {
                   print(annotationsList.length);
                 }
               },
-              child: const Text('Save'),
+              child: Text('Save',
+                  style: textTheme.labelLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  )),
             ),
           ],
         );
@@ -96,6 +107,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -107,10 +119,10 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 child: Column(
                   children: [
                     GestureDetector(
-                      child: const Row(
+                      child: Row(
                         children: [
-                          Icon(Icons.arrow_back_ios),
-                          Text("Back to list"),
+                          const Icon(Icons.arrow_back_ios),
+                          Text("Back to list", style: textTheme.labelLarge),
                         ],
                       ),
                       onTap: () => Navigator.pop(context),
@@ -132,18 +144,22 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-                  _showPopup();
-                },
-                child: const Text("Label Annotation"),
-              ),
+                  onPressed: () {
+                    _showPopup();
+                  },
+                  child: Text("Label Annotation",
+                      style: textTheme.labelLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ))),
               ElevatedButton(
-                onPressed: () {
-                  captureImage();
-                  print(annotationsList);
-                },
-                child: const Text("Complete Annotations"),
-              ),
+                  onPressed: () {
+                    captureImage();
+                    print(annotationsList);
+                  },
+                  child: Text("Complete Annotations",
+                      style: textTheme.labelLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ))),
               if (_capturedImage != null)
                 Image.memory(
                   _capturedImage!,

@@ -5,7 +5,6 @@ import 'package:sqflite/sqflite.dart';
 import '../shared.dart';
 
 class DeviceDatabase extends FakeDatabase {
-
   final bool exists;
 
   DeviceDatabase({this.exists = true});
@@ -37,7 +36,6 @@ class DeviceDatabase extends FakeDatabase {
 }
 
 void main() async {
-
   test("Finding a device that exists", () async {
     Database db = DeviceDatabase();
     setDatabase(db);
@@ -64,5 +62,4 @@ void main() async {
     expect(devices[0].id, equals("foo"));
     expect(devices[1].id, equals("bar"));
   });
-
 }

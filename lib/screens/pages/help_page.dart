@@ -6,45 +6,46 @@ class HelpPage extends StatelessWidget {
   const HelpPage({super.key});
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme.bodyMedium;
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(10),
         child: ListView(
-          children: const [
+          children: [
             Expanded(
               child: ExpansionTile(
-                title: Heading(text: "FAQ"),
+                title: const Heading(text: "FAQ"),
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text("FAQ Content"),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("FAQ Content", style: textTheme),
                   ),
                 ],
               ),
             ),
             Expanded(
               child: ExpansionTile(
-                title: Heading(text: "User Guide"),
+                title: const Heading(text: "User Guide"),
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text("User Guide Content"),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("User Guide Content", style: textTheme),
                   ),
                 ],
               ),
             ),
             Expanded(
               child: ExpansionTile(
-                title: Heading(text: "Help"),
+                title: const Heading(text: "Help"),
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text("Help Content"),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("Help Content", style: textTheme),
                   ),
                 ],
               ),
             ),
-            Expanded(
+            const Expanded(
               child: ExpansionTile(
                 title: Heading(text: "Contact Us"),
                 children: [
