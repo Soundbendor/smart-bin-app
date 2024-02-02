@@ -31,13 +31,14 @@ void main() async {
   // handleMessages(channel);
 
   // Determine if there are devices in the database.
-  final devices = await Device.all();
+  var devices = await Device.all();
 
   if (kDebugMode) {
     final db = await getDatabaseConnection();
     // development code to add fake data
     if (devices.isEmpty) {
       await db.insert("devices", {"id": "test"});
+      devices = await Device.all();
     }
 
     final detections = await Detection.all();
