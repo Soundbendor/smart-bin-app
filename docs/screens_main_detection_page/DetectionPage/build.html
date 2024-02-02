@@ -130,56 +130,84 @@ Widget build(BuildContext context) {
                 Text(&quot;Back to list&quot;),
               ],
             ),
-            onTap: () =&gt; Navigator.pop(context),
+            onTap: () =&gt; context.goNamed(&#39;detections&#39;),
           ),
-          const Heading(text: &quot;Detection&quot;),
+          FutureBuilder(
+              future: detectionFuture,
+              builder:
+                  (BuildContext context, AsyncSnapshot&lt;Detection?&gt; snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Heading(text: &quot;Loading...&quot;);
+                } else {
+                  return Heading(text: formatDetectionTitle(snapshot.data!));
+                }
+              }),
           const SizedBox(height: 16),
-          GestureDetector(
-              child: Center(
-                child: Image.asset(
-                  detection.preDetectImgLink,
-                  width: 350,
-                  height: 350,
-                ),
-              ),
-              onTap: () =&gt; Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =&gt; AnnotationPage(
-                          imageLink: detection.preDetectImgLink)))),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: 400,
-            child: Row(
-              children: [
-                const Expanded(
-                  child: Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+          FutureBuilder(
+            future: detectionFuture,
+            builder:
+                (BuildContext context, AsyncSnapshot&lt;Detection?&gt; snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else {
+                final detection = snapshot.data;
+                return Column(children: [
+                  GestureDetector(
+                      child: Center(
+                        child: detection!.preDetectImgLink.startsWith(&quot;http&quot;)
+                            ? Image.network(
+                                detection.preDetectImgLink,
+                                width: 350,
+                                height: 350,
+                              )
+                            : Image.asset(
+                                detection.preDetectImgLink,
+                                width: 350,
+                                height: 350,
+                              ),
+                      ),
+                      onTap: () =&gt; Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =&gt; AnnotationPage(
+                                  imageLink: detection.preDetectImgLink)))),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: 400,
+                    child: Row(
                       children: [
-                        Text(&quot;Temperature:&quot;),
-                        Text(&quot;Humidity:&quot;),
-                        Text(&quot;eCO2:&quot;),
-                        Text(&quot;tVOC:&quot;),
+                        const Expanded(
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(&quot;Temperature:&quot;),
+                                Text(&quot;Humidity:&quot;),
+                                Text(&quot;eCO2:&quot;),
+                                Text(&quot;tVOC:&quot;),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(detection.temperature.toString()),
+                                Text(detection.humidity.toString()),
+                                Text(detection.co2.toString()),
+                                Text(detection.vo2.toString()),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(detection.temperature.toString()),
-                        Text(detection.humidity.toString()),
-                        Text(detection.co2.toString()),
-                        Text(detection.vo2.toString()),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+                  )
+                ]);
+              }
+            },
           )
         ],
       ),

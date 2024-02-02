@@ -1,5 +1,5 @@
-import 'package:binsight_ai/database/models/detection.dart';
 import 'package:flutter/material.dart';
+import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/detections.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 
@@ -50,8 +50,28 @@ class _DetectionsPageState extends State<DetectionsPage> {
             Row(
               children: [
                 const Expanded(child: Heading(text: "Detections")),
-                Switch(value: sizeToggle, onChanged: onToggleSwitch),
-                const Text("Toggle Size"),
+                Switch(
+                    value: sizeToggle,
+                    onChanged: onToggleSwitch,
+                    thumbColor: MaterialStateProperty.resolveWith((states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return Theme.of(context).colorScheme.onPrimary;
+                      }
+                      return Theme.of(context).colorScheme.onSurface;
+                    }),
+                    trackOutlineColor: MaterialStatePropertyAll(
+                      Theme.of(context).colorScheme.onBackground,
+                    ),
+                    trackColor: MaterialStateProperty.resolveWith((states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return Theme.of(context).colorScheme.primary;
+                      }
+                      return Theme.of(context).colorScheme.surface;
+                    })),
+                Text(
+                  "Toggle Size",
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
               ],
             ),
             FutureBuilder(

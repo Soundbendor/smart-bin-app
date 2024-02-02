@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:go_router/go_router.dart';
 
 /// Writes specified characteristic data to the device.
 Future<void> writeCharacteristic(
@@ -147,6 +147,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
                             await connectToDevice(bluetoothDevice);
                             await readCharacteristic(
                                 bluetoothDevice, Guid("2AF9"));
+                            if (!mounted) return;
                             GoRouter.of(context)
                                 .goNamed('wifi', extra: bluetoothDevice);
                           }),

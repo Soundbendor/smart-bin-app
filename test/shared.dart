@@ -37,9 +37,7 @@ ignoreOverflowErrors(
     }
 
     // Ignore if is overflow error.
-    if (ifIsOverflowError || isUnableToLoadAsset) {
-      debugPrint('Ignored Error');
-    } else {
+    if (!(ifIsOverflowError || isUnableToLoadAsset)) {
       originalHandler?.call(details);
     }
   };

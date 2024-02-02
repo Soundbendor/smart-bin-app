@@ -7,6 +7,8 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -22,24 +24,20 @@ class SplashPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Padding(
-                        padding: EdgeInsets.only(
+                    Padding(
+                        padding: const EdgeInsets.only(
                             left: 16, right: 16, bottom: 30, top: 160),
                         child: Text(
                           "Welcome!",
-                          style: TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff787878)),
+                          style: textTheme.displayLarge,
                         )),
-                    const Padding(
-                      padding: EdgeInsets.only(
+                    Padding(
+                      padding: const EdgeInsets.only(
                           left: 80, right: 80, top: 20, bottom: 20),
                       child: Text(
                         "Let's get you connected to your bin.",
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: Color(0xff787878),
+                        style: textTheme.headlineLarge!.copyWith(
+                          color: colorScheme.onBackground,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -48,10 +46,10 @@ class SplashPage extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: TextButton(
                         style: TextButton.styleFrom(
-                            foregroundColor: Colors.white,
+                            foregroundColor: colorScheme.onPrimary,
                             padding: const EdgeInsets.all(16.0),
-                            textStyle: const TextStyle(fontSize: 20),
-                            backgroundColor: const Color(0xFF15a2cd)),
+                            textStyle: textTheme.labelLarge,
+                            backgroundColor: colorScheme.primary),
                         onPressed: () {
                           context.goNamed('bluetooth');
                         },

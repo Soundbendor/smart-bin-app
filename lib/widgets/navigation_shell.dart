@@ -15,7 +15,8 @@ class NavigationShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('binsight.ai'),
+        title:
+            Text('binsight.ai', style: Theme.of(context).textTheme.titleLarge),
         centerTitle: true,
       ),
       body: child,
@@ -43,22 +44,19 @@ class NavigationShell extends StatelessWidget {
 
   // Calculate the index of the bottom navigation bar based on the current route
   static int _calculateSelectedIndex(BuildContext context) {
-    try {
-      final String location = GoRouterState.of(context).uri.toString();
-      if (location == '/main') {
-        return 0;
-      }
-      if (location == '/main/detections') {
-        return 1;
-      }
-      if (location == '/main/stats') {
-        return 2;
-      }
-      // Default to home page
-      return 0;
-    } catch (e) {
+    final String location = GoRouterState.of(context).uri.toString();
+    print(location);
+    if (location == '/main') {
       return 0;
     }
+    if (location.startsWith('/main/detection')) {
+      return 1;
+    }
+    if (location.startsWith('/main/stats')) {
+      return 2;
+    }
+    // Default to home page
+    return 0;
   }
 
   // Function to handle navigation when an item is tapped

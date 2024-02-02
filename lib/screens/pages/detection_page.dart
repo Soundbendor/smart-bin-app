@@ -1,9 +1,9 @@
-import 'package:binsight_ai/screens/main/annotation.dart';
-import 'package:binsight_ai/widgets/detections.dart';
 import 'package:flutter/material.dart';
-import 'package:binsight_ai/database/models/detection.dart';
-import 'package:binsight_ai/widgets/heading.dart';
 import 'package:go_router/go_router.dart';
+import 'package:binsight_ai/database/models/detection.dart';
+import 'package:binsight_ai/screens/pages/annotation.dart';
+import 'package:binsight_ai/widgets/detections.dart';
+import 'package:binsight_ai/widgets/heading.dart';
 
 /// Displays information about a single detection.
 class DetectionPage extends StatelessWidget {
@@ -16,16 +16,17 @@ class DetectionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             GestureDetector(
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(Icons.arrow_back_ios),
-                  Text("Back to list"),
+                  const Icon(Icons.arrow_back_ios),
+                  Text("Back to list", style: textTheme.labelLarge),
                 ],
               ),
               onTap: () => context.goNamed('detections'),
@@ -74,15 +75,25 @@ class DetectionPage extends StatelessWidget {
                       width: 400,
                       child: Row(
                         children: [
-                          const Expanded(
+                          Expanded(
                             child: Center(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Temperature:"),
-                                  Text("Humidity:"),
-                                  Text("eCO2:"),
-                                  Text("tVOC:"),
+                                  Text("Temperature:",
+                                      style: textTheme.labelLarge),
+                                  Text(
+                                    "Humidity:",
+                                    style: textTheme.labelLarge,
+                                  ),
+                                  Text(
+                                    "eCO2:",
+                                    style: textTheme.labelLarge,
+                                  ),
+                                  Text(
+                                    "tVOC:",
+                                    style: textTheme.labelLarge,
+                                  ),
                                 ],
                               ),
                             ),
@@ -92,10 +103,14 @@ class DetectionPage extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(detection.temperature.toString()),
-                                  Text(detection.humidity.toString()),
-                                  Text(detection.co2.toString()),
-                                  Text(detection.vo2.toString()),
+                                  Text(detection.temperature.toString(),
+                                      style: textTheme.bodyMedium),
+                                  Text(detection.humidity.toString(),
+                                      style: textTheme.bodyMedium),
+                                  Text(detection.co2.toString(),
+                                      style: textTheme.bodyMedium),
+                                  Text(detection.vo2.toString(),
+                                      style: textTheme.bodyMedium),
                                 ],
                               ),
                             ),

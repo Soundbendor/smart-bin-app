@@ -62,7 +62,7 @@
 
         <section class="multi-line-signature">
           
-          <a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/go_router/13.0.1/go_router/RouteBase-class.html">RouteBase</a></span>&gt;</span>
+          <a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/go_router/13.1.0/go_router/RouteBase-class.html">RouteBase</a></span>&gt;</span>
           <span class="name ">routes</span>
           <div class="features"><span class="feature">getter/setter pair</span></div>
 
@@ -71,7 +71,8 @@
 <section class="desc markdown">
   <p>The routes for the application.</p>
 <p>The routes are defined like a tree. There are two top-level routes: 'main' and 'set-up'.
-The 'main' route is wrapped in a <a href="https://pub.dev/documentation/go_router/13.0.1/go_router/ShellRoute-class.html">ShellRoute</a> to share the bottom navigation bar.</p>
+The 'main' route is wrapped in a <a href="https://pub.dev/documentation/go_router/13.1.0/go_router/ShellRoute-class.html">ShellRoute</a> to share the bottom navigation bar.
+The ShellRoute returns an <code>AppShell</code> widget, which contains the top navigation bar.</p>
 </section>
 
         
@@ -80,7 +81,7 @@ The 'main' route is wrapped in a <a href="https://pub.dev/documentation/go_route
   <pre class="language-dart"><code class="language-dart">var routes = [
   ShellRoute(
     builder: (BuildContext context, GoRouterState state, Widget child) {
-      return BottomNavBar(child: child);
+      return NavigationShell(child: child);
     },
     routes: &lt;GoRoute&gt;[
       &#47;&#47; `&#47;main` - home page
@@ -109,6 +110,13 @@ The 'main' route is wrapped in a <a href="https://pub.dev/documentation/go_route
                             imageLink: state.pathParameters[&#39;imagePath&#39;]!);
                       }),
                 ]),
+            &#47;&#47; `&#47;main&#47;detection&#47;:detectionId` - detection page with detailed information
+            GoRoute(
+                path: &#39;detection&#47;:detectionId&#39;,
+                builder: (BuildContext context, GoRouterState state) {
+                  return DetectionPage.fromId(
+                      detectionId: state.pathParameters[&#39;detectionId&#39;]!);
+                }),
             &#47;&#47; `&#47;main&#47;stats` - usage and statistics page
             GoRoute(
               name: &#39;stats&#39;,
@@ -117,9 +125,17 @@ The 'main' route is wrapped in a <a href="https://pub.dev/documentation/go_route
                 return const StatsPage();
               },
             ),
+            GoRoute(
+              name: &#39;help&#39;,
+              path: &#39;help&#39;,
+              builder: (BuildContext context, GoRouterState state) {
+                return const HelpPage();
+              },
+            ),
           ]),
     ],
   ),
+
   &#47;&#47; `&#47;set-up` - set up &#47; welcome page
   GoRoute(
       name: &#39;set-up&#39;,
