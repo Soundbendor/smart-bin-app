@@ -150,12 +150,56 @@ class _BinsightAiAppState extends State<BinsightAiApp>
   @override
   Widget build(BuildContext context) {
     //Defines the router to be used for the app, with set-up as the initial route
+    routes = getRoutes();
     router = GoRouter(
         initialLocation: widget.skipSetUp ? '/main' : '/set-up',
         routes: routes);
 
+    final mainColorScheme = ColorScheme(
+      primary: Colors.blue,
+      onPrimary: Colors.white,
+      secondary: Colors.blueAccent.shade700,
+      onSecondary: Colors.white,
+      tertiary: Colors.green.shade700,
+      onTertiary: Colors.white,
+      error: Colors.red,
+      onError: Colors.red.shade700,
+      background: Colors.white,
+      onBackground: Colors.black,
+      brightness: Brightness.light,
+      surface: Colors.grey.shade200,
+      onSurface: Colors.black,
+    );
     return MaterialApp.router(
       routerConfig: router,
+      theme: ThemeData(
+        colorScheme: mainColorScheme,
+        textTheme: const TextTheme(
+          headlineLarge: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            backgroundColor: mainColorScheme.primary,
+            foregroundColor: mainColorScheme.onPrimary,
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: mainColorScheme.primary,
+              foregroundColor: mainColorScheme.onPrimary),
+        ),
+        cardTheme: CardTheme(
+          surfaceTintColor: mainColorScheme.onSurface,
+          shadowColor: mainColorScheme.onBackground,
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -164,89 +208,92 @@ class _BinsightAiAppState extends State<BinsightAiApp>
 ///
 /// The routes are defined like a tree. There are two top-level routes: 'main' and 'set-up'.
 /// The 'main' route is wrapped in a [ShellRoute] to share the bottom navigation bar.
-/// The ShellRoute returns an [AppShell] widget, which contains the top navigation bar.
-var routes = [
-  ShellRoute(
-    builder: (BuildContext context, GoRouterState state, Widget child) {
-      return NavigationShell(child: child);
-    },
-    routes: <GoRoute>[
-      // `/main` - home page
-      GoRoute(
-          name: 'main',
-          path: '/main',
-          builder: (BuildContext context, GoRouterState state) {
-            return const HomePage();
-          },
-          routes: [
-            // `/main/detections` - list of detections
-            GoRoute(
-                name: 'detections',
-                path: 'detections',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const DetectionsPage();
-                },
-                routes: [
-                  // `/main/detections/annotation` - annotation page
-                  // [imagePath] is the id of the detection to annotate.
-                  GoRoute(
-                      name: 'annotation',
-                      path: 'annotation:imagePath',
-                      builder: (BuildContext context, GoRouterState state) {
-                        return AnnotationPage(
-                            imageLink: state.pathParameters['imagePath']!);
-                      }),
-                ]),
-            // `/main/detection/:detectionId` - detection page with detailed information
-            GoRoute(
-                path: 'detection/:detectionId',
-                builder: (BuildContext context, GoRouterState state) {
-                  return DetectionPage.fromId(
-                      detectionId: state.pathParameters['detectionId']!);
-                }),
-            // `/main/stats` - usage and statistics page
-            GoRoute(
-              name: 'stats',
-              path: 'stats',
-              builder: (BuildContext context, GoRouterState state) {
-                return const StatsPage();
-              },
-            ),
-            GoRoute(
-              name: 'help',
-              path: 'help',
-              builder: (BuildContext context, GoRouterState state) {
-                return const HelpPage();
-              },
-            ),
-          ]),
-    ],
-  ),
-
-  // `/set-up` - set up / welcome page
-  GoRoute(
-      name: 'set-up',
-      path: '/set-up',
-      builder: (BuildContext conext, GoRouterState state) {
-        return const SplashPage();
+/// The ShellRoute returns an [NavigationShell] widget, which contains the top navigation bar.
+List<RouteBase> routes = getRoutes();
+List<RouteBase> getRoutes() {
+  return [
+    ShellRoute(
+      builder: (BuildContext context, GoRouterState state, Widget child) {
+        return NavigationShell(child: child);
       },
-      routes: [
-        // `/set-up/bluetooth` - bluetooth set up page
+      routes: <GoRoute>[
+        // `/main` - home page
         GoRoute(
-            name: 'bluetooth',
-            path: 'bluetooth',
+            name: 'main',
+            path: '/main',
             builder: (BuildContext context, GoRouterState state) {
-              return const BluetoothPage();
-            }),
-        // `/set-up/wifi` - selecting wifi page
-        GoRoute(
-            name: 'wifi',
-            path: 'wifi',
-            builder: (BuildContext context, GoRouterState state) {
-              return WifiPage(device: state.extra as BluetoothDevice);
-            }),
-      ]),
-];
+              return const HomePage();
+            },
+            routes: [
+              // `/main/detections` - list of detections
+              GoRoute(
+                  name: 'detections',
+                  path: 'detections',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return const DetectionsPage();
+                  },
+                  routes: [
+                    // `/main/detections/annotation` - annotation page
+                    // [imagePath] is the id of the detection to annotate.
+                    GoRoute(
+                        name: 'annotation',
+                        path: 'annotation:imagePath',
+                        builder: (BuildContext context, GoRouterState state) {
+                          return AnnotationPage(
+                              imageLink: state.pathParameters['imagePath']!);
+                        }),
+                  ]),
+              // `/main/detection/:detectionId` - detection page with detailed information
+              GoRoute(
+                  path: 'detection/:detectionId',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return DetectionPage.fromId(
+                        detectionId: state.pathParameters['detectionId']!);
+                  }),
+              // `/main/stats` - usage and statistics page
+              GoRoute(
+                name: 'stats',
+                path: 'stats',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const StatsPage();
+                },
+              ),
+              GoRoute(
+                name: 'help',
+                path: 'help',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const HelpPage();
+                },
+              ),
+            ]),
+      ],
+    ),
+
+    // `/set-up` - set up / welcome page
+    GoRoute(
+        name: 'set-up',
+        path: '/set-up',
+        builder: (BuildContext context, GoRouterState state) {
+          return const SplashPage();
+        },
+        routes: [
+          // `/set-up/bluetooth` - bluetooth set up page
+          GoRoute(
+              name: 'bluetooth',
+              path: 'bluetooth',
+              builder: (BuildContext context, GoRouterState state) {
+                return const BluetoothPage();
+              }),
+          // `/set-up/wifi` - selecting wifi page
+          GoRoute(
+              name: 'wifi',
+              path: 'wifi',
+              builder: (BuildContext context, GoRouterState state) {
+                return WifiPage(device: state.extra as BluetoothDevice);
+              }),
+        ]),
+  ];
+}
 
 /// Wrapper containing the title app bar and bottom navigation bar.
 /// Used for testing
