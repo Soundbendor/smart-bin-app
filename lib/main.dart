@@ -273,7 +273,7 @@ List<RouteBase> getRoutes() {
     GoRoute(
         name: 'set-up',
         path: '/set-up',
-        builder: (BuildContext conext, GoRouterState state) {
+        builder: (BuildContext context, GoRouterState state) {
           return const SplashPage();
         },
         routes: [
