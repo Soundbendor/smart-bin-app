@@ -113,28 +113,6 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     initWebSocket();
   }
 
-  Future<DateTime> getLatestTimestamp() async {
-    //Get last detection in local database
-    final latestDetection = await Detection.latest();
-    final timeStamp = latestDetection.timestamp;
-    return timeStamp;
-  }
-
-  void initWebSocket() {
-    // Initialize WebSocket channel and subscribe
-    channel = IOWebSocketChannel.connect('ws://10.0.2.2:8000/subscribe');
-    final subscriptionMessage = {"type": "subscribe", "channel": "1"};
-    channel.sink.add(jsonEncode(subscriptionMessage));
-    final timeStamp = getLatestTimestamp();
-    final requestMessage = {
-      "type": "request_data",
-      "after": timeStamp.toString(),
-      "channel": "1"
-    };
-    channel.sink.add(jsonEncode(requestMessage));
-    handleMessages(channel);
-  }
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
@@ -168,6 +146,28 @@ class _BinsightAiAppState extends State<BinsightAiApp>
       // title: appTitle,
       routerConfig: router,
     );
+  }
+
+    Future<DateTime> getLatestTimestamp() async {
+    //Get last detection in local database
+    final latestDetection = await Detection.latest();
+    final timeStamp = latestDetection.timestamp;
+    return timeStamp;
+  }
+
+  void initWebSocket() {
+    // Initialize WebSocket channel and subscribe
+    channel = IOWebSocketChannel.connect('ws://10.0.2.2:8000/subscribe');
+    final subscriptionMessage = {"type": "subscribe", "channel": "1"};
+    channel.sink.add(jsonEncode(subscriptionMessage));
+    final timeStamp = getLatestTimestamp();
+    final requestMessage = {
+      "type": "request_data",
+      "after": timeStamp.toString(),
+      "channel": "1"
+    };
+    channel.sink.add(jsonEncode(requestMessage));
+    handleMessages(channel);
   }
 }
 
