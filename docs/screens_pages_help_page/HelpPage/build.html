@@ -118,45 +118,46 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
+  final textTheme = Theme.of(context).textTheme.bodyMedium;
   return Scaffold(
     body: Container(
       padding: const EdgeInsets.all(10),
       child: ListView(
-        children: const [
+        children: [
           Expanded(
             child: ExpansionTile(
-              title: Heading(text: &quot;FAQ&quot;),
+              title: const Heading(text: &quot;FAQ&quot;),
               children: [
                 Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(&quot;FAQ Content&quot;),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(&quot;FAQ Content&quot;, style: textTheme),
                 ),
               ],
             ),
           ),
           Expanded(
             child: ExpansionTile(
-              title: Heading(text: &quot;User Guide&quot;),
+              title: const Heading(text: &quot;User Guide&quot;),
               children: [
                 Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(&quot;User Guide Content&quot;),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(&quot;User Guide Content&quot;, style: textTheme),
                 ),
               ],
             ),
           ),
           Expanded(
             child: ExpansionTile(
-              title: Heading(text: &quot;Help&quot;),
+              title: const Heading(text: &quot;Help&quot;),
               children: [
                 Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(&quot;Help Content&quot;),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(&quot;Help Content&quot;, style: textTheme),
                 ),
               ],
             ),
           ),
-          Expanded(
+          const Expanded(
             child: ExpansionTile(
               title: Heading(text: &quot;Contact Us&quot;),
               children: [

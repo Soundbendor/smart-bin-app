@@ -118,6 +118,8 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
+  final textTheme = Theme.of(context).textTheme;
+  final colorScheme = Theme.of(context).colorScheme;
   return Scaffold(
     body: Container(
       decoration: const BoxDecoration(
@@ -133,24 +135,20 @@ Widget build(BuildContext context) {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Padding(
-                      padding: EdgeInsets.only(
+                  Padding(
+                      padding: const EdgeInsets.only(
                           left: 16, right: 16, bottom: 30, top: 160),
                       child: Text(
                         &quot;Welcome!&quot;,
-                        style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff787878)),
+                        style: textTheme.displayLarge,
                       )),
-                  const Padding(
-                    padding: EdgeInsets.only(
+                  Padding(
+                    padding: const EdgeInsets.only(
                         left: 80, right: 80, top: 20, bottom: 20),
                     child: Text(
                       &quot;Let&#39;s get you connected to your bin.&quot;,
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Color(0xff787878),
+                      style: textTheme.headlineLarge!.copyWith(
+                        color: colorScheme.onBackground,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -159,10 +157,10 @@ Widget build(BuildContext context) {
                     padding: const EdgeInsets.all(8.0),
                     child: TextButton(
                       style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
+                          foregroundColor: colorScheme.onPrimary,
                           padding: const EdgeInsets.all(16.0),
-                          textStyle: const TextStyle(fontSize: 20),
-                          backgroundColor: const Color(0xFF15a2cd)),
+                          textStyle: textTheme.labelLarge,
+                          backgroundColor: colorScheme.primary),
                       onPressed: () {
                         context.goNamed(&#39;bluetooth&#39;);
                       },
