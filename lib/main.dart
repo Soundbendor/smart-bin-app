@@ -161,7 +161,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
   Widget build(BuildContext context) {
     //Defines the router to be used for the app, with set-up as the initial route
     router = GoRouter(
-        initialLocation: !widget.skipSetUp ? '/main' : '/set-up',
+        initialLocation: widget.skipSetUp ? '/main' : '/set-up',
         routes: routes);
 
     return MaterialApp.router(
