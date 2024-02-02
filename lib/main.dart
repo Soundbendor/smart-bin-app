@@ -30,7 +30,7 @@ void main() async {
   // handleMessages(channel);
   // Determine if there are devices in the database.
   final devices = await Device.all();
-  runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
+  runApp(BinsightAiApp(skipSetUp: !devices.isNotEmpty));
 }
 
 class DeviceNotifier with ChangeNotifier {

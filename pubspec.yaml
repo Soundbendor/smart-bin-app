@@ -16,7 +16,7 @@ dependencies:
   wifi_iot: ^0.3.18+1
   go_router: ^13.0.1
   web_socket_channel: ^2.4.0
-  flutter_blue_plus: ^1.29.8
+  flutter_blue_plus: ^1.31.13
   provider: ^6.1.1
 
 dev_dependencies:

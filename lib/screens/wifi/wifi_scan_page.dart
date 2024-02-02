@@ -28,7 +28,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
         ),
         child: const Center(
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: EdgeInsets.all(20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
