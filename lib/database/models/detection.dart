@@ -68,6 +68,7 @@ class Detection extends Model {
         timestamp = DateTime.now(),
         deviceId = "1";
 
+  /// Creates a null object pattern equivalent for a Detection that is not found.
   Detection.notFound()
       : imageId = "-1",
         preDetectImgLink = "assets/images/placeholder.png",
@@ -168,6 +169,7 @@ class Detection extends Model {
         .toList();
   }
 
+  /// Returns the latest detection in the local database, null Detection if none found.
   static Future<Detection> latest() async {
     Database db = await getDatabaseConnection();
     List<Map<String, dynamic>> results =
