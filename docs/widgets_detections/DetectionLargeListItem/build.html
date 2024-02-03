@@ -118,32 +118,23 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
+  final textTheme = Theme.of(context).textTheme;
+  final colorScheme = Theme.of(context).colorScheme;
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: GestureDetector(
       onTap: () =&gt; _onTileTap(context, detection),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade500,
-              blurRadius: 8,
-              offset: const Offset(0, 3),
-            ),
-          ],
-          color: Colors.white,
-        ),
+      child: Card(
         child: Padding(
           padding: const EdgeInsets.all(9.0),
           child: Column(
             children: [
               Text(formatDetectionTitle(detection),
-                  textScaler: const TextScaler.linear(1.75)),
+                  style: textTheme.headlineSmall),
               Container(
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Colors.grey.shade700,
+                      color: colorScheme.onSurface,
                       width: 2,
                     ),
                   ),
@@ -157,20 +148,22 @@ Widget build(BuildContext context) {
                 width: 250,
                 child: Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(&quot;Temperature&quot;),
-                          Text(&quot;Humidity&quot;),
+                          Text(&quot;Temperature&quot;, style: textTheme.labelLarge),
+                          Text(&quot;Humidity&quot;, style: textTheme.labelLarge),
                         ],
                       ),
                     ),
                     Expanded(
                       child: Column(
                         children: [
-                          Text(detection.temperature.toString()),
-                          Text(detection.humidity.toString()),
+                          Text(detection.temperature.toString(),
+                              style: textTheme.bodyMedium),
+                          Text(detection.humidity.toString(),
+                              style: textTheme.bodyMedium),
                         ],
                       ),
                     ),

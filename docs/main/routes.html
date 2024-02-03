@@ -72,94 +72,13 @@
   <p>The routes for the application.</p>
 <p>The routes are defined like a tree. There are two top-level routes: 'main' and 'set-up'.
 The 'main' route is wrapped in a <a href="https://pub.dev/documentation/go_router/13.1.0/go_router/ShellRoute-class.html">ShellRoute</a> to share the bottom navigation bar.
-The ShellRoute returns an <code>AppShell</code> widget, which contains the top navigation bar.</p>
+The ShellRoute returns an <a href="../widgets_navigation_shell/NavigationShell-class.html">NavigationShell</a> widget, which contains the top navigation bar.</p>
 </section>
 
         
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">var routes = [
-  ShellRoute(
-    builder: (BuildContext context, GoRouterState state, Widget child) {
-      return NavigationShell(child: child);
-    },
-    routes: &lt;GoRoute&gt;[
-      &#47;&#47; `&#47;main` - home page
-      GoRoute(
-          name: &#39;main&#39;,
-          path: &#39;&#47;main&#39;,
-          builder: (BuildContext context, GoRouterState state) {
-            return const HomePage();
-          },
-          routes: [
-            &#47;&#47; `&#47;main&#47;detections` - list of detections
-            GoRoute(
-                name: &#39;detections&#39;,
-                path: &#39;detections&#39;,
-                builder: (BuildContext context, GoRouterState state) {
-                  return const DetectionsPage();
-                },
-                routes: [
-                  &#47;&#47; `&#47;main&#47;detections&#47;annotation` - annotation page
-                  &#47;&#47; [imagePath] is the id of the detection to annotate.
-                  GoRoute(
-                      name: &#39;annotation&#39;,
-                      path: &#39;annotation:imagePath&#39;,
-                      builder: (BuildContext context, GoRouterState state) {
-                        return AnnotationPage(
-                            imageLink: state.pathParameters[&#39;imagePath&#39;]!);
-                      }),
-                ]),
-            &#47;&#47; `&#47;main&#47;detection&#47;:detectionId` - detection page with detailed information
-            GoRoute(
-                path: &#39;detection&#47;:detectionId&#39;,
-                builder: (BuildContext context, GoRouterState state) {
-                  return DetectionPage.fromId(
-                      detectionId: state.pathParameters[&#39;detectionId&#39;]!);
-                }),
-            &#47;&#47; `&#47;main&#47;stats` - usage and statistics page
-            GoRoute(
-              name: &#39;stats&#39;,
-              path: &#39;stats&#39;,
-              builder: (BuildContext context, GoRouterState state) {
-                return const StatsPage();
-              },
-            ),
-            GoRoute(
-              name: &#39;help&#39;,
-              path: &#39;help&#39;,
-              builder: (BuildContext context, GoRouterState state) {
-                return const HelpPage();
-              },
-            ),
-          ]),
-    ],
-  ),
-
-  &#47;&#47; `&#47;set-up` - set up &#47; welcome page
-  GoRoute(
-      name: &#39;set-up&#39;,
-      path: &#39;&#47;set-up&#39;,
-      builder: (BuildContext conext, GoRouterState state) {
-        return const SplashPage();
-      },
-      routes: [
-        &#47;&#47; `&#47;set-up&#47;bluetooth` - bluetooth set up page
-        GoRoute(
-            name: &#39;bluetooth&#39;,
-            path: &#39;bluetooth&#39;,
-            builder: (BuildContext context, GoRouterState state) {
-              return const BluetoothPage();
-            }),
-        &#47;&#47; `&#47;set-up&#47;wifi` - selecting wifi page
-        GoRoute(
-            name: &#39;wifi&#39;,
-            path: &#39;wifi&#39;,
-            builder: (BuildContext context, GoRouterState state) {
-              return WifiPage(device: state.extra as BluetoothDevice);
-            }),
-      ]),
-];</code></pre>
+  <pre class="language-dart"><code class="language-dart">List&lt;RouteBase&gt; routes = getRoutes();</code></pre>
 </section>
 
 

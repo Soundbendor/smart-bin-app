@@ -118,12 +118,15 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
+  final textTheme = Theme.of(context).textTheme;
   return ListTile(
     leading: detection.preDetectImgLink.startsWith(&quot;http&quot;)
         ? Image.network(detection.preDetectImgLink)
         : Image.asset(&quot;assets&#47;images&#47;placeholder.png&quot;),
-    title: Text(formatDetectionTitle(detection)),
-    subtitle: Text(detection.timestamp.toString()),
+    title:
+        Text(formatDetectionTitle(detection), style: textTheme.titleMedium),
+    subtitle:
+        Text(detection.timestamp.toString(), style: textTheme.bodyMedium),
     trailing: const Icon(Icons.arrow_forward_ios),
     onTap: () =&gt; _onTileTap(context, detection),
   );
