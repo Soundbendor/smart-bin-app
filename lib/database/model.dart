@@ -12,7 +12,7 @@ abstract class Model {
   /// Generates a dictionary of values to be inserted into the database.
   Map<String, dynamic> toMap();
 
-  ///Generates a Model from a dictionary of values.
+  /// Generates a Model from a dictionary of values.
   static Model fromMap(Map<String, dynamic> map) {
     throw UnimplementedError("Must implement fromMap method");
   }

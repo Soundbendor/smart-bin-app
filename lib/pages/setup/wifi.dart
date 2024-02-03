@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:binsight_ai/widgets/wifi_configuration_widget.dart';
+import 'package:binsight_ai/widgets/wifi_configuration.dart';
 
 /// Displays the WiFi configuration page with background and padding.
 class WifiPage extends StatelessWidget {
@@ -23,7 +23,7 @@ class WifiPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                WifiConfigurationWidget(device: device),
+                WifiConfiguration(device: device),
                 const Padding(
                   padding: EdgeInsets.all(20.0),
                   child: Text("Wifi Page Content"),

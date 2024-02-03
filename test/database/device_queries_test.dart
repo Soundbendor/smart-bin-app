@@ -36,6 +36,8 @@ class DeviceDatabase extends FakeDatabase {
 }
 
 void main() async {
+  testInit();
+
   test("Finding a device that exists", () async {
     Database db = DeviceDatabase();
     setDatabase(db);
