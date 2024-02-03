@@ -1,6 +1,10 @@
 // Flutter imports:
 import 'dart:convert';
 
+import 'package:binsight_ai/pages/detection/detection.dart';
+import 'package:binsight_ai/pages/detection/index.dart';
+import 'package:binsight_ai/pages/setup/index.dart';
+import 'package:binsight_ai/pages/setup/wifi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -11,16 +15,11 @@ import 'package:web_socket_channel/io.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/device.dart';
-import 'package:binsight_ai/screens/pages/detections_page.dart';
-import 'package:binsight_ai/screens/pages/bluetooth_page.dart';
-import 'package:binsight_ai/screens/pages/annotation.dart';
+import 'pages/setup/bluetooth.dart';
+import 'pages/detection/annotation.dart';
 import 'package:binsight_ai/database/models/detection.dart';
-import 'package:binsight_ai/screens/pages/detection_page.dart';
-import 'package:binsight_ai/screens/pages/home_page.dart';
-import 'package:binsight_ai/screens/pages/stats_page.dart';
-import 'package:binsight_ai/screens/pages/help_page.dart';
-import 'package:binsight_ai/screens/splash/screen.dart';
-import 'package:binsight_ai/screens/splash/wifi_page.dart';
+import 'pages/main/home.dart';
+import 'pages/main/help.dart';
 import 'package:binsight_ai/widgets/navigation_shell.dart';
 import 'package:binsight_ai/database/connection.dart';
 import 'package:binsight_ai/pub_sub/subscriber.dart';
@@ -200,7 +199,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     final timeStamp = latestDetection.timestamp;
     return timeStamp;
   }
-  
+
   /// Initialize WebSocket channel and subscribe
   void initWebSocket() {
     channel = IOWebSocketChannel.connect('ws://10.0.2.2:8000/subscribe');
@@ -263,14 +262,6 @@ List<RouteBase> getRoutes() {
                     return DetectionPage.fromId(
                         detectionId: state.pathParameters['detectionId']!);
                   }),
-              // `/main/stats` - usage and statistics page
-              GoRoute(
-                name: 'stats',
-                path: 'stats',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const StatsPage();
-                },
-              ),
               GoRoute(
                 name: 'help',
                 path: 'help',
