@@ -74,11 +74,11 @@ class _FreeDrawState extends State<FreeDraw> {
         //Render the drawing on top of the image
         child: Stack(
           children: [
-            Image.asset(
-              widget.imageLink,
-              key: imageKey,
-              fit: BoxFit.cover,
-            ),
+            widget.imageLink.startsWith("http")
+                ? Image.network(widget.imageLink,
+                    key: imageKey, fit: BoxFit.cover)
+                : Image.asset(widget.imageLink,
+                    key: imageKey, fit: BoxFit.cover),
             CustomPaint(
               painter: DrawingPainter(
                 drawingSegments: annotation,
