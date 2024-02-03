@@ -6,6 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 import '../shared.dart';
 
 void main() {
+  testInit();
+
   testWidgets("Detection list (incomplete) displays correct title",
       (widgetTester) async {
     final detection = Detection.fromMap({

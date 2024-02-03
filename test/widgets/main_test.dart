@@ -7,6 +7,8 @@ import 'package:go_router/go_router.dart';
 import '../shared.dart';
 
 void main() {
+  testInit();
+
   testWidgets("Initial location is at set-up when devices don't exist",
       (widgetTester) async {
     final originalErrorHandler = FlutterError.onError;

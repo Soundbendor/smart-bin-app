@@ -7,6 +7,7 @@ import '../shared.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  testInit();
 
   testWidgets("Incomplete detection displays pending title",
       (widgetTester) async {
