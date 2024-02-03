@@ -193,7 +193,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     );
   }
 
-  ///Get last detection in local database
+  /// Get last detection in local database
   Future<DateTime> getLatestTimestamp() async {
     final latestDetection = await Detection.latest();
     final timeStamp = latestDetection.timestamp;

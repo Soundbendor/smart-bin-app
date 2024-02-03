@@ -1,22 +1,22 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../pages/setup/bluetooth.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'dart:convert';
+import 'package:binsight_ai/pages/setup/bluetooth.dart';
 
 /// Widget for configuring the wifi credentials of the compost bin
-class WifiConfigurationWidget extends StatefulWidget {
-  const WifiConfigurationWidget({super.key, required this.device});
+class WifiConfiguration extends StatefulWidget {
+  const WifiConfiguration({super.key, required this.device});
 
   final BluetoothDevice device;
 
   @override
-  State<WifiConfigurationWidget> createState() =>
-      _WifiConfigurationWidgetState();
+  State<WifiConfiguration> createState() =>
+      _WifiConfigurationState();
 }
 
 /// State class for WifiConfigurationWidget
-class _WifiConfigurationWidgetState extends State<WifiConfigurationWidget> {
+class _WifiConfigurationState extends State<WifiConfiguration> {
   TextEditingController ssidController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
