@@ -118,16 +118,17 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
+  final textTheme = Theme.of(context).textTheme;
   return Scaffold(
     body: Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           GestureDetector(
-            child: const Row(
+            child: Row(
               children: [
-                Icon(Icons.arrow_back_ios),
-                Text(&quot;Back to list&quot;),
+                const Icon(Icons.arrow_back_ios),
+                Text(&quot;Back to list&quot;, style: textTheme.labelLarge),
               ],
             ),
             onTap: () =&gt; context.goNamed(&#39;detections&#39;),
@@ -176,15 +177,25 @@ Widget build(BuildContext context) {
                     width: 400,
                     child: Row(
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: Center(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(&quot;Temperature:&quot;),
-                                Text(&quot;Humidity:&quot;),
-                                Text(&quot;eCO2:&quot;),
-                                Text(&quot;tVOC:&quot;),
+                                Text(&quot;Temperature:&quot;,
+                                    style: textTheme.labelLarge),
+                                Text(
+                                  &quot;Humidity:&quot;,
+                                  style: textTheme.labelLarge,
+                                ),
+                                Text(
+                                  &quot;eCO2:&quot;,
+                                  style: textTheme.labelLarge,
+                                ),
+                                Text(
+                                  &quot;tVOC:&quot;,
+                                  style: textTheme.labelLarge,
+                                ),
                               ],
                             ),
                           ),
@@ -194,10 +205,14 @@ Widget build(BuildContext context) {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(detection.temperature.toString()),
-                                Text(detection.humidity.toString()),
-                                Text(detection.co2.toString()),
-                                Text(detection.vo2.toString()),
+                                Text(detection.temperature.toString(),
+                                    style: textTheme.bodyMedium),
+                                Text(detection.humidity.toString(),
+                                    style: textTheme.bodyMedium),
+                                Text(detection.co2.toString(),
+                                    style: textTheme.bodyMedium),
+                                Text(detection.vo2.toString(),
+                                    style: textTheme.bodyMedium),
                               ],
                             ),
                           ),

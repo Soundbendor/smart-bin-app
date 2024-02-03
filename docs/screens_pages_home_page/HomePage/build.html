@@ -118,9 +118,12 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  return const Scaffold(
+  return Scaffold(
     body: Center(
-      child: Text(&quot;Home Page Content&quot;),
+      child: Text(
+        &quot;Home Page Content&quot;,
+        style: Theme.of(context).textTheme.bodyMedium,
+      ),
     ),
   );
 }</code></pre>
