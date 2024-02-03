@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-///Widget with logic to annotate and render detection images
+/// Widget with logic to annotate and render detection images
 class FreeDraw extends StatefulWidget {
-  ///The link for the image to be annotated
+  /// The link for the image to be annotated
   final String imageLink;
 
   const FreeDraw({
@@ -15,16 +15,16 @@ class FreeDraw extends StatefulWidget {
 }
 
 class _FreeDrawState extends State<FreeDraw> {
-  ///List of DrawingSegments that make up the current annotation
+  /// List of DrawingSegments that make up the current annotation
   var annotation = <DrawingSegment>[];
 
-  ///Copy of the annotation list, unaffected by undo/redo operations
+  /// Copy of the annotation list, unaffected by undo/redo operations
   var historyDrawingSegments = <DrawingSegment>[];
 
-  ///The DrawingSegment being actively updated
+  /// The DrawingSegment being actively updated
   DrawingSegment? currentDrawingSegment;
 
-  ///Key for the Image widget that renders the detection image
+  /// Key for the Image widget that renders the detection image
   late GlobalKey imageKey;
 
   @override
@@ -90,7 +90,7 @@ class _FreeDrawState extends State<FreeDraw> {
     );
   }
 
-  ///Checks whether an Offset is within the bounds of the image
+  /// Checks whether an Offset is within the bounds of the image
   bool _isPointOnImage(Offset point) {
     RenderBox renderBox =
         imageKey.currentContext!.findRenderObject() as RenderBox;
@@ -98,12 +98,12 @@ class _FreeDrawState extends State<FreeDraw> {
     return imageBounds.contains(point);
   }
 
-  ///Returns the last DrawingSegment in the annotation list
+  /// Returns the last DrawingSegment in the annotation list
   DrawingSegment? get lastDrawingPoint {
     return annotation.isNotEmpty ? annotation.last : null;
   }
 
-  ///Removes the last DrawingSegment from the annotation list
+  /// Removes the last DrawingSegment from the annotation list
   void undo() {
     setState(() {
       if (annotation.isNotEmpty && historyDrawingSegments.isNotEmpty) {
@@ -112,7 +112,7 @@ class _FreeDrawState extends State<FreeDraw> {
     });
   }
 
-  ///Adds the most recent DrawingSegment to the annotation list, from the history list
+  /// Adds the most recent DrawingSegment to the annotation list, from the history list
   void redo() {
     setState(() {
       if (annotation.length < historyDrawingSegments.length) {
@@ -123,10 +123,10 @@ class _FreeDrawState extends State<FreeDraw> {
   }
 }
 
-///Implementation of the Custom Painter to provide drawing capabilities
+/// Implementation of the Custom Painter to provide drawing capabilities
 ///
-///To be used as the painter within the CustomPaint widget, providing the
-///implementation of paint, specifying what to paint and what data to use
+/// To be used as the painter within the CustomPaint widget, providing the
+/// implementation of paint, specifying what to paint and what data to use
 class DrawingPainter extends CustomPainter {
   final List<DrawingSegment> drawingSegments;
 
@@ -163,15 +163,15 @@ class DrawingPainter extends CustomPainter {
   }
 }
 
-///Represents one continous stroke in an annotation
+/// Represents one continous stroke in an annotation
 ///
-///When annotating an image, multiple segments can be drawn to make up the
-///larger annotation. Each continious stroke is registred as one DrawingSegment
+/// When annotating an image, multiple segments can be drawn to make up the
+/// larger annotation. Each continious stroke is registred as one DrawingSegment
 class DrawingSegment {
-  ///Unique identifier for the segment
+  /// Unique identifier for the segment
   int id;
 
-  ///List of x,y Offsets that make up the segment
+  /// List of x,y Offsets that make up the segment
   List<Offset> offsets;
 
   DrawingSegment({
@@ -179,8 +179,8 @@ class DrawingSegment {
     this.offsets = const [],
   });
 
-  ///Allows for creation of a new DrawingSegment instance with updated offsets
-  ///but the same id.
+  /// Allows for creation of a new DrawingSegment instance with updated offsets
+  /// but the same id.
   DrawingSegment copyWith({List<Offset>? offsets}) {
     return DrawingSegment(
       id: id,

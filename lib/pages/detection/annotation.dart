@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/widgets/free_draw.dart';
-import 'package:binsight_ai/widgets/heading.dart';
 
 /// Page used for annotating an individual detection image
 class AnnotationPage extends StatefulWidget {
-  ///The link for the image to be annotated
+  /// The link for the image to be annotated
   final String imageLink;
 
   const AnnotationPage({super.key, required this.imageLink});
@@ -18,28 +17,28 @@ class AnnotationPage extends StatefulWidget {
 }
 
 class _AnnotationPageState extends State<AnnotationPage> {
-  ///Key for the RepaintBoundary widget that's used to capture the annotated image
+  /// Key for the RepaintBoundary widget that's used to capture the annotated image
   final GlobalKey _captureKey = GlobalKey();
 
-  ///Key for the FreeDraw widget that's used to render and annotate the image
+  /// Key for the FreeDraw widget that's used to render and annotate the image
   final GlobalKey<dynamic> _freeDrawKey = GlobalKey();
 
-  ///List of unsigned integers representing the bytes of the captured image
+  /// List of unsigned integers representing the bytes of the captured image
   Uint8List? _capturedImage;
 
   //Points and label for the captured annotation
   DrawingSegment? _capturedPoint;
 
-  ///Input entered by user to label the current annotation
+  /// Input entered by user to label the current annotation
   String? userInput;
 
-  ///List of annotations, each annotation having a label and a list of Offsets
+  /// List of annotations, each annotation having a label and a list of Offsets
   List<List<dynamic>> annotationsList = [];
 
-  ///Function to capture the annotated image
+  /// Function to capture the annotated image
   ///
-  ///Uses the RepaintBoundary's key to obtain the RenderObject, and converts it
-  ///to it into a Uint8List to be used with Image.memory
+  /// Uses the RepaintBoundary's key to obtain the RenderObject, and converts it
+  /// to it into a Uint8List to be used with Image.memory
   void captureImage() async {
     RenderRepaintBoundary boundary =
         _captureKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
@@ -50,7 +49,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
     setState(() {});
   }
 
-  ///Renders the popup that prompts input for a label of the current annotation
+  /// Renders the popup that prompts input for a label of the current annotation
   void _showPopup() {
     TextEditingController userInputController = TextEditingController();
 

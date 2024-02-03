@@ -4,6 +4,7 @@ import 'package:binsight_ai/database/models/device.dart';
 import '../shared.dart';
 
 void main() async {
+  testInit();
   test("database connection is closed", () async {
     FakeDatabase db = FakeDatabase();
     setDatabase(db);

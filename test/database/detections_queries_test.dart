@@ -76,8 +76,7 @@ class DetectionDatabase extends FakeDatabase {
 }
 
 void main() async {
-  sqfliteFfiInit();
-  databaseFactory = databaseFactoryFfi;
+  testInit();
   test("Finding all devices", () async {
     Database db = DetectionDatabase(datatype: 4);
     setDatabase(db);
