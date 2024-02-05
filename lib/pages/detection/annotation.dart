@@ -127,7 +127,25 @@ class _AnnotationPageState extends State<AnnotationPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _BackToListButton(),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      child: Row(
+                        children: [
+                          const Icon(Icons.arrow_back_ios),
+                          Text("Back to detection",
+                              style: textTheme.labelLarge),
+                        ],
+                      ),
+                      onTap: () => GoRouter.of(context).pop(),
+                    ),
+                    const Heading(text: "Annotate Your Image"),
+                    const SizedBox(height: 16),
+                  ],
+                ),
+              ),
               FutureBuilder(
                   future: widget.imageLink,
                   builder: (context, snapshot) {
@@ -194,31 +212,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
             },
             child: const Icon(Icons.redo),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _BackToListButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          GestureDetector(
-            child: Row(
-              children: [
-                const Icon(Icons.arrow_back_ios),
-                Text("Back to list", style: textTheme.labelLarge),
-              ],
-            ),
-            onTap: () => GoRouter.of(context).pop(),
-          ),
-          const Heading(text: "Annotate Your Image"),
-          const SizedBox(height: 16),
         ],
       ),
     );
