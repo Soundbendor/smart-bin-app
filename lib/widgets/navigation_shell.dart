@@ -31,10 +31,6 @@ class NavigationShell extends StatelessWidget {
             icon: Icon(Icons.search),
             label: 'Detections',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.show_chart),
-            label: 'Stats',
-          ),
         ],
         currentIndex: _calculateSelectedIndex(context),
         onTap: (int idx) => _onItemTapped(idx, context),
@@ -52,9 +48,6 @@ class NavigationShell extends StatelessWidget {
     if (location.startsWith('/main/detection')) {
       return 1;
     }
-    if (location.startsWith('/main/stats')) {
-      return 2;
-    }
     // Default to home page
     return 0;
   }
@@ -68,8 +61,6 @@ class NavigationShell extends StatelessWidget {
       case 1:
         GoRouter.of(context).go('/main/detections');
         break;
-      case 2:
-        GoRouter.of(context).go('/main/stats');
     }
   }
 }
