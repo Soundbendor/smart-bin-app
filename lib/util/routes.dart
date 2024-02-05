@@ -41,25 +41,25 @@ List<RouteBase> getRoutes() {
                   path: 'detections',
                   builder: (BuildContext context, GoRouterState state) {
                     return const DetectionsPage();
-                  },
-                  routes: [
-                    // `/main/detections/annotation` - annotation page
-                    // [imagePath] is the id of the detection to annotate.
-                    GoRoute(
-                        name: 'annotation',
-                        path: 'annotation:imagePath',
-                        builder: (BuildContext context, GoRouterState state) {
-                          return AnnotationPage(
-                              imageLink: state.pathParameters['imagePath']!);
-                        }),
-                  ]),
+                  }),
               // `/main/detection/:detectionId` - detection page with detailed information
               GoRoute(
                   path: 'detection/:detectionId',
                   builder: (BuildContext context, GoRouterState state) {
                     return DetectionPage.fromId(
                         detectionId: state.pathParameters['detectionId']!);
-                  }),
+                  },
+                  routes: [
+                    // `/main/detection/:detectionId/annotation` - annotation page
+                    GoRoute(
+                        path: 'annotation',
+                        builder: (BuildContext context, GoRouterState state) {
+                          return AnnotationPage(
+                              detectionId:
+                                  state.pathParameters['detectionId']!);
+                        }),
+                  ]),
+
               GoRoute(
                 name: 'help',
                 path: 'help',

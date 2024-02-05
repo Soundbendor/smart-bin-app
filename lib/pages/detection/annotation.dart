@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:go_router/go_router.dart';
+import 'package:binsight_ai/database/models/detection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:binsight_ai/widgets/heading.dart';
@@ -8,9 +10,21 @@ import 'package:binsight_ai/widgets/free_draw.dart';
 /// Page used for annotating an individual detection image
 class AnnotationPage extends StatefulWidget {
   /// The link for the image to be annotated
-  final String imageLink;
+  late final Future<String>? imageLink;
 
-  const AnnotationPage({super.key, required this.imageLink});
+  AnnotationPage({super.key, String? imageLink, String? detectionId}) {
+    if (imageLink != null) {
+      this.imageLink = Future.value(imageLink);
+    } else if (detectionId != null) {
+      this.imageLink = Future(() async {
+        return Detection.find(detectionId)
+            .then((detection) => detection!.preDetectImgLink);
+      });
+    } else {
+      throw ArgumentError(
+          "AnnotationPage requires either an imageLink or a detectionId");
+    }
+  }
 
   @override
   State<AnnotationPage> createState() => _AnnotationPageState();
@@ -113,35 +127,26 @@ class _AnnotationPageState extends State<AnnotationPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      child: Row(
-                        children: [
-                          const Icon(Icons.arrow_back_ios),
-                          Text("Back to list", style: textTheme.labelLarge),
-                        ],
-                      ),
-                      onTap: () => Navigator.pop(context),
-                    ),
-                    const Heading(text: "Annotate Your Image"),
-                    const SizedBox(height: 16),
-                  ],
-                ),
-              ),
-              RepaintBoundary(
-                key: _captureKey,
-                child: SizedBox(
-                  width: 300,
-                  height: 300,
-                  child: FreeDraw(
-                    key: _freeDrawKey,
-                    imageLink: widget.imageLink,
-                  ),
-                ),
-              ),
+              _BackToListButton(),
+              FutureBuilder(
+                  future: widget.imageLink,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else {
+                      return RepaintBoundary(
+                        key: _captureKey,
+                        child: SizedBox(
+                          width: 300,
+                          height: 300,
+                          child: FreeDraw(
+                            key: _freeDrawKey,
+                            imageLink: snapshot.data as String,
+                          ),
+                        ),
+                      );
+                    }
+                  }),
               ElevatedButton(
                   onPressed: () {
                     _showPopup();
@@ -189,6 +194,31 @@ class _AnnotationPageState extends State<AnnotationPage> {
             },
             child: const Icon(Icons.redo),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BackToListButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          GestureDetector(
+            child: Row(
+              children: [
+                const Icon(Icons.arrow_back_ios),
+                Text("Back to list", style: textTheme.labelLarge),
+              ],
+            ),
+            onTap: () => GoRouter.of(context).pop(),
+          ),
+          const Heading(text: "Annotate Your Image"),
+          const SizedBox(height: 16),
         ],
       ),
     );
