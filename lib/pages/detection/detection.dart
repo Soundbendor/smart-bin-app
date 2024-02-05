@@ -154,7 +154,7 @@ class _BackToListButton extends StatelessWidget {
           Text("Back to list", style: textTheme.labelLarge),
         ],
       ),
-      onTap: () => context.goNamed('detections'),
+      onTap: () => GoRouter.of(context).pop(),
     );
   }
 }

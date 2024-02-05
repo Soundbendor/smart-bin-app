@@ -18,7 +18,7 @@ String formatDetectionTitle(Detection detection) {
 }
 
 void _onTileTap(BuildContext context, Detection detection) {
-  context.go("/main/detection/${detection.imageId}");
+  GoRouter.of(context).push("/main/detection/${detection.imageId}");
 }
 
 /// Displays a detection item in a large card format.
