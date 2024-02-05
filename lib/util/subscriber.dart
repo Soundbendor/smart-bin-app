@@ -1,8 +1,8 @@
-import 'package:binsight_ai/database/connection.dart';
-import 'package:binsight_ai/database/models/detection.dart';
+import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:sqflite/sqflite.dart';
-import 'dart:convert';
+import 'package:binsight_ai/database/connection.dart';
+import 'package:binsight_ai/database/models/detection.dart';
 
 /// Handles messages from the WebSocket channel.
 void handleMessages(WebSocketChannel channel) {
