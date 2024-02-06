@@ -1,8 +1,9 @@
 // This file tests the entry point.
-import 'package:binsight_ai/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:binsight_ai/main.dart';
+import 'package:binsight_ai/util/routes.dart';
 
 import '../shared.dart';
 
