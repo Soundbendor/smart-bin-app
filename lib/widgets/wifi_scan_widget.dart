@@ -2,7 +2,6 @@ import 'package:binsight_ai/main.dart';
 import 'package:flutter/material.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 import 'package:wifi_iot/wifi_iot.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,7 +13,7 @@ class WifiScanWidget extends StatefulWidget {
 }
 
 class _WifiScanWidgetState extends State<WifiScanWidget> {
-  _WifiScanWidgetState();
+  // _WifiScanWidgetState();
 
   List<WiFiAccessPoint> wifiResults = [];
 
@@ -55,78 +54,91 @@ class _WifiScanWidgetState extends State<WifiScanWidget> {
     final canGetResults =
         await WiFiScan.instance.canGetScannedResults(askPermissions: true);
 
-    final accessPoints = await WiFiScan.instance.getScannedResults();
-    // Define regex on wifi ssid
-    RegExp wifiNameCheck = RegExp(r'');
-    // List of wifi access points that will store the filtered, regex'd networks that match our bins
-    List<WiFiAccessPoint> filteredAccessPoints = [];
-    // List of strings that keep track of what access points have been added to our display list
-    List<String> filteredAccessPointsString = [];
-    // Iterate through all scanned access points and only add the ones that meet our criteria
-    for (var point in accessPoints) {
-      if (wifiNameCheck.hasMatch(point.ssid) &&
-          !filteredAccessPointsString.contains(point.ssid)) {
-        filteredAccessPoints.add(point);
-      }
+    switch (canGetResults) {
+      case CanGetScannedResults.yes:
+        final accessPoints = await WiFiScan.instance.getScannedResults();
+        // Define regex on wifi ssid
+        RegExp wifiNameCheck = RegExp(r'');
+        // List of wifi access points that will store the filtered, regex'd networks that match our bins
+        List<WiFiAccessPoint> filteredAccessPoints = [];
+        // List of strings that keep track of what access points have been added to our display list
+        List<String> filteredAccessPointsString = [];
+        // Iterate through all scanned access points and only add the ones that meet our criteria
+        for (var point in accessPoints) {
+          if (wifiNameCheck.hasMatch(point.ssid) &&
+              !filteredAccessPointsString.contains(point.ssid)) {
+            filteredAccessPoints.add(point);
+          }
 
-      filteredAccessPointsString.add(point.ssid);
+          filteredAccessPointsString.add(point.ssid);
+        }
+
+        setState(() {
+          wifiResults = filteredAccessPoints;
+        });
+        break;
+      case CanGetScannedResults.noLocationServiceDisabled:
+        // Handle the case where getting results is not possible
+        break;
+      case CanGetScannedResults.noLocationPermissionDenied:
+        // Handle the case where the user denied the necessary permissions
+        break;
+      default:
+      // handle default
     }
-
-    wifiResults = filteredAccessPoints;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage("assets/images/background2.JPG"),
-            fit: BoxFit.cover),
-      ),
-      child: Column(
-        children: [
-          const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Text(
-                  "Connect to your Bin!",
-                  style: TextStyle(
-                    fontSize: 30,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage("assets/images/background2.JPG"),
+              fit: BoxFit.cover),
+        ),
+        child: Column(
+          children: [
+            const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: Text(
+                    "Connect to your Bin!",
+                    style: TextStyle(
+                      fontSize: 30,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height / 2,
-            width: MediaQuery.of(context).size.width / 2,
-            child: ListView.builder(
-              itemCount: wifiResults.length,
-              itemBuilder: (BuildContext context, int index) {
-                final wifiResult = wifiResults[index];
-                return Card(
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0)),
-                  child: ListTile(
-                      leading: const Icon(Icons.wifi),
-                      title: Text(wifiResult.ssid),
-                      trailing: const Icon(Icons.keyboard_arrow_right),
-                      onTap: () {
-                        GoRouter.of(context).goNamed('wifi-page', extra: {
-                          Provider.of<DeviceNotifier>(context, listen: false)
-                              .getDevice,
-                          wifiResult.ssid
-                        });
-                      }),
-                );
-              },
+              ],
             ),
-          ),
-        ],
-      ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 2,
+              width: MediaQuery.of(context).size.width / 2,
+              child: ListView.builder(
+                itemCount: wifiResults.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final wifiResult = wifiResults[index];
+                  return Card(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0)),
+                    child: ListTile(
+                        leading: const Icon(Icons.wifi),
+                        title: Text(wifiResult.ssid),
+                        trailing: const Icon(Icons.keyboard_arrow_right),
+                        onTap: () {
+                          GoRouter.of(context).goNamed('wifi', extra: {
+                            Provider.of<DeviceNotifier>(context, listen: false)
+                                .getDevice, wifiResult.ssid
+                          });
+                        }),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
     );
   }
 }
