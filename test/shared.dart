@@ -1,4 +1,49 @@
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+
+/// Allows for the creation of a testable widget
+///
+/// Provides a [MediaQuery] with a given size and a [Scaffold] with a given child for testing.
+/// This avoids errors related to the lack of a [Material] ancestor.
+Widget makeTestableWidget({required Widget child, required Size size}) {
+  return MaterialApp(
+    home: MediaQuery(
+      data: MediaQueryData(size: size),
+      child: Scaffold(body: child),
+    ),
+  );
+}
+
+// Taken from https://remelehane.dev/posts/widget-testing-rendeflex-overflow/
+/// Ignores overflow errors in tests.
+ignoreOverflowErrors(
+    void Function(FlutterErrorDetails details)? originalHandler) {
+  return (
+    FlutterErrorDetails details, {
+    bool forceReport = false,
+  }) {
+    bool ifIsOverflowError = false;
+    bool isUnableToLoadAsset = false;
+
+    // Detect overflow error.
+    var exception = details.exception;
+    if (exception is FlutterError) {
+      ifIsOverflowError = !exception.diagnostics.any(
+        (e) => e.value.toString().startsWith("A RenderFlex overflowed by"),
+      );
+      isUnableToLoadAsset = !exception.diagnostics.any(
+        (e) => e.value.toString().startsWith("Unable to load asset"),
+      );
+    }
+
+    // Ignore if is overflow error.
+    if (ifIsOverflowError || isUnableToLoadAsset) {
+      debugPrint('Ignored Error');
+    } else {
+      originalHandler?.call(details);
+    }
+  };
+}
 
 class FakeDatabase implements Database {
   bool isClosed = false;
@@ -130,7 +175,6 @@ class FakeDatabase implements Database {
       ConflictAlgorithm? conflictAlgorithm}) {
     throw UnimplementedError();
   }
-  
   @override
   Future<T> readTransaction<T>(Future<T> Function(Transaction txn) action) {
     // TODO: implement readTransaction

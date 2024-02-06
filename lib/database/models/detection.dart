@@ -68,6 +68,12 @@ class Detection extends Model {
         timestamp = DateTime.now(),
         deviceId = "1";
 
+  Detection.notFound()
+      : imageId = "-1",
+        preDetectImgLink = "assets/images/placeholder.png",
+        timestamp = DateTime.now(),
+        deviceId = "-1";
+
   @override
   Map<String, dynamic> toMap() {
     return {
@@ -85,6 +91,16 @@ class Detection extends Model {
       "timestamp": timestamp.toIso8601String(),
       "deviceId": deviceId,
     };
+  }
+
+  static Future<Detection?> find(String imageId) async {
+    Database db = await getDatabaseConnection();
+    List<Map<String, dynamic>> results = await db.query("detections",
+        where: "imageId = ?", whereArgs: [imageId], limit: 1);
+    if (results.isEmpty) {
+      return null;
+    }
+    return Detection.fromMap(results.first);
   }
 
   static Detection fromMap(Map<String, dynamic> map) {
@@ -110,12 +126,13 @@ class Detection extends Model {
 
   @override
   String get schema => """
-    ( 
+    (
       imageId TEXT PRIMARY KEY,
       preDetectImgLink TEXT,
       postDetectImgLink TEXT,
       depthMapImgLink TEXT,
       irImgLink TEXT,
+      weight DOUBLE,
       humidity DOUBLE,
       temperature DOUBLE,
       co2 DOUBLE,
@@ -138,5 +155,27 @@ class Detection extends Model {
   Future<void> delete() async {
     Database db = await getDatabaseConnection();
     await db.delete(tableName, where: "imageId = ?", whereArgs: [imageId]);
+  }
+
+  /// Returns all detections.
+  static Future<List<Detection>> all() async {
+    Database db = await getDatabaseConnection();
+    List<Map<String, dynamic>> results = await db.query("detections");
+    return results
+        .map((result) => Detection.fromMap(
+              result,
+            ))
+        .toList();
+  }
+
+  static Future<Detection> latest() async {
+    Database db = await getDatabaseConnection();
+    List<Map<String, dynamic>> results =
+        await db.query("detections", orderBy: "timestamp DESC");
+    if (results.isNotEmpty) {
+      return Detection.fromMap(results.first);
+    } else {
+      return Detection.notFound();
+    }
   }
 }
