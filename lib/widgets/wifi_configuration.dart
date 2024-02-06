@@ -11,8 +11,7 @@ class WifiConfiguration extends StatefulWidget {
   final BluetoothDevice device;
 
   @override
-  State<WifiConfiguration> createState() =>
-      _WifiConfigurationState();
+  State<WifiConfiguration> createState() => _WifiConfigurationState();
 }
 
 /// State class for WifiConfigurationWidget

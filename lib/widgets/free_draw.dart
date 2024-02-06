@@ -1,3 +1,4 @@
+import 'package:binsight_ai/widgets/image.dart';
 import 'package:flutter/material.dart';
 
 /// Widget with logic to annotate and render detection images
@@ -74,11 +75,7 @@ class _FreeDrawState extends State<FreeDraw> {
         //Render the drawing on top of the image
         child: Stack(
           children: [
-            widget.imageLink.startsWith("http")
-                ? Image.network(widget.imageLink,
-                    key: imageKey, fit: BoxFit.cover)
-                : Image.asset(widget.imageLink,
-                    key: imageKey, fit: BoxFit.cover),
+            DynamicImage(widget.imageLink, key: imageKey, fit: BoxFit.cover),
             CustomPaint(
               painter: DrawingPainter(
                 drawingSegments: annotation,

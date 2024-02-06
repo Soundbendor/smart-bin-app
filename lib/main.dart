@@ -1,13 +1,10 @@
 // Flutter imports:
 import 'dart:convert';
-
-import 'package:binsight_ai/pages/detection/detection.dart';
-import 'package:binsight_ai/pages/detection/index.dart';
-import 'package:binsight_ai/pages/setup/index.dart';
-import 'package:binsight_ai/pages/setup/wifi.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:binsight_ai/util/print.dart';
+import 'package:binsight_ai/util/routes.dart';
+import 'package:binsight_ai/util/styles.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:go_router/go_router.dart';
@@ -15,14 +12,9 @@ import 'package:web_socket_channel/io.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/device.dart';
-import 'pages/setup/bluetooth.dart';
-import 'pages/detection/annotation.dart';
 import 'package:binsight_ai/database/models/detection.dart';
-import 'pages/main/home.dart';
-import 'pages/main/help.dart';
-import 'package:binsight_ai/widgets/navigation_shell.dart';
 import 'package:binsight_ai/database/connection.dart';
-import 'package:binsight_ai/pub_sub/subscriber.dart';
+import 'package:binsight_ai/util/subscriber.dart';
 
 /// Entry point of the application
 void main() async {
@@ -91,9 +83,6 @@ void main() async {
   runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
 }
 
-// Also used for testing
-late GoRouter router;
-
 /// The root of the application. Contains the GoRouter and MaterialApp wrappers.
 class BinsightAiApp extends StatefulWidget {
   final bool skipSetUp;
@@ -120,11 +109,11 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     super.didChangeAppLifecycleState(state);
     //Minimized
     if (state == AppLifecycleState.paused) {
-      print("closed");
+      debug("closed");
     }
     //Reopened
     else if (state == AppLifecycleState.resumed) {
-      print("Opened");
+      debug("Opened");
       if (channel.closeCode != null) {
         initWebSocket();
       }
@@ -140,56 +129,14 @@ class _BinsightAiAppState extends State<BinsightAiApp>
   @override
   Widget build(BuildContext context) {
     //Defines the router to be used for the app, with set-up as the initial route
-    routes = getRoutes();
+    setRoutes(getRoutes());
     router = GoRouter(
         initialLocation: widget.skipSetUp ? '/main' : '/set-up',
         routes: routes);
 
-    final mainColorScheme = ColorScheme(
-      primary: Colors.blue,
-      onPrimary: Colors.white,
-      secondary: Colors.blueAccent.shade700,
-      onSecondary: Colors.white,
-      tertiary: Colors.green.shade700,
-      onTertiary: Colors.white,
-      error: Colors.red,
-      onError: Colors.red.shade700,
-      background: Colors.white,
-      onBackground: Colors.black,
-      brightness: Brightness.light,
-      surface: Colors.grey.shade200,
-      onSurface: Colors.black,
-    );
     return MaterialApp.router(
       routerConfig: router,
-      theme: ThemeData(
-        colorScheme: mainColorScheme,
-        textTheme: const TextTheme(
-          headlineLarge: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            backgroundColor: mainColorScheme.primary,
-            foregroundColor: mainColorScheme.onPrimary,
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: mainColorScheme.primary,
-              foregroundColor: mainColorScheme.onPrimary),
-        ),
-        cardTheme: CardTheme(
-          surfaceTintColor: mainColorScheme.onSurface,
-          shadowColor: mainColorScheme.onBackground,
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-      ),
+      theme: mainTheme,
     );
   }
 
@@ -214,93 +161,4 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     channel.sink.add(jsonEncode(requestMessage));
     handleMessages(channel);
   }
-}
-
-/// The routes for the application.
-///
-/// The routes are defined like a tree. There are two top-level routes: 'main' and 'set-up'.
-/// The 'main' route is wrapped in a [ShellRoute] to share the bottom navigation bar.
-/// The ShellRoute returns an [NavigationShell] widget, which contains the top navigation bar.
-List<RouteBase> routes = getRoutes();
-List<RouteBase> getRoutes() {
-  return [
-    ShellRoute(
-      builder: (BuildContext context, GoRouterState state, Widget child) {
-        return NavigationShell(child: child);
-      },
-      routes: <GoRoute>[
-        // `/main` - home page
-        GoRoute(
-            name: 'main',
-            path: '/main',
-            builder: (BuildContext context, GoRouterState state) {
-              return const HomePage();
-            },
-            routes: [
-              // `/main/detections` - list of detections
-              GoRoute(
-                  name: 'detections',
-                  path: 'detections',
-                  builder: (BuildContext context, GoRouterState state) {
-                    return const DetectionsPage();
-                  },
-                  routes: [
-                    // `/main/detections/annotation` - annotation page
-                    // [imagePath] is the id of the detection to annotate.
-                    GoRoute(
-                        name: 'annotation',
-                        path: 'annotation:imagePath',
-                        builder: (BuildContext context, GoRouterState state) {
-                          return AnnotationPage(
-                              imageLink: state.pathParameters['imagePath']!);
-                        }),
-                  ]),
-              // `/main/detection/:detectionId` - detection page with detailed information
-              GoRoute(
-                  path: 'detection/:detectionId',
-                  builder: (BuildContext context, GoRouterState state) {
-                    return DetectionPage.fromId(
-                        detectionId: state.pathParameters['detectionId']!);
-                  }),
-              GoRoute(
-                name: 'help',
-                path: 'help',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const HelpPage();
-                },
-              ),
-            ]),
-      ],
-    ),
-
-    // `/set-up` - set up / welcome page
-    GoRoute(
-        name: 'set-up',
-        path: '/set-up',
-        builder: (BuildContext context, GoRouterState state) {
-          return const SplashPage();
-        },
-        routes: [
-          // `/set-up/bluetooth` - bluetooth set up page
-          GoRoute(
-              name: 'bluetooth',
-              path: 'bluetooth',
-              builder: (BuildContext context, GoRouterState state) {
-                return const BluetoothPage();
-              }),
-          // `/set-up/wifi` - selecting wifi page
-          GoRoute(
-              name: 'wifi',
-              path: 'wifi',
-              builder: (BuildContext context, GoRouterState state) {
-                return WifiPage(device: state.extra as BluetoothDevice);
-              }),
-        ]),
-  ];
-}
-
-/// Wrapper containing the title app bar and bottom navigation bar.
-/// Used for testing
-void setRoutes(List<RouteBase> newRoutes) {
-  routes = newRoutes;
 }
