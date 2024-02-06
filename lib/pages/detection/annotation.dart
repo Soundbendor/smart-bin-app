@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:binsight_ai/util/print.dart';
 import 'package:go_router/go_router.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +60,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
     ui.Image image = await boundary.toImage(pixelRatio: 3.0);
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     _capturedImage = byteData?.buffer.asUint8List();
-    print("Captured image size: ${_capturedImage?.length} bytes");
+    debug("Captured image size: ${_capturedImage?.length} bytes");
     setState(() {});
   }
 
@@ -104,7 +105,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                   annotationsList.add([userInput, _capturedPoint!.offsets]);
                   Navigator.of(context).pop();
                   _capturedPoint = null;
-                  print(annotationsList.length);
+                  debug(annotationsList.length);
                 }
               },
               child: Text('Save',
@@ -176,7 +177,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
               ElevatedButton(
                   onPressed: () {
                     captureImage();
-                    print(annotationsList);
+                    debug(annotationsList);
                   },
                   child: Text("Complete Annotations",
                       style: textTheme.labelLarge!.copyWith(

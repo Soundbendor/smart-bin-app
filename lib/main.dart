@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'dart:convert';
+import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/util/routes.dart';
 import 'package:binsight_ai/util/styles.dart';
 import 'package:flutter/foundation.dart';
@@ -108,11 +109,11 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     super.didChangeAppLifecycleState(state);
     //Minimized
     if (state == AppLifecycleState.paused) {
-      print("closed");
+      debug("closed");
     }
     //Reopened
     else if (state == AppLifecycleState.resumed) {
-      print("Opened");
+      debug("Opened");
       if (channel.closeCode != null) {
         initWebSocket();
       }

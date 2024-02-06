@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:binsight_ai/util/print.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:go_router/go_router.dart';
@@ -31,7 +32,7 @@ Future<void> readCharacteristic(
       // Only read the specified characteristic
       if (characteristic.uuid == characteristicId) {
         List<int> value = await characteristic.read();
-        print('Read value: $value');
+        debug('Read value: $value');
       }
     }
   }

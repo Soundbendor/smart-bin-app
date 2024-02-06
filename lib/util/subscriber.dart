@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:binsight_ai/util/print.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:binsight_ai/database/connection.dart';
@@ -12,21 +13,21 @@ void handleMessages(WebSocketChannel channel) {
         final jsonData = await jsonDecode(data);
         final messageType = jsonData['type'];
         if (messageType == 'pre_detection') {
-          print('Emitted predetection was received');
+          debug('Emitted predetection was received');
           // await updatePreDetection(jsonData["pre_detection"], database);
         } else if (messageType == 'post_detection') {
-          print('Emitted postdetection was received');
+          debug('Emitted postdetection was received');
           // await updatePostDetection(jsonData["post_detection"], database);
         }
       } catch (e) {
-        print('Error decoding JSON: $e');
+        debug('Error decoding JSON: $e');
       }
     },
     onDone: () {
-      print('Socket Closed');
+      debug('Socket Closed');
     },
     onError: (error) {
-      print('Socket Error: $error');
+      debug('Socket Error: $error');
     },
   );
 }
