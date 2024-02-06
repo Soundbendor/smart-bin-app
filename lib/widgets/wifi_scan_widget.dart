@@ -45,8 +45,11 @@ class _WifiScanWidgetState extends State<WifiScanWidget> {
       case CanStartScan.notSupported:
         // Handle the case where the user denied the necessary permissions
         break;
+      case CanStartScan.noLocationServiceDisabled:
+        print("location service disabled");
       default:
-      // handle default case
+        // handle default case
+        print("default case: $canStartScan");
     }
   }
 
