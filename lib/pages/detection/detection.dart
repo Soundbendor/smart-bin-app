@@ -1,3 +1,4 @@
+import 'package:binsight_ai/widgets/image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:binsight_ai/database/models/detection.dart';
@@ -53,17 +54,8 @@ class _DetectionCard extends StatelessWidget {
     return Column(children: [
       GestureDetector(
           child: Center(
-            child: detection.preDetectImgLink.startsWith("http")
-                ? Image.network(
-                    detection.preDetectImgLink,
-                    width: 350,
-                    height: 350,
-                  )
-                : Image.asset(
-                    detection.preDetectImgLink,
-                    width: 350,
-                    height: 350,
-                  ),
+            child: DynamicImage(detection.preDetectImgLink,
+                width: 350, height: 350),
           ),
           onTap: () => GoRouter.of(context)
               .push("/main/detection/${detection.imageId}/annotation")),

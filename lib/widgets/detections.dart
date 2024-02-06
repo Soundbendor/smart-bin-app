@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:binsight_ai/widgets/image.dart';
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:go_router/go_router.dart';
@@ -56,11 +57,8 @@ class DetectionLargeListItem extends StatelessWidget {
                       ),
                     ),
                     margin: const EdgeInsets.only(bottom: 12, top: 12),
-                    child: detection.preDetectImgLink.startsWith("http")
-                        ? Image.network(detection.preDetectImgLink,
-                            width: 300, height: 300)
-                        : Image.asset("assets/images/placeholder.png",
-                            width: 300, height: 300)),
+                    child: DynamicImage(detection.preDetectImgLink,
+                        width: 300, height: 300)),
                 SizedBox(
                   width: 250,
                   child: Row(
@@ -112,9 +110,7 @@ class DetectionSmallListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return ListTile(
-      leading: detection.preDetectImgLink.startsWith("http")
-          ? Image.network(detection.preDetectImgLink)
-          : Image.asset("assets/images/placeholder.png"),
+      leading: DynamicImage(detection.preDetectImgLink),
       title:
           Text(formatDetectionTitle(detection), style: textTheme.titleMedium),
       subtitle:
