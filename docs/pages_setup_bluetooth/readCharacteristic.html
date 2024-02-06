@@ -89,7 +89,7 @@
       &#47;&#47; Only read the specified characteristic
       if (characteristic.uuid == characteristicId) {
         List&lt;int&gt; value = await characteristic.read();
-        print(&#39;Read value: $value&#39;);
+        debug(&#39;Read value: $value&#39;);
       }
     }
   }
