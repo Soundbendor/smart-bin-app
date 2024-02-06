@@ -22,6 +22,8 @@ class DynamicImage extends StatelessWidget {
   final bool gaplessPlayback;
   final FilterQuality filterQuality;
   final bool isAntiAlias;
+  final Widget Function(BuildContext context, Object error, StackTrace? trace)?
+      errorBuilder;
 
   const DynamicImage(
     this.imageUrl, {
@@ -42,13 +44,25 @@ class DynamicImage extends StatelessWidget {
     this.gaplessPlayback = false,
     this.filterQuality = FilterQuality.low,
     this.isAntiAlias = false,
+    this.errorBuilder,
   });
+
+  Widget onError(BuildContext context, Object error, StackTrace? stackTrace) {
+    return Icon(
+      Icons.error,
+      size: width ?? height,
+      color: color,
+      semanticLabel: semanticLabel,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     if (imageUrl.startsWith("http")) {
       return Image.network(
         imageUrl,
+        key: key,
+        errorBuilder: errorBuilder ?? onError,
         scale: scale,
         width: width,
         height: height,
@@ -69,6 +83,8 @@ class DynamicImage extends StatelessWidget {
     } else {
       return Image.asset(
         imageUrl,
+        key: key,
+        errorBuilder: errorBuilder ?? onError,
         scale: scale,
         width: width,
         height: height,
