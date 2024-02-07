@@ -148,9 +148,9 @@ class _BluetoothPageState extends State<BluetoothPage> {
                             FlutterBluePlus.stopScan();
                             Provider.of<DeviceNotifier>(context, listen:false).setDevice(bluetoothDevice);
                             print(Provider.of<DeviceNotifier>(context, listen:false).getDevice());
-                            // await connectToDevice(bluetoothDevice);
-                            // await readCharacteristic(
-                            //     bluetoothDevice, Guid("2AF9"));
+                            await connectToDevice(bluetoothDevice);
+                            await readCharacteristic(
+                                bluetoothDevice, Guid("2AF9"));
                             GoRouter.of(context)
                                 .goNamed('wifi-scan', extra: bluetoothDevice);
                           }),

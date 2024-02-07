@@ -62,7 +62,7 @@ class _WifiPageState extends State<WifiPage> {
                     ElevatedButton(
                       onPressed: () {
                         // Call function to send WiFi credentials to the Compost Bin
-                        // sendWifiCredentials();
+                        sendWifiCredentials();
                         // Navigate to the 'main' route using GoRouter
                         context.goNamed('main');
                       },
