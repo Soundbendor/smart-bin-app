@@ -17,7 +17,6 @@ class WifiScanPage extends StatefulWidget {
 
 class _WifiScanPageState extends State<WifiScanPage> {
   // _WifiScanPageState();
-
 List<WiFiAccessPoint> wifiResults = [];
 
   @override
