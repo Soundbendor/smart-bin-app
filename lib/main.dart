@@ -264,7 +264,6 @@ var routes = [
             path: 'wifi',
             builder: (BuildContext context, GoRouterState state) {
               return WifiPage(
-                  device: state.extra as BluetoothDevice,
                   ssid: state.extra as String);
             }),
       ]),

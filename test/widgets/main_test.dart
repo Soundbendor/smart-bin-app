@@ -24,7 +24,7 @@ void main() {
       ),
     ]);
 
-    await widgetTester.pumpWidget(const BinsightAiApp(skipSetUp: false));
+    await widgetTester.pumpWidget(BinsightAiApp(skipSetUp: false));
     expect(
       router.routerDelegate.currentConfiguration.last.matchedLocation,
       equals("/set-up")
@@ -49,7 +49,7 @@ void main() {
       ),
     ]);
 
-    await widgetTester.pumpWidget(const BinsightAiApp(skipSetUp: true));
+    await widgetTester.pumpWidget(BinsightAiApp(skipSetUp: true));
     expect(
       router.routerDelegate.currentConfiguration.last.matchedLocation,
       equals("/main")

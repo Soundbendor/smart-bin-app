@@ -100,7 +100,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
         width: MediaQuery.of(context).size.width,
         decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage("assets/images/background2.JPG"),
+              image: AssetImage("assets/images/FlowersBackground.png"),
               fit: BoxFit.cover),
         ),
         child: Column(
@@ -122,12 +122,12 @@ class _BluetoothPageState extends State<BluetoothPage> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.purple,
+                      Color.fromARGB(255, 0, 0, 0),
                       Colors.transparent,
                       Colors.transparent,
-                      Colors.purple
+                      Color.fromARGB(255, 0, 0, 0)
                     ],
-                    stops: [0.0, 0.2, 0.6, 1.0],
+                    stops: [0.0, 0.2, 0.9, 1.0],
                   ).createShader(rect);
                 },
                 blendMode: BlendMode.dstOut,
