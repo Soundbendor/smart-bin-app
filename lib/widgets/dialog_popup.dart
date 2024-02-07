@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-//Usage: await Dialog.showDialogPopup
+/// Shows a dialog for annotation details
 class Dialog {
   static Future<void> showDialogPopup(
       BuildContext context, String title, String content) async {

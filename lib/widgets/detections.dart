@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:binsight_ai/widgets/image.dart';
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:go_router/go_router.dart';
@@ -18,7 +19,7 @@ String formatDetectionTitle(Detection detection) {
 }
 
 void _onTileTap(BuildContext context, Detection detection) {
-  context.go("/main/detection/${detection.imageId}");
+  GoRouter.of(context).push("/main/detection/${detection.imageId}");
 }
 
 /// Displays a detection item in a large card format.
@@ -35,59 +36,49 @@ class DetectionLargeListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () => _onTileTap(context, detection),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.shade500,
-                blurRadius: 8,
-                offset: const Offset(0, 3),
-              ),
-            ],
-            color: Colors.white,
-          ),
+        child: Card(
           child: Padding(
             padding: const EdgeInsets.all(9.0),
             child: Column(
               children: [
                 Text(formatDetectionTitle(detection),
-                    textScaler: const TextScaler.linear(1.75)),
+                    style: textTheme.headlineSmall),
                 Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Colors.grey.shade700,
+                        color: colorScheme.onSurface,
                         width: 2,
                       ),
                     ),
                     margin: const EdgeInsets.only(bottom: 12, top: 12),
-                    child: detection.preDetectImgLink.startsWith("http")
-                        ? Image.network(detection.preDetectImgLink,
-                            width: 300, height: 300)
-                        : Image.asset("assets/images/placeholder.png",
-                            width: 300, height: 300)),
+                    child: DynamicImage(detection.preDetectImgLink,
+                        width: 300, height: 300)),
                 SizedBox(
                   width: 250,
                   child: Row(
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Temperature"),
-                            Text("Humidity"),
+                            Text("Temperature", style: textTheme.labelLarge),
+                            Text("Humidity", style: textTheme.labelLarge),
                           ],
                         ),
                       ),
                       Expanded(
                         child: Column(
                           children: [
-                            Text(detection.temperature.toString()),
-                            Text(detection.humidity.toString()),
+                            Text(detection.temperature.toString(),
+                                style: textTheme.bodyMedium),
+                            Text(detection.humidity.toString(),
+                                style: textTheme.bodyMedium),
                           ],
                         ),
                       ),
@@ -117,12 +108,13 @@ class DetectionSmallListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return ListTile(
-      leading: detection.preDetectImgLink.startsWith("http")
-          ? Image.network(detection.preDetectImgLink)
-          : Image.asset("assets/images/placeholder.png"),
-      title: Text(formatDetectionTitle(detection)),
-      subtitle: Text(detection.timestamp.toString()),
+      leading: DynamicImage(detection.preDetectImgLink),
+      title:
+          Text(formatDetectionTitle(detection), style: textTheme.titleMedium),
+      subtitle:
+          Text(detection.timestamp.toString(), style: textTheme.bodyMedium),
       trailing: const Icon(Icons.arrow_forward_ios),
       onTap: () => _onTileTap(context, detection),
     );

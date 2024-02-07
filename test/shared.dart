@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
+void testInit() {
+  sqfliteFfiInit();
+  databaseFactory = databaseFactoryFfi;
+}
 
 /// Allows for the creation of a testable widget
 ///
@@ -37,9 +42,7 @@ ignoreOverflowErrors(
     }
 
     // Ignore if is overflow error.
-    if (ifIsOverflowError || isUnableToLoadAsset) {
-      debugPrint('Ignored Error');
-    } else {
+    if (!(ifIsOverflowError || isUnableToLoadAsset)) {
       originalHandler?.call(details);
     }
   };

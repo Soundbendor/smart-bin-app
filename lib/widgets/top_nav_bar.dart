@@ -16,23 +16,6 @@ class _TopNavBarState extends State<TopNavBar> {
   // Set default selection in the navigation bar to the home page.
   int _selectedIndex = 0;
 
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Profile',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: Help',
-      style: optionStyle,
-    ),
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -52,7 +35,7 @@ class _TopNavBarState extends State<TopNavBar> {
         children: [
           const DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Color.fromARGB(255, 25, 192, 147),
             ),
             child: Text(
               'Binsight.ai',
@@ -69,13 +52,14 @@ class _TopNavBarState extends State<TopNavBar> {
             onTap: () {
               // Update the state of the app.
               _onItemTapped(0);
+              GoRouter.of(context).goNamed('main');
               // Then close the drawer.
               Navigator.pop(context);
             },
           ),
           ListTile(
             leading: const Icon(Icons.person_2_outlined),
-            title: const Text('Profile'),
+            title: const Text('My Bin'),
             selected: _selectedIndex == 1,
             onTap: () {
               _onItemTapped(1);

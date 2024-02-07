@@ -1,31 +1,22 @@
 // Flutter imports:
 import 'dart:convert';
-
-import 'package:binsight_ai/screens/wifi/wifi_scan_page.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:binsight_ai/util/print.dart';
+import 'package:binsight_ai/util/routes.dart';
+import 'package:binsight_ai/util/styles.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 // Package imports:
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/device.dart';
-import 'package:binsight_ai/screens/main/detections_page.dart';
-import 'package:binsight_ai/screens/bluetooth/bluetooth_page.dart';
-import 'package:binsight_ai/screens/main/annotation.dart';
 import 'package:binsight_ai/database/models/detection.dart';
-import 'package:binsight_ai/screens/main/detection_page.dart';
-import 'package:binsight_ai/screens/main/home_page.dart';
-import 'package:binsight_ai/screens/main/stats_page.dart';
-import 'package:binsight_ai/screens/main/help_page.dart';
-import 'package:binsight_ai/screens/splash/screen.dart';
-import 'package:binsight_ai/screens/splash/wifi_credentials_page.dart';
-import 'package:binsight_ai/widgets/navigation_shell.dart';
 import 'package:binsight_ai/database/connection.dart';
-import 'package:binsight_ai/pub_sub/subscriber.dart';
+import 'package:binsight_ai/util/subscriber.dart';
 
 /// Entry point of the application
 void main() async {
@@ -102,9 +93,6 @@ class DeviceNotifier with ChangeNotifier {
   }
 }
 
-// Also used for testing
-late GoRouter router;
-
 /// The root of the application. Contains the GoRouter and MaterialApp wrappers.
 class BinsightAiApp extends StatefulWidget {
   final bool skipSetUp;
@@ -127,25 +115,16 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     initWebSocket();
   }
 
-  void initWebSocket() {
-    // Initialize WebSocket channel and subscribe
-    channel = IOWebSocketChannel.connect('ws://10.0.2.2:8000/subscribe');
-    final subscriptionMessage = {"type": "subscribe", "channel": "1"};
-    channel.sink.add(jsonEncode(subscriptionMessage));
-
-    handleMessages(channel);
-  }
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     //Minimized
     if (state == AppLifecycleState.paused) {
-      print("closed");
+      debug("closed");
     }
     //Reopened
     else if (state == AppLifecycleState.resumed) {
-      print("Opened");
+      debug("Opened");
       if (channel.closeCode != null) {
         initWebSocket();
       }
@@ -161,6 +140,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
   @override
   Widget build(BuildContext context) {
     //Defines the router to be used for the app, with set-up as the initial route
+    setRoutes(getRoutes());
     router = GoRouter(
         initialLocation: widget.skipSetUp ? '/main' : '/set-up',
         routes: routes);
@@ -169,109 +149,30 @@ class _BinsightAiAppState extends State<BinsightAiApp>
       create: (_) => DeviceNotifier(),
       child: MaterialApp.router(
         routerConfig: router,
+        theme: mainTheme,
       ),
     );
   }
-}
 
-/// The routes for the application.
-///
-/// The routes are defined like a tree. There are two top-level routes: 'main' and 'set-up'.
-/// The 'main' route is wrapped in a [ShellRoute] to share the bottom navigation bar.
-/// The ShellRoute returns an [AppShell] widget, which contains the top navigation bar.
-var routes = [
-  ShellRoute(
-    builder: (BuildContext context, GoRouterState state, Widget child) {
-      return NavigationShell(child: child);
-    },
-    routes: <GoRoute>[
-      // `/main` - home page
-      GoRoute(
-          name: 'main',
-          path: '/main',
-          builder: (BuildContext context, GoRouterState state) {
-            return const HomePage();
-          },
-          routes: [
-            // `/main/detections` - list of detections
-            GoRoute(
-                name: 'detections',
-                path: 'detections',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const DetectionsPage();
-                },
-                routes: [
-                  // `/main/detections/annotation` - annotation page
-                  // [imagePath] is the id of the detection to annotate.
-                  GoRoute(
-                      name: 'annotation',
-                      path: 'annotation:imagePath',
-                      builder: (BuildContext context, GoRouterState state) {
-                        return AnnotationPage(
-                            imageLink: state.pathParameters['imagePath']!);
-                      }),
-                ]),
-            // `/main/detection/:detectionId` - detection page with detailed information
-            GoRoute(
-                path: 'detection/:detectionId',
-                builder: (BuildContext context, GoRouterState state) {
-                  return DetectionPage.fromId(
-                      detectionId: state.pathParameters['detectionId']!);
-                }),
-            // `/main/stats` - usage and statistics page
-            GoRoute(
-              name: 'stats',
-              path: 'stats',
-              builder: (BuildContext context, GoRouterState state) {
-                return const StatsPage();
-              },
-            ),
-            GoRoute(
-              name: 'help',
-              path: 'help',
-              builder: (BuildContext context, GoRouterState state) {
-                return const HelpPage();
-              },
-            ),
-          ]),
-    ],
-  ),
+  /// Get last detection in local database
+  Future<DateTime> getLatestTimestamp() async {
+    final latestDetection = await Detection.latest();
+    final timeStamp = latestDetection.timestamp;
+    return timeStamp;
+  }
 
-  // `/set-up` - set up / welcome page
-  GoRoute(
-      name: 'set-up',
-      path: '/set-up',
-      builder: (BuildContext context, GoRouterState state) {
-        return const SplashPage();
-      },
-      routes: [
-        // `/set-up/bluetooth` - bluetooth set up page
-        GoRoute(
-            name: 'bluetooth',
-            path: 'bluetooth',
-            builder: (BuildContext context, GoRouterState state) {
-              return const BluetoothPage();
-            }),
-        GoRoute(
-            name: 'wifi-scan',
-            path: 'wifi-scan',
-            builder: (BuildContext context, GoRouterState state) {
-              return const WifiScanPage();
-            }),
-        // `/set-up/wifi` - selecting wifi page
-        GoRoute(
-            name: 'wifi',
-            path: 'wifi',
-            builder: (BuildContext context, GoRouterState state) {
-              return WifiPage(
-                  ssid: state.extra as String);
-            }),
-      ]),
-];
-
-
-/// Wrapper containing the title app bar and bottom navigation bar.
-/// Used for testing
-void setRoutes(List<RouteBase> newRoutes) {
-  routes = newRoutes;
+  /// Initialize WebSocket channel and subscribe
+  void initWebSocket() {
+    channel = IOWebSocketChannel.connect('ws://10.0.2.2:8000/subscribe');
+    final subscriptionMessage = {"type": "subscribe", "channel": "1"};
+    channel.sink.add(jsonEncode(subscriptionMessage));
+    final timeStamp = getLatestTimestamp();
+    final requestMessage = {
+      "type": "request_data",
+      "after": timeStamp.toString(),
+      "channel": "1"
+    };
+    channel.sink.add(jsonEncode(requestMessage));
+    handleMessages(channel);
+  }
 }
