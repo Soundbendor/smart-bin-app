@@ -1,6 +1,5 @@
 import 'package:binsight_ai/pages/wifi/wifi_scan_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:go_router/go_router.dart';
 import 'package:binsight_ai/pages/detection/annotation.dart';
 import 'package:binsight_ai/pages/detection/detection.dart';
@@ -88,11 +87,11 @@ List<RouteBase> getRoutes() {
                 return const BluetoothPage();
               }),
           GoRoute(
-            name: 'wifi-scan',
-            path: 'wifi-scan',
-            builder: (BuildContext context, GoRouterState state) {
-              return const WifiScanPage();
-            }),
+              name: 'wifi-scan',
+              path: 'wifi-scan',
+              builder: (BuildContext context, GoRouterState state) {
+                return const WifiScanPage();
+              }),
           // `/set-up/wifi` - selecting wifi page
           GoRoute(
               name: 'wifi',
