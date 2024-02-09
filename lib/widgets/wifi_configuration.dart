@@ -42,11 +42,11 @@ class _WifiConfigurationState extends State<WifiConfiguration> {
       debug(passwordController.text);
       List<int> encodedJsonData = utf8.encode(jsonEncode(
           {"ssid": ssidController.text, "password": passwordController.text}));
-      await writeCharacteristic(
-          bluetoothDevice!, Guid("2AB5"), encodedJsonData);
-      setState(() {
-        isLoading = true;
-      });
+      // await writeCharacteristic(
+      //     bluetoothDevice!, Guid("2AB5"), encodedJsonData);
+      // setState(() {
+        // isLoading = true;
+      // });
     }
 
     final textTheme = Theme.of(context).textTheme;
