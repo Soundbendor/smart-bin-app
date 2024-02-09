@@ -139,11 +139,8 @@ Widget build(BuildContext context) {
                     ),
                   ),
                   margin: const EdgeInsets.only(bottom: 12, top: 12),
-                  child: detection.preDetectImgLink.startsWith(&quot;http&quot;)
-                      ? Image.network(detection.preDetectImgLink,
-                          width: 300, height: 300)
-                      : Image.asset(&quot;assets&#47;images&#47;placeholder.png&quot;,
-                          width: 300, height: 300)),
+                  child: DynamicImage(detection.preDetectImgLink,
+                      width: 300, height: 300)),
               SizedBox(
                 width: 250,
                 child: Row(
