@@ -118,31 +118,13 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  final textTheme = Theme.of(context).textTheme;
   return Scaffold(
     body: Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          GestureDetector(
-            child: Row(
-              children: [
-                const Icon(Icons.arrow_back_ios),
-                Text(&quot;Back to list&quot;, style: textTheme.labelLarge),
-              ],
-            ),
-            onTap: () =&gt; context.goNamed(&#39;detections&#39;),
-          ),
-          FutureBuilder(
-              future: detectionFuture,
-              builder:
-                  (BuildContext context, AsyncSnapshot&lt;Detection?&gt; snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Heading(text: &quot;Loading...&quot;);
-                } else {
-                  return Heading(text: formatDetectionTitle(snapshot.data!));
-                }
-              }),
+          _BackToListButton(),
+          _DetectionHeader(detectionFuture: detectionFuture),
           const SizedBox(height: 16),
           FutureBuilder(
             future: detectionFuture,
@@ -152,75 +134,7 @@ Widget build(BuildContext context) {
                 return const CircularProgressIndicator();
               } else {
                 final detection = snapshot.data;
-                return Column(children: [
-                  GestureDetector(
-                      child: Center(
-                        child: detection!.preDetectImgLink.startsWith(&quot;http&quot;)
-                            ? Image.network(
-                                detection.preDetectImgLink,
-                                width: 350,
-                                height: 350,
-                              )
-                            : Image.asset(
-                                detection.preDetectImgLink,
-                                width: 350,
-                                height: 350,
-                              ),
-                      ),
-                      onTap: () =&gt; Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =&gt; AnnotationPage(
-                                  imageLink: detection.preDetectImgLink)))),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: 400,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(&quot;Temperature:&quot;,
-                                    style: textTheme.labelLarge),
-                                Text(
-                                  &quot;Humidity:&quot;,
-                                  style: textTheme.labelLarge,
-                                ),
-                                Text(
-                                  &quot;eCO2:&quot;,
-                                  style: textTheme.labelLarge,
-                                ),
-                                Text(
-                                  &quot;tVOC:&quot;,
-                                  style: textTheme.labelLarge,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(detection.temperature.toString(),
-                                    style: textTheme.bodyMedium),
-                                Text(detection.humidity.toString(),
-                                    style: textTheme.bodyMedium),
-                                Text(detection.co2.toString(),
-                                    style: textTheme.bodyMedium),
-                                Text(detection.vo2.toString(),
-                                    style: textTheme.bodyMedium),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ]);
+                return _DetectionCard(detection: detection!);
               }
             },
           )
