@@ -141,12 +141,18 @@
               builder: (BuildContext context, GoRouterState state) {
                 return const BluetoothPage();
               }),
+          GoRoute(
+              name: &#39;wifi-scan&#39;,
+              path: &#39;wifi-scan&#39;,
+              builder: (BuildContext context, GoRouterState state) {
+                return const WifiScanPage();
+              }),
           &#47;&#47; `&#47;set-up&#47;wifi` - selecting wifi page
           GoRoute(
               name: &#39;wifi&#39;,
               path: &#39;wifi&#39;,
               builder: (BuildContext context, GoRouterState state) {
-                return WifiPage(device: state.extra as BluetoothDevice);
+                return WifiConfiguration(ssid: state.extra as String);
               }),
         ]),
   ];
