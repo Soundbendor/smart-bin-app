@@ -1,5 +1,5 @@
+import 'package:binsight_ai/pages/wifi/wifi_scan_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:go_router/go_router.dart';
 import 'package:binsight_ai/pages/detection/annotation.dart';
 import 'package:binsight_ai/pages/detection/detection.dart';
@@ -8,8 +8,8 @@ import 'package:binsight_ai/pages/main/help.dart';
 import 'package:binsight_ai/pages/main/home.dart';
 import 'package:binsight_ai/pages/setup/bluetooth.dart';
 import 'package:binsight_ai/pages/setup/index.dart';
-import 'package:binsight_ai/pages/setup/wifi.dart';
 import 'package:binsight_ai/widgets/navigation_shell.dart';
+import 'package:binsight_ai/widgets/wifi_configuration.dart';
 
 // Used for testing
 late GoRouter router;
@@ -86,12 +86,18 @@ List<RouteBase> getRoutes() {
               builder: (BuildContext context, GoRouterState state) {
                 return const BluetoothPage();
               }),
+          GoRoute(
+              name: 'wifi-scan',
+              path: 'wifi-scan',
+              builder: (BuildContext context, GoRouterState state) {
+                return const WifiScanPage();
+              }),
           // `/set-up/wifi` - selecting wifi page
           GoRoute(
               name: 'wifi',
               path: 'wifi',
               builder: (BuildContext context, GoRouterState state) {
-                return WifiPage(device: state.extra as BluetoothDevice);
+                return WifiConfiguration(ssid: state.extra as String);
               }),
         ]),
   ];

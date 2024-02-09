@@ -1,8 +1,9 @@
-import 'dart:async';
+import 'package:binsight_ai/main.dart';
 import 'package:binsight_ai/util/print.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 /// Writes specified characteristic data to the device.
 Future<void> writeCharacteristic(
@@ -99,7 +100,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
         width: MediaQuery.of(context).size.width,
         decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage("assets/images/background2.JPG"),
+              image: AssetImage("assets/images/FlowersBackground.png"),
               fit: BoxFit.cover),
         ),
         child: Column(
@@ -121,12 +122,12 @@ class _BluetoothPageState extends State<BluetoothPage> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.purple,
+                      Color.fromARGB(255, 0, 0, 0),
                       Colors.transparent,
                       Colors.transparent,
-                      Colors.purple
+                      Color.fromARGB(255, 0, 0, 0)
                     ],
-                    stops: [0.0, 0.2, 0.6, 1.0],
+                    stops: [0.0, 0.2, 0.9, 1.0],
                   ).createShader(rect);
                 },
                 blendMode: BlendMode.dstOut,
@@ -145,12 +146,17 @@ class _BluetoothPageState extends State<BluetoothPage> {
                           trailing: const Icon(Icons.keyboard_arrow_right),
                           onTap: () async {
                             FlutterBluePlus.stopScan();
-                            await connectToDevice(bluetoothDevice);
+                            Provider.of<DeviceNotifier>(context, listen: false)
+                                .setDevice(bluetoothDevice);
+                            debug(Provider.of<DeviceNotifier>(context,
+                                    listen: false)
+                                .getDevice());
+                            await bluetoothDevice.connect();
+                            // await bluetoothDevice.createBond();
                             await readCharacteristic(
                                 bluetoothDevice, Guid("2AF9"));
                             if (!mounted) return;
-                            GoRouter.of(context)
-                                .goNamed('wifi', extra: bluetoothDevice);
+                            GoRouter.of(context).goNamed('wifi-scan');
                           }),
                     );
                   },
