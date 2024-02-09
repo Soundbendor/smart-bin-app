@@ -13,7 +13,7 @@ class SplashPage extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage("assets/images/background3.JPG"),
+              image: AssetImage("assets/images/BinFlowersCloudsBackground.png"),
               fit: BoxFit.cover),
         ),
         child: Center(
