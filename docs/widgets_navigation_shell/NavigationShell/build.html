@@ -136,10 +136,6 @@ Widget build(BuildContext context) {
           icon: Icon(Icons.search),
           label: &#39;Detections&#39;,
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.show_chart),
-          label: &#39;Stats&#39;,
-        ),
       ],
       currentIndex: _calculateSelectedIndex(context),
       onTap: (int idx) =&gt; _onItemTapped(idx, context),

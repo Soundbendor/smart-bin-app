@@ -120,9 +120,7 @@ and</li>
 Widget build(BuildContext context) {
   final textTheme = Theme.of(context).textTheme;
   return ListTile(
-    leading: detection.preDetectImgLink.startsWith(&quot;http&quot;)
-        ? Image.network(detection.preDetectImgLink)
-        : Image.asset(&quot;assets&#47;images&#47;placeholder.png&quot;),
+    leading: DynamicImage(detection.preDetectImgLink),
     title:
         Text(formatDetectionTitle(detection), style: textTheme.titleMedium),
     subtitle:
