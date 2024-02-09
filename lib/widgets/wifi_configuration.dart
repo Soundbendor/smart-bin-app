@@ -65,15 +65,22 @@ class _WifiConfigurationState extends State<WifiConfiguration> {
             fit: BoxFit.cover),
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('Connect to Compost Bin', style: textTheme.headlineMedium),
-          TextField(
-            controller: ssidController..text = ssid,
-            decoration: const InputDecoration(labelText: 'SSID'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: TextField(
+              controller: ssidController..text = ssid,
+              decoration: const InputDecoration(labelText: 'SSID'),
+            ),
           ),
-          TextField(
-            controller: passwordController,
-            decoration: const InputDecoration(labelText: 'Password'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: TextField(
+              controller: passwordController,
+              decoration: const InputDecoration(labelText: 'Password'),
+            ),
           ),
           ElevatedButton(
             onPressed: () {
