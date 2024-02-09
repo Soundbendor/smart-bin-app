@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the build method from the SplashPage class, for the Dart programming language.">
-  <title>build method - SplashPage class - index library - Dart API</title>
+  <meta name="description" content="API docs for the build method from the LoadingPopup class, for the Dart programming language.">
+  <title>build method - LoadingPopup class - loading_popup library - Dart API</title>
 
 
   
@@ -29,8 +29,8 @@
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">binsight_ai</a></li>
-    <li><a href="../../pages_setup_index/pages_setup_index-library.html">index</a></li>
-    <li><a href="../../pages_setup_index/SplashPage-class.html">SplashPage</a></li>
+    <li><a href="../../widgets_loading_popup/widgets_loading_popup-library.html">loading_popup</a></li>
+    <li><a href="../../widgets_loading_popup/LoadingPopup-class.html">LoadingPopup</a></li>
     <li class="self-crumb">build method</li>
   </ol>
   <div class="self-name">build</div>
@@ -54,7 +54,7 @@
   <div
       id="dartdoc-main-content"
       class="main-content"
-      data-above-sidebar="pages_setup_index&#47;SplashPage-class-sidebar.html"
+      data-above-sidebar="widgets_loading_popup&#47;LoadingPopup-class-sidebar.html"
       data-below-sidebar="">
       <div>
 <h1><span class="kind-method">build</span> method 
@@ -104,7 +104,7 @@ and</li>
 <li>any ambient state obtained from the <code>context</code> using
 <a href="https://api.flutter.dev/flutter/widgets/BuildContext/dependOnInheritedWidgetOfExactType.html">BuildContext.dependOnInheritedWidgetOfExactType</a>.</li>
 </ul>
-<p>If a widget's <a href="../../pages_setup_index/SplashPage/build.html">build</a> method is to depend on anything else, use a
+<p>If a widget's <a href="../../widgets_loading_popup/LoadingPopup/build.html">build</a> method is to depend on anything else, use a
 <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a> instead.</p>
 <p>See also:</p>
 <ul>
@@ -118,64 +118,7 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  final textTheme = Theme.of(context).textTheme;
-  final colorScheme = Theme.of(context).colorScheme;
-  return Scaffold(
-    body: Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage(&quot;assets&#47;images&#47;BinFlowersCloudsBackground.png&quot;),
-            fit: BoxFit.cover),
-      ),
-      child: Center(
-        child: Column(
-          children: [
-            Flexible(
-              flex: 5,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Padding(
-                      padding: const EdgeInsets.only(
-                          left: 16, right: 16, bottom: 30, top: 160),
-                      child: Text(
-                        &quot;Welcome!&quot;,
-                        style: textTheme.displayLarge,
-                      )),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 80, right: 80, top: 20, bottom: 20),
-                    child: Text(
-                      &quot;Let&#39;s get you connected to your bin.&quot;,
-                      style: textTheme.headlineLarge!.copyWith(
-                        color: colorScheme.onBackground,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                          foregroundColor: colorScheme.onPrimary,
-                          padding: const EdgeInsets.all(16.0),
-                          textStyle: textTheme.labelLarge,
-                          backgroundColor: colorScheme.primary),
-                      onPressed: () {
-                        context.goNamed(&#39;bluetooth&#39;);
-                      },
-                      child: const Text(&#39;Continue&#39;),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Flexible(flex: 3, child: Container())
-          ],
-        ),
-      ),
-    ),
-  );
+  return spinkit;
 }</code></pre>
 </section>
 
@@ -192,13 +135,13 @@ Widget build(BuildContext context) {
 
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">binsight_ai</a></li>
-    <li><a href="../../pages_setup_index/pages_setup_index-library.html">index</a></li>
-    <li><a href="../../pages_setup_index/SplashPage-class.html">SplashPage</a></li>
+    <li><a href="../../widgets_loading_popup/widgets_loading_popup-library.html">loading_popup</a></li>
+    <li><a href="../../widgets_loading_popup/LoadingPopup-class.html">LoadingPopup</a></li>
     <li class="self-crumb">build method</li>
 </ol>
 
 
-    <h5>SplashPage class</h5>
+    <h5>LoadingPopup class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
 
