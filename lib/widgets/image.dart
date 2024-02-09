@@ -61,7 +61,7 @@ class DynamicImage extends StatelessWidget {
     if (imageUrl.startsWith("http")) {
       return Image.network(
         imageUrl,
-        key: key,
+        // key: key,
         errorBuilder: errorBuilder ?? onError,
         scale: scale,
         width: width,
@@ -83,7 +83,7 @@ class DynamicImage extends StatelessWidget {
     } else {
       return Image.asset(
         imageUrl,
-        key: key,
+        // key: key,
         errorBuilder: errorBuilder ?? onError,
         scale: scale,
         width: width,
