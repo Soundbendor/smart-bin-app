@@ -59,18 +59,18 @@ void main() async {
           boxes: "[]",
         ),
         Detection(
-          imageId: "test-2",
-          preDetectImgLink: "https://placehold.co/512x512.png",
-          timestamp: DateTime.now(),
-          deviceId: "test",
-          depthMapImgLink: "https://placehold.co/514x514.png",
-          irImgLink: "https://placehold.co/515x515.png",
-          weight: 12.0,
-          humidity: 0.5,
-          temperature: 20.0,
-          co2: 0.5,
-          vo2: 0.5,
-        ),
+            imageId: "test-2",
+            preDetectImgLink: "https://placehold.co/512x512.png",
+            timestamp: DateTime.now(),
+            deviceId: "test",
+            depthMapImgLink: "https://placehold.co/514x514.png",
+            irImgLink: "https://placehold.co/515x515.png",
+            weight: 12.0,
+            humidity: 0.5,
+            temperature: 10.0,
+            co2: 0.5,
+            vo2: 0.5,
+            boxes: "[]"),
       ];
       for (final detection in fakeDetections) {
         await detection.save();
@@ -78,7 +78,7 @@ void main() async {
     }
   }
 
-  runApp(BinsightAiApp(skipSetUp: devices.isEmpty));
+  runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
 }
 
 class DeviceNotifier with ChangeNotifier {
