@@ -28,6 +28,8 @@ class _FreeDrawState extends State<FreeDraw> {
   /// Key for the Image widget that renders the detection image
   late GlobalKey imageKey;
 
+  int startIndex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -98,6 +100,28 @@ class _FreeDrawState extends State<FreeDraw> {
   /// Returns the last DrawingSegment in the annotation list
   DrawingSegment? get lastDrawingPoint {
     return annotation.isNotEmpty ? annotation.last : null;
+  }
+
+  DrawingSegment? combineSegments() {
+    if (startIndex < 0 || startIndex >= annotation.length) {
+      throw ArgumentError("Invalid startIndex");
+    }
+
+    DrawingSegment combinedSegment = DrawingSegment(
+      id: annotation[startIndex].id,
+      offsets: [],
+    );
+
+    for (int i = startIndex; i < annotation.length; i++) {
+      combinedSegment.offsets.addAll(annotation[i].offsets);
+      startIndex++;
+    }
+    print("Starting Index for next annotation $startIndex");
+    return combinedSegment;
+  }
+
+  void resetAnnotation() {
+    startIndex = 0;
   }
 
   /// Removes the last DrawingSegment from the annotation list

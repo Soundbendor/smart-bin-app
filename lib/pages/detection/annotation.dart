@@ -98,7 +98,8 @@ class _AnnotationPageState extends State<AnnotationPage> {
             TextButton(
               onPressed: () {
                 userInput = userInputController.text;
-                _capturedPoint = _freeDrawKey.currentState?.lastDrawingPoint;
+                _capturedPoint = _freeDrawKey.currentState?.combineSegments();
+
                 if (userInput != null &&
                     userInput!.isNotEmpty &&
                     _capturedPoint != null) {
@@ -178,6 +179,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                   onPressed: () {
                     captureImage();
                     debug(annotationsList);
+                    _freeDrawKey.currentState?.resetAnnotation();
                   },
                   child: Text("Complete Annotations",
                       style: textTheme.labelLarge!.copyWith(
