@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:binsight_ai/main.dart';
 import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/widgets/background.dart';
@@ -53,14 +55,32 @@ class BluetoothPage extends StatefulWidget {
 /// Handles collecting Bluetooth devices to be displayed.
 class _BluetoothPageState extends State<BluetoothPage> {
   final flutterReactiveBle = FlutterReactiveBle();
+  final List<DiscoveredDevice> _foundBleUARTDevices = [];
+  StreamSubscription<DiscoveredDevice>? _scanStream;
+  Stream<ConnectionStateUpdate>? _currentConnectionStream;
+  StreamSubscription<ConnectionStateUpdate>? _connection;
+  QualifiedCharacteristic? _txCharacteristic;
+  QualifiedCharacteristic? _rxCharacteristic;
+  Stream<List<int>>? _receivedDataStream;
+  final List<String> _receivedData = [];
+  TextEditingController? _dataToSendText;
   // final List<BluetoothDevice> _bluetoothDevices = [];
 
   @override
   void initState() {
     super.initState();
-
+    _dataToSendText = TextEditingController();
     // Opening the page should start a scan for devices
     scanForDevices();
+  }
+
+
+  void _sendData() async {
+    await flutterReactiveBle.writeCharacteristicWithResponse(_rxCharacteristic!, value: _dataToSendText!.text.codeUnits);
+  }
+
+  void onNewReceivedData(List<int> data) {
+    _receivedData.add(data as String);
   }
 
   /// Connects to the specified device using Flutter Blue Plus's connect method.
