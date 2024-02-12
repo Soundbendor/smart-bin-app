@@ -84,7 +84,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
     });
   }
 
-  /// Connects to the specified device and discovers its services. 
+  /// Connects to the specified device and discovers its services.
   /// If it has to attempt more than three times, it will fail out.
   void connect(BluetoothDevice device) async {
     debug(device);
