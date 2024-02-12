@@ -65,7 +65,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
   Stream<List<int>>? _receivedDataStream;
   final List<String> _receivedData = [];
   TextEditingController? _dataToSendText;
-  HashMap<String, int>? deviceDict;
+  Set<String>? deviceSet = {};
 
   @override
   void initState() {
@@ -91,8 +91,8 @@ class _BluetoothPageState extends State<BluetoothPage> {
 
   Stream<DiscoveredDevice>? scanForDevices() {
     flutterReactiveBle.scanForDevices(withServices: []).listen((device) {
-        if (!deviceDict!.containsKey(device.name)) {
-          deviceDict![device.name] = 1;
+        if (deviceSet != null && !deviceSet!.contains(device.name)) {
+          deviceSet!.add(device.name);
           setState(() {
             _foundBleUARTDevices.add(device);
           });
