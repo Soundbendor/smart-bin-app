@@ -60,8 +60,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
   StreamSubscription<DiscoveredDevice>? _scanStream;
   Stream<ConnectionStateUpdate>? _currentConnectionStream;
   StreamSubscription<ConnectionStateUpdate>? _connection;
-  QualifiedCharacteristic? _txCharacteristic;
-  QualifiedCharacteristic? _rxCharacteristic;
+  final Uuid _binServiceID = Uuid.parse("31415924535897932384626433832790");
   Stream<List<int>>? _receivedDataStream;
   final List<String> _receivedData = [];
   TextEditingController? _dataToSendText;
@@ -73,11 +72,6 @@ class _BluetoothPageState extends State<BluetoothPage> {
     _dataToSendText = TextEditingController();
     // Opening the page should start a scan for devices
     scanForDevices();
-  }
-
-
-  void _sendData() async {
-    await flutterReactiveBle.writeCharacteristicWithResponse(_rxCharacteristic!, value: _dataToSendText!.text.codeUnits);
   }
 
   void onNewReceivedData(List<int> data) {

@@ -7,7 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+// import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
@@ -83,12 +84,12 @@ void main() async {
 }
 
 class DeviceNotifier with ChangeNotifier {
-  BluetoothDevice? device;
-  BluetoothDevice? getDevice() {
+  DiscoveredDevice? device;
+  DiscoveredDevice? getDevice() {
     return device;
   }
 
-  void setDevice(BluetoothDevice newDevice) {
+  void setDevice(DiscoveredDevice newDevice) {
     device = newDevice;
     notifyListeners();
   }
