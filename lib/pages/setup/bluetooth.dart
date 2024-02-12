@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:binsight_ai/main.dart';
 import 'package:binsight_ai/util/print.dart';
@@ -64,7 +65,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
   Stream<List<int>>? _receivedDataStream;
   final List<String> _receivedData = [];
   TextEditingController? _dataToSendText;
-  // final List<BluetoothDevice> _bluetoothDevices = [];
+  HashMap<String, int>? deviceDict;
 
   @override
   void initState() {
@@ -90,7 +91,12 @@ class _BluetoothPageState extends State<BluetoothPage> {
 
   Stream<DiscoveredDevice>? scanForDevices() {
     flutterReactiveBle.scanForDevices(withServices: []).listen((device) {
-        debug(device.name);
+        if (!deviceDict!.containsKey(device.name)) {
+          deviceDict![device.name] = 1;
+          setState(() {
+            _foundBleUARTDevices.add(device);
+          });
+        }
     });
     return null;
       // }, onError: () {
@@ -158,36 +164,35 @@ class _BluetoothPageState extends State<BluetoothPage> {
                   ).createShader(rect);
                 },
                 blendMode: BlendMode.dstOut,
-                // child: ListView.builder(
-                //   itemCount: _bluetoothDevices.length,
-                //   itemBuilder: (BuildContext context, int index) {
-                //     final bluetoothDevice = _bluetoothDevices[index];
-                //     return Card(
-                //       margin: const EdgeInsets.symmetric(
-                //           vertical: 10, horizontal: 20),
-                //       shape: RoundedRectangleBorder(
-                //           borderRadius: BorderRadius.circular(15.0)),
-                //       child: ListTile(
-                //           leading: const Icon(Icons.bluetooth),
-                //           title: Text(bluetoothDevice.platformName),
-                //           trailing: const Icon(Icons.keyboard_arrow_right),
-                //           onTap: () async {
-                //             FlutterBluePlus.stopScan();
-                //             Provider.of<DeviceNotifier>(context, listen: false)
-                //                 .setDevice(bluetoothDevice);
-                //             debug(Provider.of<DeviceNotifier>(context,
-                //                     listen: false)
-                //                 .getDevice());
-                //             await bluetoothDevice.connect();
-                //             // await bluetoothDevice.createBond();
-                //             await readCharacteristic(
-                //                 bluetoothDevice, Guid("2AF9"));
-                //             if (!mounted) return;
-                //             GoRouter.of(context).goNamed('wifi-scan');
-                //           }),
-                //     );
-                //   },
-                // ),
+                child: ListView.builder(
+                  itemCount: _foundBleUARTDevices.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final bluetoothDevice = _foundBleUARTDevices[index];
+                    return Card(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 20),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0)),
+                      child: ListTile(
+                          leading: const Icon(Icons.bluetooth),
+                          title: Text(bluetoothDevice.name),
+                          trailing: const Icon(Icons.keyboard_arrow_right),
+                          onTap: () async {
+                            // Provider.of<DeviceNotifier>(context, listen: false)
+                                // .setDevice(bluetoothDevice);
+                            debug(Provider.of<DeviceNotifier>(context,
+                                    listen: false)
+                                .getDevice());
+                            // await bluetoothDevice.connect();
+                            // await bluetoothDevice.createBond();
+                            // await readCharacteristic(
+                                // bluetoothDevice, Guid("2AF9"));
+                            if (!mounted) return;
+                            GoRouter.of(context).goNamed('wifi-scan');
+                          }),
+                    );
+                  },
+                ),
               ),
             ),
           ],
