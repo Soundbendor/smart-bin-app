@@ -30,9 +30,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
   }
 
   void _startScan(DiscoveredDevice? bluetoothDevice) {
-    debug("IT GOT HERE!!!!!!!!!!!!!!!!");
     if (bluetoothDevice != null) {
-      debug ("IT GOT TO THE BLUETOOTH IF THING YAYYYYYYYYYYYYY");
       final characteristic = QualifiedCharacteristic(
           serviceId: _binServiceID,
           characteristicId: _wifiCredID,
