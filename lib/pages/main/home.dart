@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:binsight_ai/database/models/detection.dart';
+import 'package:binsight_ai/util/print.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -11,6 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Detection> detections = [];
+  Map foods = {};
   late Future loadDetectionFuture;
 
   @override
@@ -26,6 +30,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     //TODO: Map detections to _PieData(category count, category)
+    if (detections.isNotEmpty) {
+      List<Map<String, dynamic>> detectionsMaps =
+          detections.map((e) => e.toMap()).toList();
+      List<String> boxes =
+          detectionsMaps.map((e) => e["boxes"] as String).toList();
+    }
 
     List<_PieData> pieData = [
       _PieData(10, 'Orange'),

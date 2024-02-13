@@ -36,6 +36,7 @@ void main() async {
   if (kDebugMode) {
     final db = await getDatabaseConnection();
     // development code to add fake data
+
     if (devices.isEmpty) {
       await db.insert("devices", {"id": "test"});
     }
@@ -44,20 +45,20 @@ void main() async {
     if (detections.isEmpty) {
       final fakeDetections = [
         Detection(
-          imageId: "test-1",
-          preDetectImgLink: "https://placehold.co/512x512.png",
-          timestamp: DateTime.now(),
-          deviceId: "test",
-          postDetectImgLink: "https://placehold.co/513x513.png",
-          depthMapImgLink: "https://placehold.co/514x514.png",
-          irImgLink: "https://placehold.co/515x515.png",
-          weight: 12.0,
-          humidity: 0.5,
-          temperature: 20.0,
-          co2: 0.5,
-          vo2: 0.5,
-          boxes: "[]",
-        ),
+            imageId: "test-1",
+            preDetectImgLink: "https://placehold.co/512x512.png",
+            timestamp: DateTime.now(),
+            deviceId: "test",
+            postDetectImgLink: "https://placehold.co/513x513.png",
+            depthMapImgLink: "https://placehold.co/514x514.png",
+            irImgLink: "https://placehold.co/515x515.png",
+            weight: 12.0,
+            humidity: 0.5,
+            temperature: 20.0,
+            co2: 0.5,
+            vo2: 0.5,
+            boxes:
+                "[['Apple', [Offset(11.1, 16.4)]], ['Orange', [Offset(10.0, 292.7)]], ['Banana', [Offset(10.0, 292.7)]]"),
         Detection(
             imageId: "test-2",
             preDetectImgLink: "https://placehold.co/512x512.png",
@@ -70,7 +71,8 @@ void main() async {
             temperature: 10.0,
             co2: 0.5,
             vo2: 0.5,
-            boxes: "[]"),
+            boxes:
+                "[['Apple', [Offset(11.1, 16.4)]], ['Apple', [Offset(10.0, 292.7)]]]"),
       ];
       for (final detection in fakeDetections) {
         await detection.save();
