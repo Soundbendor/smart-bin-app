@@ -48,7 +48,6 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 class BluetoothPage extends StatefulWidget {
   const BluetoothPage({super.key});
 
-
   @override
   State<BluetoothPage> createState() => _BluetoothPageState();
 }
@@ -82,39 +81,66 @@ class _BluetoothPageState extends State<BluetoothPage> {
   // Future<void> connectToDevice(BluetoothDevice device) async {
   //   await device.connect();
   // }
+  // Future<void> connectToBluetooth(String deviceId) async {
+  //   var completer = Completer<void>();
+  //   flutterReactiveBle.connectToDevice(
+  //       id: deviceId,
+  //       servicesWithCharacteristicsToDiscover: {_binServiceID: [Uuid.parse("31415924535897932384626433832791"), Uuid.parse("31415924535897932384626433832792"), Uuid.parse("31415924535897932384626433832793")]},
+  //       connectionTimeout: const Duration(seconds: 2),
+  //     ).listen((connectionState) {
+  //       switch (connectionState.connectionState) {
+  //         case DeviceConnectionState.connected:
+  //           completer.complete();
+  //           return;
+  //         default:
+  //       }
+
+  //     }, onError: (Object error) {
+  //       // Handle a possible error
+  //     });
+  //   return completer.future;
+  // }
   Future<void> connectToBluetooth(String deviceId) async {
-    var completer = Completer<void>();
-    flutterReactiveBle.connectToDevice(
-        id: deviceId,
-        servicesWithCharacteristicsToDiscover: {_binServiceID: [Uuid.parse("31415924535897932384626433832791"), Uuid.parse("31415924535897932384626433832792"), Uuid.parse("31415924535897932384626433832793")]},
-        connectionTimeout: const Duration(seconds: 2),
-      ).listen((connectionState) {
-        switch (connectionState.connectionState) {
-          case DeviceConnectionState.connected:
-            completer.complete();
-            return;
-          default:
-        }
-        
-      }, onError: (Object error) {
-        // Handle a possible error
-      });
-    return completer.future;
+    Stream<ConnectionStateUpdate> connectionStream =
+        flutterReactiveBle.connectToDevice(
+      id: deviceId,
+      servicesWithCharacteristicsToDiscover: {
+        _binServiceID: [
+          Uuid.parse("31415924535897932384626433832791"),
+          Uuid.parse("31415924535897932384626433832792"),
+          Uuid.parse("31415924535897932384626433832793")
+        ]
+      },
+      connectionTimeout: const Duration(seconds: 2),
+    );
+
+    await for (ConnectionStateUpdate connectionState in connectionStream) {
+      switch (connectionState.connectionState) {
+        case DeviceConnectionState.connected:
+          return;
+        default:
+      }
+    }
+    throw Exception("Connection failed");
   }
 
   Stream<DiscoveredDevice>? scanForDevices() {
-    flutterReactiveBle.scanForDevices(withServices: []).listen((device) {
+    flutterReactiveBle.scanForDevices(withServices: []).listen(
+      (device) {
         if (deviceSet != null && !deviceSet!.contains(device.name)) {
           deviceSet!.add(device.name);
-          setState(() {
-            _foundBleUARTDevices.add(device);
-          });
+          setState(
+            () {
+              _foundBleUARTDevices.add(device);
+            },
+          );
         }
-    });
+      },
+    );
     return null;
-      // }, onError: () {
-      //   //code for handling error
-      // });
+    // }, onError: () {
+    //   //code for handling error
+    // });
   }
 
   /// Starts the Flutter Blue Plus scan and populates the results with found devices.
@@ -187,23 +213,24 @@ class _BluetoothPageState extends State<BluetoothPage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0)),
                       child: ListTile(
-                          leading: const Icon(Icons.bluetooth),
-                          title: Text(bluetoothDevice.name),
-                          trailing: const Icon(Icons.keyboard_arrow_right),
-                          onTap: () async {
-                            Provider.of<DeviceNotifier>(context, listen: false)
-                                .setDevice(bluetoothDevice);
-                            debug(Provider.of<DeviceNotifier>(context,
-                                    listen: false)
-                                .getDevice());
-                            await connectToBluetooth(bluetoothDevice.id);
-                            // await bluetoothDevice.connect();
-                            // await bluetoothDevice.createBond();
-                            // await readCharacteristic(
-                                // bluetoothDevice, Guid("2AF9"));
-                            if (!mounted) return;
-                            GoRouter.of(context).goNamed('wifi-scan');
-                          }),
+                        leading: const Icon(Icons.bluetooth),
+                        title: Text(bluetoothDevice.name),
+                        trailing: const Icon(Icons.keyboard_arrow_right),
+                        onTap: () async {
+                          Provider.of<DeviceNotifier>(context, listen: false)
+                              .setDevice(bluetoothDevice);
+                          debug(Provider.of<DeviceNotifier>(context,
+                                  listen: false)
+                              .getDevice());
+                          await connectToBluetooth(bluetoothDevice.id);
+                          // await bluetoothDevice.connect();
+                          // await bluetoothDevice.createBond();
+                          // await readCharacteristic(
+                          // bluetoothDevice, Guid("2AF9"));
+                          if (!mounted) return;
+                          GoRouter.of(context).goNamed('wifi-scan');
+                        },
+                      ),
                     );
                   },
                 ),
