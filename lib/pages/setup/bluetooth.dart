@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 /// Displays scanned Bluetooth devices.
 class BluetoothPage extends StatefulWidget {
@@ -25,6 +26,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
   final Uuid _binServiceID = Uuid.parse("31415924535897932384626433832790");
   final List<String> _receivedData = [];
   Set<String>? deviceSet = {};
+  PermissionStatus? status;
 
   @override
   void initState() {
@@ -60,34 +62,52 @@ class _BluetoothPageState extends State<BluetoothPage> {
   //     });
   //   return completer.future;
   // }
-  
-  Future<void> connectToBluetooth(String deviceId) async {
-    var status = await Permission.location.request();
-    if (status != PermissionStatus.granted) {
-      throw Exception("Fine location permission denied");
-    }
+  // ################################################################################################
+  // Future<void> connectToBluetooth(String deviceId) async {
+  //   if (status != PermissionStatus.granted) {
+  //     throw Exception("Fine location permission denied");
+  //   }
 
-    Stream<ConnectionStateUpdate> connectionStream =
-        flutterReactiveBle.connectToDevice(
-      id: deviceId,
-      servicesWithCharacteristicsToDiscover: {
-        _binServiceID: [
-          Uuid.parse("31415924535897932384626433832791"),
-          Uuid.parse("31415924535897932384626433832792"),
-          Uuid.parse("31415924535897932384626433832793")
-        ]
-      },
-      connectionTimeout: const Duration(seconds: 2),
-    );
+  //   Completer<void> completer = Completer<void>();
 
-    await for (ConnectionStateUpdate connectionState in connectionStream) {
-      switch (connectionState.connectionState) {
-        case DeviceConnectionState.connected:
-          return;
-        default:
-      }
-    }
-    throw Exception("Connection failed");
+  //   Stream<ConnectionStateUpdate> connectionStream =
+  //       flutterReactiveBle.connectToDevice(
+  //     id: deviceId,
+  //     servicesWithCharacteristicsToDiscover: {
+  //       _binServiceID: [
+  //         Uuid.parse("31415924535897932384626433832791"),
+  //         Uuid.parse("31415924535897932384626433832792"),
+  //         Uuid.parse("31415924535897932384626433832793")
+  //       ]
+  //     },
+  //     connectionTimeout: const Duration(seconds: 2),
+  //   );
+
+  //   await for (ConnectionStateUpdate connectionState in connectionStream) {
+  //     switch (connectionState.connectionState) {
+  //       case DeviceConnectionState.connected:
+  //         completer.complete();
+  //         return;
+  //       case DeviceConnectionState.connecting:
+  //         debug("CONNECTING");
+  //         continue;
+  //       case DeviceConnectionState.disconnecting:
+  //         debug("DISCONNECTING");
+  //         break;
+  //       case DeviceConnectionState.disconnected:
+  //         debug("DISCONNECTED");
+  //         break;
+  //       default:
+  //     }
+  //   }
+  //   await completer.future;
+  //   // return;
+  //   // throw Exception("Connection failed");
+  // }
+  // ################################################################################################
+
+  void connectToBluetooth(device) async {
+    await device.connect();
   }
   
   Stream<DiscoveredDevice>? scanForDevices() {
@@ -188,7 +208,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
                           debug(Provider.of<DeviceNotifier>(context,
                                   listen: false)
                               .getDevice());
-                          await connectToBluetooth(bluetoothDevice.id);
+                          connectToBluetooth(bluetoothDevice);
                           // await bluetoothDevice.connect();
                           // await bluetoothDevice.createBond();
                           // await readCharacteristic(
