@@ -82,6 +82,17 @@ class _BluetoothPageState extends State<BluetoothPage> {
   // Future<void> connectToDevice(BluetoothDevice device) async {
   //   await device.connect();
   // }
+  void connectToBluetooth(String deviceId) {
+    flutterReactiveBle.connectToDevice(
+        id: deviceId,
+        servicesWithCharacteristicsToDiscover: {serviceId: [Uuid(), Uuid()]},
+        connectionTimeout: const Duration(seconds: 2),
+      ).listen((connectionState) {
+        // Handle connection state updates
+      }, onError: (Object error) {
+        // Handle a possible error
+      });
+  }
 
   Stream<DiscoveredDevice>? scanForDevices() {
     flutterReactiveBle.scanForDevices(withServices: []).listen((device) {
@@ -172,8 +183,8 @@ class _BluetoothPageState extends State<BluetoothPage> {
                           title: Text(bluetoothDevice.name),
                           trailing: const Icon(Icons.keyboard_arrow_right),
                           onTap: () async {
-                            // Provider.of<DeviceNotifier>(context, listen: false)
-                                // .setDevice(bluetoothDevice);
+                            Provider.of<DeviceNotifier>(context, listen: false)
+                                .setDevice(bluetoothDevice);
                             debug(Provider.of<DeviceNotifier>(context,
                                     listen: false)
                                 .getDevice());

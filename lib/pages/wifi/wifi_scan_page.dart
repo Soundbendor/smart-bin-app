@@ -1,6 +1,11 @@
+import 'dart:convert';
+
+import 'package:binsight_ai/main.dart';
 import 'package:binsight_ai/util/print.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 
@@ -16,42 +21,53 @@ class _WifiScanPageState extends State<WifiScanPage> {
   // _WifiScanPageState();
 
   List<WiFiAccessPoint> wifiResults = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _startScan();
-    _initializeWifiPlugin();
-  }
+  final flutterReactiveBle = FlutterReactiveBle();
+  final Uuid _binServiceID = Uuid.parse("31415924535897932384626433832790");
+  final Uuid _wifiCredID = Uuid.parse("31415924535897932384626433832793");
 
   Future<void> _initializeWifiPlugin() async {
     await WiFiForIoTPlugin.forceWifiUsage(true);
   }
 
-  Future<void> _startScan() async {
-    final canStartScan =
-        await WiFiScan.instance.canStartScan(askPermissions: true);
-    // Switch statement should go here
-    switch (canStartScan) {
-      case CanStartScan.yes:
-        final isScanning = await WiFiScan.instance.startScan();
-        if (isScanning) {
-          _getScannedResults();
-        }
-        break;
-      case CanStartScan.failed:
-        // Handle the case where scanning is not possible
-        break;
-      case CanStartScan.notSupported:
-        // Handle the case where the user denied the necessary permissions
-        break;
-      case CanStartScan.noLocationServiceDisabled:
-        debug("location service disabled");
-      default:
-        // handle default case
-        debug("default case: $canStartScan");
+  void _startScan(DiscoveredDevice? bluetoothDevice) {
+    if (bluetoothDevice != null) {
+      final characteristic = QualifiedCharacteristic(
+          serviceId: _binServiceID,
+          characteristicId: _wifiCredID,
+          deviceId: bluetoothDevice.id);
+      flutterReactiveBle.subscribeToCharacteristic(characteristic).listen(
+        (data) {
+          debug(utf8.decode(data));
+          // }, onError: (dynamic error) {
+        },
+      );
     }
   }
+
+  // Future<void> _startScan() async {
+  //   final canStartScan =
+  //       await WiFiScan.instance.canStartScan(askPermissions: true);
+  //   // Switch statement should go here
+  //   switch (canStartScan) {
+  //     case CanStartScan.yes:
+  //       final isScanning = await WiFiScan.instance.startScan();
+  //       if (isScanning) {
+  //         _getScannedResults();
+  //       }
+  //       break;
+  //     case CanStartScan.failed:
+  //       // Handle the case where scanning is not possible
+  //       break;
+  //     case CanStartScan.notSupported:
+  //       // Handle the case where the user denied the necessary permissions
+  //       break;
+  //     case CanStartScan.noLocationServiceDisabled:
+  //       debug("location service disabled");
+  //     default:
+  //       // handle default case
+  //       debug("default case: $canStartScan");
+  //   }
+  // }
 
   Future<void> _getScannedResults() async {
     final canGetResults =
@@ -93,6 +109,9 @@ class _WifiScanPageState extends State<WifiScanPage> {
 
   @override
   Widget build(BuildContext context) {
+    final DiscoveredDevice? bluetoothDevice =
+        Provider.of<DeviceNotifier>(context, listen: false).getDevice();
+    _startScan(bluetoothDevice);
     const textSize = 20.0;
 
     return Scaffold(

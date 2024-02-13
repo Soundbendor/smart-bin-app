@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:binsight_ai/pages/setup/bluetooth.dart';
 import 'package:provider/provider.dart';
-import 'package:binsight_ai/widgets/loading_popup.dart';
+// import 'package:binsight_ai/widgets/loading_popup.dart';
 
 /// Widget for configuring the wifi credentials of the compost bin
 class WifiConfiguration extends StatefulWidget {
@@ -24,6 +24,7 @@ class _WifiConfigurationState extends State<WifiConfiguration> {
   _WifiConfigurationState({required this.ssid});
   final flutterReactiveBle = FlutterReactiveBle();
   final Uuid _binServiceID = Uuid.parse("31415924535897932384626433832790");
+  final Uuid _wifiCredID = Uuid.parse("31415924535897932384626433832793");
 
   final String ssid;
   bool isLoading = false;
@@ -40,9 +41,14 @@ class _WifiConfigurationState extends State<WifiConfiguration> {
       List<int> encodedJsonData = utf8.encode(jsonEncode(
           {"ssid": ssidController.text, "password": passwordController.text}));
       Uuid wifiCharacteristic = Uuid.parse("31415924535897932384626433832792");
-      final characteristic = QualifiedCharacteristic(serviceId: _binServiceID, characteristicId: wifiCharacteristic, deviceId: deviceId); 
-      await flutterReactiveBle.writeCharacteristicWithResponse(characteristic, value: encodedJsonData);
+      final characteristic = QualifiedCharacteristic(
+          serviceId: _binServiceID,
+          characteristicId: wifiCharacteristic,
+          deviceId: deviceId);
+      await flutterReactiveBle.writeCharacteristicWithResponse(characteristic,
+          value: encodedJsonData);
     }
+
     /// Function to send WiFi credentials to the Bluetooth connected Compost Bin
     // Future<void> sendWifiCredentials() async {
     //   // Encode WiFi credentials as JSON and convert to bytes
