@@ -48,6 +48,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>DetectSmartBinDevice</string>
+	<string>to connect your Smart Bin device to the internet</string>
 </dict>
 </plist>
