@@ -8,42 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-// import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-
-/// Writes specified characteristic data to the device.
-// Future<void> writeCharacteristic(
-//     BluetoothDevice device, Guid characteristicId, List<int> data) async {
-//   // Compile all of the services and characteristics on the device
-//   List<BluetoothService> services = await device.discoverServices();
-//   for (BluetoothService service in services) {
-//     for (BluetoothCharacteristic characteristic in service.characteristics) {
-//       // Only write to the specified characteristic
-//       if (characteristic.uuid == characteristicId) {
-//         await characteristic.write(data,
-//             // This line was used for debugging, as we could not get proof-of-concept without it,
-//             // a general error was being consistently thrown and there was no indicator of what was causing it
-//             withoutResponse: true);
-//       }
-//     }
-//   }
-// }
-
-// /// Reads specified characteristic data from the device.
-// Future<void> readCharacteristic(
-//     BluetoothDevice device, Guid characteristicId) async {
-//   // Compile all of the services and characteristics on the device
-//   List<BluetoothService> services = await device.discoverServices();
-//   for (BluetoothService service in services) {
-//     for (BluetoothCharacteristic characteristic in service.characteristics) {
-//       // Only read the specified characteristic
-//       if (characteristic.uuid == characteristicId) {
-//         List<int> value = await characteristic.read();
-//         debug('Read value: $value');
-//       }
-//     }
-//   }
-// }
 
 /// Displays scanned Bluetooth devices.
 class BluetoothPage extends StatefulWidget {
@@ -57,19 +22,13 @@ class BluetoothPage extends StatefulWidget {
 class _BluetoothPageState extends State<BluetoothPage> {
   final flutterReactiveBle = FlutterReactiveBle();
   final List<DiscoveredDevice> _foundBleUARTDevices = [];
-  StreamSubscription<DiscoveredDevice>? _scanStream;
-  Stream<ConnectionStateUpdate>? _currentConnectionStream;
-  StreamSubscription<ConnectionStateUpdate>? _connection;
   final Uuid _binServiceID = Uuid.parse("31415924535897932384626433832790");
-  Stream<List<int>>? _receivedDataStream;
   final List<String> _receivedData = [];
-  TextEditingController? _dataToSendText;
   Set<String>? deviceSet = {};
 
   @override
   void initState() {
     super.initState();
-    _dataToSendText = TextEditingController();
     // Opening the page should start a scan for devices
     scanForDevices();
   }
@@ -101,6 +60,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
   //     });
   //   return completer.future;
   // }
+  
   Future<void> connectToBluetooth(String deviceId) async {
     var status = await Permission.location.request();
     if (status != PermissionStatus.granted) {
@@ -129,6 +89,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
     }
     throw Exception("Connection failed");
   }
+  
   Stream<DiscoveredDevice>? scanForDevices() {
     flutterReactiveBle.scanForDevices(withServices: []).listen(
       (device) {
