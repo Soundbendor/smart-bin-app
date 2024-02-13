@@ -48,6 +48,7 @@ class _WifiConfigurationState extends State<WifiConfiguration> {
       await flutterReactiveBle.writeCharacteristicWithResponse(characteristic,
           value: encodedJsonData);
     }
+
     /// Function to send WiFi credentials to the Bluetooth connected Compost Bin
     // Future<void> sendWifiCredentials() async {
     //   // Encode WiFi credentials as JSON and convert to bytes
