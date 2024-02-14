@@ -78,7 +78,10 @@ void main() async {
     }
   }
 
-  runApp(BinsightAiApp(skipSetUp: devices.isEmpty));
+  // for testing purposes
+  runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
+  // for production
+  // runApp(BinsightAiApp(skipSetUp: devices.isEmpty));
 }
 
 class DeviceNotifier with ChangeNotifier {
