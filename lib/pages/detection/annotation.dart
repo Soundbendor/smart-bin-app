@@ -103,7 +103,8 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 if (userInput != null &&
                     userInput!.isNotEmpty &&
                     _capturedPoint != null) {
-                  annotationsList.add([userInput, _capturedPoint!.offsets]);
+                  annotationsList
+                      .add([userInput, _capturedPoint!.toFloatList()]);
                   Navigator.of(context).pop();
                   _capturedPoint = null;
                   debug(annotationsList.length);

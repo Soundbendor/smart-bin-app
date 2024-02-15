@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Detection> detections = [];
-  Map foods = {};
+  Map<String, int> labelCounts = {};
   late Future loadDetectionFuture;
 
   @override
@@ -29,19 +29,23 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: Map detections to _PieData(category count, category)
     if (detections.isNotEmpty) {
       List<Map<String, dynamic>> detectionsMaps =
-          detections.map((e) => e.toMap()).toList();
-      List<String> boxes =
-          detectionsMaps.map((e) => e["boxes"] as String).toList();
+          detections.map((detection) => detection.toMap()).toList();
+      for (Map<String, dynamic> detection in detectionsMaps) {
+        String boxes = detection["boxes"];
+        List<dynamic> boxesList = jsonDecode(boxes);
+        for (var label in boxesList) {
+          String fruitName = label[0];
+          labelCounts[fruitName] = (labelCounts[fruitName] ?? 0) + 1;
+        }
+      }
     }
 
-    List<_PieData> pieData = [
-      _PieData(10, 'Orange'),
-      _PieData(20, 'Apple'),
-      _PieData(15, 'Banana'),
-    ];
+    debug(labelCounts);
+    List<_PieData> pieData = labelCounts.entries.map((entry) {
+      return _PieData(entry.value, entry.key);
+    }).toList();
 
     return Center(
       child: SfCircularChart(

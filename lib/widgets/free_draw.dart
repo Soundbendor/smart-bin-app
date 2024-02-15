@@ -1,3 +1,5 @@
+import 'dart:ffi';
+import 'dart:ui' as ui;
 import 'package:binsight_ai/widgets/image.dart';
 import 'package:flutter/material.dart';
 
@@ -116,7 +118,6 @@ class _FreeDrawState extends State<FreeDraw> {
       combinedSegment.offsets.addAll(annotation[i].offsets);
       startIndex++;
     }
-    print("Starting Index for next annotation $startIndex");
     return combinedSegment;
   }
 
@@ -156,7 +157,7 @@ class DrawingPainter extends CustomPainter {
   });
 
   @override
-  void paint(Canvas canvas, Size size) {
+  void paint(Canvas canvas, ui.Size size) {
     //Draws a line between each drawingSegment's Offsets
     //for each segment in drawingSegments
     for (var drawingSegment in drawingSegments) {
@@ -207,5 +208,12 @@ class DrawingSegment {
       id: id,
       offsets: offsets ?? this.offsets,
     );
+  }
+
+  List<List<double>> toFloatList() {
+    List<List<double>> list = offsets.map((offset) {
+      return [offset.dx, offset.dy];
+    }).toList();
+    return list;
   }
 }

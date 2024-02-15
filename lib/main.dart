@@ -58,7 +58,7 @@ void main() async {
             co2: 0.5,
             vo2: 0.5,
             boxes:
-                "[['Apple', [Offset(11.1, 16.4)]], ['Orange', [Offset(10.0, 292.7)]], ['Banana', [Offset(10.0, 292.7)]]"),
+                '[["Apple", [11.1, 16.4]], ["Orange", [10.0, 292.7]], ["Banana", [10.0, 292.7]]]'),
         Detection(
             imageId: "test-2",
             preDetectImgLink: "https://placehold.co/512x512.png",
@@ -71,8 +71,7 @@ void main() async {
             temperature: 10.0,
             co2: 0.5,
             vo2: 0.5,
-            boxes:
-                "[['Apple', [Offset(11.1, 16.4)]], ['Apple', [Offset(10.0, 292.7)]]]"),
+            boxes: '[["Apple", [11.1, 16.4]], ["Apple", [10.0, 292.7]]]'),
       ];
       for (final detection in fakeDetections) {
         await detection.save();
