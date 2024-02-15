@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:binsight_ai/main.dart';
 import 'package:binsight_ai/util/print.dart';
@@ -21,139 +22,100 @@ class BluetoothPage extends StatefulWidget {
 
 /// Handles collecting Bluetooth devices to be displayed.
 class _BluetoothPageState extends State<BluetoothPage> {
-  final flutterReactiveBle = FlutterReactiveBle();
-  final List<DiscoveredDevice> _foundBleUARTDevices = [];
-  final Uuid _binServiceID = Uuid.parse("31415924535897932384626433832790");
-  final List<String> _receivedData = [];
-  Set<String>? deviceSet = {};
-  PermissionStatus? status;
+  final client = FlutterReactiveBle();
+  final Set<String> deviceSet = {};
+  final List<DiscoveredDevice> scannedDevices = [];
+  StreamSubscription? scanSubscription;
+  bool connected = false;
 
   @override
   void initState() {
     super.initState();
-    // Opening the page should start a scan for devices
     scanForDevices();
   }
+  /// After ensuring the platform-dependent permissions are accepted, performs a scan for nearby devices.
+  void scanForDevices() async {
+    if (Platform.isAndroid) {
+      var status = await Permission.location.request();
 
-  void onNewReceivedData(List<int> data) {
-    _receivedData.add(data as String);
-  }
+      if (status != PermissionStatus.granted) {
+        throw Exception("Fine location permission denied");
+      } else {
+        debug("Fine location permission granted");
+      }
 
-  /// Connects to the specified device using Flutter Blue Plus's connect method.
-  // Future<void> connectToDevice(BluetoothDevice device) async {
-  //   await device.connect();
-  // }
-  // Future<void> connectToBluetooth(String deviceId) async {
-  //   var completer = Completer<void>();
-  //   flutterReactiveBle.connectToDevice(
-  //       id: deviceId,
-  //       servicesWithCharacteristicsToDiscover: {_binServiceID: [Uuid.parse("31415924535897932384626433832791"), Uuid.parse("31415924535897932384626433832792"), Uuid.parse("31415924535897932384626433832793")]},
-  //       connectionTimeout: const Duration(seconds: 2),
-  //     ).listen((connectionState) {
-  //       switch (connectionState.connectionState) {
-  //         case DeviceConnectionState.connected:
-  //           completer.complete();
-  //           return;
-  //         default:
-  //       }
+      status = await Permission.bluetoothScan.request();
+      if (status != PermissionStatus.granted) {
+        throw Exception("Bluetooth scan permission denied");
+      } else {
+        debug("Bluetooth scan permission granted");
+      }
 
-  //     }, onError: (Object error) {
-  //       // Handle a possible error
-  //     });
-  //   return completer.future;
-  // }
-  // ################################################################################################
-  // Future<void> connectToBluetooth(String deviceId) async {
-  //   if (status != PermissionStatus.granted) {
-  //     throw Exception("Fine location permission denied");
-  //   }
-
-  //   Completer<void> completer = Completer<void>();
-
-  //   Stream<ConnectionStateUpdate> connectionStream =
-  //       flutterReactiveBle.connectToDevice(
-  //     id: deviceId,
-  //     servicesWithCharacteristicsToDiscover: {
-  //       _binServiceID: [
-  //         Uuid.parse("31415924535897932384626433832791"),
-  //         Uuid.parse("31415924535897932384626433832792"),
-  //         Uuid.parse("31415924535897932384626433832793")
-  //       ]
-  //     },
-  //     connectionTimeout: const Duration(seconds: 2),
-  //   );
-
-  //   await for (ConnectionStateUpdate connectionState in connectionStream) {
-  //     switch (connectionState.connectionState) {
-  //       case DeviceConnectionState.connected:
-  //         completer.complete();
-  //         return;
-  //       case DeviceConnectionState.connecting:
-  //         debug("CONNECTING");
-  //         continue;
-  //       case DeviceConnectionState.disconnecting:
-  //         debug("DISCONNECTING");
-  //         break;
-  //       case DeviceConnectionState.disconnected:
-  //         debug("DISCONNECTED");
-  //         break;
-  //       default:
-  //     }
-  //   }
-  //   await completer.future;
-  //   // return;
-  //   // throw Exception("Connection failed");
-  // }
-  // ################################################################################################
-
-  void connectToBluetooth(device) async {
-    await device.connect();
-  }
-  
-  Stream<DiscoveredDevice>? scanForDevices() {
-    flutterReactiveBle.scanForDevices(withServices: []).listen(
-      (device) {
-        if (deviceSet != null && !deviceSet!.contains(device.name)) {
-          deviceSet!.add(device.name);
-          setState(
-            () {
-              _foundBleUARTDevices.add(device);
-            },
-          );
+      status = await Permission.bluetoothConnect.request();
+      if (status != PermissionStatus.granted) {
+        throw Exception("Bluetooth connect permission denied");
+      } else {
+        debug("Bluetooth connect permission granted");
+      }
+    } else {
+      if (await Permission.bluetooth.isRestricted) {
+        var status = await Permission.bluetooth.request();
+        if (status != PermissionStatus.granted) {
+          throw Exception("Bluetooth permission denied");
+        } else {
+          debug("Bluetooth permission granted");
         }
-      },
-    );
-    return null;
-    // }, onError: () {
-    //   //code for handling error
-    // });
+      }
+    }
+  final sub = client.scanForDevices(withServices: [
+      Uuid.parse("31415924535897932384626433832790")
+    ]).listen((device) {
+      debug("Found device: ${device.name}");
+      if (device.name.trim() == "") return;
+      setState(() {
+        if (!deviceSet.contains(device.id)) {
+          deviceSet.add(device.id);
+          scannedDevices.add(device);
+        }
+      });
+    });
+    setState(() {
+      scanSubscription = sub;
+    });
   }
 
-  /// Starts the Flutter Blue Plus scan and populates the results with found devices.
-  // void performScan() {
-  //   // When scanning for devices, continuously update the list and remove old devices
-  //   FlutterBluePlus.startScan(
-  //     continuousUpdates: true,
-  //     removeIfGone: const Duration(seconds: 3),
-  //     // The below comment can be uncommented when the official device naming convention is decided
-  //     // withKeywords: ["LE"]
-  //   );
-
-  //   // Listen to the scan stream to populate the found devices
-  //   List<String> filteredBluetoothConnectionsString = [];
-  //   FlutterBluePlus.scanResults.listen((results) {
-  //     // Only add devices that have not already been put into _bluetoothDevices
-  //     for (ScanResult r in results) {
-  //       if (!filteredBluetoothConnectionsString
-  //           .contains(r.advertisementData.advName)) {
-  //         setState(() {
-  //           _bluetoothDevices.add(r.device);
-  //         });
-  //         filteredBluetoothConnectionsString.add(r.advertisementData.advName);
-  //       }
-  //     }
-  //   });
-  // }
+  /// Connects to the specified device and discovers its services. 
+  /// If it has to attempt more than three times, it will fail out.
+  void connect(BluetoothDevice device) async {
+    debug(device);
+    if (!device.isConnected) {
+      int tries = 0;
+      while (tries < 3) {
+        try {
+          await device.connect();
+          break;
+        } catch (e) {
+          debug("Failed to connect to device: $e");
+          tries++;
+        }
+      }
+      debug("Connected to device: ${device.advName}");
+    }
+    int tries = 0;
+    while (tries < 3) {
+      try {
+        var services = await device.discoverServices();
+        setState(() {
+          connected = true;
+          services = services;
+        });
+        break;
+      } catch (e) {
+        debug("Failed to discover services: $e");
+        tries++;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -190,9 +152,9 @@ class _BluetoothPageState extends State<BluetoothPage> {
                 },
                 blendMode: BlendMode.dstOut,
                 child: ListView.builder(
-                  itemCount: _foundBleUARTDevices.length,
+                  itemCount: scannedDevices.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final bluetoothDevice = _foundBleUARTDevices[index];
+                    final device = scannedDevices[index];
                     return Card(
                       margin: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 20),
@@ -200,19 +162,17 @@ class _BluetoothPageState extends State<BluetoothPage> {
                           borderRadius: BorderRadius.circular(15.0)),
                       child: ListTile(
                         leading: const Icon(Icons.bluetooth),
-                        title: Text(bluetoothDevice.name),
+                        title: Text(device.name),
                         trailing: const Icon(Icons.keyboard_arrow_right),
                         onTap: () async {
+                          // THIS LINE IS SO FUCKING SCUFFED?!?!? COULDNT CAST FROM DISCOVEREDDEVICE TO BTDEVICE
+                          connect(BluetoothDevice(remoteId: DeviceIdentifier(device.id)));
                           Provider.of<DeviceNotifier>(context, listen: false)
-                              .setDevice(bluetoothDevice);
+                              .setDevice(device);
                           debug(Provider.of<DeviceNotifier>(context,
                                   listen: false)
                               .getDevice());
-                          connectToBluetooth(bluetoothDevice);
-                          // await bluetoothDevice.connect();
-                          // await bluetoothDevice.createBond();
-                          // await readCharacteristic(
-                          // bluetoothDevice, Guid("2AF9"));
+                          scanSubscription?.cancel();
                           if (!mounted) return;
                           GoRouter.of(context).goNamed('wifi-scan');
                         },
