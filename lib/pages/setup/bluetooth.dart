@@ -157,13 +157,3 @@ class _BluetoothPageState extends State<BluetoothPage> {
     );
   }
 }
-
-// listen for disconnection
-// var subscription = device.connectionState.listen((BluetoothConnectionState state) async {
-//     if (state == BluetoothConnectionState.disconnected) {
-//         // 1. typically, start a periodic timer that tries to
-//         //    reconnect, or just call connect() again right now
-//         // 2. you must always re-discover services after disconnection!
-//         print("${device.disconnectReasonCode} ${device.disconnectReasonDescription}");
-//     }
-// });
