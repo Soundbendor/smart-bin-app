@@ -49,48 +49,8 @@ class _WifiConfigurationState extends State<WifiConfiguration> {
           value: encodedJsonData);
     }
 
-    /// Function to send WiFi credentials to the Bluetooth connected Compost Bin
-    // Future<void> sendWifiCredentials() async {
-    //   // Encode WiFi credentials as JSON and convert to bytes
-    //   setState(() {
-    //     isLoading = true;
-    //   });
-    //   debug(ssidController.text);
-    //   debug(passwordController.text);
-    //   List<int> encodedJsonData = utf8.encode(jsonEncode(
-    //       {"ssid": ssidController.text, "password": passwordController.text}));
-    //   await writeCharacteristic(
-    //       bluetoothDevice!, Guid("2AB5"), encodedJsonData);
-    //   setState(() {
-    //     isLoading = true;
-    //   });
-    // }
-
-    /// Function to send WiFi credentials to the Bluetooth connected Compost Bin
-    // Future<void> sendWifiCredentials() async {
-    //   // Encode WiFi credentials as JSON and convert to bytes
-    //   setState(() {
-    //     isLoading = true;
-    //   });
-    //   debug(ssidController.text);
-    //   debug(passwordController.text);
-    //   List<int> encodedJsonData = utf8.encode(jsonEncode(
-    //       {"ssid": ssidController.text, "password": passwordController.text}));
-    //   await writeCharacteristic(
-    //       bluetoothDevice!, Guid("2AB5"), encodedJsonData);
-    //   setState(() {
-    //     isLoading = true;
-    //   });
-    // }
-
     final textTheme = Theme.of(context).textTheme;
-    // if (isLoading) {
-    //   showDialog(
-    //       context: context,
-    //       builder: (context) {
-    //         return const LoadingPopup();
-    //       });
-    // }
+
     return Scaffold(
         body: Container(
       decoration: const BoxDecoration(
@@ -120,7 +80,6 @@ class _WifiConfigurationState extends State<WifiConfiguration> {
             onPressed: () {
               // Call function to send WiFi credentials to the Compost Bin
               // await the sending
-              // isLoading, ? displayLoading : null
               if (bluetoothDevice != null) {
                 sendData(bluetoothDevice.id);
               }
