@@ -7,7 +7,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
 
 // Project imports:
@@ -76,18 +78,27 @@ void main() async {
     }
   }
 
-  // Run the app without the bluetooth set up
-  // runApp(BinsightAiApp(skipSetUp: true));
+  runApp(BinsightAiApp(skipSetUp: devices.isEmpty));
+}
 
-  // Run the app with the bluetooth set up
-  runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
+class DeviceNotifier with ChangeNotifier {
+  BluetoothDevice? device;
+  BluetoothDevice? getDevice() {
+    return device;
+  }
+
+  void setDevice(BluetoothDevice newDevice) {
+    device = newDevice;
+    notifyListeners();
+  }
 }
 
 /// The root of the application. Contains the GoRouter and MaterialApp wrappers.
 class BinsightAiApp extends StatefulWidget {
   final bool skipSetUp;
+  late final DeviceNotifier deviceNotifier = DeviceNotifier();
 
-  const BinsightAiApp({super.key, this.skipSetUp = false});
+  BinsightAiApp({super.key, this.skipSetUp = false});
 
   @override
   State<BinsightAiApp> createState() => _BinsightAiAppState();
@@ -134,9 +145,12 @@ class _BinsightAiAppState extends State<BinsightAiApp>
         initialLocation: widget.skipSetUp ? '/main' : '/set-up',
         routes: routes);
 
-    return MaterialApp.router(
-      routerConfig: router,
-      theme: mainTheme,
+    return ChangeNotifierProvider(
+      create: (_) => DeviceNotifier(),
+      child: MaterialApp.router(
+        routerConfig: router,
+        theme: mainTheme,
+      ),
     );
   }
 
