@@ -49,12 +49,18 @@ Future<void> requestBluetoothPermissions() async {
 
 /// A Bluetooth device.
 class BleDevice {
+  /// Initial [DiscoveredDevice] used to create the [BleDevice].
+  ///
+  /// Used to retreive the device's ID, name, and service UUIDs.
   final DiscoveredDevice _discoveredDevice;
 
   BleDevice(this._discoveredDevice);
 
+  /// The device's ID.
   String get id => _discoveredDevice.id.toString();
+  /// The device's name.
   String get name => _discoveredDevice.name;
+  /// The device's service UUIDs.
   List<Uuid> get serviceIds => _discoveredDevice.serviceUuids;
 }
 
@@ -104,6 +110,9 @@ class BleDeviceScanner {
     await _scanSubscription?.cancel();
   }
 
+  /// Runs the timer while the scan is going.
+  ///
+  /// It removes devices that haven't been seen in a while.
   void _runDeviceTimer() async {
     while (isScanning) {
       final now = DateTime.now();
@@ -119,9 +128,11 @@ class BleDeviceScanner {
           _scannedDevicesTime[deviceEntry.key] = now;
         }
       }
+      await Future.delayed(const Duration(seconds: 1));
     }
   }
 
+  /// Manages internal state when a device is discovered.
   void _handleDiscoveredDevice(DiscoveredDevice device) {
     final bleDevice = BleDevice(device);
     if (!_scannedDevices.containsKey(bleDevice.id)) {
