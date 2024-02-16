@@ -1,4 +1,4 @@
- import 'dart:convert';
+import 'dart:convert';
 
 import 'package:binsight_ai/main.dart';
 import 'package:binsight_ai/util/print.dart';

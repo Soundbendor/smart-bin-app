@@ -49,10 +49,11 @@ class SplashPage extends StatelessWidget {
                             textStyle: textTheme.labelLarge,
                             backgroundColor: colorScheme.primary),
                         onPressed: () async {
-                        PermissionStatus status = await Permission.location.request();
-                        if (status == PermissionStatus.granted) {
-                          context.goNamed('bluetooth');
-                        }
+                          PermissionStatus status =
+                              await Permission.location.request();
+                          if (status == PermissionStatus.granted) {
+                            context.goNamed('bluetooth');
+                          }
                         },
                         child: const Text('Continue'),
                       ),

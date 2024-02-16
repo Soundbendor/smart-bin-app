@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:io';
 
 import 'package:binsight_ai/main.dart';
@@ -33,6 +32,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
     super.initState();
     scanForDevices();
   }
+
   /// After ensuring the platform-dependent permissions are accepted, performs a scan for nearby devices.
   void scanForDevices() async {
     if (Platform.isAndroid) {
@@ -67,7 +67,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
         }
       }
     }
-  final sub = client.scanForDevices(withServices: [
+    final sub = client.scanForDevices(withServices: [
       Uuid.parse("31415924535897932384626433832790")
     ]).listen((device) {
       debug("Found device: ${device.name}");

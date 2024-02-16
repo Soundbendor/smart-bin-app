@@ -1,7 +1,5 @@
-import 'package:binsight_ai/main.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 
@@ -9,15 +7,14 @@ import 'package:wifi_scan/wifi_scan.dart';
 class WifiScanPage extends StatefulWidget {
   const WifiScanPage({super.key});
 
-
   @override
-  State<WifiScanPage> createState() =>
-  _WifiScanPageState();
+  State<WifiScanPage> createState() => _WifiScanPageState();
 }
 
 class _WifiScanPageState extends State<WifiScanPage> {
   // _WifiScanPageState();
-List<WiFiAccessPoint> wifiResults = [];
+
+  List<WiFiAccessPoint> wifiResults = [];
 
   @override
   void initState() {
@@ -92,7 +89,6 @@ List<WiFiAccessPoint> wifiResults = [];
       // handle default
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
