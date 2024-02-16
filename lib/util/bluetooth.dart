@@ -14,6 +14,11 @@ enum BleDeviceScannerEvents {
   deviceListUpdated,
 }
 
+enum BleDeviceClientEvents {
+  connected,
+  disconnected,
+}
+
 /// Requests the necessary permissions for scanning and connecting.
 Future<void> requestBluetoothPermissions() async {
   if (Platform.isAndroid) {
@@ -49,19 +54,75 @@ Future<void> requestBluetoothPermissions() async {
 
 /// A Bluetooth device.
 class BleDevice {
+  BleDevice(this._discoveredDevice) {
+    _device = BluetoothDevice(remoteId: DeviceIdentifier(id));
+  }
+
   /// Initial [DiscoveredDevice] used to create the [BleDevice].
   ///
   /// Used to retreive the device's ID, name, and service UUIDs.
   final DiscoveredDevice _discoveredDevice;
 
-  BleDevice(this._discoveredDevice);
+  /// The connected [BluetoothDevice].
+  ///
+  /// Used for connection and communication.
+  late BluetoothDevice _device;
+
+  /// Used to emit events.
+  final _emitter = EventEmitter();
 
   /// The device's ID.
   String get id => _discoveredDevice.id.toString();
+
   /// The device's name.
   String get name => _discoveredDevice.name;
+
   /// The device's service UUIDs.
   List<Uuid> get serviceIds => _discoveredDevice.serviceUuids;
+
+  /// Connects to the device.
+  ///
+  /// Throws a [BleConnectionException] if the connection fails.
+  Future<void> connect() async {
+    if (_device.isConnected) return;
+    int attempts = 0;
+    while (attempts < 3) {
+      try {
+        await _device.connect();
+        break;
+      } catch (e) {
+        debug("BleDevice: Error connecting to device: $e ($attempts/3)");
+        attempts++;
+      }
+      if (attempts == 3) {
+        throw BleConnectionException("Failed to connect to device");
+      }
+    }
+    _emit(BleDeviceClientEvents.connected, null);
+  }
+
+  // events
+  /// Emits an event with data.
+  void _emit<T>(BleDeviceClientEvents event, T data) {
+    _emitter.emit(event.name, data);
+  }
+
+  /// Creates a listener for the given event type.
+  void on<T>(BleDeviceClientEvents type, dynamic Function(T) callback) {
+    _emitter.on(type.name, callback);
+  }
+
+  /// Creates a listener for the given event type that will only be called once.
+  ///
+  /// Can be awaited.
+  Future<T> once<T>(BleDeviceClientEvents type, dynamic Function(T) callback) {
+    return _emitter.once(type.name, callback);
+  }
+
+  /// Removes a listener for the given event type.
+  void off<T>(BleDeviceClientEvents type, dynamic Function(T) callback) {
+    _emitter.off(type: type.name, callback: callback);
+  }
 }
 
 /// Manages scanned Bluetooth devices and emits relevant events.
@@ -85,6 +146,12 @@ class BleDeviceScanner {
   StreamSubscription? _scanSubscription;
 
   /// Starts scanning for devices.
+  ///
+  /// [serviceFilter] is a list of service UUIDs to filter by. If null, all devices will be scanned.
+  ///
+  /// Throws a [BleBluetoothDisabledException] if Bluetooth is not turned on.
+  /// Throws a [BleBluetoothNotSupportedException] if Bluetooth is not supported on the device.
+  /// Throws a [BlePermissionException] if the necessary permissions are not granted.
   Future<void> startScan({List<Uuid>? serviceFilter}) async {
     // check permissions and Bluetooth support
     if (await FlutterBluePlus.isSupported) {
@@ -149,6 +216,22 @@ class BleDeviceScanner {
   }
 
   // events
+  /// Creates a listener which is run when a device is found.
+  void onDeviceFound(Function(BleDevice) callback) {
+    on(BleDeviceScannerEvents.deviceFound, callback);
+  }
+
+  /// Creates a listener which is run when a device is lost.
+  void onDeviceLost(Function(BleDevice) callback) {
+    on(BleDeviceScannerEvents.deviceLost, callback);
+  }
+
+  /// Creates a listener which is run when the device list is updated.
+  void onDeviceListUpdated(Function(List<BleDevice>) callback) {
+    on(BleDeviceScannerEvents.deviceListUpdated, callback);
+  }
+
+  /// Emits an event with data.
   void _emit<T>(BleDeviceScannerEvents event, T data) {
     _emitter.emit(event.name, data);
   }
@@ -168,20 +251,5 @@ class BleDeviceScanner {
   /// Removes a listener for the given event type.
   void off<T>(BleDeviceScannerEvents type, dynamic Function(T) callback) {
     _emitter.off(type: type.name, callback: callback);
-  }
-
-  /// Creates a listener which is run when a device is found.
-  void onDeviceFound(Function(BleDevice) callback) {
-    on(BleDeviceScannerEvents.deviceFound, callback);
-  }
-
-  /// Creates a listener which is run when a device is lost.
-  void onDeviceLost(Function(BleDevice) callback) {
-    on(BleDeviceScannerEvents.deviceLost, callback);
-  }
-
-  /// Creates a listener which is run when the device list is updated.
-  void onDeviceListUpdated(Function(List<BleDevice>) callback) {
-    on(BleDeviceScannerEvents.deviceListUpdated, callback);
   }
 }

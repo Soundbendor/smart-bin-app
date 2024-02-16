@@ -30,3 +30,14 @@ class BleBluetoothDisabledException implements Exception {
     return "BleBluetoothDisabledException: $message";
   }
 }
+
+class BleConnectionException implements Exception {
+  final String message;
+
+  BleConnectionException(this.message);
+
+  @override
+  String toString() {
+    return "BleConnectionException: $message";
+  }
+}
