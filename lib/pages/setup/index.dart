@@ -1,3 +1,4 @@
+import 'package:binsight_ai/widgets/background.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,12 +11,8 @@ class SplashPage extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("assets/images/BinFlowersCloudsBackground.png"),
-              fit: BoxFit.cover),
-        ),
+      body: CustomBackground(
+        imageURL: "assets/images/background3.JPG",
         child: Center(
           child: Column(
             children: [

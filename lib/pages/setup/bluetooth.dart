@@ -1,5 +1,6 @@
 import 'package:binsight_ai/main.dart';
 import 'package:binsight_ai/util/print.dart';
+import 'package:binsight_ai/widgets/background.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -95,14 +96,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
     const textSize = 20.0;
 
     return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("assets/images/FlowersBackground.png"),
-              fit: BoxFit.cover),
-        ),
+      body: CustomBackground(
         child: Column(
           children: [
             SizedBox(
@@ -169,13 +163,3 @@ class _BluetoothPageState extends State<BluetoothPage> {
     );
   }
 }
-
-// listen for disconnection
-// var subscription = device.connectionState.listen((BluetoothConnectionState state) async {
-//     if (state == BluetoothConnectionState.disconnected) {
-//         // 1. typically, start a periodic timer that tries to
-//         //    reconnect, or just call connect() again right now
-//         // 2. you must always re-discover services after disconnection!
-//         print("${device.disconnectReasonCode} ${device.disconnectReasonDescription}");
-//     }
-// });
