@@ -9,11 +9,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text(
-          "Home Page Content",
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
+      body: Text(
+        "My Dashboard",
+        style: Theme.of(context).textTheme.bodyLarge,
       ),
     );
   }
