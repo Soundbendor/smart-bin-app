@@ -29,7 +29,7 @@
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../index.html">binsight_ai</a></li>
-    <li><a href="../main/main-library.html">main</a></li>
+    <li><a href="../main/main-library.html">main.dart</a></li>
     <li class="self-crumb">main function</li>
   </ol>
   <div class="self-name">main</div>
@@ -137,11 +137,7 @@
     }
   }
 
-  &#47;&#47; Run the app without the bluetooth set up
-  &#47;&#47; runApp(BinsightAiApp(skipSetUp: true));
-
-  &#47;&#47; Run the app with the bluetooth set up
-  runApp(BinsightAiApp(skipSetUp: devices.isNotEmpty));
+  runApp(BinsightAiApp(skipSetUp: devices.isEmpty));
 }</code></pre>
 </section>
 
