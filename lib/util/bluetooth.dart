@@ -124,6 +124,7 @@ class BleDeviceScanner {
               _scannedDevices[deviceEntry.key]!);
           _emit<List<BleDevice>>(BleDeviceScannerEvents.deviceListUpdated,
               _scannedDevices.values.toList());
+          debug("BleDeviceScanner: Device ${deviceEntry.key} lost");
         } else {
           _scannedDevicesTime[deviceEntry.key] = now;
         }
@@ -141,6 +142,7 @@ class BleDeviceScanner {
       _emit<BleDevice>(BleDeviceScannerEvents.deviceFound, bleDevice);
       _emit<List<BleDevice>>(BleDeviceScannerEvents.deviceListUpdated,
           _scannedDevices.values.toList());
+      debug("BleDeviceScanner: Device ${bleDevice.id} found");
     } else {
       _scannedDevicesTime[bleDevice.id] = DateTime.now();
     }
