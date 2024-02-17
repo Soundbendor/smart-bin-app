@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:binsight_ai/database/connection.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import '../shared.dart';
