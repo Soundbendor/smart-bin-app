@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:binsight_ai/util/bluetooth_exception.dart';
@@ -117,14 +118,22 @@ class BleDevice {
 
   /// Disconnects from the device.
   ///
-  /// Note: On iOS, the device might not be disconnected. You may need to notify the user to manually disconnect from the device.
+  /// Note: On iOS, the device might not be disconnected.
+  /// You may need to notify the user to manually disconnect from the device.
   void disconnect() {
     _device.disconnect();
     _emit(BleDeviceClientEvents.disconnected, null);
   }
 
+  /// Reads a characteristic.
+  ///
+  /// [serviceId] is the service UUID.
+  /// [characteristicId] is the characteristic UUID.
+  ///
+  /// Throws a [BleInvalidOperationException] if the characteristic does not support reading.
+  /// Throws a [BleOperationFailureException] if the read fails.
   Future<List<int>> readCharacteristic(
-      Uuid serviceId, Uuid characteristicId) async {
+      {required Uuid serviceId, required Uuid characteristicId}) async {
     final characteristic = BluetoothCharacteristic(
         remoteId: DeviceIdentifier(id),
         serviceUuid: Guid.fromBytes(serviceId.data),
@@ -146,6 +155,49 @@ class BleDevice {
       debug("BleDevice[readCharacteristic][$characteristicId]: $e");
       throw BleOperationFailureException(
           "Failed to read characteristic $characteristicId");
+    }
+  }
+
+  /// Writes a characteristic.
+  ///
+  /// [serviceId] is the service UUID.
+  /// [characteristicId] is the characteristic UUID.
+  /// [value] is the value to write. It must be a [List] of [int] or a [String].
+  ///
+  /// Throws a [BleInvalidOperationException] if the characteristic does not support writing.
+  /// Throws a [BleOperationFailureException] if the write fails.
+  Future<void> writeCharacteristic({
+    required Uuid serviceId,
+    required Uuid characteristicId,
+    required dynamic value,
+  }) async {
+    if (value is String) {
+      value = utf8.encode(value);
+    } else if (value is! List<int>) {
+      throw BleInvalidOperationException(
+          "Value must be a List<int> or a String");
+    }
+    final characteristic = BluetoothCharacteristic(
+        remoteId: DeviceIdentifier(id),
+        serviceUuid: Guid.fromBytes(serviceId.data),
+        characteristicUuid: Guid.fromBytes(characteristicId.data));
+    if (!isConnected) {
+      debug(
+          "BleDevice[writeCharacteristic]: Device not connected, attempting to connect");
+      await connect();
+    }
+    if (!characteristic.properties.write) {
+      debug(
+          "BleDevice[writeCharacteristic][$characteristicId]: write = ${characteristic.properties.write}");
+      throw BleInvalidOperationException(
+          "Characteristic $characteristicId does not support writing");
+    }
+    try {
+      await characteristic.write(value);
+    } catch (e) {
+      debug("BleDevice[writeCharacteristic][$characteristicId]: $e");
+      throw BleOperationFailureException(
+          "Failed to write characteristic $characteristicId");
     }
   }
 
