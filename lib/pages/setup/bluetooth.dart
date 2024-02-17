@@ -225,6 +225,7 @@ class _BluetoothListState extends State<BluetoothList> {
     )));
   }
 
+  /// Displays an error dialog.
   Widget displayErrorDialog(BuildContext context) {
     final strings = getStringsFromException(error);
     return ErrorDialog(

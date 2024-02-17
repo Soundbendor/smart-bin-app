@@ -19,10 +19,10 @@ BleExceptionDialogStrings getStringsFromException(Exception? error) {
   } else if (error is BlePermissionException) {
     title = "Insufficient permissions";
     description = """
-              Please grant the necessary permissions to continue.
-              To do so, head to your system's application settings and manually grant the permissions.
-              You may need to restart the app after granting permissions.
-              The error message was: '${error.message}'.
+Please grant the necessary permissions to continue.
+To do so, restart this app or head to your system's application settings and manually grant the permissions.
+You may need to restart the app after granting permissions.
+The error message was: '${error.message}'.
             """;
   } else if (error is BleConnectionException) {
     title = "Failed to connect";
