@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:binsight_ai/widgets/image.dart';
+import 'package:binsight_ai/database/models/detection.dart';
 
 String formatDetectionTitle(Detection detection) {
   if (detection.boxes != null) {
