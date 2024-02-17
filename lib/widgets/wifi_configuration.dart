@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:binsight_ai/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-// import 'package:binsight_ai/widgets/loading_popup.dart';
+import 'package:binsight_ai/util/bluetooth.dart';
+import 'package:binsight_ai/util/providers.dart';
 
 /// Widget for configuring the wifi credentials of the compost bin
 class WifiConfiguration extends StatefulWidget {
@@ -28,8 +28,8 @@ class _WifiConfigurationState extends State<WifiConfiguration> {
 
   @override
   Widget build(BuildContext context) {
-    final DiscoveredDevice? bluetoothDevice =
-        Provider.of<DeviceNotifier>(context, listen: false).getDevice();
+    final BleDevice? bluetoothDevice =
+        Provider.of<DeviceNotifier>(context, listen: false).device;
     TextEditingController ssidController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
 

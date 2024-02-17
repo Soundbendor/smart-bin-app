@@ -1,6 +1,5 @@
-import 'package:binsight_ai/util/bluetooth.dart';
-import 'package:binsight_ai/util/bluetooth_exception.dart';
 import 'package:flutter/material.dart';
+import 'package:binsight_ai/util/bluetooth.dart';
 
 /// Notifies listeners of changes to the device.
 ///

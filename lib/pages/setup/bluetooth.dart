@@ -1,10 +1,10 @@
-import 'package:binsight_ai/util/bluetooth_exception.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/bluetooth_bin_data.dart';
+import 'package:binsight_ai/util/bluetooth_exception.dart';
 import 'package:binsight_ai/widgets/background.dart';
 
 /// Page which displays scanned Bluetooth devices.

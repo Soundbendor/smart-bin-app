@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:binsight_ai/util/bluetooth_exception.dart';
-import 'package:binsight_ai/util/print.dart';
 import 'package:events_emitter/events_emitter.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:binsight_ai/util/bluetooth_exception.dart';
+import 'package:binsight_ai/util/print.dart';
 
 enum BleDeviceScannerEvents {
   deviceFound,

@@ -1,7 +1,7 @@
-import 'package:binsight_ai/widgets/background.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:binsight_ai/widgets/background.dart';
 
 /// The splash screen prompting the user to continue setting up their application.
 class SplashPage extends StatelessWidget {
