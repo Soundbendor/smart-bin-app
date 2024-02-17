@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:binsight_ai/main.dart';
 import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/widgets/background.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:provider/provider.dart';
 
 /// Displays scanned Bluetooth devices.
 class BluetoothPage extends StatefulWidget {
