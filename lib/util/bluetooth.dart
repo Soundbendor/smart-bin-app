@@ -71,6 +71,9 @@ class BleDevice {
   /// Used to emit events.
   final _emitter = EventEmitter();
 
+  /// Whether the device is currently connecting.
+  bool isConnecting = false;
+
   /// The device's ID.
   String get id => _discoveredDevice.id.toString();
 
@@ -80,28 +83,83 @@ class BleDevice {
   /// The device's service UUIDs.
   List<Uuid> get serviceIds => _discoveredDevice.serviceUuids;
 
+  /// Whether the device is connected.
+  bool get isConnected => _device.isConnected;
+
   /// Connects to the device.
   ///
   /// Throws a [BleConnectionException] if the connection fails.
   Future<void> connect() async {
-    if (_device.isConnected) return;
+    if (isConnected || isConnecting) return;
+    isConnecting = true;
     int attempts = 0;
     while (attempts < 3) {
       try {
         await _device.connect();
+        debug("BleDevice[connect]: Connection initialized successfully");
+        await _device.discoverServices();
+        debug("BleDevice[connect]: Discovered services");
         break;
       } catch (e) {
-        debug("BleDevice: Error connecting to device: $e ($attempts/3)");
         attempts++;
+        debug(
+            "BleDevice[connect]: ($attempts/3) Error connecting to device: $e");
       }
       if (attempts == 3) {
+        isConnecting = false;
         throw BleConnectionException("Failed to connect to device");
       }
     }
+    debug("BleDevice[connect]: Connected to device complete");
+    isConnecting = false;
     _emit(BleDeviceClientEvents.connected, null);
   }
 
+  /// Disconnects from the device.
+  ///
+  /// Note: On iOS, the device might not be disconnected. You may need to notify the user to manually disconnect from the device.
+  void disconnect() {
+    _device.disconnect();
+    _emit(BleDeviceClientEvents.disconnected, null);
+  }
+
+  Future<List<int>> readCharacteristic(
+      Uuid serviceId, Uuid characteristicId) async {
+    final characteristic = BluetoothCharacteristic(
+        remoteId: DeviceIdentifier(id),
+        serviceUuid: Guid.fromBytes(serviceId.data),
+        characteristicUuid: Guid.fromBytes(characteristicId.data));
+    if (!isConnected) {
+      debug(
+          "BleDevice[readCharacteristic]: Device not connected, attempting to connect");
+      await connect();
+    }
+    if (!characteristic.properties.read) {
+      debug(
+          "BleDevice[readCharacteristic][$characteristicId]: read = ${characteristic.properties.read}");
+      throw BleInvalidOperationException(
+          "Characteristic $characteristicId does not support reading");
+    }
+    try {
+      return await characteristic.read();
+    } catch (e) {
+      debug("BleDevice[readCharacteristic][$characteristicId]: $e");
+      throw BleOperationFailureException(
+          "Failed to read characteristic $characteristicId");
+    }
+  }
+
   // events
+  /// Creates a listener which is run when the device is connected.
+  void onConnected(Function(Null) callback) {
+    on(BleDeviceClientEvents.connected, callback);
+  }
+
+  /// Creates a listener which is run when the device is disconnected.
+  void onDisconnected(Function(Null) callback) {
+    on(BleDeviceClientEvents.disconnected, callback);
+  }
+
   /// Emits an event with data.
   void _emit<T>(BleDeviceClientEvents event, T data) {
     _emitter.emit(event.name, data);
@@ -120,7 +178,8 @@ class BleDevice {
   }
 
   /// Removes a listener for the given event type.
-  void off<T>(BleDeviceClientEvents type, dynamic Function(T) callback) {
+  void removeListener<T>(
+      BleDeviceClientEvents type, dynamic Function(T) callback) {
     _emitter.off(type: type.name, callback: callback);
   }
 }
@@ -249,7 +308,8 @@ class BleDeviceScanner {
   }
 
   /// Removes a listener for the given event type.
-  void off<T>(BleDeviceScannerEvents type, dynamic Function(T) callback) {
+  void removeListener<T>(
+      BleDeviceScannerEvents type, dynamic Function(T) callback) {
     _emitter.off(type: type.name, callback: callback);
   }
 }

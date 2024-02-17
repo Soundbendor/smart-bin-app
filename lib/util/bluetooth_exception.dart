@@ -41,3 +41,25 @@ class BleConnectionException implements Exception {
     return "BleConnectionException: $message";
   }
 }
+
+class BleInvalidOperationException implements Exception {
+  final String message;
+
+  BleInvalidOperationException(this.message);
+
+  @override
+  String toString() {
+    return "BleInvalidOperationException: $message";
+  }
+}
+
+class BleOperationFailureException implements Exception {
+  final String message;
+
+  BleOperationFailureException(this.message);
+
+  @override
+  String toString() {
+    return "BleOperationFailureException: $message";
+  }
+}
