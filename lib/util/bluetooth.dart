@@ -157,7 +157,13 @@ class BleDevice {
   ///
   /// Throws a [BleConnectionException] if the connection fails.
   Future<void> connect() async {
-    if (isConnected) return;
+    if (isConnected) {
+      if (!_shouldBeConnected) {
+        _shouldBeConnected = true;
+        _createConnectionStateSubscription();
+      }
+      return;
+    }
     if (isConnecting) {
       return await _connectionFuture;
     }
