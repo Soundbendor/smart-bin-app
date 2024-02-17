@@ -68,7 +68,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
               Please grant the necessary permissions to continue.
               To do so, head to your system's application settings and manually grant the permissions.
               You may need to restart the app after granting permissions.
-              The error message was: ${error.message}
+              The error message was: '${error.message}'.
             """;
             callback = () {
               Navigator.of(context).pop();

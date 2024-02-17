@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:binsight_ai/util/bluetooth.dart';
+import 'package:binsight_ai/util/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:go_router/go_router.dart';
@@ -28,7 +30,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
     await WiFiForIoTPlugin.forceWifiUsage(true);
   }
 
-  void _startScan(DiscoveredDevice? bluetoothDevice) {
+  void _startScan(BleDevice? bluetoothDevice) {
     if (bluetoothDevice != null) {
       final characteristic = QualifiedCharacteristic(
           serviceId: _binServiceID,
@@ -108,8 +110,8 @@ class _WifiScanPageState extends State<WifiScanPage> {
 
   @override
   Widget build(BuildContext context) {
-    final DiscoveredDevice? bluetoothDevice =
-        Provider.of<DeviceNotifier>(context, listen: false).getDevice();
+    final BleDevice? bluetoothDevice =
+        Provider.of<DeviceNotifier>(context, listen: false).device;
     _startScan(bluetoothDevice);
     const textSize = 20.0;
 
