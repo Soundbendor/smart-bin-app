@@ -1,4 +1,3 @@
-import 'package:binsight_ai/pages/wifi/wifi_scan_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:binsight_ai/pages/detection/annotation.dart';
@@ -6,8 +5,9 @@ import 'package:binsight_ai/pages/detection/detection.dart';
 import 'package:binsight_ai/pages/detection/index.dart';
 import 'package:binsight_ai/pages/main/help.dart';
 import 'package:binsight_ai/pages/main/home.dart';
-import 'package:binsight_ai/pages/setup/bluetooth.dart';
 import 'package:binsight_ai/pages/setup/index.dart';
+import 'package:binsight_ai/pages/setup/bluetooth.dart';
+import 'package:binsight_ai/pages/wifi/wifi_scan_page.dart';
 import 'package:binsight_ai/widgets/navigation_shell.dart';
 import 'package:binsight_ai/widgets/wifi_configuration.dart';
 

@@ -1,13 +1,12 @@
 import 'dart:convert';
 
-import 'package:binsight_ai/main.dart';
-import 'package:binsight_ai/util/print.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 import 'package:wifi_scan/wifi_scan.dart';
+import 'package:binsight_ai/util/print.dart';
 
 /// Displays the WiFi configuration page with background and padding.
 class WifiScanPage extends StatefulWidget {

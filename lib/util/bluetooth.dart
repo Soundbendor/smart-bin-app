@@ -141,7 +141,8 @@ class BleDevice {
         _emit(BleDeviceClientEvents.disconnected, null);
         if (_shouldBeConnected) {
           connect().onError((error, stackTrace) {
-            debug("BleDevice[_createConnectionStateSubscription]: automatic reconnection failed: $error");
+            debug(
+                "BleDevice[_createConnectionStateSubscription]: automatic reconnection failed: $error");
           });
         }
       }
@@ -156,6 +157,9 @@ class BleDevice {
   /// To stop the device from reconnecting, call [disconnect].
   ///
   /// Throws a [BleConnectionException] if the connection fails.
+  /// Throws a [BleBluetoothDisabledException] if Bluetooth is not turned on.
+  /// Throws a [BleBluetoothNotSupportedException] if Bluetooth is not supported on the device.
+  /// Throws a [BlePermissionException] if the necessary permissions are not granted.
   Future<void> connect() async {
     if (isConnected) {
       if (!_shouldBeConnected) {
@@ -170,7 +174,19 @@ class BleDevice {
     _connectionFuture = _connect();
     return await _connectionFuture;
   }
+
   Future<void> _connect() async {
+    // Check permissions and Bluetooth support
+    if (await FlutterBluePlus.isSupported) {
+      await requestBluetoothPermissions();
+      if (FlutterBluePlus.adapterStateNow != BluetoothAdapterState.on &&
+          FlutterBluePlus.adapterStateNow != BluetoothAdapterState.unknown) {
+        throw BleBluetoothDisabledException("Bluetooth is not turned on");
+      }
+    } else {
+      throw BleBluetoothNotSupportedException(
+          "Bluetooth is not supported on this device");
+    }
     isConnecting = true;
     int attempts = 0;
     while (attempts < 3) {
