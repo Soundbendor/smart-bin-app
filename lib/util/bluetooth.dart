@@ -81,6 +81,8 @@ class BleDevice {
   /// A list of subscriptions to rebuild when the device disconnects and reconnects.
   final _rebuildSubscriptionList = <List<dynamic>>[];
 
+  Future? _connectionFuture;
+
   /// Whether the device should be connected.
   ///
   /// Used to reconnect to the device after an unexpected disconnection.
@@ -101,9 +103,12 @@ class BleDevice {
   /// Whether the device is connected.
   bool get isConnected => _device.isConnected;
 
+  /// Rebuilds subscriptions when the device disconnects and reconnects automatically.
   Future<void> _rebuildSubscriptions() async {
     debug("BleDevice[_rebuildSubscriptions]: Rebuilding subscriptions");
-    for (final subscription in _rebuildSubscriptionList) {
+    final subscriptionList = List.from(_rebuildSubscriptionList);
+    _rebuildSubscriptionList.clear();
+    for (final subscription in subscriptionList) {
       if (subscription[0] == _BleSubscriptionType.subscribe) {
         int attempts = 0;
         while (attempts < 3) {
@@ -124,16 +129,42 @@ class BleDevice {
           }
         }
       } else if (subscription[0] == _BleSubscriptionType.connection) {
-        // TODO: implement connection subscriptions
+        _createConnectionStateSubscription();
       }
     }
   }
 
+  /// Creates a subscription to the device's connection state.
+  void _createConnectionStateSubscription() {
+    final stream = _device.connectionState.listen((status) {
+      if (status == BluetoothConnectionState.disconnected) {
+        _emit(BleDeviceClientEvents.disconnected, null);
+        if (_shouldBeConnected) {
+          connect().onError((error, stackTrace) {
+            debug("BleDevice[_createConnectionStateSubscription]: automatic reconnection failed: $error");
+          });
+        }
+      }
+    });
+    _device.cancelWhenDisconnected(stream, delayed: true);
+    _rebuildSubscriptionList.add([_BleSubscriptionType.connection]);
+  }
+
   /// Connects to the device.
+  ///
+  /// The device will automatically reconnect if it is unexpectedly disconnected.
+  /// To stop the device from reconnecting, call [disconnect].
   ///
   /// Throws a [BleConnectionException] if the connection fails.
   Future<void> connect() async {
-    if (isConnected || isConnecting) return;
+    if (isConnected) return;
+    if (isConnecting) {
+      return await _connectionFuture;
+    }
+    _connectionFuture = _connect();
+    return await _connectionFuture;
+  }
+  Future<void> _connect() async {
     isConnecting = true;
     int attempts = 0;
     while (attempts < 3) {
@@ -155,6 +186,8 @@ class BleDevice {
     }
     if (_shouldBeConnected) {
       await _rebuildSubscriptions();
+    } else {
+      _createConnectionStateSubscription();
     }
     debug("BleDevice[connect]: Connected to device complete");
     isConnecting = false;
