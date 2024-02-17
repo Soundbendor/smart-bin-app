@@ -18,6 +18,12 @@ enum BleDeviceScannerEvents {
 enum BleDeviceClientEvents {
   connected,
   disconnected,
+  notification,
+}
+
+enum _BleSubscriptionType {
+  subscribe,
+  connection,
 }
 
 /// Requests the necessary permissions for scanning and connecting.
@@ -72,6 +78,14 @@ class BleDevice {
   /// Used to emit events.
   final _emitter = EventEmitter();
 
+  /// A list of subscriptions to rebuild when the device disconnects and reconnects.
+  final _rebuildSubscriptionList = <List<dynamic>>[];
+
+  /// Whether the device should be connected.
+  ///
+  /// Used to reconnect to the device after an unexpected disconnection.
+  bool _shouldBeConnected = false;
+
   /// Whether the device is currently connecting.
   bool isConnecting = false;
 
@@ -86,6 +100,34 @@ class BleDevice {
 
   /// Whether the device is connected.
   bool get isConnected => _device.isConnected;
+
+  Future<void> _rebuildSubscriptions() async {
+    debug("BleDevice[_rebuildSubscriptions]: Rebuilding subscriptions");
+    for (final subscription in _rebuildSubscriptionList) {
+      if (subscription[0] == _BleSubscriptionType.subscribe) {
+        int attempts = 0;
+        while (attempts < 3) {
+          try {
+            await subscribeToCharacteristic(
+                serviceId: subscription[1],
+                characteristicId: subscription[2],
+                onNotification: subscription[3]);
+            break;
+          } catch (e) {
+            attempts++;
+            debug(
+                "BleDevice[_rebuildSubscriptions]: ($attempts/3) Error rebuilding subscription: $e");
+          }
+          if (attempts == 3) {
+            disconnect();
+            throw BleConnectionException("Failed to rebuild subscriptions");
+          }
+        }
+      } else if (subscription[0] == _BleSubscriptionType.connection) {
+        // TODO: implement connection subscriptions
+      }
+    }
+  }
 
   /// Connects to the device.
   ///
@@ -111,8 +153,12 @@ class BleDevice {
         throw BleConnectionException("Failed to connect to device");
       }
     }
+    if (_shouldBeConnected) {
+      await _rebuildSubscriptions();
+    }
     debug("BleDevice[connect]: Connected to device complete");
     isConnecting = false;
+    _shouldBeConnected = true;
     _emit(BleDeviceClientEvents.connected, null);
   }
 
@@ -121,7 +167,8 @@ class BleDevice {
   /// Note: On iOS, the device might not be disconnected.
   /// You may need to notify the user to manually disconnect from the device.
   void disconnect() {
-    _device.disconnect();
+    _shouldBeConnected = false;
+    _device.disconnect().ignore();
     _emit(BleDeviceClientEvents.disconnected, null);
   }
 
@@ -132,6 +179,7 @@ class BleDevice {
   ///
   /// Throws a [BleInvalidOperationException] if the characteristic does not support reading.
   /// Throws a [BleOperationFailureException] if the read fails.
+  /// Throws a [BleConnectionException] if the device fails to connect.
   Future<List<int>> readCharacteristic(
       {required Uuid serviceId, required Uuid characteristicId}) async {
     final characteristic = BluetoothCharacteristic(
@@ -166,6 +214,7 @@ class BleDevice {
   ///
   /// Throws a [BleInvalidOperationException] if the characteristic does not support writing.
   /// Throws a [BleOperationFailureException] if the write fails.
+  /// Throws a [BleConnectionException] if the device fails to connect.
   Future<void> writeCharacteristic({
     required Uuid serviceId,
     required Uuid characteristicId,
@@ -198,6 +247,106 @@ class BleDevice {
       debug("BleDevice[writeCharacteristic][$characteristicId]: $e");
       throw BleOperationFailureException(
           "Failed to write characteristic $characteristicId");
+    }
+  }
+
+  /// Subscribes to a characteristic.
+  ///
+  /// [serviceId] is the service UUID.
+  /// [characteristicId] is the characteristic UUID.
+  /// [onNotification] is a function that is run when a notification is received.
+  /// The function is passed a [List] of [int] representing the notification value.
+  ///
+  /// Throws a [BleInvalidOperationException] if the characteristic does not support subscribing.
+  /// Throws a [BleOperationFailureException] if the subscription fails.
+  /// Throws a [BleConnectionException] if the device fails to connect.
+  Future<void> subscribeToCharacteristic({
+    required Uuid serviceId,
+    required Uuid characteristicId,
+    Function(List<int>)? onNotification,
+  }) async {
+    final characteristic = BluetoothCharacteristic(
+        remoteId: DeviceIdentifier(id),
+        serviceUuid: Guid.fromBytes(serviceId.data),
+        characteristicUuid: Guid.fromBytes(characteristicId.data));
+    if (!isConnected) {
+      debug(
+          "BleDevice[subscribeToCharacteristic]: Device not connected, attempting to connect");
+      await connect();
+    }
+    if (!characteristic.properties.notify &&
+        !characteristic.properties.indicate) {
+      debug(
+          "BleDevice[subscribeToCharacteristic][$characteristicId]: notify = ${characteristic.properties.notify}, indicate = ${characteristic.properties.indicate}");
+      throw BleInvalidOperationException(
+          "Characteristic $characteristicId does not support subscribing");
+    }
+    try {
+      await characteristic.setNotifyValue(true);
+      final stream = characteristic.lastValueStream.listen((value) {
+        _emit(BleDeviceClientEvents.notification,
+            [serviceId, characteristicId, value]);
+        if (onNotification != null) onNotification(value);
+      });
+      _device.cancelWhenDisconnected(stream);
+      _rebuildSubscriptionList.add([
+        _BleSubscriptionType.subscribe,
+        serviceId,
+        characteristicId,
+        onNotification
+      ]);
+    } catch (e) {
+      debug("BleDevice[subscribeToCharacteristic][$characteristicId]: $e");
+      throw BleOperationFailureException(
+          "Failed to subscribe to characteristic $characteristicId");
+    }
+  }
+
+  /// Unsubscribes from a characteristic.
+  ///
+  /// [serviceId] is the service UUID.
+  /// [characteristicId] is the characteristic UUID.
+  ///
+  /// Throws a [BleInvalidOperationException] if the characteristic does not support unsubscribing.
+  /// Throws a [BleOperationFailureException] if the unsubscription fails.
+  /// Throws a [BleConnectionException] if the device fails to connect.
+  Future<void> unsubscribeFromCharacteristic({
+    required Uuid serviceId,
+    required Uuid characteristicId,
+  }) async {
+    final characteristic = BluetoothCharacteristic(
+        remoteId: DeviceIdentifier(id),
+        serviceUuid: Guid.fromBytes(serviceId.data),
+        characteristicUuid: Guid.fromBytes(characteristicId.data));
+    // remove subscriptions
+    List<dynamic>? toRemove;
+    for (final subscription in _rebuildSubscriptionList) {
+      if (subscription[0] == _BleSubscriptionType.subscribe &&
+          subscription[1] == serviceId &&
+          subscription[2] == characteristicId) {
+        toRemove = subscription;
+        break;
+      }
+    }
+    _rebuildSubscriptionList.remove(toRemove);
+    if (!isConnected) {
+      debug(
+          "BleDevice[unsubscribeFromCharacteristic]: Device not connected, attempting to connect");
+      await connect();
+    }
+    if (!characteristic.properties.notify &&
+        !characteristic.properties.indicate) {
+      debug(
+          "BleDevice[unsubscribeFromCharacteristic][$characteristicId]: notify = ${characteristic.properties.notify}, indicate = ${characteristic.properties.indicate}");
+      throw BleInvalidOperationException(
+          "Characteristic $characteristicId does not support unsubscribing");
+    }
+    try {
+      await characteristic.setNotifyValue(false);
+    } catch (e) {
+      debug("BleDevice[unsubscribeFromCharacteristic][$characteristicId]: $e");
+      throw BleOperationFailureException(
+          "Failed to unsubscribe from characteristic $characteristicId");
     }
   }
 
