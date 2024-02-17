@@ -28,10 +28,13 @@ class _BluetoothPageState extends State<BluetoothPage> {
         final device = deviceNotifier.device;
         if (device != null && !dialogIsVisible) {
           dialogIsVisible = true;
-          showDialog(
-              context: context,
-              builder: connectingDialogBuilder,
-              barrierDismissible: false);
+          Future.delayed(Duration.zero, () {
+            device.connect();
+            showDialog(
+                context: context,
+                builder: connectingDialogBuilder,
+                barrierDismissible: false);
+          });
         }
         return child!;
       },
@@ -90,7 +93,9 @@ class _BluetoothPageState extends State<BluetoothPage> {
             callback: callback,
           );
         } else if (device!.isConnected) {
-          GoRouter.of(context).goNamed('wifi-scan');
+          Future.delayed(Duration.zero, () {
+            GoRouter.of(context).goNamed('wifi-scan');
+          });
           dialogIsVisible = false;
           return const SizedBox();
         } else {

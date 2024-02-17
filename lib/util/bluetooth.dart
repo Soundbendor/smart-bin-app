@@ -516,6 +516,7 @@ class BleDeviceScanner {
 
   /// Manages internal state when a device is discovered.
   void _handleDiscoveredDevice(DiscoveredDevice device) {
+    debug("BleDeviceScanner: Device ${device.id} scanned by library");
     final bleDevice = BleDevice(device);
     if (!_scannedDevices.containsKey(bleDevice.id)) {
       _scannedDevices[bleDevice.id] = bleDevice;
