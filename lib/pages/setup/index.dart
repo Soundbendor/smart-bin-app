@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:binsight_ai/widgets/background.dart';
 
 /// The splash screen prompting the user to continue setting up their application.
@@ -49,11 +48,7 @@ class SplashPage extends StatelessWidget {
                             textStyle: textTheme.labelLarge,
                             backgroundColor: colorScheme.primary),
                         onPressed: () async {
-                          PermissionStatus status =
-                              await Permission.location.request();
-                          if (status == PermissionStatus.granted) {
-                            context.goNamed('bluetooth');
-                          }
+                          context.goNamed('bluetooth');
                         },
                         child: const Text('Continue'),
                       ),

@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/bluetooth_bin_data.dart';
-import 'package:binsight_ai/util/bluetooth_exception.dart';
-import 'package:binsight_ai/util/print.dart';
+import 'package:binsight_ai/util/bluetooth_dialog_strings.dart';
 import 'package:binsight_ai/widgets/background.dart';
+import 'package:binsight_ai/widgets/error_dialog.dart';
 
 /// Page which displays scanned Bluetooth devices.
 class BluetoothPage extends StatefulWidget {
@@ -56,54 +56,14 @@ class _BluetoothPageState extends State<BluetoothPage> {
         final device = deviceNotifier.device;
         final error = deviceNotifier.error;
         if (deviceNotifier.hasError()) {
-          String title;
-          String description;
-          Function() callback;
-          if (error is BleBluetoothNotSupportedException) {
-            title = "Bluetooth is not supported";
-            description =
-                "This device does not support Bluetooth, which is required for this step. To still receive data, manually enter your bin's ID via the help menu.";
-            callback = () {
-              dialogIsVisible = false;
-              Navigator.of(context).pop();
-            };
-          } else if (error is BleBluetoothDisabledException) {
-            title = "Bluetooth is disabled";
-            description = "Please enable Bluetooth to continue set up.";
-            callback = () {
-              dialogIsVisible = false;
-              Navigator.of(context).pop();
-            };
-          } else if (error is BlePermissionException) {
-            title = "Insufficient permissions";
-            description = """
-              Please grant the necessary permissions to continue.
-              To do so, head to your system's application settings and manually grant the permissions.
-              You may need to restart the app after granting permissions.
-              The error message was: '${error.message}'.
-            """;
-            callback = () {
-              dialogIsVisible = false;
-              Navigator.of(context).pop();
-            };
-          } else if (error is BleConnectionException) {
-            title = "Failed to connect";
-            description =
-                "Failed to connect to the bin. Please make sure the bin is powered on and in range.";
-            callback = () {
-              dialogIsVisible = false;
-              Navigator.of(context).pop();
-            };
-          } else {
-            throw UnimplementedError(
-                "Error $error is not handled in connectingDialogBuilder");
-          }
+          final strings = getStringsFromException(error);
           return ErrorDialog(
-              text: title,
-              description: description,
+              text: strings.title,
+              description: strings.description,
               callback: () {
+                Navigator.of(context).pop();
                 setState(() {
-                  callback();
+                  dialogIsVisible = false;
                   deviceNotifier.resetDevice();
                 });
               });
@@ -134,36 +94,6 @@ class _BluetoothPageState extends State<BluetoothPage> {
   }
 }
 
-class ErrorDialog extends StatelessWidget {
-  const ErrorDialog({
-    super.key,
-    required this.text,
-    required this.description,
-    required this.callback,
-  });
-
-  final String text;
-  final String description;
-  final Function() callback;
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(text, style: Theme.of(context).textTheme.headlineMedium),
-      content: Text(
-        description,
-        style: Theme.of(context).textTheme.bodyMedium,
-      ),
-      actions: [
-        TextButton(
-          onPressed: callback,
-          child: const Text("OK"),
-        ),
-      ],
-    );
-  }
-}
-
 /// Displays a list of Bluetooth devices.
 class BluetoothList extends StatefulWidget {
   BluetoothList({super.key});
@@ -181,6 +111,12 @@ class _BluetoothListState extends State<BluetoothList> {
 
   /// Whether the scanner is currently scanning for devices.
   bool isScanning = false;
+
+  /// An error that may occur during the scanning process.
+  Exception? error;
+
+  /// Whether the dialog is currently visible.
+  bool isDialogVisible = false;
 
   @override
   void initState() {
@@ -206,9 +142,17 @@ class _BluetoothListState extends State<BluetoothList> {
   }
 
   /// Starts scanning for devices.
-  void startScanning() {
-    widget.scanner.startScan(serviceFilter: [mainServiceId]);
-    isScanning = true;
+  void startScanning() async {
+    try {
+      isScanning = true;
+      await widget.scanner.startScan(serviceFilter: [mainServiceId]);
+    } on Exception catch (e) {
+      stopScanning();
+      if (!mounted) return;
+      setState(() {
+        error = e;
+      });
+    }
   }
 
   /// Updates the list of devices found by the scanner.
@@ -220,6 +164,12 @@ class _BluetoothListState extends State<BluetoothList> {
 
   @override
   Widget build(BuildContext context) {
+    if (error != null && !isDialogVisible) {
+      Future.delayed(Duration.zero, () {
+        showDialog(context: context, builder: displayErrorDialog);
+      });
+    }
+
     const textSize = 20.0;
     return Scaffold(
         body: CustomBackground(
@@ -273,6 +223,20 @@ class _BluetoothListState extends State<BluetoothList> {
               ),
       ],
     )));
+  }
+
+  Widget displayErrorDialog(BuildContext context) {
+    final strings = getStringsFromException(error);
+    return ErrorDialog(
+        text: strings.title,
+        description: strings.description,
+        callback: () {
+          Navigator.of(context).pop();
+          setState(() {
+            isDialogVisible = false;
+            error = null;
+          });
+        });
   }
 
   /// Builds a list item for a Bluetooth device.
