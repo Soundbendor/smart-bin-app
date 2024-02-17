@@ -5,6 +5,7 @@ import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/bluetooth_bin_data.dart';
 import 'package:binsight_ai/util/bluetooth_exception.dart';
+import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/widgets/background.dart';
 
 /// Page which displays scanned Bluetooth devices.
@@ -27,14 +28,20 @@ class _BluetoothPageState extends State<BluetoothPage> {
       builder: (context, deviceNotifier, child) {
         final device = deviceNotifier.device;
         if (device != null && !dialogIsVisible) {
-          dialogIsVisible = true;
-          Future.delayed(Duration.zero, () {
-            device.connect();
-            showDialog(
-                context: context,
-                builder: connectingDialogBuilder,
-                barrierDismissible: false);
-          });
+          if (device.isConnected) {
+            Future.delayed(Duration.zero, () {
+              GoRouter.of(context).goNamed('wifi-scan');
+            });
+          } else {
+            dialogIsVisible = true;
+            Future.delayed(Duration.zero, () {
+              deviceNotifier.connect();
+              showDialog(
+                  context: context,
+                  builder: connectingDialogBuilder,
+                  barrierDismissible: false);
+            });
+          }
         }
         return child!;
       },
@@ -57,12 +64,14 @@ class _BluetoothPageState extends State<BluetoothPage> {
             description =
                 "This device does not support Bluetooth, which is required for this step. To still receive data, manually enter your bin's ID via the help menu.";
             callback = () {
-              GoRouter.of(context).goNamed('main');
+              dialogIsVisible = false;
+              Navigator.of(context).pop();
             };
           } else if (error is BleBluetoothDisabledException) {
             title = "Bluetooth is disabled";
             description = "Please enable Bluetooth to continue set up.";
             callback = () {
+              dialogIsVisible = false;
               Navigator.of(context).pop();
             };
           } else if (error is BlePermissionException) {
@@ -74,6 +83,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
               The error message was: '${error.message}'.
             """;
             callback = () {
+              dialogIsVisible = false;
               Navigator.of(context).pop();
             };
           } else if (error is BleConnectionException) {
@@ -81,6 +91,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
             description =
                 "Failed to connect to the bin. Please make sure the bin is powered on and in range.";
             callback = () {
+              dialogIsVisible = false;
               Navigator.of(context).pop();
             };
           } else {
@@ -88,10 +99,13 @@ class _BluetoothPageState extends State<BluetoothPage> {
                 "Error $error is not handled in connectingDialogBuilder");
           }
           return ErrorDialog(
-            text: title,
-            description: description,
-            callback: callback,
-          );
+              text: title,
+              description: description,
+              callback: () {
+                setState(() {
+                  callback();
+                });
+              });
         } else if (device!.isConnected) {
           Future.delayed(Duration.zero, () {
             GoRouter.of(context).goNamed('wifi-scan');
@@ -104,7 +118,14 @@ class _BluetoothPageState extends State<BluetoothPage> {
               "Connecting...",
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-            content: const CircularProgressIndicator(),
+            content: const SizedBox(
+              height: 50,
+              child: Center(
+                  child: SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: CircularProgressIndicator())),
+            ),
           );
         }
       },
