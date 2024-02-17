@@ -104,6 +104,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
               callback: () {
                 setState(() {
                   callback();
+                  deviceNotifier.resetDevice();
                 });
               });
         } else if (device!.isConnected) {
@@ -178,19 +179,36 @@ class _BluetoothListState extends State<BluetoothList> {
   /// The list of devices found by the scanner.
   List<BleDevice> devices = [];
 
+  /// Whether the scanner is currently scanning for devices.
+  bool isScanning = false;
+
   @override
   void initState() {
     super.initState();
-    widget.scanner.startScan(serviceFilter: [mainServiceId]);
+    startScanning();
     widget.scanner.onDeviceListUpdated(onDeviceListUpdated);
+    isScanning = true;
   }
 
   @override
   void dispose() {
-    widget.scanner.stopScan();
+    isScanning = false;
+    stopScanning();
     widget.scanner.removeListener(
         BleDeviceScannerEvents.deviceListUpdated, onDeviceListUpdated);
     super.dispose();
+  }
+
+  /// Stops scanning for devices.
+  void stopScanning() {
+    widget.scanner.stopScan();
+    isScanning = false;
+  }
+
+  /// Starts scanning for devices.
+  void startScanning() {
+    widget.scanner.startScan(serviceFilter: [mainServiceId]);
+    isScanning = true;
   }
 
   /// Updates the list of devices found by the scanner.
@@ -240,6 +258,19 @@ class _BluetoothListState extends State<BluetoothList> {
             ),
           ),
         ),
+        isScanning
+            ? const CircularProgressIndicator()
+            : ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    startScanning();
+                  });
+                },
+                child: Text("Resume Scan",
+                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        )),
+              ),
       ],
     )));
   }
@@ -258,9 +289,11 @@ class _BluetoothListState extends State<BluetoothList> {
           title: Text(device.name),
           trailing: const Icon(Icons.keyboard_arrow_right),
           onTap: () {
-            widget.scanner.stopScan();
-            Provider.of<DeviceNotifier>(context, listen: false)
-                .setDevice(device);
+            setState(() {
+              stopScanning();
+              Provider.of<DeviceNotifier>(context, listen: false)
+                  .setDevice(device);
+            });
           }),
     );
   }

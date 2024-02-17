@@ -19,6 +19,12 @@ class DeviceNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  void resetDevice() async {
+    device?.disconnect();
+    device = null;
+    notifyListeners();
+  }
+
   Future<void> connect() async {
     try {
       error = null;
