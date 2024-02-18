@@ -8,11 +8,12 @@ import 'package:go_router/go_router.dart';
 String formatDetectionTitle(Detection detection) {
   if (detection.boxes != null) {
     final boxData = jsonDecode(detection.boxes!);
-    final List<String> keys = [];
-    for (final box in boxData) {
-      keys.add(box.keys.first);
+    final List<String> names = [];
+    for (var label in boxData) {
+      String name = label[0];
+      names.add(name);
     }
-    return "Detection ${detection.imageId}: ${keys.join(", ")}";
+    return "Detection ${detection.imageId}: ${names.join(", ")}";
   } else {
     return "Detection ${detection.imageId}: pending analysis...";
   }

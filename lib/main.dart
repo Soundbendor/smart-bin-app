@@ -71,7 +71,7 @@ void main() async {
             temperature: 10.0,
             co2: 0.5,
             vo2: 0.5,
-            boxes: '[["Apple", [11.1, 16.4]], ["Apple", [10.0, 292.7]]]'),
+            boxes: '[["Kiwi", [11.1, 16.4]], ["Apple", [10.0, 292.7]]]'),
       ];
       for (final detection in fakeDetections) {
         await detection.save();
