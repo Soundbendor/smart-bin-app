@@ -19,25 +19,54 @@ class WifiScanPage extends StatefulWidget {
 }
 
 class _WifiScanPageState extends State<WifiScanPage> {
+  /// The list of WiFi networks scanned.
   List<WifiScanResult> wifiResults = [];
+
+  /// Whether the error modal is currently open.
+  bool isModalOpen = false;
+
+  /// Whether the device is currently scanning for WiFi networks.
+  bool isScanning = false;
+
+  /// The error that occurred.
+  Exception? error;
+
+  /// The future for checking disconnect status of device.
+  Future? disconnectFuture;
 
   @override
   void initState() {
     super.initState();
-    widget.device.subscribeToCharacteristic(
-        serviceId: mainServiceId,
-        characteristicId: wifiListCharacteristicId,
-        onNotification: (data) {
-          try {
-            final List<dynamic> content = jsonDecode(utf8.decode(data));
-            setState(() {
-              wifiResults =
-                  content.map((e) => WifiScanResult(e[0], e[1], e[2])).toList();
-            });
-          } catch (e) {
-            // likely empty message
-          }
-        });
+  }
+
+  void scanForWifi() async {
+    try {
+      isScanning = true;
+      await widget.device.subscribeToCharacteristic(
+          serviceId: mainServiceId,
+          characteristicId: wifiListCharacteristicId,
+          onNotification: (data) {
+            try {
+              final List<dynamic> content = jsonDecode(utf8.decode(data));
+              setState(() {
+                wifiResults = content
+                    .map((e) => WifiScanResult(e[0], e[1], e[2]))
+                    .toList();
+              });
+            } catch (e) {
+              // likely empty message
+            }
+          });
+    } on Exception catch (e) {
+      widget.device
+          .unsubscribeFromCharacteristic(
+              serviceId: mainServiceId,
+              characteristicId: wifiListCharacteristicId)
+          .ignore();
+      setState(() {
+        error = e;
+      });
+    }
   }
 
   @override
@@ -46,6 +75,14 @@ class _WifiScanPageState extends State<WifiScanPage> {
 
     return Consumer<DeviceNotifier>(
       builder: (context, value, child) {
+        final device = value.device!;
+        if (!isModalOpen) {
+          if (error != null) {
+            // TODO: show error modal
+          } else if (!device.isConnected) {
+            // TODO: show disconnect modal
+          }
+        }
         return child!;
       },
       child: Scaffold(
@@ -85,6 +122,22 @@ class _WifiScanPageState extends State<WifiScanPage> {
                   ),
                 ),
               ),
+              isScanning
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          scanForWifi();
+                        });
+                      },
+                      child: Text("Resume Scan",
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              )),
+                    ),
             ],
           ),
         ),
