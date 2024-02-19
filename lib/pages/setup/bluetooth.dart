@@ -165,6 +165,7 @@ class _BluetoothListState extends State<BluetoothList> {
   @override
   Widget build(BuildContext context) {
     if (error != null && !isDialogVisible) {
+      isDialogVisible = true;
       Future.delayed(Duration.zero, () {
         showDialog(context: context, builder: displayErrorDialog);
       });
@@ -234,7 +235,6 @@ class _BluetoothListState extends State<BluetoothList> {
         callback: () {
           Navigator.of(context).pop();
           setState(() {
-            isDialogVisible = false;
             error = null;
           });
         });
