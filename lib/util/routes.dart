@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/pages/detection/annotation.dart';
 import 'package:binsight_ai/pages/detection/detection.dart';
 import 'package:binsight_ai/pages/detection/index.dart';
@@ -90,7 +92,8 @@ List<RouteBase> getRoutes() {
               name: 'wifi-scan',
               path: 'wifi-scan',
               builder: (BuildContext context, GoRouterState state) {
-                return const WifiScanPage();
+                final device = Provider.of<DeviceNotifier>(context, listen: false).device;
+                return WifiScanPage(device: device!);
               }),
           // `/set-up/wifi` - selecting wifi page
           GoRoute(
