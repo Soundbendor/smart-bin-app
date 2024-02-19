@@ -1,11 +1,13 @@
 import 'dart:convert';
-import 'package:binsight_ai/util/bluetooth_bin_data.dart';
-import 'package:binsight_ai/widgets/background.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/providers.dart';
+import 'package:binsight_ai/util/bluetooth_bin_data.dart';
+import 'package:binsight_ai/util/bluetooth_exception.dart';
+import 'package:binsight_ai/widgets/background.dart';
+import 'package:binsight_ai/widgets/error_dialog.dart';
 
 /// Displays the WiFi configuration page with background and padding.
 class WifiScanPage extends StatefulWidget {
@@ -64,6 +66,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
               characteristicId: wifiListCharacteristicId)
           .ignore();
       setState(() {
+        isScanning = false;
         error = e;
       });
     }
@@ -77,10 +80,55 @@ class _WifiScanPageState extends State<WifiScanPage> {
       builder: (context, value, child) {
         final device = value.device!;
         if (!isModalOpen) {
-          if (error != null) {
-            // TODO: show error modal
+          if (error != null && error is BleOperationFailureException) {
+            isModalOpen = true;
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return ErrorDialog(
+                      text: "Scan Failure",
+                      description: """
+Unable to scan for WiFi networks. If this error persists, please try restarting the bin, or try again later.
+The error was: ${(error as BleOperationFailureException).message}.
+""",
+                      callback: () {
+                        setState(() {
+                          isModalOpen = false;
+                          error = null;
+                        });
+                        Navigator.of(context).pop();
+                      });
+                });
           } else if (!device.isConnected) {
-            // TODO: show disconnect modal
+            isModalOpen = true;
+            showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (context) {
+                  disconnectFuture =
+                      Future.delayed(const Duration(seconds: 5), () => {});
+                  return Consumer<DeviceNotifier>(
+                    builder: (context, notifier, child) {
+                      if (notifier.device!.isConnected) {
+                        Future.delayed(Duration.zero, () {
+                          Navigator.of(context).pop();
+                          setState(() => isModalOpen = false);
+                        });
+                        return const SizedBox();
+                      }
+                      return child!;
+                    },
+                    child: WifiScanDisconnectDialog(
+                        callback: (context) {
+                          Navigator.of(context).pop();
+                          setState(() {
+                            isModalOpen = false;
+                            isScanning = false;
+                          });
+                        },
+                        disconnectFuture: disconnectFuture),
+                  );
+                });
           }
         }
         return child!;
@@ -157,6 +205,51 @@ class _WifiScanPageState extends State<WifiScanPage> {
           onTap: () async {
             GoRouter.of(context).goNamed('wifi', extra: wifiResult);
           }),
+    );
+  }
+}
+
+class WifiScanDisconnectDialog extends StatelessWidget {
+  const WifiScanDisconnectDialog({
+    super.key,
+    required this.callback,
+    required this.disconnectFuture,
+  });
+
+  final Null Function(dynamic context) callback;
+  final Future? disconnectFuture;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      builder: (context, future) {
+        final textTheme = Theme.of(context).textTheme;
+        if (future.connectionState == ConnectionState.done) {
+          return ErrorDialog(
+            text: "Device Disconnected",
+            description:
+                "Unable to connect to the device. Please make sure the bin is powered on and in range.",
+            callback: () {
+              callback(context);
+            },
+          );
+        } else {
+          return AlertDialog(
+            title: Text("Device Disconnected", style: textTheme.headlineMedium),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("The device has disconnected. Reconnecting...",
+                    style: textTheme.bodyMedium),
+                const SizedBox(height: 10),
+                const SizedBox(
+                    height: 20, width: 20, child: CircularProgressIndicator()),
+              ],
+            ),
+          );
+        }
+      },
+      future: disconnectFuture,
     );
   }
 }
