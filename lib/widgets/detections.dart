@@ -19,7 +19,7 @@ String formatDetectionTitle(Detection detection) {
   }
 }
 
-void _onTileTap(BuildContext context, Detection detection) {
+void onTileTap(BuildContext context, Detection detection) {
   GoRouter.of(context).push("/main/detection/${detection.imageId}");
 }
 
@@ -42,7 +42,7 @@ class DetectionLargeListItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: () => _onTileTap(context, detection),
+        onTap: () => onTileTap(context, detection),
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(9.0),
@@ -117,7 +117,7 @@ class DetectionSmallListItem extends StatelessWidget {
       subtitle:
           Text(detection.timestamp.toString(), style: textTheme.bodyMedium),
       trailing: const Icon(Icons.arrow_forward_ios),
-      onTap: () => _onTileTap(context, detection),
+      onTap: () => onTileTap(context, detection),
     );
   }
 }

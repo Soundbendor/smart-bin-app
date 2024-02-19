@@ -161,7 +161,8 @@ class Detection extends Model {
   /// Returns all detections.
   static Future<List<Detection>> all() async {
     Database db = await getDatabaseConnection();
-    List<Map<String, dynamic>> results = await db.query("detections");
+    List<Map<String, dynamic>> results =
+        await db.query("detections", orderBy: "timestamp DESC");
     return results
         .map((result) => Detection.fromMap(
               result,

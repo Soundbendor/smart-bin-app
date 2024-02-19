@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:binsight_ai/database/models/detection.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -17,8 +14,8 @@ class CircleChart extends StatefulWidget {
 class _CircleChartState extends State<CircleChart> {
   @override
   Widget build(BuildContext context) {
-    List<_PieData> pieData = widget.data.entries.map((entry) {
-      return _PieData(entry.value, entry.key);
+    List<_ChartData> pieData = widget.data.entries.map((entry) {
+      return _ChartData(entry.value, entry.key);
     }).toList();
 
     return Center(
@@ -33,21 +30,21 @@ class _CircleChartState extends State<CircleChart> {
           Color(0xFFF0C27C),
           Color(0xFFD0B4CF),
         ],
-        series: <DoughnutSeries<_PieData, String>>[
-          DoughnutSeries<_PieData, String>(
-            radius: '60%',
+        series: <DoughnutSeries<_ChartData, String>>[
+          DoughnutSeries<_ChartData, String>(
+            radius: '65%',
             explode: true,
             explodeIndex: 0,
             dataSource: pieData,
-            xValueMapper: (_PieData data, _) => data.text!,
-            yValueMapper: (_PieData data, _) => data.xData,
-            dataLabelMapper: (_PieData data, _) => data.text!,
+            xValueMapper: (_ChartData data, _) => data.text!,
+            yValueMapper: (_ChartData data, _) => data.xData,
+            dataLabelMapper: (_ChartData data, _) => data.text!,
             dataLabelSettings: const DataLabelSettings(
               isVisible: true,
               labelPosition: ChartDataLabelPosition.outside,
               overflowMode: OverflowMode.shift,
               connectorLineSettings: ConnectorLineSettings(
-                  type: ConnectorType.line, length: "60%"),
+                  type: ConnectorType.line, length: "50%"),
             ),
           ),
         ],
@@ -56,8 +53,8 @@ class _CircleChartState extends State<CircleChart> {
   }
 }
 
-class _PieData {
-  _PieData(this.xData, [this.text]);
+class _ChartData {
+  _ChartData(this.xData, [this.text]);
   final num xData;
   String? text;
 }
