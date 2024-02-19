@@ -16,6 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Detection> detections = [];
   Map<String, int> labelCounts = {};
+  Map<DateTime, double> weightCounts = {};
   late Future loadDetectionFuture;
 
   @override
@@ -35,7 +36,7 @@ class _HomePageState extends State<HomePage> {
     if (detections.isNotEmpty) {
       latest = detections[0];
     }
-
+    print(weightCounts);
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -46,7 +47,9 @@ class _HomePageState extends State<HomePage> {
             data: labelCounts,
             title: "Detections by food category",
           ),
-          LineChart(detections: detections)
+          FractionallySizedBox(
+              widthFactor: 0.9,
+              child: LineChart(data: weightCounts, title: "Compost Over Time"))
         ],
       ),
     );
@@ -57,6 +60,11 @@ class _HomePageState extends State<HomePage> {
       List<Map<String, dynamic>> detectionsMaps =
           detections.map((detection) => detection.toMap()).toList();
       for (Map<String, dynamic> detection in detectionsMaps) {
+        DateTime timestamp = DateTime.parse(detection["timestamp"]);
+        DateTime monthDay =
+            DateTime(timestamp.year, timestamp.month, timestamp.day);
+        weightCounts[monthDay] =
+            (weightCounts[monthDay] ?? 0.0) + detection["weight"];
         String boxes = detection["boxes"];
         List<dynamic> boxesList = jsonDecode(boxes);
         for (var label in boxesList) {

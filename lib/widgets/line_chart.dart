@@ -1,19 +1,33 @@
-import 'package:binsight_ai/database/models/detection.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 
 class LineChart extends StatelessWidget {
-  final List<Detection> detections;
-  const LineChart({super.key, required this.detections});
+  final Map<DateTime, double> data;
+  final String title;
+  const LineChart({super.key, required this.data, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    List<_ChartData> lineData = detections.map((detection) {
-      return _ChartData(detection.timestamp, detection.weight);
-    }).toList();
+    List<_ChartData> lineData = data.entries
+        .map((entry) => _ChartData(entry.key, entry.value))
+        .toList();
+
+    lineData.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+
+    while (lineData.length < 7) {
+      DateTime latestTimestamp = lineData.isNotEmpty
+          ? lineData
+              .map((data) => data.timestamp)
+              .reduce((a, b) => a.isAfter(b) ? a : b)
+          : DateTime.now();
+
+      DateTime nextDay = latestTimestamp.add(const Duration(days: 1));
+      lineData.add(_ChartData(nextDay, 0.0));
+    }
+
     return SfCartesianChart(
-      title: const ChartTitle(text: "Compost over time"),
+      title: ChartTitle(text: title),
       primaryXAxis: DateTimeAxis(
         isVisible: true,
         dateFormat: DateFormat('M/d'),
@@ -31,6 +45,7 @@ class LineChart extends StatelessWidget {
 
 class _ChartData {
   _ChartData(this.timestamp, this.weight);
+
   final DateTime timestamp;
-  final double? weight;
+  final double weight;
 }
