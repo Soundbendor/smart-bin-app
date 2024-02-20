@@ -6,6 +6,7 @@ class BleExceptionDialogStrings {
   final String description;
 }
 
+/// Returns the title and description for a given exception.
 BleExceptionDialogStrings getStringsFromException(Exception? error) {
   String title;
   String description;

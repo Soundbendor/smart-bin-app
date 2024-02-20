@@ -88,6 +88,9 @@ class _WifiScanPageState extends State<WifiScanPage> {
         .ignore();
   }
 
+  /// Fetches the WiFi network list manually.
+  ///
+  /// This may speed up when items appear in the list at the start.
   void fetchWifiList() async {
     try {
       if (wifiResults.isNotEmpty) return;
@@ -230,7 +233,7 @@ The error was: ${(error as BleOperationFailureException).message}.
             Icon(icon),
           ]),
           trailing: const Icon(Icons.keyboard_arrow_right),
-          onTap: () async {
+          onTap: () {
             goToWifiConfiguration(wifiResult);
           }),
     );

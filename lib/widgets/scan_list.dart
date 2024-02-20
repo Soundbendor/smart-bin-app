@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+/// A list container with a gradient mask at the top and bottom.
+///
+/// [onResume] is a callback to be run when the 'resume' button is pressed.
+/// [inProgress] determines whether a spinner or the 'resume' button is visible. When true, the spinner is visible.
 class ScanList extends StatelessWidget {
   const ScanList({
     super.key,

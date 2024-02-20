@@ -47,7 +47,7 @@ class SplashPage extends StatelessWidget {
                             padding: const EdgeInsets.all(16.0),
                             textStyle: textTheme.labelLarge,
                             backgroundColor: colorScheme.primary),
-                        onPressed: () async {
+                        onPressed: () {
                           context.goNamed('bluetooth');
                         },
                         child: const Text('Continue'),
