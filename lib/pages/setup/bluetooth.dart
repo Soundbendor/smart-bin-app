@@ -1,4 +1,3 @@
-import 'package:binsight_ai/util/print.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -6,8 +5,11 @@ import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/bluetooth_bin_data.dart';
 import 'package:binsight_ai/util/bluetooth_dialog_strings.dart';
+import 'package:binsight_ai/util/async_ops.dart';
+import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/widgets/background.dart';
 import 'package:binsight_ai/widgets/error_dialog.dart';
+import 'package:binsight_ai/widgets/scan_list.dart';
 
 /// Page which displays scanned Bluetooth devices.
 class BluetoothPage extends StatefulWidget {
@@ -30,12 +32,12 @@ class _BluetoothPageState extends State<BluetoothPage> {
         final device = deviceNotifier.device;
         if (device != null && !dialogIsVisible) {
           if (device.isConnected) {
-            Future.delayed(Duration.zero, () {
+            runSoon(() {
               GoRouter.of(context).goNamed('wifi-scan');
             });
           } else {
             dialogIsVisible = true;
-            Future.delayed(Duration.zero, () {
+            runSoon(() {
               deviceNotifier.connect();
               showDialog(
                   context: context,
@@ -69,7 +71,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
                 });
               });
         } else if (device!.isConnected) {
-          Future.delayed(Duration.zero, () {
+          runSoon(() {
             GoRouter.of(context).goNamed('wifi-scan');
           });
           dialogIsVisible = false;
@@ -169,64 +171,26 @@ class _BluetoothListState extends State<BluetoothList> {
   Widget build(BuildContext context) {
     if (error != null && !isDialogVisible) {
       isDialogVisible = true;
-      Future.delayed(Duration.zero, () {
+      runSoon(() {
         showDialog(context: context, builder: displayErrorDialog);
       });
     }
 
-    const textSize = 20.0;
     return Scaffold(
-        body: CustomBackground(
-            child: Column(
-      children: [
-        SizedBox(
-          height: (MediaQuery.of(context).size.height / 2) - (200 + textSize),
+      body: CustomBackground(
+        child: ScanList(
+          itemCount: devices.length,
+          listBuilder: buildDeviceItem,
+          onResume: () {
+            setState(() {
+              startScanning();
+            });
+          },
+          title: "Find your bin!",
+          inProgress: isScanning,
         ),
-        Text(
-          "Find your bin!",
-          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                fontSize: textSize,
-              ),
-        ),
-        Container(
-          color: const Color.fromRGBO(0, 0, 0, 0),
-          height: MediaQuery.of(context).size.height / 2.5,
-          child: ShaderMask(
-            shaderCallback: (Rect rect) {
-              return const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color.fromARGB(255, 0, 0, 0),
-                  Colors.transparent,
-                  Colors.transparent,
-                  Color.fromARGB(255, 0, 0, 0)
-                ],
-                stops: [0.0, 0.2, 0.9, 1.0],
-              ).createShader(rect);
-            },
-            blendMode: BlendMode.dstOut,
-            child: ListView.builder(
-              itemCount: devices.length,
-              itemBuilder: buildDeviceItem,
-            ),
-          ),
-        ),
-        isScanning
-            ? const CircularProgressIndicator()
-            : ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    startScanning();
-                  });
-                },
-                child: Text("Resume Scan",
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        )),
-              ),
-      ],
-    )));
+      ),
+    );
   }
 
   /// Displays an error dialog.

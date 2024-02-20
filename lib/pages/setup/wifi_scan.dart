@@ -1,9 +1,10 @@
 import 'dart:convert';
-import 'package:binsight_ai/util/bluetooth_dialog_strings.dart';
-import 'package:binsight_ai/util/print.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:binsight_ai/util/async_ops.dart';
+import 'package:binsight_ai/util/bluetooth_dialog_strings.dart';
+import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/util/bluetooth_bin_data.dart';
@@ -11,6 +12,7 @@ import 'package:binsight_ai/util/bluetooth_exception.dart';
 import 'package:binsight_ai/util/wifi_scan.dart';
 import 'package:binsight_ai/widgets/background.dart';
 import 'package:binsight_ai/widgets/error_dialog.dart';
+import 'package:binsight_ai/widgets/scan_list.dart';
 
 /// Displays the WiFi configuration page with background and padding.
 class WifiScanPage extends StatefulWidget {
@@ -93,8 +95,6 @@ class _WifiScanPageState extends State<WifiScanPage> {
 
   @override
   Widget build(BuildContext context) {
-    const textSize = 20.0;
-
     return Consumer<DeviceNotifier>(
       builder: (context, value, child) {
         final device = value.device!;
@@ -115,7 +115,7 @@ The error was: ${(error as BleOperationFailureException).message}.
               text = strings.title;
               description = strings.description;
             }
-            Future.delayed(Duration.zero, () {
+            runSoon(() {
               showDialog(
                   context: context,
                   builder: (context) {
@@ -133,7 +133,7 @@ The error was: ${(error as BleOperationFailureException).message}.
             });
           } else if (!device.isConnected && isScanning) {
             isModalOpen = true;
-            Future.delayed(Duration.zero, () {
+            runSoon(() {
               showDialog(
                   barrierDismissible: false,
                   context: context,
@@ -143,7 +143,7 @@ The error was: ${(error as BleOperationFailureException).message}.
                     return Consumer<DeviceNotifier>(
                       builder: (context, notifier, child) {
                         if (notifier.device!.isConnected) {
-                          Future.delayed(Duration.zero, () {
+                          runSoon(() {
                             Navigator.of(context).pop();
                             setState(() {
                               isModalOpen = false;
@@ -174,57 +174,16 @@ The error was: ${(error as BleOperationFailureException).message}.
       child: Scaffold(
         body: CustomBackground(
           imageURL: "assets/images/FlowersBackground.png",
-          child: Column(
-            children: [
-              SizedBox(
-                height:
-                    (MediaQuery.of(context).size.height / 2) - (200 + textSize),
-              ),
-              const Text("Select Your Network!",
-                  style: TextStyle(
-                    fontSize: textSize,
-                  )),
-              Container(
-                color: const Color.fromRGBO(0, 0, 0, 0),
-                height: MediaQuery.of(context).size.height / 2.5,
-                child: ShaderMask(
-                  shaderCallback: (Rect rect) {
-                    return const LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Color.fromARGB(255, 0, 0, 0),
-                        Colors.transparent,
-                        Colors.transparent,
-                        Color.fromARGB(255, 0, 0, 0)
-                      ],
-                      stops: [0.0, 0.2, 0.9, 1.0],
-                    ).createShader(rect);
-                  },
-                  blendMode: BlendMode.dstOut,
-                  child: ListView.builder(
-                    itemCount: wifiResults.length,
-                    itemBuilder: buildWifiItem,
-                  ),
-                ),
-              ),
-              isScanning
-                  ? const CircularProgressIndicator()
-                  : ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          startScanning();
-                        });
-                      },
-                      child: Text("Resume Scan",
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelLarge!
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              )),
-                    ),
-            ],
+          child: ScanList(
+            itemCount: wifiResults.length,
+            listBuilder: buildWifiItem,
+            onResume: () {
+              setState(() {
+                startScanning();
+              });
+            },
+            title: "Select Your Network!",
+            inProgress: isScanning,
           ),
         ),
       ),
@@ -232,7 +191,7 @@ The error was: ${(error as BleOperationFailureException).message}.
   }
 
   /// Builds a WiFi network list item.
-  Widget? buildWifiItem(BuildContext context, int index) {
+  Widget buildWifiItem(BuildContext context, int index) {
     final wifiResult = wifiResults[index];
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
