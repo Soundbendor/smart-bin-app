@@ -212,12 +212,23 @@ The error was: ${(error as BleOperationFailureException).message}.
   /// Builds a WiFi network list item.
   Widget buildWifiItem(BuildContext context, int index) {
     final wifiResult = wifiResults[index];
+    IconData icon;
+    if (wifiResult.security.startsWith("WPA")) {
+      icon = Icons.lock_outline;
+    } else {
+      icon = Icons.lock_open;
+    }
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       child: ListTile(
           leading: const Icon(Icons.wifi),
-          title: Text(wifiResult.ssid),
+          title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(wifiResult.ssid, softWrap: true),
+                Icon(icon),
+              ]),
           trailing: const Icon(Icons.keyboard_arrow_right),
           onTap: () async {
             goToWifiConfiguration(wifiResult);
