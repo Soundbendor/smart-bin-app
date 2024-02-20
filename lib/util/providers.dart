@@ -20,9 +20,21 @@ class DeviceNotifier with ChangeNotifier {
   }
 
   void resetDevice() async {
+    device?.removeListener(BleDeviceClientEvents.connected, onConnectionChange);
+    device?.removeListener(
+        BleDeviceClientEvents.disconnected, onConnectionChange);
     device?.disconnect();
     device = null;
     notifyListeners();
+  }
+
+  void onConnectionChange(_) {
+    notifyListeners();
+  }
+
+  void listenForConnectionEvents() {
+    device?.onConnected(onConnectionChange);
+    device?.onDisconnected(onConnectionChange);
   }
 
   Future<void> connect() async {

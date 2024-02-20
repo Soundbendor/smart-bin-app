@@ -256,8 +256,9 @@ class _BluetoothListState extends State<BluetoothList> {
           onTap: () {
             setState(() {
               stopScanning();
-              Provider.of<DeviceNotifier>(context, listen: false)
-                  .setDevice(device);
+              final deviceProvider = Provider.of<DeviceNotifier>(context, listen: false);
+              deviceProvider.setDevice(device);
+              deviceProvider.listenForConnectionEvents();
             });
           }),
     );

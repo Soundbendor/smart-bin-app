@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:binsight_ai/util/bluetooth_dialog_strings.dart';
+import 'package:binsight_ai/util/print.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -40,12 +42,12 @@ class _WifiScanPageState extends State<WifiScanPage> {
   @override
   void initState() {
     super.initState();
+    startScanning();
   }
 
   /// Begins the subscription for WiFi networks scan.
   void startScanning() async {
     try {
-      isScanning = true;
       await widget.device.subscribeToCharacteristic(
           serviceId: mainServiceId,
           characteristicId: wifiListCharacteristicId,
@@ -61,6 +63,9 @@ class _WifiScanPageState extends State<WifiScanPage> {
               // likely empty message
             }
           });
+      setState(() {
+        isScanning = true;
+      });
     } on Exception catch (e) {
       stopScanning();
       setState(() {
@@ -70,6 +75,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
     }
   }
 
+  /// Stops scanning for WiFi networks.
   void stopScanning() {
     widget.device
         .unsubscribeFromCharacteristic(
@@ -78,6 +84,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
         .ignore();
   }
 
+  /// Navigates to the WiFi configuration page with the selected WiFi network.
   void goToWifiConfiguration(WifiScanResult wifiResult) {
     stopScanning();
     isScanning = false;
@@ -91,56 +98,71 @@ class _WifiScanPageState extends State<WifiScanPage> {
     return Consumer<DeviceNotifier>(
       builder: (context, value, child) {
         final device = value.device!;
+        debug("Connected = ${device.isConnected}");
         if (!isModalOpen) {
-          if (error != null && error is BleOperationFailureException) {
+          if (error != null) {
             isModalOpen = true;
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return ErrorDialog(
-                      text: "Scan Failure",
-                      description: """
+            String text;
+            String description;
+            if (error is BleOperationFailureException) {
+              text = "Scan Failure";
+              description = """
 Unable to scan for WiFi networks. If this error persists, please try restarting the bin, or try again later.
 The error was: ${(error as BleOperationFailureException).message}.
-""",
-                      callback: () {
-                        setState(() {
-                          isModalOpen = false;
-                          error = null;
-                        });
-                        Navigator.of(context).pop();
-                      });
-                });
-          } else if (!device.isConnected) {
-            isModalOpen = true;
-            showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (context) {
-                  disconnectFuture =
-                      Future.delayed(const Duration(seconds: 5), () => {});
-                  return Consumer<DeviceNotifier>(
-                    builder: (context, notifier, child) {
-                      if (notifier.device!.isConnected) {
-                        Future.delayed(Duration.zero, () {
-                          Navigator.of(context).pop();
-                          setState(() => isModalOpen = false);
-                        });
-                        return const SizedBox();
-                      }
-                      return child!;
-                    },
-                    child: WifiScanDisconnectDialog(
-                        callback: (context) {
-                          Navigator.of(context).pop();
+""";
+            } else {
+              final strings = getStringsFromException(error);
+              text = strings.title;
+              description = strings.description;
+            }
+            Future.delayed(Duration.zero, () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return ErrorDialog(
+                        text: text,
+                        description: description,
+                        callback: () {
                           setState(() {
                             isModalOpen = false;
-                            isScanning = false;
+                            error = null;
                           });
-                        },
-                        disconnectFuture: disconnectFuture),
-                  );
-                });
+                          Navigator.of(context).pop();
+                        });
+                  });
+            });
+          } else if (!device.isConnected && isScanning) {
+            isModalOpen = true;
+            Future.delayed(Duration.zero, () {
+              showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (context) {
+                    disconnectFuture =
+                        Future.delayed(const Duration(seconds: 25), () => {});
+                    return Consumer<DeviceNotifier>(
+                      builder: (context, notifier, child) {
+                        if (notifier.device!.isConnected) {
+                          Future.delayed(Duration.zero, () {
+                            Navigator.of(context).pop();
+                            setState(() => isModalOpen = false);
+                          });
+                          return const SizedBox();
+                        }
+                        return child!;
+                      },
+                      child: WifiScanDisconnectDialog(
+                          callback: (context) {
+                            Navigator.of(context).pop();
+                            setState(() {
+                              isModalOpen = false;
+                              isScanning = false;
+                            });
+                          },
+                          disconnectFuture: disconnectFuture),
+                    );
+                  });
+            });
           }
         }
         return child!;
@@ -249,7 +271,7 @@ class WifiScanDisconnectDialog extends StatelessWidget {
         } else {
           return AlertDialog(
             title: Text("Device Disconnected", style: textTheme.headlineMedium),
-            content: Row(
+            content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
@@ -257,8 +279,12 @@ class WifiScanDisconnectDialog extends StatelessWidget {
                   style: textTheme.bodyMedium,
                   softWrap: true,
                 ),
-                const SizedBox(
-                    height: 20, width: 20, child: CircularProgressIndicator()),
+                const Center(
+                  child: SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator()),
+                ),
               ],
             ),
           );
