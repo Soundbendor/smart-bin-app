@@ -1,3 +1,4 @@
+import 'package:binsight_ai/widgets/background.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,6 @@ class WifiConfigurationPage extends StatefulWidget {
 
 /// State class for WifiConfigurationWidget
 class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
-
   bool isLoading = false;
 
   @override
@@ -27,53 +27,50 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
     TextEditingController ssidController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
 
-    void sendData(String deviceId) async {
-    }
+    void sendData(String deviceId) async {}
 
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-        body: Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage("assets/images/FlowersBackground.png"),
-            fit: BoxFit.cover),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Connect to Compost Bin', style: textTheme.headlineMedium),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: TextField(
-              controller: ssidController..text = widget.wifiResult.ssid,
-              decoration: const InputDecoration(labelText: 'SSID'),
+      body: CustomBackground(
+        imageURL: "assets/images/FlowersBackground.png",
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Connect to Compost Bin', style: textTheme.headlineMedium),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: TextField(
+                controller: ssidController..text = widget.wifiResult.ssid,
+                decoration: const InputDecoration(labelText: 'SSID'),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: TextField(
-              controller: passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: TextField(
+                controller: passwordController,
+                decoration: const InputDecoration(labelText: 'Password'),
+                obscureText: true,
+              ),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // Call function to send WiFi credentials to the Compost Bin
-              // await the sending
-              if (bluetoothDevice != null) {
-                sendData(bluetoothDevice.id);
-              }
-              // Navigate to the 'main' route using GoRouter
-              context.goNamed('main');
-            },
-            child: Text('Connect',
-                style: textTheme.labelLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                )),
-          ),
-        ], // Column children
+            ElevatedButton(
+              onPressed: () {
+                // Call function to send WiFi credentials to the Compost Bin
+                // await the sending
+                if (bluetoothDevice != null) {
+                  sendData(bluetoothDevice.id);
+                }
+                // Navigate to the 'main' route using GoRouter
+                context.goNamed('main');
+              },
+              child: Text('Connect',
+                  style: textTheme.labelLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  )),
+            ),
+          ], // Column children
+        ),
       ),
-    ));
+    );
   }
 }
