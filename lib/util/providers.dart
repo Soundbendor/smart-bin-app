@@ -10,33 +10,40 @@ class DeviceNotifier with ChangeNotifier {
   /// An error that occurred during the connection process.
   Exception? error;
 
+  /// Whether an error occurred during the connection process.
   bool hasError() {
     return error != null;
   }
 
+  /// Sets the device to the new device and notifies listeners.
   void setDevice(BleDevice newDevice) {
     device = newDevice;
     notifyListeners();
   }
 
+  /// Resets and disconnects the device.
   void resetDevice() async {
-    device?.removeListener(BleDeviceClientEvents.connected, onConnectionChange);
     device?.removeListener(
-        BleDeviceClientEvents.disconnected, onConnectionChange);
+        BleDeviceClientEvents.connected, _onConnectionChange);
+    device?.removeListener(
+        BleDeviceClientEvents.disconnected, _onConnectionChange);
     device?.disconnect();
     device = null;
     notifyListeners();
   }
 
-  void onConnectionChange(_) {
+  /// Notifies listeners of a change in the connection status.
+  void _onConnectionChange(_) {
     notifyListeners();
   }
 
+  /// Listens for connection events on the device.
   void listenForConnectionEvents() {
-    device?.onConnected(onConnectionChange);
-    device?.onDisconnected(onConnectionChange);
+    device?.onConnected(_onConnectionChange);
+    device?.onDisconnected(_onConnectionChange);
   }
 
+  /// Connects to the device and notifies when the connection is complete.
   Future<void> connect() async {
     try {
       error = null;
