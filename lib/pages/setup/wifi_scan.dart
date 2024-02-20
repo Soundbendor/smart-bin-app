@@ -50,7 +50,9 @@ class _WifiScanPageState extends State<WifiScanPage> {
   /// Begins the subscription for WiFi networks scan.
   void startScanning() async {
     try {
-      // TODO: handle the case where "subscribing is not supported" (prompt user to reset their bluetooth settings for the bin)
+      setState(() {
+        isScanning = true;
+      });
       await widget.device.subscribeToCharacteristic(
           serviceId: mainServiceId,
           characteristicId: wifiListCharacteristicId,
@@ -67,9 +69,6 @@ class _WifiScanPageState extends State<WifiScanPage> {
             }
           });
       fetchWifiList();
-      setState(() {
-        isScanning = true;
-      });
     } on Exception catch (e) {
       stopScanning();
       setState(() {
@@ -120,7 +119,8 @@ class _WifiScanPageState extends State<WifiScanPage> {
   Widget build(BuildContext context) {
     return Consumer<DeviceNotifier>(
       builder: (context, value, child) {
-        final device = value.device!;
+        final device = value.device;
+        if (device == null) return const SizedBox();
         debug("Connected = ${device.isConnected}");
         if (!isModalOpen) {
           if (error != null) {
@@ -130,7 +130,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
             if (error is BleOperationFailureException) {
               text = "Scan Failure";
               description = """
-Unable to scan for WiFi networks. If this error persists, please try restarting the bin, or try again later.
+Unable to scan for WiFi networks. If this error persists, please try resetting your bluetooth settings, restarting the bin, or try again later.
 The error was: ${(error as BleOperationFailureException).message}.
 """;
             } else {
@@ -197,16 +197,34 @@ The error was: ${(error as BleOperationFailureException).message}.
       child: Scaffold(
         body: CustomBackground(
           imageURL: "assets/images/FlowersBackground.png",
-          child: ScanList(
-            itemCount: wifiResults.length,
-            listBuilder: buildWifiItem,
-            onResume: () {
-              setState(() {
-                startScanning();
-              });
-            },
-            title: "Select Your Network!",
-            inProgress: isScanning,
+          child: Column(
+            children: [
+              ScanList(
+                itemCount: wifiResults.length,
+                listBuilder: buildWifiItem,
+                onResume: () {
+                  setState(() {
+                    startScanning();
+                  });
+                },
+                title: "Select Your Network!",
+                inProgress: isScanning,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  stopScanning();
+                  Provider.of<DeviceNotifier>(context, listen: false)
+                      .resetDevice();
+                  GoRouter.of(context).goNamed("bluetooth");
+                },
+                child: Text(
+                  "Back",
+                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

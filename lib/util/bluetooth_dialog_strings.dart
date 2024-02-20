@@ -29,9 +29,16 @@ The error message was: '${error.message}'.
     title = "Failed to connect";
     description =
         "Failed to connect to the bin. Please make sure the bin is powered on and in range.";
+  } else if (error is BleInvalidOperationException ||
+      error is BleOperationFailureException) {
+    title = "Operation failed";
+    description = """
+An operation failed. Please try again. You may need to reset your bluetooth settings, restart the bin, try again, or restart the app.
+The error message was: '${error.toString()}'.
+    """;
   } else {
     throw UnimplementedError(
-        "Error $error is not handled in connectingDialogBuilder");
+        "Error $error is not handled in getStringsFromException");
   }
   return BleExceptionDialogStrings(title, description);
 }
