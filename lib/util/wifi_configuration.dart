@@ -1,29 +1,23 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/providers.dart';
+import 'package:binsight_ai/util/wifi_scan.dart';
 
 /// Widget for configuring the wifi credentials of the compost bin
 class WifiConfiguration extends StatefulWidget {
-  const WifiConfiguration({super.key, required this.ssid});
+  const WifiConfiguration({super.key, required this.wifiResult});
 
-  final String ssid;
+  final WifiScanResult wifiResult;
 
   @override
-  State<WifiConfiguration> createState() => _WifiConfigurationState(ssid: ssid);
+  State<WifiConfiguration> createState() => _WifiConfigurationState();
 }
 
 /// State class for WifiConfigurationWidget
 class _WifiConfigurationState extends State<WifiConfiguration> {
-  _WifiConfigurationState({required this.ssid});
-  final flutterReactiveBle = FlutterReactiveBle();
-  final Uuid _binServiceID = Uuid.parse("31415924535897932384626433832790");
-  final Uuid _wifiCredID = Uuid.parse("31415924535897932384626433832793");
 
-  final String ssid;
   bool isLoading = false;
 
   @override
@@ -34,16 +28,6 @@ class _WifiConfigurationState extends State<WifiConfiguration> {
     TextEditingController passwordController = TextEditingController();
 
     void sendData(String deviceId) async {
-      // await flutterReactiveBle.writeCharacteristicWithResponse(_rxCharacteristic!, value: _dataToSendText!.text.codeUnits);
-      List<int> encodedJsonData = utf8.encode(jsonEncode(
-          {"ssid": ssidController.text, "password": passwordController.text}));
-      Uuid wifiCharacteristic = Uuid.parse("31415924535897932384626433832792");
-      final characteristic = QualifiedCharacteristic(
-          serviceId: _binServiceID,
-          characteristicId: wifiCharacteristic,
-          deviceId: deviceId);
-      await flutterReactiveBle.writeCharacteristicWithResponse(characteristic,
-          value: encodedJsonData);
     }
 
     final textTheme = Theme.of(context).textTheme;
@@ -62,7 +46,7 @@ class _WifiConfigurationState extends State<WifiConfiguration> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: TextField(
-              controller: ssidController..text = ssid,
+              controller: ssidController..text = widget.wifiResult.ssid,
               decoration: const InputDecoration(labelText: 'SSID'),
             ),
           ),

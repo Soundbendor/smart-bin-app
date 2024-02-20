@@ -6,6 +6,7 @@ import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/util/bluetooth_bin_data.dart';
 import 'package:binsight_ai/util/bluetooth_exception.dart';
+import 'package:binsight_ai/util/wifi_scan.dart';
 import 'package:binsight_ai/widgets/background.dart';
 import 'package:binsight_ai/widgets/error_dialog.dart';
 
@@ -41,7 +42,8 @@ class _WifiScanPageState extends State<WifiScanPage> {
     super.initState();
   }
 
-  void scanForWifi() async {
+  /// Begins the subscription for WiFi networks scan.
+  void startScanning() async {
     try {
       isScanning = true;
       await widget.device.subscribeToCharacteristic(
@@ -60,16 +62,26 @@ class _WifiScanPageState extends State<WifiScanPage> {
             }
           });
     } on Exception catch (e) {
-      widget.device
-          .unsubscribeFromCharacteristic(
-              serviceId: mainServiceId,
-              characteristicId: wifiListCharacteristicId)
-          .ignore();
+      stopScanning();
       setState(() {
         isScanning = false;
         error = e;
       });
     }
+  }
+
+  void stopScanning() {
+    widget.device
+        .unsubscribeFromCharacteristic(
+            serviceId: mainServiceId,
+            characteristicId: wifiListCharacteristicId)
+        .ignore();
+  }
+
+  void goToWifiConfiguration(WifiScanResult wifiResult) {
+    stopScanning();
+    isScanning = false;
+    GoRouter.of(context).goNamed('wifi', extra: wifiResult);
   }
 
   @override
@@ -175,7 +187,7 @@ The error was: ${(error as BleOperationFailureException).message}.
                   : ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          scanForWifi();
+                          startScanning();
                         });
                       },
                       child: Text("Resume Scan",
@@ -193,6 +205,7 @@ The error was: ${(error as BleOperationFailureException).message}.
     );
   }
 
+  /// Builds a WiFi network list item.
   Widget? buildWifiItem(BuildContext context, int index) {
     final wifiResult = wifiResults[index];
     return Card(
@@ -203,7 +216,7 @@ The error was: ${(error as BleOperationFailureException).message}.
           title: Text(wifiResult.ssid),
           trailing: const Icon(Icons.keyboard_arrow_right),
           onTap: () async {
-            GoRouter.of(context).goNamed('wifi', extra: wifiResult);
+            goToWifiConfiguration(wifiResult);
           }),
     );
   }
@@ -236,12 +249,14 @@ class WifiScanDisconnectDialog extends StatelessWidget {
         } else {
           return AlertDialog(
             title: Text("Device Disconnected", style: textTheme.headlineMedium),
-            content: Column(
+            content: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text("The device has disconnected. Reconnecting...",
-                    style: textTheme.bodyMedium),
-                const SizedBox(height: 10),
+                Text(
+                  "The device has disconnected. Reconnecting...",
+                  style: textTheme.bodyMedium,
+                  softWrap: true,
+                ),
                 const SizedBox(
                     height: 20, width: 20, child: CircularProgressIndicator()),
               ],
@@ -252,12 +267,4 @@ class WifiScanDisconnectDialog extends StatelessWidget {
       future: disconnectFuture,
     );
   }
-}
-
-class WifiScanResult {
-  final String ssid;
-  final String security;
-  final int signalStrength;
-
-  WifiScanResult(this.ssid, this.security, this.signalStrength);
 }
