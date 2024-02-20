@@ -145,7 +145,10 @@ The error was: ${(error as BleOperationFailureException).message}.
                         if (notifier.device!.isConnected) {
                           Future.delayed(Duration.zero, () {
                             Navigator.of(context).pop();
-                            setState(() => isModalOpen = false);
+                            setState(() {
+                              isModalOpen = false;
+                              error = null;
+                            });
                           });
                           return const SizedBox();
                         }
@@ -157,6 +160,7 @@ The error was: ${(error as BleOperationFailureException).message}.
                             setState(() {
                               isModalOpen = false;
                               isScanning = false;
+                              error = null;
                             });
                           },
                           disconnectFuture: disconnectFuture),
