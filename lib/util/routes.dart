@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/util/wifi_scan.dart';
-import 'package:binsight_ai/util/wifi_configuration.dart';
+import 'package:binsight_ai/pages/setup/wifi_configuration.dart';
 import 'package:binsight_ai/pages/detection/annotation.dart';
 import 'package:binsight_ai/pages/detection/detection.dart';
 import 'package:binsight_ai/pages/detection/index.dart';
@@ -101,7 +101,7 @@ List<RouteBase> getRoutes() {
               name: 'wifi',
               path: 'wifi',
               builder: (BuildContext context, GoRouterState state) {
-                return WifiConfiguration(wifiResult: state.extra as WifiScanResult);
+                return WifiConfigurationPage(wifiResult: state.extra as WifiScanResult);
               }),
         ]),
   ];

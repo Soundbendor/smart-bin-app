@@ -6,17 +6,17 @@ import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/util/wifi_scan.dart';
 
 /// Widget for configuring the wifi credentials of the compost bin
-class WifiConfiguration extends StatefulWidget {
-  const WifiConfiguration({super.key, required this.wifiResult});
+class WifiConfigurationPage extends StatefulWidget {
+  const WifiConfigurationPage({super.key, required this.wifiResult});
 
   final WifiScanResult wifiResult;
 
   @override
-  State<WifiConfiguration> createState() => _WifiConfigurationState();
+  State<WifiConfigurationPage> createState() => _WifiConfigurationPageState();
 }
 
 /// State class for WifiConfigurationWidget
-class _WifiConfigurationState extends State<WifiConfiguration> {
+class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
 
   bool isLoading = false;
 
