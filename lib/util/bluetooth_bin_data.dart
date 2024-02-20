@@ -24,7 +24,8 @@ final mainServiceId = Uuid.parse("31415924535897932384626433832790");
 ///   "success": false,
 /// }
 /// ```
-final wifiStatusCharacteristicId = Uuid.parse("31415924535897932384626433832791");
+final wifiStatusCharacteristicId =
+    Uuid.parse("31415924535897932384626433832791");
 
 /// The characteristic ID for the WiFi credentials.
 ///
@@ -46,7 +47,8 @@ final wifiStatusCharacteristicId = Uuid.parse("31415924535897932384626433832791"
 ///   "password": "password123"
 /// }
 /// ```
-final wifiCredentialCharacteristicId = Uuid.parse("31415924535897932384626433832792");
+final wifiCredentialCharacteristicId =
+    Uuid.parse("31415924535897932384626433832792");
 
 /// The characteristic ID for the WiFi list.
 ///

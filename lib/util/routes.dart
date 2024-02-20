@@ -93,7 +93,8 @@ List<RouteBase> getRoutes() {
               name: 'wifi-scan',
               path: 'wifi-scan',
               builder: (BuildContext context, GoRouterState state) {
-                final device = Provider.of<DeviceNotifier>(context, listen: false).device;
+                final device =
+                    Provider.of<DeviceNotifier>(context, listen: false).device;
                 return WifiScanPage(device: device!);
               }),
           // `/set-up/wifi` - selecting wifi page
@@ -101,7 +102,8 @@ List<RouteBase> getRoutes() {
               name: 'wifi',
               path: 'wifi',
               builder: (BuildContext context, GoRouterState state) {
-                return WifiConfigurationPage(wifiResult: state.extra as WifiScanResult);
+                return WifiConfigurationPage(
+                    wifiResult: state.extra as WifiScanResult);
               }),
         ]),
   ];
