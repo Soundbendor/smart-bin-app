@@ -1,3 +1,4 @@
+import 'package:binsight_ai/util/print.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -147,6 +148,8 @@ class _BluetoothListState extends State<BluetoothList> {
       isScanning = true;
       await widget.scanner.startScan(serviceFilter: [mainServiceId]);
     } on Exception catch (e) {
+      debug("BLE LIST ERROR");
+      debug(e);
       stopScanning();
       if (!mounted) return;
       setState(() {
@@ -233,6 +236,7 @@ class _BluetoothListState extends State<BluetoothList> {
         text: strings.title,
         description: strings.description,
         callback: () {
+          isDialogVisible = false;
           Navigator.of(context).pop();
           setState(() {
             error = null;
@@ -256,7 +260,8 @@ class _BluetoothListState extends State<BluetoothList> {
           onTap: () {
             setState(() {
               stopScanning();
-              final deviceProvider = Provider.of<DeviceNotifier>(context, listen: false);
+              final deviceProvider =
+                  Provider.of<DeviceNotifier>(context, listen: false);
               deviceProvider.setDevice(device);
               deviceProvider.listenForConnectionEvents();
             });
