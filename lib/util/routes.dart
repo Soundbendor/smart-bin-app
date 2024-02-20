@@ -15,7 +15,7 @@ import 'package:binsight_ai/pages/setup/wifi_scan.dart';
 import 'package:binsight_ai/widgets/navigation_shell.dart';
 
 // Used for testing
-late GoRouter router;
+GoRouter? router;
 
 /// The routes for the application.
 ///
