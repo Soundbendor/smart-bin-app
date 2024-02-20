@@ -50,6 +50,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
   /// Begins the subscription for WiFi networks scan.
   void startScanning() async {
     try {
+      // TODO: handle the case where "subscribing is not supported" (prompt user to reset their bluetooth settings for the bin)
       await widget.device.subscribeToCharacteristic(
           serviceId: mainServiceId,
           characteristicId: wifiListCharacteristicId,
