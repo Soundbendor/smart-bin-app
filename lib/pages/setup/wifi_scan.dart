@@ -224,12 +224,11 @@ The error was: ${(error as BleOperationFailureException).message}.
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       child: ListTile(
           leading: const Icon(Icons.wifi),
-          title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(wifiResult.ssid, softWrap: true),
-                Icon(icon),
-              ]),
+          title:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text(wifiResult.ssid, softWrap: true),
+            Icon(icon),
+          ]),
           trailing: const Icon(Icons.keyboard_arrow_right),
           onTap: () async {
             goToWifiConfiguration(wifiResult);
