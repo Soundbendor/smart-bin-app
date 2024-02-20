@@ -1,15 +1,16 @@
-import 'package:binsight_ai/widgets/background.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/util/wifi_scan.dart';
+import 'package:binsight_ai/widgets/background.dart';
 
 /// Widget for configuring the wifi credentials of the compost bin
 class WifiConfigurationPage extends StatefulWidget {
   const WifiConfigurationPage({super.key, required this.wifiResult});
 
+  /// The wifi scan result
   final WifiScanResult wifiResult;
 
   @override
@@ -18,17 +19,31 @@ class WifiConfigurationPage extends StatefulWidget {
 
 /// State class for WifiConfigurationWidget
 class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
-  bool isLoading = false;
+  /// Whether the modal is currently open
+  bool isModalOpen = false;
+
+  /// The status of the wifi configuration
+  WifiConfigurationStatus status = WifiConfigurationStatus.waiting;
+
+  /// The error that occurred
+  Exception? error;
+
+  /// Controller for the SSID text field
+  final TextEditingController ssidController = TextEditingController();
+
+  /// Controller for the password text field
+  final TextEditingController passwordController = TextEditingController();
+
+  void sendCredentials() async {}
+
+  @override
+  void initState() {
+    super.initState();
+    ssidController.text = widget.wifiResult.ssid;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final BleDevice? bluetoothDevice =
-        Provider.of<DeviceNotifier>(context, listen: false).device;
-    TextEditingController ssidController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-
-    void sendData(String deviceId) async {}
-
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -37,11 +52,11 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Connect to Compost Bin', style: textTheme.headlineMedium),
+            Text('Connect Bin to WiFi', style: textTheme.headlineMedium),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: TextField(
-                controller: ssidController..text = widget.wifiResult.ssid,
+                controller: ssidController,
                 decoration: const InputDecoration(labelText: 'SSID'),
               ),
             ),
@@ -54,16 +69,17 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {
-                // Call function to send WiFi credentials to the Compost Bin
-                // await the sending
-                if (bluetoothDevice != null) {
-                  sendData(bluetoothDevice.id);
-                }
-                // Navigate to the 'main' route using GoRouter
-                context.goNamed('main');
-              },
+              onPressed: () {},
               child: Text('Connect',
+                  style: textTheme.labelLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  )),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                GoRouter.of(context).goNamed("wifi-scan");
+              },
+              child: Text("Back",
                   style: textTheme.labelLarge!.copyWith(
                     color: Theme.of(context).colorScheme.onPrimary,
                   )),
@@ -73,4 +89,11 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
       ),
     );
   }
+}
+
+enum WifiConfigurationStatus {
+  waiting,
+  sending,
+  verifying,
+  error,
 }
