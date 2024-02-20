@@ -65,6 +65,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
               // likely empty message
             }
           });
+      fetchWifiList();
       setState(() {
         isScanning = true;
       });
@@ -84,6 +85,24 @@ class _WifiScanPageState extends State<WifiScanPage> {
             serviceId: mainServiceId,
             characteristicId: wifiListCharacteristicId)
         .ignore();
+  }
+
+  void fetchWifiList() async {
+    try {
+      if (wifiResults.isNotEmpty) return;
+      final List<dynamic> parsed = jsonDecode(utf8.decode(await widget.device
+          .readCharacteristic(
+              serviceId: mainServiceId,
+              characteristicId: wifiListCharacteristicId)));
+      if (wifiResults.isNotEmpty) {
+        setState(() {
+          wifiResults =
+              parsed.map((e) => WifiScanResult(e[0], e[1], e[2])).toList();
+        });
+      }
+    } catch (e) {
+      debug("Error manually fetching WiFi list: $e");
+    }
   }
 
   /// Navigates to the WiFi configuration page with the selected WiFi network.
