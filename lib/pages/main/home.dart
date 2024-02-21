@@ -65,11 +65,13 @@ class _HomePageState extends State<HomePage> {
             DateTime(timestamp.year, timestamp.month, timestamp.day);
         weightCounts[monthDay] =
             (weightCounts[monthDay] ?? 0.0) + detection["weight"];
-        String boxes = detection["boxes"];
-        List<dynamic> boxesList = jsonDecode(boxes);
-        for (var label in boxesList) {
-          String name = label[0];
-          labelCounts[name] = (labelCounts[name] ?? 0) + 1;
+        if (detection["boxes"] != null) {
+          String boxes = detection["boxes"];
+          List<dynamic> boxesList = jsonDecode(boxes);
+          for (var label in boxesList) {
+            String name = label[0];
+            labelCounts[name] = (labelCounts[name] ?? 0) + 1;
+          }
         }
       }
     }
