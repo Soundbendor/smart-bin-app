@@ -29,7 +29,7 @@
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../index.html">binsight_ai</a></li>
-    <li><a href="../util_routes/util_routes-library.html">routes</a></li>
+    <li><a href="../util_routes/util_routes-library.html">util&#47;routes.dart</a></li>
     <li class="self-crumb">getRoutes function</li>
   </ol>
   <div class="self-name">getRoutes</div>
@@ -63,7 +63,7 @@
     <section class="multi-line-signature">
         
 
-<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/go_router/13.1.0/go_router/RouteBase-class.html">RouteBase</a></span>&gt;</span></span>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/go_router/13.2.0/go_router/RouteBase-class.html">RouteBase</a></span>&gt;</span></span>
 <span class="name ">getRoutes</span>(<wbr>)
 
         
@@ -141,12 +141,18 @@
               builder: (BuildContext context, GoRouterState state) {
                 return const BluetoothPage();
               }),
+          GoRoute(
+              name: &#39;wifi-scan&#39;,
+              path: &#39;wifi-scan&#39;,
+              builder: (BuildContext context, GoRouterState state) {
+                return const WifiScanPage();
+              }),
           &#47;&#47; `&#47;set-up&#47;wifi` - selecting wifi page
           GoRoute(
               name: &#39;wifi&#39;,
               path: &#39;wifi&#39;,
               builder: (BuildContext context, GoRouterState state) {
-                return WifiPage(device: state.extra as BluetoothDevice);
+                return WifiConfiguration(ssid: state.extra as String);
               }),
         ]),
   ];
