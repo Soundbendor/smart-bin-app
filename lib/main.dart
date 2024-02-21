@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:go_router/go_router.dart';
@@ -21,6 +22,7 @@ import 'package:binsight_ai/database/connection.dart';
 /// Entry point of the application
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   // Determine if there are devices in the database.
   var devices = await Device.all();

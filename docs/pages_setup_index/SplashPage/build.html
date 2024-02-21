@@ -29,7 +29,7 @@
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">binsight_ai</a></li>
-    <li><a href="../../pages_setup_index/pages_setup_index-library.html">index</a></li>
+    <li><a href="../../pages_setup_index/pages_setup_index-library.html">pages&#47;setup&#47;index.dart</a></li>
     <li><a href="../../pages_setup_index/SplashPage-class.html">SplashPage</a></li>
     <li class="self-crumb">build method</li>
   </ol>
@@ -121,12 +121,8 @@ Widget build(BuildContext context) {
   final textTheme = Theme.of(context).textTheme;
   final colorScheme = Theme.of(context).colorScheme;
   return Scaffold(
-    body: Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage(&quot;assets&#47;images&#47;background3.JPG&quot;),
-            fit: BoxFit.cover),
-      ),
+    body: CustomBackground(
+      imageURL: &quot;assets&#47;images&#47;background3.JPG&quot;,
       child: Center(
         child: Column(
           children: [
