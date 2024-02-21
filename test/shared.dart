@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void testInit() {
@@ -178,6 +179,7 @@ class FakeDatabase implements Database {
       ConflictAlgorithm? conflictAlgorithm}) {
     throw UnimplementedError();
   }
+
   @override
   Future<T> readTransaction<T>(Future<T> Function(Transaction txn) action) {
     // TODO: implement readTransaction

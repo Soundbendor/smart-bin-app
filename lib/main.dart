@@ -1,45 +1,38 @@
 // Flutter imports:
 import 'dart:convert';
-import 'package:binsight_ai/util/print.dart';
-import 'package:binsight_ai/util/routes.dart';
-import 'package:binsight_ai/util/styles.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Package imports:
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
 
 // Project imports:
+import 'package:binsight_ai/util/print.dart';
+import 'package:binsight_ai/util/providers.dart';
+import 'package:binsight_ai/util/routes.dart';
+import 'package:binsight_ai/util/styles.dart';
+import 'package:binsight_ai/util/subscriber.dart';
 import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/database/connection.dart';
-import 'package:binsight_ai/util/subscriber.dart';
 
 /// Entry point of the application
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  // final channel =
-  //     IOWebSocketChannel.connect('http://54.214.80.15/api/model/subscribe');
-  // final subscriptionMessage = {
-  //   "type": "subscribe",
-  //   "channel": "1",
-  // };
-  // channel.sink.add(jsonEncode(subscriptionMessage));
-  // handleMessages(channel);
 
   // Determine if there are devices in the database.
-  final devices = await Device.all();
+  var devices = await Device.all();
 
   if (kDebugMode) {
     final db = await getDatabaseConnection();
     // development code to add fake data
     if (devices.isEmpty) {
       await db.insert("devices", {"id": "test"});
+      devices = await Device.all();
     }
 
     final detections = await Detection.all();
@@ -80,27 +73,16 @@ void main() async {
     }
   }
 
-  runApp(BinsightAiApp(skipSetUp: devices.isEmpty));
-}
-
-class DeviceNotifier with ChangeNotifier {
-  BluetoothDevice? device;
-  BluetoothDevice? getDevice() {
-    return device;
-  }
-
-  void setDevice(BluetoothDevice newDevice) {
-    device = newDevice;
-    notifyListeners();
-  }
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => DeviceNotifier()),
+  ], child: BinsightAiApp(skipSetUp: devices.isEmpty)));
 }
 
 /// The root of the application. Contains the GoRouter and MaterialApp wrappers.
 class BinsightAiApp extends StatefulWidget {
   final bool skipSetUp;
-  late final DeviceNotifier deviceNotifier = DeviceNotifier();
 
-  BinsightAiApp({super.key, this.skipSetUp = false});
+  const BinsightAiApp({super.key, this.skipSetUp = false});
 
   @override
   State<BinsightAiApp> createState() => _BinsightAiAppState();
@@ -120,11 +102,11 @@ class _BinsightAiAppState extends State<BinsightAiApp>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    //Minimized
+    // Minimized
     if (state == AppLifecycleState.paused) {
       debug("closed");
     }
-    //Reopened
+    // Reopened
     else if (state == AppLifecycleState.resumed) {
       debug("Opened");
       if (channel.closeCode != null) {
@@ -143,7 +125,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
   Widget build(BuildContext context) {
     //Defines the router to be used for the app, with set-up as the initial route
     setRoutes(getRoutes());
-    router = GoRouter(
+    router ??= GoRouter(
         initialLocation: widget.skipSetUp ? '/main' : '/set-up',
         routes: routes);
 
@@ -163,6 +145,8 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     return timeStamp;
   }
 
+  // TODO: Execute this in main, but don't tie it to the UI
+  // - it could modify data in a provider instead
   /// Initialize WebSocket channel and subscribe
   void initWebSocket() {
     channel = IOWebSocketChannel.connect('ws://10.0.2.2:8000/subscribe');

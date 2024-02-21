@@ -1,46 +1,17 @@
-import 'package:binsight_ai/main.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:binsight_ai/util/providers.dart';
+import 'package:binsight_ai/util/bluetooth.dart';
+import 'package:binsight_ai/util/bluetooth_bin_data.dart';
+import 'package:binsight_ai/util/bluetooth_dialog_strings.dart';
+import 'package:binsight_ai/util/async_ops.dart';
 import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/widgets/background.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:binsight_ai/widgets/error_dialog.dart';
+import 'package:binsight_ai/widgets/scan_list.dart';
 
-/// Writes specified characteristic data to the device.
-Future<void> writeCharacteristic(
-    BluetoothDevice device, Guid characteristicId, List<int> data) async {
-  // Compile all of the services and characteristics on the device
-  List<BluetoothService> services = await device.discoverServices();
-  for (BluetoothService service in services) {
-    for (BluetoothCharacteristic characteristic in service.characteristics) {
-      // Only write to the specified characteristic
-      if (characteristic.uuid == characteristicId) {
-        await characteristic.write(data,
-            // This line was used for debugging, as we could not get proof-of-concept without it,
-            // a general error was being consistently thrown and there was no indicator of what was causing it
-            withoutResponse: true);
-      }
-    }
-  }
-}
-
-/// Reads specified characteristic data from the device.
-Future<void> readCharacteristic(
-    BluetoothDevice device, Guid characteristicId) async {
-  // Compile all of the services and characteristics on the device
-  List<BluetoothService> services = await device.discoverServices();
-  for (BluetoothService service in services) {
-    for (BluetoothCharacteristic characteristic in service.characteristics) {
-      // Only read the specified characteristic
-      if (characteristic.uuid == characteristicId) {
-        List<int> value = await characteristic.read();
-        debug('Read value: $value');
-      }
-    }
-  }
-}
-
-/// Displays scanned Bluetooth devices.
+/// Page which displays scanned Bluetooth devices.
 class BluetoothPage extends StatefulWidget {
   const BluetoothPage({super.key});
 
@@ -48,118 +19,217 @@ class BluetoothPage extends StatefulWidget {
   State<BluetoothPage> createState() => _BluetoothPageState();
 }
 
-/// Handles collecting Bluetooth devices to be displayed.
 class _BluetoothPageState extends State<BluetoothPage> {
-  final List<BluetoothDevice> _bluetoothDevices = [];
+  /// Whether the dialog is currently visible.
+  ///
+  /// While mutable, changing this value doesn't require a rebuild.
+  bool dialogIsVisible = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<DeviceNotifier>(
+      builder: (context, deviceNotifier, child) {
+        final device = deviceNotifier.device;
+        if (device != null && !dialogIsVisible) {
+          if (device.isConnected) {
+            runSoon(() {
+              GoRouter.of(context).goNamed('wifi-scan');
+            });
+          } else {
+            dialogIsVisible = true;
+            runSoon(() {
+              deviceNotifier.connect();
+              showDialog(
+                  context: context,
+                  builder: connectingDialogBuilder,
+                  barrierDismissible: false);
+            });
+          }
+        }
+        return child!;
+      },
+      child: BluetoothList(),
+    );
+  }
+
+  /// Builds a dialog to display while connecting to a Bluetooth device.
+  Widget connectingDialogBuilder(context) {
+    return Consumer<DeviceNotifier>(
+      builder: (context, deviceNotifier, child) {
+        final device = deviceNotifier.device;
+        final error = deviceNotifier.error;
+        if (deviceNotifier.hasError()) {
+          final strings = getStringsFromException(error);
+          return ErrorDialog(
+              text: strings.title,
+              description: strings.description,
+              callback: () {
+                Navigator.of(context).pop();
+                setState(() {
+                  dialogIsVisible = false;
+                  deviceNotifier.resetDevice();
+                });
+              });
+        } else if (device!.isConnected) {
+          runSoon(() {
+            GoRouter.of(context).goNamed('wifi-scan');
+          });
+          dialogIsVisible = false;
+          return const SizedBox();
+        } else {
+          return AlertDialog(
+            title: Text(
+              "Connecting...",
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            content: const SizedBox(
+              height: 50,
+              child: Center(
+                  child: SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: CircularProgressIndicator())),
+            ),
+          );
+        }
+      },
+    );
+  }
+}
+
+/// Displays a list of Bluetooth devices.
+class BluetoothList extends StatefulWidget {
+  BluetoothList({super.key});
+
+  /// The scanner used to find Bluetooth devices.
+  final scanner = BleDeviceScanner();
+
+  @override
+  State<BluetoothList> createState() => _BluetoothListState();
+}
+
+class _BluetoothListState extends State<BluetoothList> {
+  /// The list of devices found by the scanner.
+  List<BleDevice> devices = [];
+
+  /// Whether the scanner is currently scanning for devices.
+  bool isScanning = false;
+
+  /// An error that may occur during the scanning process.
+  Exception? error;
+
+  /// Whether the dialog is currently visible.
+  bool isDialogVisible = false;
 
   @override
   void initState() {
     super.initState();
-
-    // Opening the page should start a scan for devices
-    performScan();
+    startScanning();
+    widget.scanner.onDeviceListUpdated(onDeviceListUpdated);
+    isScanning = true;
   }
 
-  /// Connects to the specified device using Flutter Blue Plus's connect method.
-  Future<void> connectToDevice(BluetoothDevice device) async {
-    await device.connect();
+  @override
+  void dispose() {
+    isScanning = false;
+    stopScanning();
+    widget.scanner.removeListener(
+        BleDeviceScannerEvents.deviceListUpdated, onDeviceListUpdated);
+    super.dispose();
   }
 
-  /// Starts the Flutter Blue Plus scan and populates the results with found devices.
-  void performScan() {
-    // When scanning for devices, continuously update the list and remove old devices
-    FlutterBluePlus.startScan(
-      continuousUpdates: true,
-      removeIfGone: const Duration(seconds: 3),
-      // The below comment can be uncommented when the official device naming convention is decided
-      // withKeywords: ["LE"]
-    );
+  /// Stops scanning for devices.
+  void stopScanning() {
+    widget.scanner.stopScan();
+    isScanning = false;
+  }
 
-    // Listen to the scan stream to populate the found devices
-    List<String> filteredBluetoothConnectionsString = [];
-    FlutterBluePlus.scanResults.listen((results) {
-      // Only add devices that have not already been put into _bluetoothDevices
-      for (ScanResult r in results) {
-        if (!filteredBluetoothConnectionsString
-            .contains(r.advertisementData.advName)) {
-          setState(() {
-            _bluetoothDevices.add(r.device);
-          });
-          filteredBluetoothConnectionsString.add(r.advertisementData.advName);
-        }
-      }
+  /// Starts scanning for devices.
+  void startScanning() async {
+    try {
+      isScanning = true;
+      await widget.scanner.startScan(serviceFilter: [mainServiceId]);
+    } on Exception catch (e) {
+      debug("BLE LIST ERROR");
+      debug(e);
+      stopScanning();
+      if (!mounted) return;
+      setState(() {
+        error = e;
+      });
+    }
+  }
+
+  /// Updates the list of devices found by the scanner.
+  void onDeviceListUpdated(List<BleDevice> deviceList) {
+    setState(() {
+      devices = deviceList;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    const textSize = 20.0;
+    if (error != null && !isDialogVisible) {
+      isDialogVisible = true;
+      runSoon(() {
+        showDialog(context: context, builder: displayErrorDialog);
+      });
+    }
 
     return Scaffold(
       body: CustomBackground(
-        child: Column(
-          children: [
-            SizedBox(
-              height:
-                  (MediaQuery.of(context).size.height / 2) - (200 + textSize),
-            ),
-            const Text("Find your Bin!",
-                style: TextStyle(
-                  fontSize: textSize,
-                )),
-            Container(
-              color: const Color.fromRGBO(0, 0, 0, 0),
-              height: MediaQuery.of(context).size.height / 2.5,
-              child: ShaderMask(
-                shaderCallback: (Rect rect) {
-                  return const LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color.fromARGB(255, 0, 0, 0),
-                      Colors.transparent,
-                      Colors.transparent,
-                      Color.fromARGB(255, 0, 0, 0)
-                    ],
-                    stops: [0.0, 0.2, 0.9, 1.0],
-                  ).createShader(rect);
-                },
-                blendMode: BlendMode.dstOut,
-                child: ListView.builder(
-                  itemCount: _bluetoothDevices.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final bluetoothDevice = _bluetoothDevices[index];
-                    return Card(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0)),
-                      child: ListTile(
-                          leading: const Icon(Icons.bluetooth),
-                          title: Text(bluetoothDevice.platformName),
-                          trailing: const Icon(Icons.keyboard_arrow_right),
-                          onTap: () async {
-                            FlutterBluePlus.stopScan();
-                            Provider.of<DeviceNotifier>(context, listen: false)
-                                .setDevice(bluetoothDevice);
-                            debug(Provider.of<DeviceNotifier>(context,
-                                    listen: false)
-                                .getDevice());
-                            await bluetoothDevice.connect();
-                            // await bluetoothDevice.createBond();
-                            await readCharacteristic(
-                                bluetoothDevice, Guid("2AF9"));
-                            if (!mounted) return;
-                            GoRouter.of(context).goNamed('wifi-scan');
-                          }),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
+        child: ScanList(
+          itemCount: devices.length,
+          listBuilder: buildDeviceItem,
+          onResume: () {
+            setState(() {
+              startScanning();
+            });
+          },
+          title: "Find your bin!",
+          inProgress: isScanning,
         ),
       ),
+    );
+  }
+
+  /// Displays an error dialog.
+  Widget displayErrorDialog(BuildContext context) {
+    final strings = getStringsFromException(error);
+    return ErrorDialog(
+        text: strings.title,
+        description: strings.description,
+        callback: () {
+          isDialogVisible = false;
+          Navigator.of(context).pop();
+          setState(() {
+            error = null;
+          });
+        });
+  }
+
+  /// Builds a list item for a Bluetooth device.
+  ///
+  /// When pressed, the device is set as the current device.
+  /// This should trigger a connection attempt. See [BluetoothPage].
+  Widget buildDeviceItem(BuildContext context, int index) {
+    final device = devices[index];
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+      child: ListTile(
+          leading: const Icon(Icons.bluetooth),
+          title: Text(device.name),
+          trailing: const Icon(Icons.keyboard_arrow_right),
+          onTap: () {
+            setState(() {
+              stopScanning();
+              final deviceProvider =
+                  Provider.of<DeviceNotifier>(context, listen: false);
+              deviceProvider.setDevice(device);
+              deviceProvider.listenForConnectionEvents();
+            });
+          }),
     );
   }
 }
