@@ -5,6 +5,7 @@ import 'package:binsight_ai/util/routes.dart';
 import 'package:binsight_ai/util/styles.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -21,6 +22,7 @@ import 'package:binsight_ai/util/subscriber.dart';
 /// Entry point of the application
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   // final channel =
   //     IOWebSocketChannel.connect('http://54.214.80.15/api/model/subscribe');
   // final subscriptionMessage = {
