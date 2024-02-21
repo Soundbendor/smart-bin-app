@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:binsight_ai/util/print.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/database/connection.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 

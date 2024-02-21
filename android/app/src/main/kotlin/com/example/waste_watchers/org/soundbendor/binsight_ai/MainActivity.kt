@@ -1,4 +1,4 @@
-package com.example.binsight_ai
+package org.soundbendor.binsight_ai
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,18 +1,21 @@
-import 'package:binsight_ai/pages/wifi/wifi_scan_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:binsight_ai/util/providers.dart';
+import 'package:binsight_ai/util/wifi_scan.dart';
+import 'package:binsight_ai/pages/setup/wifi_configuration.dart';
 import 'package:binsight_ai/pages/detection/annotation.dart';
 import 'package:binsight_ai/pages/detection/detection.dart';
 import 'package:binsight_ai/pages/detection/index.dart';
 import 'package:binsight_ai/pages/main/help.dart';
 import 'package:binsight_ai/pages/main/home.dart';
-import 'package:binsight_ai/pages/setup/bluetooth.dart';
 import 'package:binsight_ai/pages/setup/index.dart';
+import 'package:binsight_ai/pages/setup/bluetooth.dart';
+import 'package:binsight_ai/pages/setup/wifi_scan.dart';
 import 'package:binsight_ai/widgets/navigation_shell.dart';
-import 'package:binsight_ai/widgets/wifi_configuration.dart';
 
 // Used for testing
-late GoRouter router;
+GoRouter? router;
 
 /// The routes for the application.
 ///
@@ -90,14 +93,17 @@ List<RouteBase> getRoutes() {
               name: 'wifi-scan',
               path: 'wifi-scan',
               builder: (BuildContext context, GoRouterState state) {
-                return const WifiScanPage();
+                final device =
+                    Provider.of<DeviceNotifier>(context, listen: false).device;
+                return WifiScanPage(device: device!);
               }),
           // `/set-up/wifi` - selecting wifi page
           GoRoute(
               name: 'wifi',
               path: 'wifi',
               builder: (BuildContext context, GoRouterState state) {
-                return WifiConfiguration(ssid: state.extra as String);
+                return WifiConfigurationPage(
+                    wifiResult: state.extra as WifiScanResult);
               }),
         ]),
   ];

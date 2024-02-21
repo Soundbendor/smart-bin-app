@@ -1,8 +1,7 @@
-import 'package:binsight_ai/database/models/detection.dart';
-import 'package:binsight_ai/pages/detection/detection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:binsight_ai/database/models/detection.dart';
+import 'package:binsight_ai/pages/detection/detection.dart';
 import '../shared.dart';
 
 void main() {

@@ -1,5 +1,5 @@
-import 'package:binsight_ai/widgets/image.dart';
 import 'package:flutter/material.dart';
+import 'package:binsight_ai/widgets/image.dart';
 
 /// Widget with logic to annotate and render detection images
 class FreeDraw extends StatefulWidget {
