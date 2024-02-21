@@ -80,6 +80,7 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   &#47;&#47; final channel =
   &#47;&#47;     IOWebSocketChannel.connect(&#39;http:&#47;&#47;54.214.80.15&#47;api&#47;model&#47;subscribe&#39;);
   &#47;&#47; final subscriptionMessage = {
