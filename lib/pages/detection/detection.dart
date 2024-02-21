@@ -19,24 +19,26 @@ class DetectionPage extends StatelessWidget {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            _BackToListButton(),
-            _DetectionHeader(detectionFuture: detectionFuture),
-            const SizedBox(height: 16),
-            FutureBuilder(
-              future: detectionFuture,
-              builder:
-                  (BuildContext context, AsyncSnapshot<Detection?> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else {
-                  final detection = snapshot.data;
-                  return _DetectionCard(detection: detection!);
-                }
-              },
-            )
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _BackToListButton(),
+              _DetectionHeader(detectionFuture: detectionFuture),
+              const SizedBox(height: 16),
+              FutureBuilder(
+                future: detectionFuture,
+                builder:
+                    (BuildContext context, AsyncSnapshot<Detection?> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else {
+                    final detection = snapshot.data;
+                    return _DetectionCard(detection: detection!);
+                  }
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
