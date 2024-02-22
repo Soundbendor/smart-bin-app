@@ -80,23 +80,17 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  &#47;&#47; final channel =
-  &#47;&#47;     IOWebSocketChannel.connect(&#39;http:&#47;&#47;54.214.80.15&#47;api&#47;model&#47;subscribe&#39;);
-  &#47;&#47; final subscriptionMessage = {
-  &#47;&#47;   &quot;type&quot;: &quot;subscribe&quot;,
-  &#47;&#47;   &quot;channel&quot;: &quot;1&quot;,
-  &#47;&#47; };
-  &#47;&#47; channel.sink.add(jsonEncode(subscriptionMessage));
-  &#47;&#47; handleMessages(channel);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   &#47;&#47; Determine if there are devices in the database.
-  final devices = await Device.all();
+  var devices = await Device.all();
 
   if (kDebugMode) {
     final db = await getDatabaseConnection();
     &#47;&#47; development code to add fake data
     if (devices.isEmpty) {
       await db.insert(&quot;devices&quot;, {&quot;id&quot;: &quot;test&quot;});
+      devices = await Device.all();
     }
 
     final detections = await Detection.all();
@@ -137,7 +131,9 @@
     }
   }
 
-  runApp(BinsightAiApp(skipSetUp: devices.isEmpty));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) =&gt; DeviceNotifier()),
+  ], child: BinsightAiApp(skipSetUp: devices.isEmpty)));
 }</code></pre>
 </section>
 
