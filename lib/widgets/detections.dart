@@ -8,9 +8,13 @@ String formatDetectionTitle(Detection detection) {
   if (detection.boxes != null) {
     final boxData = jsonDecode(detection.boxes!);
     final List<String> names = [];
-    for (var label in boxData) {
-      String name = label[0];
-      names.add(name);
+    if (boxData.isNotEmpty) {
+      for (var label in boxData) {
+        if (label[0] != null) {
+          String name = label[0];
+          names.add(name);
+        }
+      }
     }
     return "Detection ${detection.imageId}: ${names.join(", ")}";
   } else {
