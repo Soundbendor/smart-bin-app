@@ -192,6 +192,9 @@ class BleDevice {
       try {
         await _device.connect();
         debug("BleDevice[connect]: Connection initialized successfully");
+        if (Platform.isAndroid) {
+          await _device.clearGattCache();
+        }
         await _device.discoverServices();
         debug("BleDevice[connect]: Discovered services");
         break;

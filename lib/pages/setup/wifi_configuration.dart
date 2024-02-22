@@ -187,8 +187,12 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
           serviceId: mainServiceId,
           characteristicId: wifiCredentialCharacteristicId);
       debug("Status Data: $statusData");
-      final Map<dynamic, dynamic> statusJson =
-          jsonDecode(utf8.decode(statusData));
+      late Map<dynamic, dynamic> statusJson;
+      try {
+        statusJson = jsonDecode(utf8.decode(statusData));
+      } catch (e) {
+        continue;
+      }
       double timestamp = statusJson["timestamp"]; // in seconds
       String message = statusJson["message"];
       bool success = statusJson["success"];
