@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:binsight_ai/util/print.dart';
-import 'package:go_router/go_router.dart';
-import 'package:binsight_ai/database/models/detection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:go_router/go_router.dart';
+import 'package:binsight_ai/database/models/detection.dart';
+import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/widgets/free_draw.dart';
 

@@ -1,6 +1,6 @@
-import 'package:binsight_ai/util/print.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/widgets/top_nav_bar.dart';
 
 /// Bottom navigation bar widget with an app bar and tab icons.

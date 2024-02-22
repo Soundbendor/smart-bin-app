@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:ui' as ui;
 import 'package:binsight_ai/widgets/image.dart';
 import 'package:flutter/material.dart';
