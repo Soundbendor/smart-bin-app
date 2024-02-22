@@ -101,7 +101,10 @@ class BinsightAiApp extends StatefulWidget {
   final bool skipSetUp;
   late final DeviceNotifier deviceNotifier = DeviceNotifier();
 
-  BinsightAiApp({super.key, this.skipSetUp = false});
+  // for testing purposes
+  BinsightAiApp({super.key, this.skipSetUp = true});
+  // for production
+  // BinsightAiApp({super.key, this.skipSetUp = false});
 
   @override
   State<BinsightAiApp> createState() => _BinsightAiAppState();
