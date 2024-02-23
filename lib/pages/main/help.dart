@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:binsight_ai/util/print.dart';
+
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
 import 'package:binsight_ai/widgets/heading.dart';
 
-/// Displays the Help page with dropdown sections for FAQ, User Guide, Help, and Contact Us form.
+/// Displays the Help page with dropdown sections for FAQ, User Guide, Help, and Contact Us email connection
 class HelpPage extends StatelessWidget {
   const HelpPage({super.key});
   @override
@@ -15,6 +18,7 @@ class HelpPage extends StatelessWidget {
           children: [
             Expanded(
               child: ExpansionTile(
+                shape: Border.all(color: Colors.transparent),
                 title: const Heading(text: "FAQ"),
                 children: [
                   Padding(
@@ -26,6 +30,7 @@ class HelpPage extends StatelessWidget {
             ),
             Expanded(
               child: ExpansionTile(
+                shape: Border.all(color: Colors.transparent),
                 title: const Heading(text: "User Guide"),
                 children: [
                   Padding(
@@ -37,6 +42,7 @@ class HelpPage extends StatelessWidget {
             ),
             Expanded(
               child: ExpansionTile(
+                shape: Border.all(color: Colors.transparent),
                 title: const Heading(text: "Help"),
                 children: [
                   Padding(
@@ -46,13 +52,40 @@ class HelpPage extends StatelessWidget {
                 ],
               ),
             ),
-            const Expanded(
+            Expanded(
               child: ExpansionTile(
-                title: Heading(text: "Contact Us"),
+                shape: Border.all(color: Colors.transparent),
+                title: const Heading(text: "Contact Us"),
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: _ContactForm(),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        const Text(
+                            "Have questions or need help with your bin?\nContact us for help!"),
+                        const SizedBox(height: 10.0),
+                        TextButton(
+                          onPressed: () => launchUrlString(
+                              'mailto:binsight.help@gmail.com?subject=Help Request!'),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.email,
+                                color: Color.fromARGB(255, 33, 63, 148),
+                                size: 30,
+                              ),
+                              SizedBox(width: 18.0),
+                              Text('Email',
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 255, 255, 255),
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w500)),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -60,48 +93,6 @@ class HelpPage extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-/// State class for the contact form widget.
-class _ContactForm extends StatefulWidget {
-  const _ContactForm();
-
-  @override
-  _ContactFormState createState() => _ContactFormState();
-}
-
-/// Displays a form for users to submit a contact request.
-class _ContactFormState extends State<_ContactForm> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController messageController = TextEditingController();
-
-  // TODO add form validation and error checking
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          controller: emailController,
-          decoration: const InputDecoration(labelText: 'Email'),
-        ),
-        const SizedBox(height: 10),
-        TextField(
-          controller: messageController,
-          decoration: const InputDecoration(labelText: 'Message'),
-          maxLines: 15,
-        ),
-        const SizedBox(height: 10),
-        ElevatedButton(
-          onPressed: () {
-            // TODO logic to handle form submission
-            debug('Email: ${emailController.text}');
-            debug('Message: ${messageController.text}');
-          },
-          child: const Text('Submit'),
-        ),
-      ],
     );
   }
 }
