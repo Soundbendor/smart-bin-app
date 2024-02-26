@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'package:url_launcher/url_launcher_string.dart';
-
 import 'package:binsight_ai/widgets/heading.dart';
 
 /// Displays the Help page with dropdown sections for FAQ, User Guide, Help, and Contact Us email connection
@@ -63,24 +61,28 @@ class HelpPage extends StatelessWidget {
                         const Text(
                             "Have questions or need help with your bin?\nContact us for help!"),
                         const SizedBox(height: 10.0),
-                        TextButton(
-                          onPressed: () => launchUrlString(
-                              'mailto:binsight.help@gmail.com?subject=Help Request!'),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.email,
-                                color: Color.fromARGB(255, 33, 63, 148),
-                                size: 30,
-                              ),
-                              SizedBox(width: 18.0),
-                              Text('Email',
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 255, 255, 255),
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.w500)),
-                            ],
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: TextButton(
+                            onPressed: () => launchUrlString(
+                                'mailto:binsight.help@gmail.com?subject=Help Request!'),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.email,
+                                  color: Color.fromARGB(255, 33, 63, 148),
+                                  size: 30,
+                                ),
+                                SizedBox(width: 18.0),
+                                Text('Email',
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.w500)),
+                              ],
+                            ),
                           ),
                         ),
                       ],
