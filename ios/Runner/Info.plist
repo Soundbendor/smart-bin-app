@@ -51,7 +51,7 @@
 	<string>DetectSmartBinDevice</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-  		<string>email</string>
+  		<string>mailto</string>
 	</array>
 </dict>
 </plist>

@@ -55,8 +55,9 @@
     <queries>
         <!-- To open email app -->
         <intent>
-            <action android:name="android.intent.action.SEND" />
-            <data android:mimeType="*/*" />
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="mailto" />
+            <category android:name="android.intent.category.DEFAULT" />
         </intent>
     </queries>
 </manifest>
