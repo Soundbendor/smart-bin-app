@@ -49,5 +49,9 @@
 	</array>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>DetectSmartBinDevice</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+  		<string>email</string>
+	</array>
 </dict>
 </plist>
