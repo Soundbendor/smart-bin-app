@@ -5,6 +5,19 @@ import 'package:binsight_ai/widgets/heading.dart';
 /// Displays the Help page with dropdown sections for FAQ, User Guide, Help, and Contact Us email connection
 class HelpPage extends StatelessWidget {
   const HelpPage({super.key});
+
+  // Uses the url_launcher_string package to launch the email client
+  Future<void> _launchEmail() async {
+    const email = 'mailto:binsight.help@gmail.com?subject=Help Request!'
+        '&body=Please provide a detailed description of your issue.';
+    try {
+      await launchUrlString(email);
+    } catch (e) {
+      // Handle the exception, e.g., show an error message
+      throw 'Could not launch $email';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme.bodyMedium;
@@ -64,8 +77,7 @@ class HelpPage extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextButton(
-                            onPressed: () => launchUrlString(
-                                'mailto:binsight.help@gmail.com?subject=Help Request!'),
+                            onPressed: _launchEmail,
                             child: const Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
