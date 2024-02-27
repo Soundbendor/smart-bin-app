@@ -75,14 +75,14 @@ void main() async {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => DeviceNotifier()),
-  ], child: BinsightAiApp(skipSetUp: devices.isNotEmpty)));
+  ], child: BinsightAiApp(skipSetUp: devices.isEmpty)));
 }
 
 /// The root of the application. Contains the GoRouter and MaterialApp wrappers.
 class BinsightAiApp extends StatefulWidget {
   final bool skipSetUp;
 
-  const BinsightAiApp({super.key, this.skipSetUp = true});
+  const BinsightAiApp({super.key, this.skipSetUp = false});
 
   @override
   State<BinsightAiApp> createState() => _BinsightAiAppState();
