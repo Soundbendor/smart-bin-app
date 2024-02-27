@@ -30,7 +30,6 @@ class _TopNavBarState extends State<TopNavBar> {
       // through the options in the drawer if there isn't enough vertical
       // space to fit everything.
       child: ListView(
-        // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: [
           const DrawerHeader(
@@ -54,15 +53,6 @@ class _TopNavBarState extends State<TopNavBar> {
               _onItemTapped(0);
               GoRouter.of(context).goNamed('main');
               // Then close the drawer.
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.person_2_outlined),
-            title: const Text('My Bin'),
-            selected: _selectedIndex == 1,
-            onTap: () {
-              _onItemTapped(1);
               Navigator.pop(context);
             },
           ),
