@@ -119,7 +119,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
-                      "To ensure proper functionality, please pair with the bin. You should have received a notification asking to pair with the bin.\nYou may need to pair multiple times."),
+                      "To ensure proper functionality, please pair with the bin.\nYou may be prompted to pair more than once."),
                   const SizedBox(height: 10),
                   const SizedBox(
                     height: 50,
