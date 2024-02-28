@@ -87,7 +87,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
             );
             return AlertDialog(
               title: Text(
-                "Connection complete! Moving on...",
+                "Bluetooth connection complete! Moving on...",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
