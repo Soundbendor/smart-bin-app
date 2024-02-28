@@ -19,7 +19,7 @@ class BluetoothPage extends StatefulWidget {
   State<BluetoothPage> createState() => _BluetoothPageState();
 }
 
-enum _PairingState { init, pairing, paired }
+enum _PairingState { init, pairing, paired, ready }
 
 class _BluetoothPageState extends State<BluetoothPage> {
   /// Whether the dialog is currently visible.
@@ -58,7 +58,9 @@ class _BluetoothPageState extends State<BluetoothPage> {
       builder: (context, deviceNotifier, child) {
         final device = deviceNotifier.device;
         final error = deviceNotifier.error;
+        if (device == null) return const SizedBox();
         if (deviceNotifier.hasError()) {
+          pairingState = _PairingState.init;
           final strings = getStringsFromException(error);
           return ErrorDialog(
               text: strings.title,
@@ -70,14 +72,36 @@ class _BluetoothPageState extends State<BluetoothPage> {
                   deviceNotifier.resetDevice();
                 });
               });
-        } else if (device!.isConnected) {
-          if (device.isBonded && pairingState == _PairingState.paired) {
-            runSoon(() {
-              if (!context.mounted) return;
-              GoRouter.of(context).goNamed('wifi-scan');
-            });
-            dialogIsVisible = false;
-            return const SizedBox();
+        } else if (device.isConnected) {
+          if (device.isBonded && (pairingState == _PairingState.paired)) {
+            pairingState = _PairingState.ready;
+            Future.delayed(
+              const Duration(
+                seconds: 2,
+              ),
+              () {
+                if (!context.mounted) return;
+                GoRouter.of(context).goNamed('wifi-scan');
+                dialogIsVisible = false;
+              },
+            );
+            return AlertDialog(
+              title: Text(
+                "Connection complete! Moving on...",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              content: const SizedBox(
+                height: 50,
+                child: Center(
+                  child: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+            );
           } else {
             debug("Pairing: $pairingState");
             if (pairingState == _PairingState.init) {
@@ -91,12 +115,13 @@ class _BluetoothPageState extends State<BluetoothPage> {
                 "Pairing...",
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
-              content: const Column(
+              content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
+                  const Text(
                       "To ensure proper functionality, please pair with the bin. You should have received a notification asking to pair with the bin.\nYou may need to pair multiple times."),
-                  SizedBox(
+                  const SizedBox(height: 10),
+                  const SizedBox(
                     height: 50,
                     child: Center(
                       child: SizedBox(
@@ -106,11 +131,23 @@ class _BluetoothPageState extends State<BluetoothPage> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      setState(() {
+                        dialogIsVisible = false;
+                        deviceNotifier.resetDevice();
+                      });
+                    },
+                    child: const Text("Cancel"),
+                  ),
                 ],
               ),
             );
           }
         } else {
+          pairingState = _PairingState.init;
           return AlertDialog(
             title: Text(
               "Connecting...",

@@ -259,6 +259,10 @@ class BleDevice {
       debug(
           "BleDevice[_pair]: Platform is Android, skipping pairing - must be done manually");
     }
+    // However, if previously bonded, fetch services
+    if (isBonded) {
+      await _device.discoverServices();
+    }
   }
 
   /// Waits for the device to be paired. (Android only)
@@ -306,7 +310,8 @@ class BleDevice {
       debug("BleDevice[waitForPair]: $e");
       timer?.cancel();
       removeListener(BleDeviceClientEvents.bonded, callback);
-      rethrow;
+      throw BleOperationFailureException(
+          "Failed to wait for device to be bonded: $e");
     }
     removeListener(BleDeviceClientEvents.bonded, callback);
     await _updateServices();
