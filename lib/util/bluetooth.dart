@@ -18,11 +18,14 @@ enum BleDeviceClientEvents {
   connected,
   disconnected,
   notification,
+  bonded,
+  bondChange,
 }
 
 enum _BleSubscriptionType {
   subscribe,
   connection,
+  bond,
 }
 
 /// Requests the necessary permissions for scanning and connecting.
@@ -96,6 +99,9 @@ class BleDevice {
   /// The device's name.
   String get name => _discoveredDevice.name;
 
+  /// Whether the device is bonded.
+  bool isBonded = false;
+
   /// The device's service UUIDs.
   List<Uuid> get serviceIds => _discoveredDevice.serviceUuids;
 
@@ -129,6 +135,8 @@ class BleDevice {
         }
       } else if (subscription[0] == _BleSubscriptionType.connection) {
         _createConnectionStateSubscription();
+      } else if (subscription[0] == _BleSubscriptionType.bond) {
+        _createBondStateSubscription();
       }
     }
   }
@@ -150,20 +158,41 @@ class BleDevice {
     _rebuildSubscriptionList.add([_BleSubscriptionType.connection]);
   }
 
+  /// Creates a subscription to the device's bond state.
+  void _createBondStateSubscription() {
+    final stream = _device.bondState.listen((status) {
+      if (status == BluetoothBondState.bonded) {
+        isBonded = true;
+        _emit(BleDeviceClientEvents.bonded, null);
+        debug("BleDevice[_createBondStateSubscription]: Device bonded");
+      } else if (status == BluetoothBondState.none) {
+        isBonded = false;
+        debug("BleDevice[_createBondStateSubscription]: Device not bonded");
+      } else if (status == BluetoothBondState.bonding) {
+        isBonded = false;
+        debug("BleDevice[_createBondStateSubscription]: Device bonding");
+      }
+      _emit(BleDeviceClientEvents.bondChange, status);
+    });
+    _device.cancelWhenDisconnected(stream, delayed: true);
+    _rebuildSubscriptionList.add([_BleSubscriptionType.bond]);
+  }
+
   /// Connects to the device.
   ///
   /// The device will automatically reconnect if it is unexpectedly disconnected.
   /// To stop the device from reconnecting, call [disconnect].
   ///
-  /// Throws a [BleConnectionException] if the connection fails.
-  /// Throws a [BleBluetoothDisabledException] if Bluetooth is not turned on.
-  /// Throws a [BleBluetoothNotSupportedException] if Bluetooth is not supported on the device.
-  /// Throws a [BlePermissionException] if the necessary permissions are not granted.
+  /// - Throws a [BleConnectionException] if the connection fails.
+  /// - Throws a [BleBluetoothDisabledException] if Bluetooth is not turned on.
+  /// - Throws a [BleBluetoothNotSupportedException] if Bluetooth is not supported on the device.
+  /// - Throws a [BlePermissionException] if the necessary permissions are not granted.
   Future<void> connect() async {
     if (isConnected) {
       if (!_shouldBeConnected) {
         _shouldBeConnected = true;
         _createConnectionStateSubscription();
+        _createBondStateSubscription();
       }
       return;
     }
@@ -192,11 +221,7 @@ class BleDevice {
       try {
         await _device.connect();
         debug("BleDevice[connect]: Connection initialized successfully");
-        if (Platform.isAndroid) {
-          await _device.clearGattCache();
-        }
-        await _device.discoverServices();
-        debug("BleDevice[connect]: Discovered services");
+        await _pair();
         break;
       } catch (e) {
         attempts++;
@@ -210,13 +235,82 @@ class BleDevice {
     }
     if (_shouldBeConnected) {
       await _rebuildSubscriptions();
-    } else {
-      _createConnectionStateSubscription();
     }
     debug("BleDevice[connect]: Connected to device complete");
     isConnecting = false;
     _shouldBeConnected = true;
     _emit(BleDeviceClientEvents.connected, null);
+  }
+
+  /// Pairs the device. (non-Android only)
+  Future<void> _pair() async {
+    // On iOS, the device should be paired after connecting
+    // on Android, we'll have to request pairing first
+    // TODO: verify this
+    if (!Platform.isAndroid) {
+      debug("BleDevice[_pair]: Pairing device. Current bond state: $isBonded");
+      await _device.discoverServices();
+      debug("BleDevice[_pair]: Discovered services");
+      debug("BleDevice[_pair]: Pairing complete");
+    } else {
+      debug(
+          "BleDevice[_pair]: Platform is Android, skipping pairing - must be done manually");
+    }
+  }
+
+  /// Waits for the device to be paired. (Android only)
+  ///
+  /// [timeout] is the time to wait for the device to be paired in seconds.
+  ///
+  /// - Throws a [BleOperationFailureException] if the pairing fails.
+  /// - Throws a [BleConnectionException] if the device fails to connect.
+  /// - Throws a [BleBluetoothDisabledException] if Bluetooth is not turned on.
+  /// - Throws a [BleBluetoothNotSupportedException] if Bluetooth is not supported on the device.
+  /// - Throws a [BlePermissionException] if the necessary permissions are not granted.
+  /// - Throws a [BleOperationFailureException] if the pairing fails.
+  Future<void> waitForPair({int? timeout}) async {
+    if (isBonded) {
+      debug("BleDevice[waitForPair]: Device already bonded");
+      return;
+    }
+    if (!Platform.isAndroid) {
+      debug(
+          "BleDevice[waitForPair]: Platform is not Android, skipping wait for pairing");
+      return;
+    }
+    if (!isConnected) {
+      debug(
+          "BleDevice[waitForPair]: Device not connected, attempting to connect");
+      await connect();
+    }
+    final completer = Completer<void>();
+    final Timer? timer = timeout != null
+        ? Timer(Duration(seconds: timeout), () {
+            completer.completeError(BleOperationFailureException(
+                "Timed out waiting for device to be bonded"));
+          })
+        : null;
+
+    void callback(_) {
+      completer.complete();
+    }
+
+    on(BleDeviceClientEvents.bonded, callback);
+    try {
+      await completer.future;
+    } on Exception {
+      timer?.cancel();
+      removeListener(BleDeviceClientEvents.bonded, callback);
+      rethrow;
+    }
+    await _device.clearGattCache();
+    await _device.discoverServices();
+  }
+
+  /// Displays a pairing request. (Android only)
+  void displayPairingRequest() async {
+    assert(Platform.isAndroid);
+    return _device.createBond().ignore();
   }
 
   /// Disconnects from the device.
@@ -234,9 +328,9 @@ class BleDevice {
   /// [serviceId] is the service UUID.
   /// [characteristicId] is the characteristic UUID.
   ///
-  /// Throws a [BleInvalidOperationException] if the characteristic does not support reading.
-  /// Throws a [BleOperationFailureException] if the read fails.
-  /// Throws a [BleConnectionException] if the device fails to connect.
+  /// - Throws a [BleInvalidOperationException] if the characteristic does not support reading.
+  /// - Throws a [BleOperationFailureException] if the read fails.
+  /// - Throws a [BleConnectionException] if the device fails to connect.
   Future<List<int>> readCharacteristic(
       {required Uuid serviceId, required Uuid characteristicId}) async {
     final characteristic = BluetoothCharacteristic(
@@ -269,9 +363,9 @@ class BleDevice {
   /// [characteristicId] is the characteristic UUID.
   /// [value] is the value to write. It must be a [List] of [int] or a [String].
   ///
-  /// Throws a [BleInvalidOperationException] if the characteristic does not support writing.
-  /// Throws a [BleOperationFailureException] if the write fails.
-  /// Throws a [BleConnectionException] if the device fails to connect.
+  /// - Throws a [BleInvalidOperationException] if the characteristic does not support writing.
+  /// - Throws a [BleOperationFailureException] if the write fails.
+  /// - Throws a [BleConnectionException] if the device fails to connect.
   Future<void> writeCharacteristic({
     required Uuid serviceId,
     required Uuid characteristicId,
@@ -314,9 +408,9 @@ class BleDevice {
   /// [onNotification] is a function that is run when a notification is received.
   /// The function is passed a [List] of [int] representing the notification value.
   ///
-  /// Throws a [BleInvalidOperationException] if the characteristic does not support subscribing.
-  /// Throws a [BleOperationFailureException] if the subscription fails.
-  /// Throws a [BleConnectionException] if the device fails to connect.
+  /// - Throws a [BleInvalidOperationException] if the characteristic does not support subscribing.
+  /// - Throws a [BleOperationFailureException] if the subscription fails.
+  /// - Throws a [BleConnectionException] if the device fails to connect.
   Future<void> subscribeToCharacteristic({
     required Uuid serviceId,
     required Uuid characteristicId,
@@ -364,9 +458,9 @@ class BleDevice {
   /// [serviceId] is the service UUID.
   /// [characteristicId] is the characteristic UUID.
   ///
-  /// Throws a [BleInvalidOperationException] if the characteristic does not support unsubscribing.
-  /// Throws a [BleOperationFailureException] if the unsubscription fails.
-  /// Throws a [BleConnectionException] if the device fails to connect.
+  /// - Throws a [BleInvalidOperationException] if the characteristic does not support unsubscribing.
+  /// - Throws a [BleOperationFailureException] if the unsubscription fails.
+  /// - Throws a [BleConnectionException] if the device fails to connect.
   Future<void> unsubscribeFromCharacteristic({
     required Uuid serviceId,
     required Uuid characteristicId,
@@ -418,6 +512,16 @@ class BleDevice {
     on(BleDeviceClientEvents.disconnected, callback);
   }
 
+  /// Creates a listener which is run when the device is bonded.
+  void onBonded(Function(Null) callback) {
+    on(BleDeviceClientEvents.bonded, callback);
+  }
+
+  /// Creates a listener which is run when the device's bond state changes.
+  void onBondChange(Function(BluetoothBondState) callback) {
+    on(BleDeviceClientEvents.bondChange, callback);
+  }
+
   /// Emits an event with data.
   void _emit<T>(BleDeviceClientEvents event, T data) {
     _emitter.emit(event.name, data);
@@ -466,9 +570,9 @@ class BleDeviceScanner {
   ///
   /// [serviceFilter] is a list of service UUIDs to filter by. If null, all devices will be scanned.
   ///
-  /// Throws a [BleBluetoothDisabledException] if Bluetooth is not turned on.
-  /// Throws a [BleBluetoothNotSupportedException] if Bluetooth is not supported on the device.
-  /// Throws a [BlePermissionException] if the necessary permissions are not granted.
+  /// - Throws a [BleBluetoothDisabledException] if Bluetooth is not turned on.
+  /// - Throws a [BleBluetoothNotSupportedException] if Bluetooth is not supported on the device.
+  /// - Throws a [BlePermissionException] if the necessary permissions are not granted.
   Future<void> startScan({List<Uuid>? serviceFilter}) async {
     // check permissions and Bluetooth support
     if (await FlutterBluePlus.isSupported) {

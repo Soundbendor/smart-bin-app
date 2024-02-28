@@ -27,6 +27,8 @@ class DeviceNotifier with ChangeNotifier {
         BleDeviceClientEvents.connected, _onConnectionChange);
     device?.removeListener(
         BleDeviceClientEvents.disconnected, _onConnectionChange);
+    device?.removeListener(
+        BleDeviceClientEvents.bondChange, _onConnectionChange);
     device?.disconnect();
     device = null;
     notifyListeners();
@@ -41,6 +43,7 @@ class DeviceNotifier with ChangeNotifier {
   void listenForConnectionEvents() {
     device?.onConnected(_onConnectionChange);
     device?.onDisconnected(_onConnectionChange);
+    device?.onBondChange(_onConnectionChange);
   }
 
   /// Connects to the device and notifies when the connection is complete.
