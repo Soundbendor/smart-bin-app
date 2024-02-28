@@ -1,3 +1,4 @@
+import 'package:binsight_ai/util/print.dart';
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
 
@@ -27,8 +28,6 @@ class DeviceNotifier with ChangeNotifier {
         BleDeviceClientEvents.connected, _onConnectionChange);
     device?.removeListener(
         BleDeviceClientEvents.disconnected, _onConnectionChange);
-    device?.removeListener(
-        BleDeviceClientEvents.bondChange, _onConnectionChange);
     device?.disconnect();
     device = null;
     notifyListeners();
@@ -43,7 +42,20 @@ class DeviceNotifier with ChangeNotifier {
   void listenForConnectionEvents() {
     device?.onConnected(_onConnectionChange);
     device?.onDisconnected(_onConnectionChange);
-    device?.onBondChange(_onConnectionChange);
+  }
+
+  /// Pairs with the device and notifies when the pairing is complete.
+  ///
+  /// This method can be awaited to wait for the pairing to complete.
+  Future<void> pair() async {
+    try {
+      error = null;
+      await device?.waitForPair();
+    } on Exception catch (e) {
+      debug("DeviceNotifier[pair]: Failed: $e");
+      error = e;
+    }
+    notifyListeners();
   }
 
   /// Connects to the device and notifies when the connection is complete.

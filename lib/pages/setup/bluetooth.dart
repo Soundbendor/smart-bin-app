@@ -19,11 +19,14 @@ class BluetoothPage extends StatefulWidget {
   State<BluetoothPage> createState() => _BluetoothPageState();
 }
 
+enum _PairingState { init, pairing, paired }
+
 class _BluetoothPageState extends State<BluetoothPage> {
   /// Whether the dialog is currently visible.
   ///
   /// While mutable, changing this value doesn't require a rebuild.
   bool dialogIsVisible = false;
+  _PairingState pairingState = _PairingState.init;
 
   @override
   Widget build(BuildContext context) {
@@ -31,18 +34,15 @@ class _BluetoothPageState extends State<BluetoothPage> {
       builder: (context, deviceNotifier, child) {
         final device = deviceNotifier.device;
         if (device != null && !dialogIsVisible) {
-          if (device.isConnected) {
-            runSoon(() {
-              GoRouter.of(context).goNamed('wifi-scan');
-            });
-          } else {
+          if (!(device.isConnected && device.isBonded)) {
             dialogIsVisible = true;
             runSoon(() {
               deviceNotifier.connect();
               showDialog(
-                  context: context,
-                  builder: connectingDialogBuilder,
-                  barrierDismissible: false);
+                context: context,
+                builder: connectingDialogBuilder,
+                barrierDismissible: false,
+              );
             });
           }
         }
@@ -71,11 +71,45 @@ class _BluetoothPageState extends State<BluetoothPage> {
                 });
               });
         } else if (device!.isConnected) {
-          runSoon(() {
-            GoRouter.of(context).goNamed('wifi-scan');
-          });
-          dialogIsVisible = false;
-          return const SizedBox();
+          if (device.isBonded && pairingState == _PairingState.paired) {
+            runSoon(() {
+              if (!context.mounted) return;
+              GoRouter.of(context).goNamed('wifi-scan');
+            });
+            dialogIsVisible = false;
+            return const SizedBox();
+          } else {
+            debug("Pairing: $pairingState");
+            if (pairingState == _PairingState.init) {
+              pairingState = _PairingState.pairing;
+              deviceNotifier.pair().then((value) {
+                pairingState = _PairingState.paired;
+              });
+            }
+            return AlertDialog(
+              title: Text(
+                "Pairing...",
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              content: const Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                      "To ensure proper functionality, please pair with the bin. You should have received a notification asking to pair with the bin.\nYou may need to pair multiple times."),
+                  SizedBox(
+                    height: 50,
+                    child: Center(
+                      child: SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
         } else {
           return AlertDialog(
             title: Text(
@@ -85,10 +119,12 @@ class _BluetoothPageState extends State<BluetoothPage> {
             content: const SizedBox(
               height: 50,
               child: Center(
-                  child: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: CircularProgressIndicator())),
+                child: SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: CircularProgressIndicator(),
+                ),
+              ),
             ),
           );
         }

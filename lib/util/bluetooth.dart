@@ -235,6 +235,9 @@ class BleDevice {
     }
     if (_shouldBeConnected) {
       await _rebuildSubscriptions();
+    } else {
+      _createConnectionStateSubscription();
+      _createBondStateSubscription();
     }
     debug("BleDevice[connect]: Connected to device complete");
     isConnecting = false;
@@ -271,12 +274,12 @@ class BleDevice {
   Future<void> waitForPair({int? timeout}) async {
     if (isBonded) {
       debug("BleDevice[waitForPair]: Device already bonded");
-      return;
+      return await _updateServices();
     }
     if (!Platform.isAndroid) {
       debug(
           "BleDevice[waitForPair]: Platform is not Android, skipping wait for pairing");
-      return;
+      return await _updateServices();
     }
     if (!isConnected) {
       debug(
@@ -295,22 +298,28 @@ class BleDevice {
       completer.complete();
     }
 
+    debug("BleDevice[waitForPair]: Waiting for device to be bonded");
     on(BleDeviceClientEvents.bonded, callback);
     try {
       await completer.future;
-    } on Exception {
+    } on Exception catch (e) {
+      debug("BleDevice[waitForPair]: $e");
       timer?.cancel();
       removeListener(BleDeviceClientEvents.bonded, callback);
       rethrow;
     }
-    await _device.clearGattCache();
-    await _device.discoverServices();
+    removeListener(BleDeviceClientEvents.bonded, callback);
+    await _updateServices();
   }
 
-  /// Displays a pairing request. (Android only)
-  void displayPairingRequest() async {
-    assert(Platform.isAndroid);
-    return _device.createBond().ignore();
+  Future<void> _updateServices() async {
+    if (!Platform.isAndroid) {
+      debug("BleDevice[waitForPair]: Pairing complete, clearing GATT cache");
+      await _device.clearGattCache();
+    }
+    debug("BleDevice[waitForPair]: Discovering services");
+    await _device.discoverServices();
+    debug("BleDevice[waitForPair]: Discovered services");
   }
 
   /// Disconnects from the device.
