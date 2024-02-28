@@ -245,7 +245,10 @@ class BleDevice {
     _emit(BleDeviceClientEvents.connected, null);
   }
 
-  /// Pairs the device. (non-Android only)
+  /// Pairs the device and finds its services.
+  ///
+  /// On Android, it will still try to find services if bonded.
+  /// However, if not bonded, the user has to manually pair the device.
   Future<void> _pair() async {
     // On iOS, the device should be paired after connecting
     // on Android, we'll have to request pairing first
