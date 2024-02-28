@@ -251,16 +251,33 @@ class _BluetoothListState extends State<BluetoothList> {
 
     return Scaffold(
       body: CustomBackground(
-        child: ScanList(
-          itemCount: devices.length,
-          listBuilder: buildDeviceItem,
-          onResume: () {
-            setState(() {
-              startScanning();
-            });
-          },
-          title: "Find your bin!",
-          inProgress: isScanning,
+        child: Column(
+          children: [
+            ScanList(
+              itemCount: devices.length,
+              listBuilder: buildDeviceItem,
+              onResume: () {
+                setState(() {
+                  startScanning();
+                });
+              },
+              title: "Find your bin!",
+              inProgress: isScanning,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                stopScanning();
+                GoRouter.of(context).goNamed('main');
+              },
+              child: Text(
+                "Skip Setup",
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+              ),
+            ),
+          ],
         ),
       ),
     );
