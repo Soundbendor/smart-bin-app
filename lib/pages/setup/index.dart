@@ -93,7 +93,7 @@ class _SplashPageState extends State<SplashPage> {
                       foregroundColor: colorScheme.onPrimary,
                       padding: EdgeInsets.all(MediaQuery.of(context).size.width * .05),
                       textStyle: textTheme.displaySmall,
-                      backgroundColor: colorScheme.primary),
+                      backgroundColor: const Color(0xFF74C1A4)),
                   onPressed: () {
                     (_text3 < 1) ? null : context.goNamed('bluetooth');
                   },
