@@ -34,7 +34,7 @@ class _TopNavBarState extends State<TopNavBar> {
         children: [
           const DrawerHeader(
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 25, 192, 147),
+              color: Color.fromRGBO(25, 192, 147, 1),
             ),
             child: Text(
               'Binsight.ai',
@@ -57,11 +57,31 @@ class _TopNavBarState extends State<TopNavBar> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.question_mark_outlined),
-            title: const Text('Help'),
+            leading: const Icon(Icons.list),
+            title: const Text('FAQ'),
+            selected: _selectedIndex == 1,
+            onTap: () {
+              _onItemTapped(1);
+              GoRouter.of(context).goNamed('faq');
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.book_outlined),
+            title: const Text('User Guide'),
             selected: _selectedIndex == 2,
             onTap: () {
               _onItemTapped(2);
+              GoRouter.of(context).goNamed('user_guide');
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.question_mark_outlined),
+            title: const Text('Help'),
+            selected: _selectedIndex == 3,
+            onTap: () {
+              _onItemTapped(3);
               GoRouter.of(context).goNamed('help');
               Navigator.pop(context);
             },
