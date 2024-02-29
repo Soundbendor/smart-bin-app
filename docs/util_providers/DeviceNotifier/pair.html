@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the connect method from the BleDevice class, for the Dart programming language.">
-  <title>connect method - BleDevice class - bluetooth library - Dart API</title>
+  <meta name="description" content="API docs for the pair method from the DeviceNotifier class, for the Dart programming language.">
+  <title>pair method - DeviceNotifier class - providers library - Dart API</title>
 
 
   
@@ -29,11 +29,11 @@
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">binsight_ai</a></li>
-    <li><a href="../../util_bluetooth/util_bluetooth-library.html">util&#47;bluetooth.dart</a></li>
-    <li><a href="../../util_bluetooth/BleDevice-class.html">BleDevice</a></li>
-    <li class="self-crumb">connect method</li>
+    <li><a href="../../util_providers/util_providers-library.html">util&#47;providers.dart</a></li>
+    <li><a href="../../util_providers/DeviceNotifier-class.html">DeviceNotifier</a></li>
+    <li class="self-crumb">pair method</li>
   </ol>
-  <div class="self-name">connect</div>
+  <div class="self-name">pair</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -54,52 +54,40 @@
   <div
       id="dartdoc-main-content"
       class="main-content"
-      data-above-sidebar="util_bluetooth&#47;BleDevice-class-sidebar.html"
+      data-above-sidebar="util_providers&#47;DeviceNotifier-class-sidebar.html"
       data-below-sidebar="">
       <div>
-<h1><span class="kind-method">connect</span> method 
+<h1><span class="kind-method">pair</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
 
 <span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
-<span class="name ">connect</span>(<wbr>)
+<span class="name ">pair</span>(<wbr>)
 
       
 
     </section>
     
 <section class="desc markdown">
-  <p>Connects to the device.</p>
-<p>The device will automatically reconnect if it is unexpectedly disconnected.
-To stop the device from reconnecting, call <a href="../../util_bluetooth/BleDevice/disconnect.html">disconnect</a>.</p>
-<ul>
-<li>Throws a <a href="../../util_bluetooth_exception/BleConnectionException-class.html">BleConnectionException</a> if the connection fails.</li>
-<li>Throws a <a href="../../util_bluetooth_exception/BleBluetoothDisabledException-class.html">BleBluetoothDisabledException</a> if Bluetooth is not turned on.</li>
-<li>Throws a <a href="../../util_bluetooth_exception/BleBluetoothNotSupportedException-class.html">BleBluetoothNotSupportedException</a> if Bluetooth is not supported on the device.</li>
-<li>Throws a <a href="../../util_bluetooth_exception/BlePermissionException-class.html">BlePermissionException</a> if the necessary permissions are not granted.</li>
-</ul>
+  <p>Pairs with the device and notifies when the pairing is complete.</p>
+<p>This method can be awaited to wait for the pairing to complete.</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; connect() async {
-  if (isConnected) {
-    if (!_shouldBeConnected) {
-      _shouldBeConnected = true;
-      _createConnectionStateSubscription();
-      _createBondStateSubscription();
-    }
-    return;
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; pair() async {
+  try {
+    error = null;
+    await device?.waitForPair();
+  } on Exception catch (e) {
+    debug(&quot;DeviceNotifier[pair]: Failed: $e&quot;);
+    error = e;
   }
-  if (isConnecting) {
-    return await _connectionFuture;
-  }
-  _connectionFuture = _connect();
-  return await _connectionFuture;
+  notifyListeners();
 }</code></pre>
 </section>
 
@@ -116,13 +104,13 @@ To stop the device from reconnecting, call <a href="../../util_bluetooth/BleDevi
 
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">binsight_ai</a></li>
-    <li><a href="../../util_bluetooth/util_bluetooth-library.html">bluetooth</a></li>
-    <li><a href="../../util_bluetooth/BleDevice-class.html">BleDevice</a></li>
-    <li class="self-crumb">connect method</li>
+    <li><a href="../../util_providers/util_providers-library.html">providers</a></li>
+    <li><a href="../../util_providers/DeviceNotifier-class.html">DeviceNotifier</a></li>
+    <li class="self-crumb">pair method</li>
 </ol>
 
 
-    <h5>BleDevice class</h5>
+    <h5>DeviceNotifier class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
 

@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the unsubscribeFromCharacteristic method from the BleDevice class, for the Dart programming language.">
-  <title>unsubscribeFromCharacteristic method - BleDevice class - bluetooth library - Dart API</title>
+  <meta name="description" content="API docs for the waitForPair method from the BleDevice class, for the Dart programming language.">
+  <title>waitForPair method - BleDevice class - bluetooth library - Dart API</title>
 
 
   
@@ -31,9 +31,9 @@
     <li><a href="../../index.html">binsight_ai</a></li>
     <li><a href="../../util_bluetooth/util_bluetooth-library.html">util&#47;bluetooth.dart</a></li>
     <li><a href="../../util_bluetooth/BleDevice-class.html">BleDevice</a></li>
-    <li class="self-crumb">unsubscribeFromCharacteristic method</li>
+    <li class="self-crumb">waitForPair method</li>
   </ol>
-  <div class="self-name">unsubscribeFromCharacteristic</div>
+  <div class="self-name">waitForPair</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -57,15 +57,14 @@
       data-above-sidebar="util_bluetooth&#47;BleDevice-class-sidebar.html"
       data-below-sidebar="">
       <div>
-<h1><span class="kind-method">unsubscribeFromCharacteristic</span> method 
+<h1><span class="kind-method">waitForPair</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
 
 <span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
-<span class="name ">unsubscribeFromCharacteristic</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="unsubscribeFromCharacteristic-param-serviceId">{<span>required</span> <span class="type-annotation"><a href="https://pub.dev/documentation/reactive_ble_platform_interface/5.3.1/reactive_ble_platform_interface/Uuid-class.html">Uuid</a></span> <span class="parameter-name">serviceId</span>, </span></li>
-<li><span class="parameter" id="unsubscribeFromCharacteristic-param-characteristicId"><span>required</span> <span class="type-annotation"><a href="https://pub.dev/documentation/reactive_ble_platform_interface/5.3.1/reactive_ble_platform_interface/Uuid-class.html">Uuid</a></span> <span class="parameter-name">characteristicId</span>}</span></li>
+<span class="name ">waitForPair</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="waitForPair-param-timeout">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">timeout</span>}</span></li>
 </ol>)
 
       
@@ -73,13 +72,15 @@
     </section>
     
 <section class="desc markdown">
-  <p>Unsubscribes from a characteristic.</p>
-<p><code>serviceId</code> is the service UUID.
-<code>characteristicId</code> is the characteristic UUID.</p>
+  <p>Waits for the device to be paired. (Android only)</p>
+<p><code>timeout</code> is the time to wait for the device to be paired in seconds.</p>
 <ul>
-<li>Throws a <a href="../../util_bluetooth_exception/BleInvalidOperationException-class.html">BleInvalidOperationException</a> if the characteristic does not support unsubscribing.</li>
-<li>Throws a <a href="../../util_bluetooth_exception/BleOperationFailureException-class.html">BleOperationFailureException</a> if the unsubscription fails.</li>
+<li>Throws a <a href="../../util_bluetooth_exception/BleOperationFailureException-class.html">BleOperationFailureException</a> if the pairing fails.</li>
 <li>Throws a <a href="../../util_bluetooth_exception/BleConnectionException-class.html">BleConnectionException</a> if the device fails to connect.</li>
+<li>Throws a <a href="../../util_bluetooth_exception/BleBluetoothDisabledException-class.html">BleBluetoothDisabledException</a> if Bluetooth is not turned on.</li>
+<li>Throws a <a href="../../util_bluetooth_exception/BleBluetoothNotSupportedException-class.html">BleBluetoothNotSupportedException</a> if Bluetooth is not supported on the device.</li>
+<li>Throws a <a href="../../util_bluetooth_exception/BlePermissionException-class.html">BlePermissionException</a> if the necessary permissions are not granted.</li>
+<li>Throws a <a href="../../util_bluetooth_exception/BleOperationFailureException-class.html">BleOperationFailureException</a> if the pairing fails.</li>
 </ul>
 </section>
 
@@ -87,44 +88,46 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; unsubscribeFromCharacteristic({
-  required Uuid serviceId,
-  required Uuid characteristicId,
-}) async {
-  final characteristic = BluetoothCharacteristic(
-      remoteId: DeviceIdentifier(id),
-      serviceUuid: Guid.fromBytes(serviceId.data),
-      characteristicUuid: Guid.fromBytes(characteristicId.data));
-  &#47;&#47; remove subscriptions
-  List&lt;dynamic&gt;? toRemove;
-  for (final subscription in _rebuildSubscriptionList) {
-    if (subscription[0] == _BleSubscriptionType.subscribe &amp;&amp;
-        subscription[1] == serviceId &amp;&amp;
-        subscription[2] == characteristicId) {
-      toRemove = subscription;
-      break;
-    }
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; waitForPair({int? timeout}) async {
+  if (isBonded) {
+    debug(&quot;BleDevice[waitForPair]: Device already bonded&quot;);
+    return await _updateServices();
   }
-  _rebuildSubscriptionList.remove(toRemove);
+  if (!Platform.isAndroid) {
+    debug(
+        &quot;BleDevice[waitForPair]: Platform is not Android, skipping wait for pairing&quot;);
+    return await _updateServices();
+  }
   if (!isConnected) {
     debug(
-        &quot;BleDevice[unsubscribeFromCharacteristic]: Device not connected, attempting to connect&quot;);
+        &quot;BleDevice[waitForPair]: Device not connected, attempting to connect&quot;);
     await connect();
   }
-  if (!characteristic.properties.notify &amp;&amp;
-      !characteristic.properties.indicate) {
-    debug(
-        &quot;BleDevice[unsubscribeFromCharacteristic][$characteristicId]: notify = ${characteristic.properties.notify}, indicate = ${characteristic.properties.indicate}&quot;);
-    throw BleInvalidOperationException(
-        &quot;Characteristic $characteristicId does not support unsubscribing&quot;);
+  final completer = Completer&lt;void&gt;();
+  final Timer? timer = timeout != null
+      ? Timer(Duration(seconds: timeout), () {
+          completer.completeError(BleOperationFailureException(
+              &quot;Timed out waiting for device to be bonded&quot;));
+        })
+      : null;
+
+  void callback(_) {
+    completer.complete();
   }
+
+  debug(&quot;BleDevice[waitForPair]: Waiting for device to be bonded&quot;);
+  on(BleDeviceClientEvents.bonded, callback);
   try {
-    await characteristic.setNotifyValue(false);
-  } catch (e) {
-    debug(&quot;BleDevice[unsubscribeFromCharacteristic][$characteristicId]: $e&quot;);
+    await completer.future;
+  } on Exception catch (e) {
+    debug(&quot;BleDevice[waitForPair]: $e&quot;);
+    timer?.cancel();
+    removeListener(BleDeviceClientEvents.bonded, callback);
     throw BleOperationFailureException(
-        &quot;Failed to unsubscribe from characteristic $characteristicId&quot;);
+        &quot;Failed to wait for device to be bonded: $e&quot;);
   }
+  removeListener(BleDeviceClientEvents.bonded, callback);
+  await _updateServices();
 }</code></pre>
 </section>
 
@@ -143,7 +146,7 @@
     <li><a href="../../index.html">binsight_ai</a></li>
     <li><a href="../../util_bluetooth/util_bluetooth-library.html">bluetooth</a></li>
     <li><a href="../../util_bluetooth/BleDevice-class.html">BleDevice</a></li>
-    <li class="self-crumb">unsubscribeFromCharacteristic method</li>
+    <li class="self-crumb">waitForPair method</li>
 </ol>
 
 
