@@ -22,9 +22,12 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
     List<double> textControllers = [_text1, _text2, _text3, _text4];
     for (int i = 0; i < 4; i++) {
-      Future.delayed(const Duration(seconds: 1), () => opacityController('one'));
-      Future.delayed(const Duration(seconds: 3), () => opacityController('two'));
-      Future.delayed(const Duration(seconds: 5), () => opacityController('three'));
+      Future.delayed(
+          const Duration(seconds: 1), () => opacityController('one'));
+      Future.delayed(
+          const Duration(seconds: 3), () => opacityController('two'));
+      Future.delayed(
+          const Duration(seconds: 5), () => opacityController('three'));
     }
   }
 
@@ -58,61 +61,45 @@ class _SplashPageState extends State<SplashPage> {
         imageURL: "assets/images/background3.JPG",
         child: Center(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Flexible(
-                flex: 5,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.only(
-                            left: 16, right: 16, bottom: 30, top: 160),
-                        child: AnimatedOpacity(
-                          opacity: _text1,
-                          duration: const Duration(seconds: 2),
-                          child: Text(
-                            "Welcome!",
-                            style: textTheme.displayLarge,
-                          ),
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 80, right: 80, top: 20, bottom: 20),
-                      child: AnimatedOpacity(
-                        opacity: _text2,
-                        duration: const Duration(seconds: 2),
-                        child: Text(
-                          "Let's get you connected to your bin.",
-                          style: textTheme.headlineLarge!.copyWith(
-                            color: colorScheme.onBackground,
-                            fontWeight: FontWeight.normal
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: AnimatedOpacity(
-                        opacity: _text3,
-                        duration: const Duration(seconds: 2),
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                              foregroundColor: colorScheme.onPrimary,
-                              padding: const EdgeInsets.all(16.0),
-                              textStyle: textTheme.labelLarge,
-                              backgroundColor: colorScheme.primary),
-                          onPressed: () {
-                            context.goNamed('bluetooth');
-                          },
-                          child: const Text('Get Started'),
-                        ),
-                      ),
-                    ),
-                  ],
+              SizedBox(height: MediaQuery.of(context).size.height * .20),
+              AnimatedOpacity(
+                opacity: _text1,
+                duration: const Duration(seconds: 1),
+                child: Text(
+                  "Welcome!",
+                  style: textTheme.displayLarge,
                 ),
               ),
-              Flexible(flex: 3, child: Container())
+              SizedBox(height: MediaQuery.of(context).size.height * .05),
+              AnimatedOpacity(
+                opacity: _text2,
+                duration: const Duration(seconds: 1),
+                child: Text(
+                  "Let's get you connected to your bin.",
+                  style: textTheme.headlineLarge!.copyWith(
+                      color: colorScheme.onBackground,
+                      fontWeight: FontWeight.normal),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * .10),
+              AnimatedOpacity(
+                opacity: _text3,
+                duration: const Duration(seconds: 1),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      foregroundColor: colorScheme.onPrimary,
+                      padding: EdgeInsets.all(MediaQuery.of(context).size.width * .05),
+                      textStyle: textTheme.displaySmall,
+                      backgroundColor: colorScheme.primary),
+                  onPressed: () {
+                    (_text3 < 1) ? null : context.goNamed('bluetooth');
+                  },
+                  child: const Text('Get Started'),
+                ),
+              ),
             ],
           ),
         ),
