@@ -1,5 +1,4 @@
 import 'package:binsight_ai/widgets/background.dart';
-import 'package:binsight_ai/widgets/intro_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -53,7 +52,6 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
-    // return StyledIntroScreen();
     return Scaffold(
       body: CustomBackground(
         imageURL: "assets/images/background3.JPG",

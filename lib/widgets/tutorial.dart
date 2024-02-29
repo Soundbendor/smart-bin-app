@@ -28,7 +28,7 @@ class StyledIntroScreen extends StatelessWidget {
     PageViewModel(
       title: "Using the Bin",
       body:
-          "Compost as you typically would, just toss your items in, and forget about them!",
+          "Compost as you typically would, just toss your items in, and let nature do its thing!",
       image: const Icon(Icons.compost, size: 100),
     ),
     PageViewModel(
@@ -38,8 +38,8 @@ class StyledIntroScreen extends StatelessWidget {
       image: const Icon(Icons.auto_fix_high, size: 100),
     ),
     PageViewModel(
-      title: "You're Done!",
-      body: "That's it! Get out there and have FUN!",
+      title: "That's All You Need to Know!",
+      body: "That's it! Check back every now and again to annotate your compost images.",
       image: const Icon(Icons.check_circle, size: 100),
     ),
   ];
@@ -48,8 +48,8 @@ class StyledIntroScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return IntroductionScreen(
       pages: listPageViewModels,
-      showSkipButton: true,
-      skip: const Icon(Icons.skip_next),
+      showBackButton: true,
+      back: const Icon(Icons.arrow_back),
       next: const Text("Next"),
       done: const Text("Done"),
       onDone: () {
