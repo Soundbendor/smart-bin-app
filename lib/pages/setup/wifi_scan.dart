@@ -59,6 +59,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
           onNotification: (data) {
             try {
               final List<dynamic> content = jsonDecode(utf8.decode(data));
+              debug("WiFi scan results: $content");
               setState(() {
                 wifiResults = content
                     .map((e) => WifiScanResult(e[0], e[1], e[2]))
