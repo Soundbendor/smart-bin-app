@@ -18,21 +18,17 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    for (int i = 0; i < 4; i++) {
-      Future.delayed(
-          const Duration(seconds: 1), () => opacityController('one'));
-      Future.delayed(
-          const Duration(seconds: 3), () => opacityController('two'));
-      Future.delayed(
-          const Duration(seconds: 5), () => opacityController('three'));
-    }
+    Future.delayed(const Duration(seconds: 1), () => _opacityController('one'));
+    Future.delayed(const Duration(seconds: 3), () => _opacityController('two'));
+    Future.delayed(const Duration(seconds: 5), () => _opacityController('three'));
   }
 
   void _onIntroEnd(context) {
     GoRouter.of(context).pushReplacementNamed("bluetooth");
   }
 
-  void opacityController(variable) {
+  // Modifies opacity value for fade transitions
+  void _opacityController(variable) {
     setState(() {
       switch (variable) {
         case 'one':
@@ -87,7 +83,8 @@ class _SplashPageState extends State<SplashPage> {
                 child: TextButton(
                   style: TextButton.styleFrom(
                       foregroundColor: colorScheme.onPrimary,
-                      padding: EdgeInsets.all(MediaQuery.of(context).size.width * .05),
+                      padding: EdgeInsets.all(
+                          MediaQuery.of(context).size.width * .05),
                       textStyle: textTheme.displaySmall,
                       backgroundColor: const Color(0xFF74C1A4)),
                   onPressed: () {
