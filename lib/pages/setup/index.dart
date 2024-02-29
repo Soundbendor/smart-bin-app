@@ -15,12 +15,10 @@ class _SplashPageState extends State<SplashPage> {
   double _text1 = 0;
   double _text2 = 0;
   double _text3 = 0;
-  double _text4 = 0;
 
   @override
   void initState() {
     super.initState();
-    List<double> textControllers = [_text1, _text2, _text3, _text4];
     for (int i = 0; i < 4; i++) {
       Future.delayed(
           const Duration(seconds: 1), () => opacityController('one'));
