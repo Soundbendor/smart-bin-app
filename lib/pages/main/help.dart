@@ -56,22 +56,24 @@ class HelpPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: TextButton(
                   onPressed: _launchEmail,
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.email,
-                        color: Color.fromARGB(255, 33, 63, 148),
-                        size: 30,
-                      ),
-                      SizedBox(width: 18.0),
-                      Text('Email',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 255, 255, 255),
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w500)),
-                    ],
-                  ),
+                  child: Builder(builder: (context) {
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.email,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          size: 30,
+                        ),
+                        const SizedBox(width: 18.0),
+                        Text('Email',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w500)),
+                      ],
+                    );
+                  }),
                 ),
               ),
             ],
