@@ -11,37 +11,20 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  double _text1 = 0;
-  double _text2 = 0;
-  double _text3 = 0;
+  double _text1Opacity = 0;
+  double _text2Opacity = 0;
+  double _button1Opacity = 0;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 1), () => _opacityController('one'));
-    Future.delayed(const Duration(seconds: 3), () => _opacityController('two'));
-    Future.delayed(const Duration(seconds: 5), () => _opacityController('three'));
+    runAnimation();
   }
 
-  void _onIntroEnd(context) {
-    GoRouter.of(context).pushReplacementNamed("bluetooth");
-  }
-
-  // Modifies opacity value for fade transitions
-  void _opacityController(variable) {
-    setState(() {
-      switch (variable) {
-        case 'one':
-          _text1 = 1;
-          break;
-        case 'two':
-          _text2 = 1;
-          break;
-        case 'three':
-          _text3 = 1;
-          break;
-      }
-    });
+  void runAnimation() async {
+    await Future.delayed(const Duration(seconds: 1), () => setState(() {_text1Opacity = 1;}));
+    await Future.delayed(const Duration(seconds: 1), () => setState(() {_text2Opacity = 1;}));
+    await Future.delayed(const Duration(seconds: 1), () => setState(() {_button1Opacity = 1;}));
   }
 
   @override
@@ -57,8 +40,8 @@ class _SplashPageState extends State<SplashPage> {
             children: [
               SizedBox(height: MediaQuery.of(context).size.height * .20),
               AnimatedOpacity(
-                opacity: _text1,
-                duration: const Duration(seconds: 1),
+                opacity: _text1Opacity,
+                duration: const Duration(milliseconds: 500),
                 child: Text(
                   "Welcome!",
                   style: textTheme.displayLarge,
@@ -66,8 +49,8 @@ class _SplashPageState extends State<SplashPage> {
               ),
               SizedBox(height: MediaQuery.of(context).size.height * .05),
               AnimatedOpacity(
-                opacity: _text2,
-                duration: const Duration(seconds: 1),
+                opacity: _text2Opacity,
+                duration: const Duration(milliseconds: 500),
                 child: Text(
                   "Let's get you connected to your bin.",
                   style: textTheme.headlineLarge!.copyWith(
@@ -78,17 +61,18 @@ class _SplashPageState extends State<SplashPage> {
               ),
               SizedBox(height: MediaQuery.of(context).size.height * .10),
               AnimatedOpacity(
-                opacity: _text3,
-                duration: const Duration(seconds: 1),
-                child: TextButton(
-                  style: TextButton.styleFrom(
+                opacity: _button1Opacity,
+                duration: const Duration(milliseconds: 500),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      elevation: 5,
                       foregroundColor: colorScheme.onPrimary,
-                      padding: EdgeInsets.all(
-                          MediaQuery.of(context).size.width * .05),
-                      textStyle: textTheme.displaySmall,
+                      padding: EdgeInsets.symmetric(
+                          vertical: MediaQuery.of(context).size.width * .05, horizontal: 50),
+                      textStyle: textTheme.titleLarge,
                       backgroundColor: const Color(0xFF74C1A4)),
                   onPressed: () {
-                    (_text3 < 1) ? null : context.goNamed('bluetooth');
+                    (_button1Opacity < 1) ? null : context.goNamed('bluetooth');
                   },
                   child: const Text('Get Started'),
                 ),
