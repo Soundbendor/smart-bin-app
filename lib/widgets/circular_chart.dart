@@ -3,8 +3,11 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 UniqueKey graphKey = UniqueKey();
 
+///Line chart to display names and ratios of items composted
 class CircleChart extends StatefulWidget {
+  //Map with the item name as the key and total count of that item as the value
   final Map data;
+  //Chart title
   final String title;
   const CircleChart({super.key, required this.data, required this.title});
   @override
@@ -14,10 +17,12 @@ class CircleChart extends StatefulWidget {
 class _CircleChartState extends State<CircleChart> {
   @override
   Widget build(BuildContext context) {
-    List<_ChartData> pieData = widget.data.entries.map((entry) {
+    //Create doughnut data for the doughnut chart construction using the name and counts in data
+    List<_ChartData> doughnutData = widget.data.entries.map((entry) {
       return _ChartData(entry.value, entry.key);
     }).toList();
 
+    //Creates a doughnut chart using the doughnutData
     return Center(
       child: SfCircularChart(
         key: graphKey,
@@ -35,7 +40,7 @@ class _CircleChartState extends State<CircleChart> {
             radius: '65%',
             explode: true,
             explodeIndex: 0,
-            dataSource: pieData,
+            dataSource: doughnutData,
             xValueMapper: (_ChartData data, _) => data.text!,
             yValueMapper: (_ChartData data, _) => data.xData,
             dataLabelMapper: (_ChartData data, _) => data.text!,
@@ -53,6 +58,7 @@ class _CircleChartState extends State<CircleChart> {
   }
 }
 
+//Class to contain data to be used for for graphing
 class _ChartData {
   _ChartData(this.xData, [this.text]);
   final num xData;

@@ -25,6 +25,7 @@ class DynamicImage extends StatelessWidget {
   final Widget Function(BuildContext context, Object error, StackTrace? trace)?
       errorBuilder;
 
+  ///Image that will render using either a link or path
   const DynamicImage(
     this.imageUrl, {
     super.key,
