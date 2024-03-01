@@ -22,9 +22,21 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void runAnimation() async {
-    await Future.delayed(const Duration(seconds: 1), () => setState(() {_text1Opacity = 1;}));
-    await Future.delayed(const Duration(seconds: 1), () => setState(() {_text2Opacity = 1;}));
-    await Future.delayed(const Duration(seconds: 1), () => setState(() {_button1Opacity = 1;}));
+    await Future.delayed(
+        const Duration(seconds: 1),
+        () => setState(() {
+              _text1Opacity = 1;
+            }));
+    await Future.delayed(
+        const Duration(seconds: 1),
+        () => setState(() {
+              _text2Opacity = 1;
+            }));
+    await Future.delayed(
+        const Duration(seconds: 1),
+        () => setState(() {
+              _button1Opacity = 1;
+            }));
   }
 
   @override
@@ -68,8 +80,10 @@ class _SplashPageState extends State<SplashPage> {
                       elevation: 5,
                       foregroundColor: colorScheme.onPrimary,
                       padding: EdgeInsets.symmetric(
-                          vertical: MediaQuery.of(context).size.width * .05, horizontal: 50),
-                      textStyle: textTheme.titleLarge,
+                          vertical: MediaQuery.of(context).size.width * .05,
+                          horizontal: 50),
+                      textStyle: textTheme.titleLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
                       backgroundColor: const Color(0xFF74C1A4)),
                   onPressed: () {
                     (_button1Opacity < 1) ? null : context.goNamed('bluetooth');
