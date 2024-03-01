@@ -133,7 +133,7 @@
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) =&gt; DeviceNotifier()),
-  ], child: BinsightAiApp(skipSetUp: devices.isEmpty)));
+  ], child: BinsightAiApp(skipSetUp: devices.isNotEmpty)));
 }</code></pre>
 </section>
 

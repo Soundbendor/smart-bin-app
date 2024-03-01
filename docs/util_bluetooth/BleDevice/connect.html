@@ -74,10 +74,12 @@
   <p>Connects to the device.</p>
 <p>The device will automatically reconnect if it is unexpectedly disconnected.
 To stop the device from reconnecting, call <a href="../../util_bluetooth/BleDevice/disconnect.html">disconnect</a>.</p>
-<p>Throws a <a href="../../util_bluetooth_exception/BleConnectionException-class.html">BleConnectionException</a> if the connection fails.
-Throws a <a href="../../util_bluetooth_exception/BleBluetoothDisabledException-class.html">BleBluetoothDisabledException</a> if Bluetooth is not turned on.
-Throws a <a href="../../util_bluetooth_exception/BleBluetoothNotSupportedException-class.html">BleBluetoothNotSupportedException</a> if Bluetooth is not supported on the device.
-Throws a <a href="../../util_bluetooth_exception/BlePermissionException-class.html">BlePermissionException</a> if the necessary permissions are not granted.</p>
+<ul>
+<li>Throws a <a href="../../util_bluetooth_exception/BleConnectionException-class.html">BleConnectionException</a> if the connection fails.</li>
+<li>Throws a <a href="../../util_bluetooth_exception/BleBluetoothDisabledException-class.html">BleBluetoothDisabledException</a> if Bluetooth is not turned on.</li>
+<li>Throws a <a href="../../util_bluetooth_exception/BleBluetoothNotSupportedException-class.html">BleBluetoothNotSupportedException</a> if Bluetooth is not supported on the device.</li>
+<li>Throws a <a href="../../util_bluetooth_exception/BlePermissionException-class.html">BlePermissionException</a> if the necessary permissions are not granted.</li>
+</ul>
 </section>
 
 
@@ -89,6 +91,7 @@ Throws a <a href="../../util_bluetooth_exception/BlePermissionException-class.ht
     if (!_shouldBeConnected) {
       _shouldBeConnected = true;
       _createConnectionStateSubscription();
+      _createBondStateSubscription();
     }
     return;
   }

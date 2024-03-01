@@ -114,7 +114,23 @@
                                   state.pathParameters[&#39;detectionId&#39;]!);
                         }),
                   ]),
-
+              &#47;&#47; `&#47;main&#47;faq` - frequently asked questions
+              GoRoute(
+                name: &#39;faq&#39;,
+                path: &#39;faq&#39;,
+                builder: (BuildContext context, GoRouterState state) {
+                  return const FAQ();
+                },
+              ),
+              &#47;&#47; `&#47;main&#47;user_guide` - user guide
+              GoRoute(
+                name: &#39;user_guide&#39;,
+                path: &#39;user_guide&#39;,
+                builder: (BuildContext context, GoRouterState state) {
+                  return const UserGuide();
+                },
+              ),
+              &#47;&#47; `&#47;main&#47;help` - help page
               GoRoute(
                 name: &#39;help&#39;,
                 path: &#39;help&#39;,
