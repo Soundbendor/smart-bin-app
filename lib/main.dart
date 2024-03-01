@@ -75,14 +75,14 @@ void main() async {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => DeviceNotifier()),
-  ], child: BinsightAiApp(skipSetUp: devices.isEmpty)));
+  ], child: BinsightAiApp(skipSetUp: devices.isNotEmpty)));
 }
 
 /// The root of the application. Contains the GoRouter and MaterialApp wrappers.
 class BinsightAiApp extends StatefulWidget {
   final bool skipSetUp;
 
-  const BinsightAiApp({super.key, this.skipSetUp = false});
+  const BinsightAiApp({super.key, this.skipSetUp = true});
 
   @override
   State<BinsightAiApp> createState() => _BinsightAiAppState();
@@ -104,7 +104,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     super.didChangeAppLifecycleState(state);
     // Minimized
     if (state == AppLifecycleState.paused) {
-      debug("closed");
+      debug("Closed");
     }
     // Reopened
     else if (state == AppLifecycleState.resumed) {
