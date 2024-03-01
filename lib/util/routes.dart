@@ -7,7 +7,9 @@ import 'package:binsight_ai/pages/setup/wifi_configuration.dart';
 import 'package:binsight_ai/pages/detection/annotation.dart';
 import 'package:binsight_ai/pages/detection/detection.dart';
 import 'package:binsight_ai/pages/detection/index.dart';
+import 'package:binsight_ai/pages/main/faq.dart';
 import 'package:binsight_ai/pages/main/help.dart';
+import 'package:binsight_ai/pages/main/user_guide.dart';
 import 'package:binsight_ai/pages/main/home.dart';
 import 'package:binsight_ai/pages/setup/index.dart';
 import 'package:binsight_ai/pages/setup/bluetooth.dart';
@@ -62,7 +64,23 @@ List<RouteBase> getRoutes() {
                                   state.pathParameters['detectionId']!);
                         }),
                   ]),
-
+              // `/main/faq` - frequently asked questions
+              GoRoute(
+                name: 'faq',
+                path: 'faq',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const FAQ();
+                },
+              ),
+              // `/main/user_guide` - user guide
+              GoRoute(
+                name: 'user_guide',
+                path: 'user_guide',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const UserGuide();
+                },
+              ),
+              // `/main/help` - help page
               GoRoute(
                 name: 'help',
                 path: 'help',

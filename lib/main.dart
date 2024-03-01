@@ -130,7 +130,7 @@ void main() async {
 class BinsightAiApp extends StatefulWidget {
   final bool skipSetUp;
 
-  const BinsightAiApp({super.key, this.skipSetUp = false});
+  const BinsightAiApp({super.key, this.skipSetUp = true});
 
   @override
   State<BinsightAiApp> createState() => _BinsightAiAppState();
@@ -152,7 +152,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     super.didChangeAppLifecycleState(state);
     // Minimized
     if (state == AppLifecycleState.paused) {
-      debug("closed");
+      debug("Closed");
     }
     // Reopened
     else if (state == AppLifecycleState.resumed) {
