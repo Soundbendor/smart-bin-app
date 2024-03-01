@@ -14,11 +14,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //All detections
   List<Detection> detections = [];
+  //Map item names to total count of the item
   Map<String, int> labelCounts = {};
+  //Map day to total compost weight
   Map<DateTime, double> weightCounts = {};
   late Future loadDetectionFuture;
 
+  //Load all the detections upon building
   @override
   void initState() {
     loadDetectionFuture = Detection.all().then((value) async {
@@ -36,7 +40,6 @@ class _HomePageState extends State<HomePage> {
     if (detections.isNotEmpty) {
       latest = detections[0];
     }
-    print(weightCounts);
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -55,19 +58,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  //Function to populate the weightCounts and labelCounts
   void populateCounts() {
     if (detections.isNotEmpty) {
+      //Turn detections to a list of maps
       List<Map<String, dynamic>> detectionsMaps =
           detections.map((detection) => detection.toMap()).toList();
+      //Loop over all detections and increment the counts accordingly
       for (Map<String, dynamic> detection in detectionsMaps) {
         DateTime timestamp = DateTime.parse(detection["timestamp"]);
         DateTime monthDay =
             DateTime(timestamp.year, timestamp.month, timestamp.day);
+        //Extract month and day from each timestamp, and use that as the key
         weightCounts[monthDay] =
             (weightCounts[monthDay] ?? 0.0) + detection["weight"];
         if (detection["boxes"] != null) {
           String boxes = detection["boxes"];
           List<dynamic> boxesList = jsonDecode(boxes);
+          //If the boxes field is populated, loop over the list and extract the name that's at index 0 of each item
           for (var label in boxesList) {
             String name = label[0];
             labelCounts[name] = (labelCounts[name] ?? 0) + 1;
@@ -78,6 +86,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+//Button to navigate to the latest detection's page
 class LabelButton extends StatelessWidget {
   const LabelButton({
     super.key,
