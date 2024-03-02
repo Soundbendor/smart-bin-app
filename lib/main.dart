@@ -75,7 +75,7 @@ void main() async {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => DeviceNotifier()),
-  ], child: BinsightAiApp(skipSetUp: devices.isEmpty)));
+  ], child: BinsightAiApp(skipSetUp: devices.isNotEmpty)));
 }
 
 /// The root of the application. Contains the GoRouter and MaterialApp wrappers.
