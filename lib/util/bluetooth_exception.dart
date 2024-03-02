@@ -1,3 +1,4 @@
+/// Thrown when the user denies a required permission
 class BlePermissionException implements Exception {
   final String message;
 
@@ -9,6 +10,7 @@ class BlePermissionException implements Exception {
   }
 }
 
+/// Thrown when the device does not support Bluetooth
 class BleBluetoothNotSupportedException implements Exception {
   final String message;
 
@@ -20,6 +22,7 @@ class BleBluetoothNotSupportedException implements Exception {
   }
 }
 
+/// Thrown when Bluetooth is disabled
 class BleBluetoothDisabledException implements Exception {
   final String message;
 
@@ -31,6 +34,7 @@ class BleBluetoothDisabledException implements Exception {
   }
 }
 
+/// Thrown when the app is unable to connect to the device
 class BleConnectionException implements Exception {
   final String message;
 
@@ -42,6 +46,7 @@ class BleConnectionException implements Exception {
   }
 }
 
+/// Thrown when an operation is performed on something that does not support it
 class BleInvalidOperationException implements Exception {
   final String message;
 
@@ -53,6 +58,7 @@ class BleInvalidOperationException implements Exception {
   }
 }
 
+/// Thrown when an operation fails (timeout, other error)
 class BleOperationFailureException implements Exception {
   final String message;
 
