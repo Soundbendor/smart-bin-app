@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 
-/// Displays the Help page with dropdown sections for FAQ, User Guide, Help, and Contact Us email connection
-class HelpPage extends StatelessWidget {
-  const HelpPage({super.key});
+/// Displays the User Guide
+class UserGuide extends StatelessWidget {
+  const UserGuide({super.key});
 
   @override
   Widget build(BuildContext context) {

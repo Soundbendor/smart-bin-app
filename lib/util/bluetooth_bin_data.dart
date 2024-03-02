@@ -36,6 +36,7 @@ final wifiStatusCharacteristicId =
 /// {
 ///   "message": "Wi-Fi configuration successful",
 ///   "success": true,
+///   "log": "...", // log of the operation (useful for errors)
 ///   "timestamp": 123456789.5 // Unix timestamp (seconds)
 /// }
 /// ```
