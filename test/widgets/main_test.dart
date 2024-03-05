@@ -64,6 +64,7 @@ void main() {
     await widgetTester.pumpWidget(makeTestableWidget(
         child: const BinsightAiApp(skipSetUp: true),
         size: const Size(800, 600)));
+    await widgetTester.pumpAndSettle();
     expect(router!.routerDelegate.currentConfiguration.last.matchedLocation,
         equals("/main"));
     FlutterError.onError = originalErrorHandler;

@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 import 'package:binsight_ai/widgets/image.dart';
+import 'package:flutter/material.dart';
 
 /// Widget with logic to annotate and render detection images
 class FreeDraw extends StatefulWidget {
@@ -27,6 +28,8 @@ class _FreeDrawState extends State<FreeDraw> {
 
   /// Key for the Image widget that renders the detection image
   late GlobalKey imageKey;
+
+  int startIndex = 0;
 
   @override
   void initState() {
@@ -100,6 +103,27 @@ class _FreeDrawState extends State<FreeDraw> {
     return annotation.isNotEmpty ? annotation.last : null;
   }
 
+  DrawingSegment? combineSegments() {
+    if (startIndex < 0 || startIndex >= annotation.length) {
+      throw ArgumentError("Invalid startIndex");
+    }
+
+    DrawingSegment combinedSegment = DrawingSegment(
+      id: annotation[startIndex].id,
+      offsets: [],
+    );
+
+    for (int i = startIndex; i < annotation.length; i++) {
+      combinedSegment.offsets.addAll(annotation[i].offsets);
+      startIndex++;
+    }
+    return combinedSegment;
+  }
+
+  void resetAnnotation() {
+    startIndex = 0;
+  }
+
   /// Removes the last DrawingSegment from the annotation list
   void undo() {
     setState(() {
@@ -132,7 +156,7 @@ class DrawingPainter extends CustomPainter {
   });
 
   @override
-  void paint(Canvas canvas, Size size) {
+  void paint(Canvas canvas, ui.Size size) {
     //Draws a line between each drawingSegment's Offsets
     //for each segment in drawingSegments
     for (var drawingSegment in drawingSegments) {
@@ -183,5 +207,12 @@ class DrawingSegment {
       id: id,
       offsets: offsets ?? this.offsets,
     );
+  }
+
+  List<List<double>> toFloatList() {
+    List<List<double>> list = offsets.map((offset) {
+      return [offset.dx, offset.dy];
+    }).toList();
+    return list;
   }
 }

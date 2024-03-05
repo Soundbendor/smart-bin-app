@@ -53,9 +53,8 @@ void main() {
       "temperature": 20.0,
       "co2": 0.5,
       "vo2": 0.5,
-      "boxes": '[{"pineapple":0.6},{"chicken":0.8}]',
+      "boxes": '[["pineapple", [11.4, 16.5]],["chicken", [10.0, 292.8]]]',
     });
-
     await widgetTester.pumpWidget(makeTestableWidget(
       size: const Size(800, 600),
       child: DetectionSmallListItem(detection: detection),

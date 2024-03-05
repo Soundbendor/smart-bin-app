@@ -14,10 +14,10 @@ void handleMessages(WebSocketChannel channel) {
         final messageType = jsonData['type'];
         if (messageType == 'pre_detection') {
           debug('Emitted predetection was received');
-          // await updatePreDetection(jsonData["pre_detection"], database);
+          await updatePreDetection(await jsonDecode(jsonData["pre_detection"]));
         } else if (messageType == 'post_detection') {
           debug('Emitted postdetection was received');
-          // await updatePostDetection(jsonData["post_detection"], database);
+          await addPostDetectionLink(jsonDecode(jsonData["post_detection"]));
         }
       } catch (e) {
         debug('Error decoding JSON: $e');
@@ -42,11 +42,11 @@ Future<void> updatePreDetection(Map<String, dynamic> data) async {
       depthMapImgLink: data['depth_map_link'],
       irImgLink: data['ir_link'], //Update name to name in pydantic model
       weight: data['weight'],
-      humidity: data['humditiy'],
+      humidity: data['humidity'],
       temperature: data['temperature'],
       co2: data['co2'], //Update name to name in pydantic model
       vo2: data['vo2'], //Update name to name in pydantic model
-      boxes: data['boxes'] //Update name to name in pydantic model
+      // boxes: data['boxes'] //Update name to name in pydantic model
       );
 
   await detection.save();
@@ -59,12 +59,13 @@ Future<void> addPostDetectionLink(
   List<Map<String, dynamic>> detections = await db.query(
     "detections",
     where: "imageId = ?",
-    whereArgs: [postDetectionData['imageId']],
+    whereArgs: [postDetectionData['img_id']],
   );
 
   if (detections[0].isNotEmpty) {
     Detection detection = Detection.fromMap(detections[0]);
     detection.postDetectImgLink = postDetectionData['img_link'];
+    detection.boxes = postDetectionData["boxes"];
     detection.update();
   }
 }
