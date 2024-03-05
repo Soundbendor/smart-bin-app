@@ -123,6 +123,7 @@ void main() async {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => DeviceNotifier()),
+    ChangeNotifierProvider(create: (_) => LabelNotifier()),
   ], child: BinsightAiApp(skipSetUp: devices.isNotEmpty)));
 }
 

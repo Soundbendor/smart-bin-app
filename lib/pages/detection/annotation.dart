@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:binsight_ai/util/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +8,7 @@ import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/widgets/free_draw.dart';
+import 'package:provider/provider.dart';
 
 /// Page used for annotating an individual detection image
 class AnnotationPage extends StatefulWidget {
@@ -168,24 +170,53 @@ class _AnnotationPageState extends State<AnnotationPage> {
                       );
                     }
                   }),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                    'Current Label: ${context.watch<LabelNotifier>().label ?? 'None'}'),
+              ),
               ElevatedButton(
                   onPressed: () {
-                    _showPopup();
+                    GoRouter.of(context).push("/main/label");
                   },
-                  child: Text("Label Annotation",
+                  child: Text("Update Current Label",
                       style: textTheme.labelLarge!.copyWith(
                         color: Theme.of(context).colorScheme.onPrimary,
                       ))),
               ElevatedButton(
-                  onPressed: () {
-                    captureImage();
-                    debug(annotationsList);
-                    _freeDrawKey.currentState?.resetAnnotation();
-                  },
-                  child: Text("Complete Annotations",
-                      style: textTheme.labelLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ))),
+                onPressed: () {
+                  _capturedPoint = _freeDrawKey.currentState?.combineSegments();
+                  if (_capturedPoint == null) {
+                    print("No segment entered");
+                  } else if (context.read<LabelNotifier>().label != null) {
+                    annotationsList.add([
+                      context.read<LabelNotifier>().label,
+                      _capturedPoint!.toFloatList()
+                    ]);
+                    _capturedPoint = null;
+                  }
+                  debug(annotationsList);
+                },
+                child: Text(
+                  "Save Current Annotation",
+                  style: textTheme.labelLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  captureImage();
+                  debug(annotationsList);
+                  _freeDrawKey.currentState?.resetAnnotation();
+                },
+                child: Text(
+                  "Save All Annotations",
+                  style: textTheme.labelLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
+              ),
               if (_capturedImage != null)
                 Image.memory(
                   _capturedImage!,

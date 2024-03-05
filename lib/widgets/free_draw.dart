@@ -105,7 +105,7 @@ class _FreeDrawState extends State<FreeDraw> {
 
   DrawingSegment? combineSegments() {
     if (startIndex < 0 || startIndex >= annotation.length) {
-      throw ArgumentError("Invalid startIndex");
+      return null;
     }
 
     DrawingSegment combinedSegment = DrawingSegment(

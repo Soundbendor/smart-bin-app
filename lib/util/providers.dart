@@ -69,3 +69,16 @@ class DeviceNotifier with ChangeNotifier {
     notifyListeners();
   }
 }
+
+class LabelNotifier extends ChangeNotifier {
+  String? label;
+
+  String? getLabel() {
+    return label;
+  }
+
+  void setLabel(String newLabel) {
+    label = newLabel;
+    notifyListeners();
+  }
+}
