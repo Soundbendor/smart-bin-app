@@ -27,7 +27,7 @@ void handleMessages(WebSocketChannel channel) {
       debug('Socket Closed');
     },
     onError: (error) {
-      debug('Socket Error: $error');
+      debug("Socket Error: $error");
     },
   );
 }
@@ -35,19 +35,19 @@ void handleMessages(WebSocketChannel channel) {
 /// Creates a detection with updated data and saves it to the database.
 Future<void> updatePreDetection(Map<String, dynamic> data) async {
   Detection detection = Detection(
-      imageId: data['img_id'],
-      preDetectImgLink: data['img_link'],
-      timestamp: DateTime.now(),
-      deviceId: "device_id",
-      depthMapImgLink: data['depth_map_link'],
-      irImgLink: data['ir_link'], //Update name to name in pydantic model
-      weight: data['weight'],
-      humidity: data['humidity'],
-      temperature: data['temperature'],
-      co2: data['co2'], //Update name to name in pydantic model
-      vo2: data['vo2'], //Update name to name in pydantic model
-      // boxes: data['boxes'] //Update name to name in pydantic model
-      );
+    imageId: data['img_id'],
+    preDetectImgLink: data['img_link'],
+    timestamp: DateTime.now(),
+    deviceId: "device_id",
+    depthMapImgLink: data['depth_map_link'],
+    irImgLink: data['ir_link'], //Update name to name in pydantic model
+    weight: data['weight'],
+    humidity: data['humidity'],
+    temperature: data['temperature'],
+    co2: data['co2'], //Update name to name in pydantic model
+    vo2: data['vo2'], //Update name to name in pydantic model
+    // boxes: data['boxes'] //Update name to name in pydantic model
+  );
 
   await detection.save();
 }

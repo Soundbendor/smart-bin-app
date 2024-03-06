@@ -194,20 +194,22 @@ class _BinsightAiAppState extends State<BinsightAiApp>
   }
 
   /// Initialize WebSocket channel and subscribe
-  void initWebSocket() {
+  void initWebSocket() async {
     channel = IOWebSocketChannel.connect('ws://10.0.2.2:8000/api/model/subscribe');
-    final subscriptionMessage = {"type": "subscribe", "channel": "1"};
-    channel.sink.add(jsonEncode(subscriptionMessage));
-    final timeStamp = getLatestTimestamp();
-    final requestMessage = {
-      "type": "request_data",
-      "after": timeStamp.toString(),
-      "channel": "1"
-    };
-    channel.sink.add(jsonEncode(requestMessage));
-    handleMessages(channel);
-    channel.stream.handleError((error) {
-      debug("Socket Error: $error");
-    });
+    try {
+      await channel.ready; // https://github.com/dart-lang/web_socket_channel/issues/38
+      final subscriptionMessage = {"type": "subscribe", "channel": "1"};
+      channel.sink.add(jsonEncode(subscriptionMessage));
+      final timeStamp = getLatestTimestamp();
+      final requestMessage = {
+        "type": "request_data",
+        "after": timeStamp.toString(),
+        "channel": "1"
+      };
+      channel.sink.add(jsonEncode(requestMessage));
+      handleMessages(channel);
+    } catch (e) {
+      debug("Connect Error: $e");
+    }
   }
 }
