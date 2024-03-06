@@ -80,7 +80,8 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">static Future&lt;List&lt;Detection&gt;&gt; all() async {
   Database db = await getDatabaseConnection();
-  List&lt;Map&lt;String, dynamic&gt;&gt; results = await db.query(&quot;detections&quot;);
+  List&lt;Map&lt;String, dynamic&gt;&gt; results =
+      await db.query(&quot;detections&quot;, orderBy: &quot;timestamp DESC&quot;);
   return results
       .map((result) =&gt; Detection.fromMap(
             result,

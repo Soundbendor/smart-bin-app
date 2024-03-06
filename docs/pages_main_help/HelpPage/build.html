@@ -124,50 +124,10 @@ Widget build(BuildContext context) {
       padding: const EdgeInsets.all(10),
       child: ListView(
         children: [
-          Expanded(
-            child: ExpansionTile(
-              title: const Heading(text: &quot;FAQ&quot;),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(&quot;FAQ Content&quot;, style: textTheme),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ExpansionTile(
-              title: const Heading(text: &quot;User Guide&quot;),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(&quot;User Guide Content&quot;, style: textTheme),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ExpansionTile(
-              title: const Heading(text: &quot;Help&quot;),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(&quot;Help Content&quot;, style: textTheme),
-                ),
-              ],
-            ),
-          ),
-          const Expanded(
-            child: ExpansionTile(
-              title: Heading(text: &quot;Contact Us&quot;),
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: _ContactForm(),
-                ),
-              ],
-            ),
-          ),
+          _buildExpansionTile(&quot;FAQ&quot;, &quot;FAQ Content&quot;, textTheme!),
+          _buildExpansionTile(&quot;User Guide&quot;, &quot;User Guide Content&quot;, textTheme),
+          _buildExpansionTile(&quot;Help&quot;, &quot;Help Content&quot;, textTheme),
+          _buildContactUsExpansionTile(textTheme),
         ],
       ),
     ),

@@ -81,9 +81,11 @@
 <code>characteristicId</code> is the characteristic UUID.
 <code>onNotification</code> is a function that is run when a notification is received.
 The function is passed a <a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a> of <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a> representing the notification value.</p>
-<p>Throws a <a href="../../util_bluetooth_exception/BleInvalidOperationException-class.html">BleInvalidOperationException</a> if the characteristic does not support subscribing.
-Throws a <a href="../../util_bluetooth_exception/BleOperationFailureException-class.html">BleOperationFailureException</a> if the subscription fails.
-Throws a <a href="../../util_bluetooth_exception/BleConnectionException-class.html">BleConnectionException</a> if the device fails to connect.</p>
+<ul>
+<li>Throws a <a href="../../util_bluetooth_exception/BleInvalidOperationException-class.html">BleInvalidOperationException</a> if the characteristic does not support subscribing.</li>
+<li>Throws a <a href="../../util_bluetooth_exception/BleOperationFailureException-class.html">BleOperationFailureException</a> if the subscription fails.</li>
+<li>Throws a <a href="../../util_bluetooth_exception/BleConnectionException-class.html">BleConnectionException</a> if the device fails to connect.</li>
+</ul>
 </section>
 
 
