@@ -193,8 +193,6 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     return timeStamp;
   }
 
-  // TODO: Execute this in main, but don't tie it to the UI
-  // - it could modify data in a provider instead
   /// Initialize WebSocket channel and subscribe
   void initWebSocket() {
     channel = IOWebSocketChannel.connect('ws://10.0.2.2:8000/subscribe');
@@ -208,5 +206,8 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     };
     channel.sink.add(jsonEncode(requestMessage));
     handleMessages(channel);
+    channel.stream.handleError((error) {
+      debug("Socket Error: $error");
+    });
   }
 }
