@@ -48,7 +48,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>DetectSmartBinDevice</string>
+	<string>To locate and connect with nearby Smart Bins.</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
   		<string>mailto</string>
