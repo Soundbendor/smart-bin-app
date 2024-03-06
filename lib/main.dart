@@ -195,7 +195,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
 
   /// Initialize WebSocket channel and subscribe
   void initWebSocket() {
-    channel = IOWebSocketChannel.connect('ws://10.0.2.2:8000/subscribe');
+    channel = IOWebSocketChannel.connect('ws://10.0.2.2:8000/api/model/subscribe');
     final subscriptionMessage = {"type": "subscribe", "channel": "1"};
     channel.sink.add(jsonEncode(subscriptionMessage));
     final timeStamp = getLatestTimestamp();
