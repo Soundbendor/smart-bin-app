@@ -1,3 +1,4 @@
+import 'package:binsight_ai/pages/setup/intro_sequence.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -79,31 +80,29 @@ List<RouteBase> getRoutes() {
         name: 'set-up',
         path: '/set-up',
         builder: (BuildContext context, GoRouterState state) {
-          return const SplashPage();
+          return SetupScreen();
         },
         routes: [
           // `/set-up/bluetooth` - bluetooth set up page
           GoRoute(
-              name: 'bluetooth',
-              path: 'bluetooth',
-              builder: (BuildContext context, GoRouterState state) {
-                return const BluetoothPage();
-              }),
+            name: 'bluetooth',
+            path: 'bluetooth',
+            builder: (BuildContext context, GoRouterState state) {
+              return const BluetoothPage();
+            },
+          ),
           GoRoute(
               name: 'wifi-scan',
               path: 'wifi-scan',
               builder: (BuildContext context, GoRouterState state) {
-                final device =
-                    Provider.of<DeviceNotifier>(context, listen: false).device;
-                return WifiScanPage(device: device!);
+                return const WifiScanPage();
               }),
           // `/set-up/wifi` - selecting wifi page
           GoRoute(
               name: 'wifi',
               path: 'wifi',
               builder: (BuildContext context, GoRouterState state) {
-                return WifiConfigurationPage(
-                    wifiResult: state.extra as WifiScanResult);
+                return const WifiConfigurationPage();
               }),
         ]),
   ];

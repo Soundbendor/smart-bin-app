@@ -13,19 +13,30 @@ import 'package:binsight_ai/widgets/background.dart';
 // TODO: handle potential case where incoming JSON is invalid
 
 /// Widget for configuring the wifi credentials of the compost bin
-class WifiConfigurationPage extends StatelessWidget {
-  WifiConfigurationPage({super.key, required this.wifiResult}) {
-    ssidController.text = wifiResult.ssid;
-  }
+class WifiConfigurationPage extends StatefulWidget {
+  const WifiConfigurationPage({super.key});
 
+  @override
+  State<WifiConfigurationPage> createState() => _WifiConfigurationPageState();
+}
+
+class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
   /// The wifi scan result
-  final WifiScanResult wifiResult;
+  WifiScanResult? wifiResult;
 
   /// Controller for the SSID text field
   final TextEditingController ssidController = TextEditingController();
 
   /// Controller for the password text field
   final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      wifiResult = Provider.of<WifiResultNotifier>(context, listen: false).wifiResult;
+    });
+  }
 
   /// Sends the wifi credentials to the compost bin
   void sendCredentials(BuildContext context) {

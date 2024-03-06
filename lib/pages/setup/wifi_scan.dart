@@ -16,16 +16,16 @@ import 'package:binsight_ai/widgets/scan_list.dart';
 
 /// Displays the WiFi configuration page with background and padding.
 class WifiScanPage extends StatefulWidget {
-  const WifiScanPage({super.key, required this.device});
-
-  /// The Bluetooth device to retrieve information from
-  final BleDevice device;
+  const WifiScanPage({super.key});
 
   @override
   State<WifiScanPage> createState() => _WifiScanPageState();
 }
 
 class _WifiScanPageState extends State<WifiScanPage> {
+  /// The Bluetooth device to retrieve information from
+  BleDevice? device;
+
   /// The list of WiFi networks scanned.
   List<WifiScanResult> wifiResults = [];
 
@@ -44,7 +44,14 @@ class _WifiScanPageState extends State<WifiScanPage> {
   @override
   void initState() {
     super.initState();
+    initDevice();
     startScanning();
+  }
+
+  void initDevice() {
+    setState(() {
+      device = Provider.of<DeviceNotifier>(context, listen: false).device;
+    });
   }
 
   /// Begins the subscription for WiFi networks scan.
@@ -53,7 +60,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
       setState(() {
         isScanning = true;
       });
-      await widget.device.subscribeToCharacteristic(
+      await device!.subscribeToCharacteristic(
           serviceId: mainServiceId,
           characteristicId: wifiListCharacteristicId,
           onNotification: (data) {
@@ -80,7 +87,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
 
   /// Stops scanning for WiFi networks.
   void stopScanning() {
-    widget.device
+    device!
         .unsubscribeFromCharacteristic(
             serviceId: mainServiceId,
             characteristicId: wifiListCharacteristicId)
@@ -93,7 +100,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
   void fetchWifiList() async {
     try {
       if (wifiResults.isNotEmpty) return;
-      final List<dynamic> parsed = jsonDecode(utf8.decode(await widget.device
+      final List<dynamic> parsed = jsonDecode(utf8.decode(await device!
           .readCharacteristic(
               serviceId: mainServiceId,
               characteristicId: wifiListCharacteristicId)));
@@ -112,7 +119,9 @@ class _WifiScanPageState extends State<WifiScanPage> {
   void goToWifiConfiguration(WifiScanResult wifiResult) {
     stopScanning();
     isScanning = false;
-    GoRouter.of(context).goNamed('wifi', extra: wifiResult);
+    Provider.of<WifiResultNotifier>(context, listen: false)
+        .setWifiResult(wifiResult);
+    GoRouter.of(context).goNamed('wifi');
   }
 
   @override
