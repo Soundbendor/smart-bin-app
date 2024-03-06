@@ -1,3 +1,5 @@
+import 'package:binsight_ai/util/styles.dart';
+import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -85,7 +87,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
                 dialogIsVisible = false;
               },
             );
-            return AlertDialog(
+            return BluetoothAlertBox(
               title: Text(
                 "Bluetooth connection complete! Moving on...",
                 textAlign: TextAlign.center,
@@ -110,7 +112,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
                 pairingState = _PairingState.paired;
               });
             }
-            return AlertDialog(
+            return BluetoothAlertBox(
               title: Text(
                 "Pairing...",
                 style: Theme.of(context).textTheme.headlineMedium,
@@ -148,7 +150,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
           }
         } else {
           pairingState = _PairingState.init;
-          return AlertDialog(
+          return BluetoothAlertBox(
             title: Text(
               "Connecting...",
               style: Theme.of(context).textTheme.headlineMedium,
@@ -270,6 +272,9 @@ class _BluetoothListState extends State<BluetoothList> {
                 stopScanning();
                 GoRouter.of(context).goNamed('main');
               },
+              style: ElevatedButton.styleFrom(
+                shape: bluetoothBorderRadius,
+              ),
               child: Text(
                 "Skip Setup",
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(

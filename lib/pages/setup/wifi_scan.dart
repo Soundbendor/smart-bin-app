@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -284,7 +285,7 @@ class WifiScanDisconnectDialog extends StatelessWidget {
             },
           );
         } else {
-          return AlertDialog(
+          return BluetoothAlertBox(
             title: Text("Device Disconnected", style: textTheme.headlineMedium),
             content: Column(
               mainAxisSize: MainAxisSize.min,

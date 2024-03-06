@@ -32,8 +32,9 @@ final mainTheme = ThemeData(
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-        backgroundColor: mainColorScheme.primary,
-        foregroundColor: mainColorScheme.onPrimary),
+      backgroundColor: mainColorScheme.primary,
+      foregroundColor: mainColorScheme.onPrimary,
+    ),
   ),
   cardTheme: CardTheme(
     surfaceTintColor: mainColorScheme.onSurface,
@@ -43,4 +44,8 @@ final mainTheme = ThemeData(
       borderRadius: BorderRadius.circular(10),
     ),
   ),
+);
+
+final bluetoothBorderRadius = RoundedRectangleBorder(
+  borderRadius: BorderRadius.circular(15),
 );
