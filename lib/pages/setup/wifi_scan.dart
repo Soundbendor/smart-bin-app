@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:binsight_ai/util/styles.dart';
 import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -244,7 +245,7 @@ The error was: ${(error as BleOperationFailureException).message}.
     }
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+      shape: bluetoothBorderRadius,
       child: ListTile(
           leading: const Icon(Icons.wifi),
           title:

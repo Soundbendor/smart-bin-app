@@ -272,9 +272,6 @@ class _BluetoothListState extends State<BluetoothList> {
                 stopScanning();
                 GoRouter.of(context).goNamed('main');
               },
-              style: ElevatedButton.styleFrom(
-                shape: bluetoothBorderRadius,
-              ),
               child: Text(
                 "Skip Setup",
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
@@ -311,7 +308,7 @@ class _BluetoothListState extends State<BluetoothList> {
     final device = devices[index];
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+      shape: bluetoothBorderRadius,
       child: ListTile(
           leading: const Icon(Icons.bluetooth),
           title: Text(device.name),
