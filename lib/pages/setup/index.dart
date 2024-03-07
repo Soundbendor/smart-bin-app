@@ -25,14 +25,14 @@ class SplashPage extends StatelessWidget {
                         padding: const EdgeInsets.only(
                             left: 16, right: 16, bottom: 30, top: 160),
                         child: Text(
-                          "Welcome!",
+                          "Welcome",
                           style: textTheme.displayLarge,
                         )),
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 80, right: 80, top: 20, bottom: 20),
                       child: Text(
-                        "Let's get you connected to your bin.",
+                        "Let's get you connected to your bin!",
                         style: textTheme.headlineLarge!.copyWith(
                           color: colorScheme.onBackground,
                         ),

@@ -18,23 +18,33 @@ final mainColorScheme = ColorScheme(
 
 final mainTheme = ThemeData(
   colorScheme: mainColorScheme,
+
   textTheme: const TextTheme(
-    headlineLarge: TextStyle(
-      fontSize: 30,
+    displayLarge: TextStyle(
+      fontSize: 45,
       fontWeight: FontWeight.bold,
+      fontFamily: 'Georama', // Specify the font family
+    ),
+      headlineLarge: TextStyle(
+      fontSize: 30,
+      fontWeight: FontWeight.normal,
+      fontFamily: 'GolosText', // Specify the font family
     ),
   ),
+
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
       backgroundColor: mainColorScheme.primary,
       foregroundColor: mainColorScheme.onPrimary,
     ),
   ),
+
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
         backgroundColor: mainColorScheme.primary,
         foregroundColor: mainColorScheme.onPrimary),
   ),
+
   cardTheme: CardTheme(
     surfaceTintColor: mainColorScheme.onSurface,
     shadowColor: mainColorScheme.onBackground,
@@ -43,4 +53,5 @@ final mainTheme = ThemeData(
       borderRadius: BorderRadius.circular(10),
     ),
   ),
+
 );
