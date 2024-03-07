@@ -12,7 +12,7 @@ class SplashPage extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       body: CustomBackground(
-        imageURL: "assets/images/background3.JPG",
+        imageURL: "assets/images/welcome.png",
         child: Center(
           child: Column(
             children: [
