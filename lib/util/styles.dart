@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 final mainColorScheme = ColorScheme(
-  primary: Colors.blue,
+  primary: const Color.fromARGB(255, 22, 151, 201),
   onPrimary: Colors.white,
   secondary: Colors.blueAccent.shade700,
   onSecondary: Colors.white,
-  tertiary: Colors.green.shade700,
+  tertiary: const Color.fromARGB(255, 116, 193, 164),
   onTertiary: Colors.white,
   error: Colors.red,
   onError: Colors.red.shade700,
-  background: Colors.white,
-  onBackground: Colors.black,
+  background: const Color(0xFFeef8f4),
+  onBackground: const Color(0xFF333333),
   brightness: Brightness.light,
   surface: Colors.grey.shade200,
   onSurface: Colors.black,
