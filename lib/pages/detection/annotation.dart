@@ -37,20 +37,8 @@ class _AnnotationPageState extends State<AnnotationPage> {
   /// Key for the RepaintBoundary widget that's used to capture the annotated image
   final GlobalKey _captureKey = GlobalKey();
 
-  /// Key for the FreeDraw widget that's used to render and annotate the image
-  final GlobalKey<dynamic> _freeDrawKey = GlobalKey();
-
   /// List of unsigned integers representing the bytes of the captured image
   Uint8List? _capturedImage;
-
-  //Points and label for the captured annotation
-  DrawingSegment? capturedAnnotation;
-
-  /// Input entered by user to label the current annotation
-  String? userInput;
-
-  /// List of annotations, each annotation having a label and a list of Offsets
-  List<List<dynamic>> annotationsList = [];
 
   /// Function to capture the annotated image
   ///
@@ -69,6 +57,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    AnnotationNotifier notifier = context.read<AnnotationNotifier>();
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -106,15 +95,13 @@ class _AnnotationPageState extends State<AnnotationPage> {
                           width: 300,
                           height: 300,
                           child: FreeDraw(
-                            key: _freeDrawKey,
                             imageLink: snapshot.data as String,
                           ),
                         ),
                       );
                     }
                   }),
-              Text(
-                  'Current Label: ${context.read<AnnotationNotifier>().label}'),
+              Text('Current Label: ${notifier.label}'),
               ElevatedButton(
                 onPressed: () {
                   GoRouter.of(context).push("/main/label");
@@ -128,7 +115,17 @@ class _AnnotationPageState extends State<AnnotationPage> {
               ),
               ElevatedButton(
                 onPressed: () {
-                
+                  if (notifier.isCompleteAnnotation()) {
+                    notifier.addToAllAnnotations();
+                  } else {
+                    String message;
+                    if (notifier.label == null) {
+                      message = "Please Enter A Label For Current Annotation";
+                    } else {
+                      message = "Please Draw Your Annotation";
+                    }
+                    print(message);
+                  }
                 },
                 child: Text(
                   "Save Current Label",
@@ -140,7 +137,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
               ElevatedButton(
                   onPressed: () {
                     captureImage();
-                    context.read<AnnotationNotifier>().resetAnnotation();
+                    notifier.resetAnnotation();
                   },
                   child: Text("Complete Annotations",
                       style: textTheme.labelLarge!.copyWith(
@@ -164,7 +161,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
           FloatingActionButton(
             heroTag: "Undo",
             onPressed: () {
-              context.read<AnnotationNotifier>().undo();
+              notifier.undo();
             },
             child: const Icon(Icons.undo),
           ),
@@ -172,7 +169,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
           FloatingActionButton(
             heroTag: "Redo",
             onPressed: () {
-              context.read<AnnotationNotifier>().redo();
+              notifier.redo();
             },
             child: const Icon(Icons.redo),
           ),

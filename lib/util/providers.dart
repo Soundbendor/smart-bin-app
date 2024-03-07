@@ -72,6 +72,7 @@ class DeviceNotifier with ChangeNotifier {
 }
 
 class AnnotationNotifier extends ChangeNotifier {
+  ///Current
   String? label;
   List<List<dynamic>> allAnnotations = [];
   List<DrawingSegment> currentAnnotation = [];
@@ -92,8 +93,11 @@ class AnnotationNotifier extends ChangeNotifier {
     return allAnnotations;
   }
 
-  void addToAllAnnotations(DrawingSegment annotation, String label) {
-    allAnnotations.add([label, annotation.toFloatList()]);
+  void addToAllAnnotations() {
+    combinedCurrentAnnotation = combineCurrentSegments();
+    if (combinedCurrentAnnotation != null && label != null) {
+      allAnnotations.add([label, combinedCurrentAnnotation!.toFloatList()]);
+    }
     notifyListeners();
   }
 
@@ -143,5 +147,9 @@ class AnnotationNotifier extends ChangeNotifier {
   void resetAnnotation() {
     startIndex = 0;
     notifyListeners();
+  }
+
+  bool isCompleteAnnotation() {
+    return label != null && currentAnnotation.isNotEmpty;
   }
 }

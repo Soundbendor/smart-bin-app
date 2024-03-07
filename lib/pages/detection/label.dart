@@ -11,9 +11,7 @@ class LabelAnnotation extends StatelessWidget {
     return Scaffold(
       body: TextButton(
         onPressed: () {
-          AnnotationNotifier labelNotifier =
-              Provider.of<AnnotationNotifier>(context, listen: false);
-          labelNotifier.setLabel("Carrot");
+          context.read<AnnotationNotifier>().setLabel("Carrot");
           GoRouter.of(context).pop();
         },
         child: const Text("Add"),
