@@ -44,7 +44,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
   Uint8List? _capturedImage;
 
   //Points and label for the captured annotation
-  DrawingSegment? _capturedPoint;
+  DrawingSegment? capturedAnnotation;
 
   /// Input entered by user to label the current annotation
   String? userInput;
@@ -64,63 +64,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
     _capturedImage = byteData?.buffer.asUint8List();
     debug("Captured image size: ${_capturedImage?.length} bytes");
     setState(() {});
-  }
-
-  /// Renders the popup that prompts input for a label of the current annotation
-  void _showPopup() {
-    TextEditingController userInputController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        final textTheme = Theme.of(context).textTheme;
-        final colorScheme = Theme.of(context).colorScheme;
-        return AlertDialog(
-          title: Text('Label Annotation', style: textTheme.headlineLarge),
-          content: Column(
-            children: [
-              Text('Enter a name for your annotation:',
-                  style: textTheme.bodyMedium),
-              TextField(
-                controller: userInputController,
-                style: textTheme.bodyMedium,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel',
-                  style: textTheme.labelLarge!.copyWith(
-                    color: colorScheme.onPrimary,
-                  )),
-            ),
-            TextButton(
-              onPressed: () {
-                userInput = userInputController.text;
-                _capturedPoint = _freeDrawKey.currentState?.combineSegments();
-
-                if (userInput != null &&
-                    userInput!.isNotEmpty &&
-                    _capturedPoint != null) {
-                  annotationsList
-                      .add([userInput, _capturedPoint!.toFloatList()]);
-                  Navigator.of(context).pop();
-                  _capturedPoint = null;
-                  debug(annotationsList.length);
-                }
-              },
-              child: Text('Save',
-                  style: textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  )),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -170,53 +113,39 @@ class _AnnotationPageState extends State<AnnotationPage> {
                       );
                     }
                   }),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              Text(
+                  'Current Label: ${context.read<AnnotationNotifier>().label}'),
+              ElevatedButton(
+                onPressed: () {
+                  GoRouter.of(context).push("/main/label");
+                },
                 child: Text(
-                    'Current Label: ${context.watch<LabelNotifier>().label ?? 'None'}'),
+                  "Select Label",
+                  style: textTheme.labelLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                
+                },
+                child: Text(
+                  "Save Current Label",
+                  style: textTheme.labelLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
               ),
               ElevatedButton(
                   onPressed: () {
-                    GoRouter.of(context).push("/main/label");
+                    captureImage();
+                    context.read<AnnotationNotifier>().resetAnnotation();
                   },
-                  child: Text("Update Current Label",
+                  child: Text("Complete Annotations",
                       style: textTheme.labelLarge!.copyWith(
                         color: Theme.of(context).colorScheme.onPrimary,
                       ))),
-              ElevatedButton(
-                onPressed: () {
-                  _capturedPoint = _freeDrawKey.currentState?.combineSegments();
-                  if (_capturedPoint == null) {
-                    print("No segment entered");
-                  } else if (context.read<LabelNotifier>().label != null) {
-                    annotationsList.add([
-                      context.read<LabelNotifier>().label,
-                      _capturedPoint!.toFloatList()
-                    ]);
-                    _capturedPoint = null;
-                  }
-                  debug(annotationsList);
-                },
-                child: Text(
-                  "Save Current Annotation",
-                  style: textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  captureImage();
-                  debug(annotationsList);
-                  _freeDrawKey.currentState?.resetAnnotation();
-                },
-                child: Text(
-                  "Save All Annotations",
-                  style: textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                ),
-              ),
               if (_capturedImage != null)
                 Image.memory(
                   _capturedImage!,
@@ -235,7 +164,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
           FloatingActionButton(
             heroTag: "Undo",
             onPressed: () {
-              _freeDrawKey.currentState?.undo();
+              context.read<AnnotationNotifier>().undo();
             },
             child: const Icon(Icons.undo),
           ),
@@ -243,7 +172,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
           FloatingActionButton(
             heroTag: "Redo",
             onPressed: () {
-              _freeDrawKey.currentState?.redo();
+              context.read<AnnotationNotifier>().redo();
             },
             child: const Icon(Icons.redo),
           ),

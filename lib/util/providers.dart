@@ -1,4 +1,5 @@
 import 'package:binsight_ai/util/print.dart';
+import 'package:binsight_ai/widgets/free_draw.dart';
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
 
@@ -70,8 +71,13 @@ class DeviceNotifier with ChangeNotifier {
   }
 }
 
-class LabelNotifier extends ChangeNotifier {
+class AnnotationNotifier extends ChangeNotifier {
   String? label;
+  List<List<dynamic>> allAnnotations = [];
+  List<DrawingSegment> currentAnnotation = [];
+  List<DrawingSegment> currentAnnotationHistory = [];
+  DrawingSegment? combinedCurrentAnnotation;
+  int startIndex = 0;
 
   String? getLabel() {
     return label;
@@ -79,6 +85,63 @@ class LabelNotifier extends ChangeNotifier {
 
   void setLabel(String newLabel) {
     label = newLabel;
+    notifyListeners();
+  }
+
+  List<List<dynamic>> getAllAnnotations() {
+    return allAnnotations;
+  }
+
+  void addToAllAnnotations(DrawingSegment annotation, String label) {
+    allAnnotations.add([label, annotation.toFloatList()]);
+    notifyListeners();
+  }
+
+  void addToCurrentAnnotation(DrawingSegment segment) {
+    currentAnnotation.add(segment);
+    notifyListeners();
+  }
+
+  void updateCurrentAnnotation(DrawingSegment segment) {
+    currentAnnotation.last = segment;
+    notifyListeners();
+  }
+
+  void updateCurrentAnnotationHistory() {
+    currentAnnotationHistory = List.of(currentAnnotation);
+    notifyListeners();
+  }
+
+  void undo() {
+    if (currentAnnotation.isNotEmpty && currentAnnotationHistory.isNotEmpty) {
+      currentAnnotation.removeLast();
+    }
+    notifyListeners();
+  }
+
+  void redo() {
+    if (currentAnnotation.length < currentAnnotationHistory.length) {
+      final index = currentAnnotation.length;
+      currentAnnotation.add(currentAnnotationHistory[index]);
+    }
+    notifyListeners();
+  }
+
+  DrawingSegment? combineCurrentSegments() {
+    if (startIndex < 0 || startIndex >= currentAnnotation.length) return null;
+
+    DrawingSegment combinedSegments =
+        DrawingSegment(id: currentAnnotation[startIndex].id, offsets: []);
+
+    for (int i = startIndex; i < currentAnnotation.length; i++) {
+      combinedSegments.offsets.addAll(currentAnnotation[i].offsets);
+      startIndex++;
+    }
+    return combinedSegments;
+  }
+
+  void resetAnnotation() {
+    startIndex = 0;
     notifyListeners();
   }
 }

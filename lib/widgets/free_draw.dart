@@ -1,6 +1,8 @@
 import 'dart:ui' as ui;
+import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/widgets/image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// Widget with logic to annotate and render detection images
 class FreeDraw extends StatefulWidget {
@@ -20,9 +22,6 @@ class _FreeDrawState extends State<FreeDraw> {
   /// List of DrawingSegments that make up the current annotation
   var annotation = <DrawingSegment>[];
 
-  /// Copy of the annotation list, unaffected by undo/redo operations
-  var historyDrawingSegments = <DrawingSegment>[];
-
   /// The DrawingSegment being actively updated
   DrawingSegment? currentDrawingSegment;
 
@@ -39,54 +38,61 @@ class _FreeDrawState extends State<FreeDraw> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 300,
-      height: 300,
-      child: GestureDetector(
-        //When first touching within the image, create a single Offset
-        onPanStart: (details) {
-          setState(() {
-            if (_isPointOnImage(details.localPosition)) {
-              currentDrawingSegment = DrawingSegment(
-                id: DateTime.now().microsecondsSinceEpoch,
-                offsets: [details.localPosition],
-              );
-              annotation.add(currentDrawingSegment!);
-              historyDrawingSegments = List.of(annotation);
-            }
-          });
-        },
-        //When dragging your finger, update the current drawing's offsets to include the new point
-        //Update the most recent segment in the annotation's list of Segments
-        onPanUpdate: (details) {
-          setState(() {
-            if (currentDrawingSegment != null &&
-                _isPointOnImage(details.localPosition)) {
-              Offset localPosition = details.localPosition;
+    return Consumer<AnnotationNotifier>(
+      builder: (context, notifier, child) {
+        return SizedBox(
+          width: 300,
+          height: 300,
+          child: GestureDetector(
+            //When first touching within the image, create a single Offset
+            onPanStart: (details) {
+              setState(() {
+                if (_isPointOnImage(details.localPosition)) {
+                  currentDrawingSegment = DrawingSegment(
+                    id: DateTime.now().microsecondsSinceEpoch,
+                    offsets: [details.localPosition],
+                  );
+                  notifier.addToCurrentAnnotation(currentDrawingSegment!);
+                  notifier.updateCurrentAnnotationHistory();
+                  // annotation.add(currentDrawingSegment!);
+                }
+              });
+            },
+            //When dragging your finger, update the current drawing's offsets to include the new point
+            //Update the most recent segment in the annotation's list of Segments
+            onPanUpdate: (details) {
+              setState(() {
+                if (currentDrawingSegment != null &&
+                    _isPointOnImage(details.localPosition)) {
+                  Offset localPosition = details.localPosition;
 
-              currentDrawingSegment = currentDrawingSegment?.copyWith(
-                offsets: currentDrawingSegment!.offsets..add(localPosition),
-              );
-              annotation.last = currentDrawingSegment!;
-              historyDrawingSegments = List.of(annotation);
-            }
-          });
-        },
-        onPanEnd: (_) {
-          currentDrawingSegment = null;
-        },
-        //Render the drawing on top of the image
-        child: Stack(
-          children: [
-            DynamicImage(widget.imageLink, key: imageKey, fit: BoxFit.cover),
-            CustomPaint(
-              painter: DrawingPainter(
-                drawingSegments: annotation,
-              ),
+                  currentDrawingSegment = currentDrawingSegment?.copyWith(
+                    offsets: currentDrawingSegment!.offsets..add(localPosition),
+                  );
+                  // annotation.last = currentDrawingSegment!;
+                  notifier.updateCurrentAnnotation(currentDrawingSegment!);
+                  notifier.updateCurrentAnnotationHistory();
+                }
+              });
+            },
+            onPanEnd: (_) {
+              currentDrawingSegment = null;
+            },
+            //Render the drawing on top of the image
+            child: Stack(
+              children: [
+                DynamicImage(widget.imageLink,
+                    key: imageKey, fit: BoxFit.cover),
+                CustomPaint(
+                  painter: DrawingPainter(
+                    drawingSegments: notifier.currentAnnotation,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -96,51 +102,6 @@ class _FreeDrawState extends State<FreeDraw> {
         imageKey.currentContext!.findRenderObject() as RenderBox;
     Rect imageBounds = renderBox.paintBounds;
     return imageBounds.contains(point);
-  }
-
-  /// Returns the last DrawingSegment in the annotation list
-  DrawingSegment? get lastDrawingPoint {
-    return annotation.isNotEmpty ? annotation.last : null;
-  }
-
-  DrawingSegment? combineSegments() {
-    if (startIndex < 0 || startIndex >= annotation.length) {
-      return null;
-    }
-
-    DrawingSegment combinedSegment = DrawingSegment(
-      id: annotation[startIndex].id,
-      offsets: [],
-    );
-
-    for (int i = startIndex; i < annotation.length; i++) {
-      combinedSegment.offsets.addAll(annotation[i].offsets);
-      startIndex++;
-    }
-    return combinedSegment;
-  }
-
-  void resetAnnotation() {
-    startIndex = 0;
-  }
-
-  /// Removes the last DrawingSegment from the annotation list
-  void undo() {
-    setState(() {
-      if (annotation.isNotEmpty && historyDrawingSegments.isNotEmpty) {
-        annotation.removeLast();
-      }
-    });
-  }
-
-  /// Adds the most recent DrawingSegment to the annotation list, from the history list
-  void redo() {
-    setState(() {
-      if (annotation.length < historyDrawingSegments.length) {
-        final index = annotation.length;
-        annotation.add(historyDrawingSegments[index]);
-      }
-    });
   }
 }
 
