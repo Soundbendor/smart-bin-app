@@ -40,11 +40,11 @@ flutter:
   fonts:
   - family: Georama
     fonts:
-      - asset: fonts/Georama-Italic-VariableFont.ttf
-      - asset: fonts/Georama-VariableFont.ttf
+      - asset: assets/fonts/Georama-Italic-VariableFont.ttf
+      - asset: assets/fonts/Georama-VariableFont.ttf
   - family: GolosText
     fonts:
-      - asset: fonts/GolosText-VariableFont.ttf
+      - asset: assets/fonts/GolosText-VariableFont.ttf
 
 flutter_native_splash:
   color: "#ffffff"
