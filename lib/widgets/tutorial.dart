@@ -17,18 +17,18 @@ class StyledIntroScreen extends StatelessWidget {
       ),
     ),
     PageViewModel(
-      title: "Connecting to Your Bin",
+      title: "Connecting Your Bin",
       body:
-          "To ensure you stay up to date with your composting progress, you will need to connect to your bin via Bluetooth, and then connect your bin to WiFi.",
+          "To enable your bin to do its work collecting and categorizing compost data, you'll need to grant it both Bluetooth access and WiFi connection through the app.",
       image: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Icon(Icons.bluetooth, size: 100),
         Icon(Icons.wifi, size: 100)
       ]),
     ),
     PageViewModel(
-      title: "Using the Bin",
+      title: "Using Your Bin",
       body:
-          "Compost as you typically would, just toss your items in, and let nature do its thing!",
+          "Toss compostable items into your bin, and give yourself a high five for keeping that CO2 out of the landfill!",
       image: const Icon(Icons.compost, size: 100),
     ),
     PageViewModel(
@@ -39,7 +39,8 @@ class StyledIntroScreen extends StatelessWidget {
     ),
     PageViewModel(
       title: "That's All You Need to Know!",
-      body: "That's it! Check back every now and again to annotate your compost images.",
+      body:
+          "That's it! Check back every now and again to annotate your compost images.",
       image: const Icon(Icons.check_circle, size: 100),
     ),
   ];
