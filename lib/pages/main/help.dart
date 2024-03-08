@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 
-/// Displays the Help page with dropdown sections for FAQ, User Guide, Help, and Contact Us email connection
+/// Displays the Help page with dropdown sections for Help, and Contact Us email connection
 class HelpPage extends StatelessWidget {
   const HelpPage({super.key});
 
@@ -14,9 +14,7 @@ class HelpPage extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         child: ListView(
           children: [
-            _buildExpansionTile("FAQ", "FAQ Content", textTheme!),
-            _buildExpansionTile("User Guide", "User Guide Content", textTheme),
-            _buildExpansionTile("Help", "Help Content", textTheme),
+            _buildExpansionTile("Help", "Help Content", textTheme!),
             _buildContactUsExpansionTile(textTheme),
           ],
         ),
