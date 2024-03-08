@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the onBondChange method from the BleDevice class, for the Dart programming language.">
-  <title>onBondChange method - BleDevice class - bluetooth library - Dart API</title>
+  <meta name="description" content="API docs for the ensureInitialized method from the BleDeviceScanner class, for the Dart programming language.">
+  <title>ensureInitialized method - BleDeviceScanner class - bluetooth library - Dart API</title>
 
 
   
@@ -30,10 +30,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">binsight_ai</a></li>
     <li><a href="../../util_bluetooth/util_bluetooth-library.html">util&#47;bluetooth.dart</a></li>
-    <li><a href="../../util_bluetooth/BleDevice-class.html">BleDevice</a></li>
-    <li class="self-crumb">onBondChange method</li>
+    <li><a href="../../util_bluetooth/BleDeviceScanner-class.html">BleDeviceScanner</a></li>
+    <li class="self-crumb">ensureInitialized method</li>
   </ol>
-  <div class="self-name">onBondChange</div>
+  <div class="self-name">ensureInitialized</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -54,35 +54,31 @@
   <div
       id="dartdoc-main-content"
       class="main-content"
-      data-above-sidebar="util_bluetooth&#47;BleDevice-class-sidebar.html"
+      data-above-sidebar="util_bluetooth&#47;BleDeviceScanner-class-sidebar.html"
       data-below-sidebar="">
       <div>
-<h1><span class="kind-method">onBondChange</span> method 
+<h1><span class="kind-method">ensureInitialized</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
 
-<span class="returntype">void</span>
-<span class="name ">onBondChange</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="onBondChange-param-callback"><span class="type-annotation">dynamic</span> <span class="parameter-name">callback</span>(<ol class="parameter-list"><li><span class="parameter" id="param-"><span class="type-annotation"><a href="https://pub.dev/documentation/flutter_blue_plus/1.31.16/flutter_blue_plus/BluetoothBondState.html">BluetoothBondState</a></span></span></li>
-</ol>
-)</span></li>
-</ol>)
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="name ">ensureInitialized</span>(<wbr>)
 
       
 
     </section>
     
-<section class="desc markdown">
-  <p>Creates a listener which is run when the device's bond state changes.</p>
-</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">void onBondChange(Function(BluetoothBondState) callback) {
-  on(BleDeviceClientEvents.bondChange, callback);
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; ensureInitialized() async {
+  if (FlutterBluePlus.adapterStateNow != BluetoothAdapterState.unknown) return;
+  final stream = FlutterBluePlus.adapterState;
+  await stream.first;
 }</code></pre>
 </section>
 
@@ -100,12 +96,12 @@
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">binsight_ai</a></li>
     <li><a href="../../util_bluetooth/util_bluetooth-library.html">bluetooth</a></li>
-    <li><a href="../../util_bluetooth/BleDevice-class.html">BleDevice</a></li>
-    <li class="self-crumb">onBondChange method</li>
+    <li><a href="../../util_bluetooth/BleDeviceScanner-class.html">BleDeviceScanner</a></li>
+    <li class="self-crumb">ensureInitialized method</li>
 </ol>
 
 
-    <h5>BleDevice class</h5>
+    <h5>BleDeviceScanner class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
 
