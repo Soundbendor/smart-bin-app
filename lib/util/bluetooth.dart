@@ -583,6 +583,12 @@ class BleDeviceScanner {
   /// The subscription to the scan stream.
   StreamSubscription? _scanSubscription;
 
+  Future<void> ensureInitialized() async {
+    if (FlutterBluePlus.adapterStateNow != BluetoothAdapterState.unknown) return;
+    final stream = FlutterBluePlus.adapterState;
+    await stream.first;
+  }
+
   /// Starts scanning for devices.
   ///
   /// [serviceFilter] is a list of service UUIDs to filter by. If null, all devices will be scanned.
@@ -591,6 +597,7 @@ class BleDeviceScanner {
   /// - Throws a [BleBluetoothNotSupportedException] if Bluetooth is not supported on the device.
   /// - Throws a [BlePermissionException] if the necessary permissions are not granted.
   Future<void> startScan({List<Uuid>? serviceFilter}) async {
+    await ensureInitialized();
     // check permissions and Bluetooth support
     if (await FlutterBluePlus.isSupported) {
       await requestBluetoothPermissions();
@@ -606,6 +613,10 @@ class BleDeviceScanner {
     _scanSubscription = _reactiveScanner
         .scanForDevices(withServices: serviceFilter ?? [])
         .listen(_handleDiscoveredDevice);
+    _scanSubscription!.onError((error) {
+      debug("BleDeviceScanner: Error scanning for devices: $error");
+      stopScan();
+    });
     _runDeviceTimer();
   }
 
