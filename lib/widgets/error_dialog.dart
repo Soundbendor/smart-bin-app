@@ -1,3 +1,4 @@
+import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:flutter/material.dart';
 
 class ErrorDialog extends StatelessWidget {
@@ -14,7 +15,7 @@ class ErrorDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return BluetoothAlertBox(
       title: Text(text, style: Theme.of(context).textTheme.headlineMedium),
       content: Text(
         description,
