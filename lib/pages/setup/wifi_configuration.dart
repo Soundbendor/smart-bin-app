@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -101,7 +102,7 @@ class WifiConfigurationAlert extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return BluetoothAlertBox(
       title: Text(text, style: Theme.of(context).textTheme.headlineMedium),
       content: const SizedBox(
         height: 50,

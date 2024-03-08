@@ -25,6 +25,7 @@ class DynamicImage extends StatelessWidget {
   final Widget Function(BuildContext context, Object error, StackTrace? trace)?
       errorBuilder;
 
+  ///Image that will render using either a link or path
   const DynamicImage(
     this.imageUrl, {
     super.key,
@@ -61,7 +62,6 @@ class DynamicImage extends StatelessWidget {
     if (imageUrl.startsWith("http")) {
       return Image.network(
         imageUrl,
-        key: key,
         errorBuilder: errorBuilder ?? onError,
         scale: scale,
         width: width,
@@ -83,7 +83,6 @@ class DynamicImage extends StatelessWidget {
     } else {
       return Image.asset(
         imageUrl,
-        key: key,
         errorBuilder: errorBuilder ?? onError,
         scale: scale,
         width: width,

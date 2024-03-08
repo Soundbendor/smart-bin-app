@@ -7,17 +7,22 @@ import 'package:binsight_ai/database/models/detection.dart';
 String formatDetectionTitle(Detection detection) {
   if (detection.boxes != null) {
     final boxData = jsonDecode(detection.boxes!);
-    final List<String> keys = [];
-    for (final box in boxData) {
-      keys.add(box.keys.first);
+    final List<String> names = [];
+    if (boxData.isNotEmpty) {
+      for (var label in boxData) {
+        if (label[0] != null) {
+          String name = label[0];
+          names.add(name);
+        }
+      }
     }
-    return "Detection ${detection.imageId}: ${keys.join(", ")}";
+    return "Detection ${detection.imageId}: ${names.join(", ")}";
   } else {
     return "Detection ${detection.imageId}: pending analysis...";
   }
 }
 
-void _onTileTap(BuildContext context, Detection detection) {
+void onTileTap(BuildContext context, Detection detection) {
   GoRouter.of(context).push("/main/detection/${detection.imageId}");
 }
 
@@ -40,7 +45,7 @@ class DetectionLargeListItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: () => _onTileTap(context, detection),
+        onTap: () => onTileTap(context, detection),
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(9.0),
@@ -115,7 +120,7 @@ class DetectionSmallListItem extends StatelessWidget {
       subtitle:
           Text(detection.timestamp.toString(), style: textTheme.bodyMedium),
       trailing: const Icon(Icons.arrow_forward_ios),
-      onTap: () => _onTileTap(context, detection),
+      onTap: () => onTileTap(context, detection),
     );
   }
 }

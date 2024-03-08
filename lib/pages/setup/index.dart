@@ -48,7 +48,7 @@ class _SplashPageState extends State<SplashPage> {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       body: CustomBackground(
-        imageURL: "assets/images/background3.JPG",
+        imageURL: "assets/images/welcome.png",
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -85,7 +85,8 @@ class _SplashPageState extends State<SplashPage> {
                       padding: EdgeInsets.symmetric(
                           vertical: MediaQuery.of(context).size.width * .05,
                           horizontal: 50),
-                      textStyle: textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
+                      textStyle: textTheme.titleLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
                       backgroundColor: const Color(0xFF74C1A4)),
                   onPressed: () {
                     (_button1Opacity < 1) ? null : context.goNamed('bluetooth');
