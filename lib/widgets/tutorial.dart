@@ -34,13 +34,19 @@ class StyledIntroScreen extends StatelessWidget {
     PageViewModel(
       title: "Annotating Images",
       body:
-          "After you compost, photos will be captured of the composted items, from there, you can help us by manually annotating the item(s) you composted!",
+          "Your bin will capture photos of the items you compost. Keep an eye on the images in your app, and correct the labels if the AI algorithm gets it wrong!",
       image: const Icon(Icons.auto_fix_high, size: 100),
+    ),
+    PageViewModel(
+      title: "Have Questions or Need Help?",
+      body:
+          "Check out our FAQ page, or scroll through our help section!",
+      image: const Icon(Icons.question_mark, size: 100),
     ),
     PageViewModel(
       title: "That's All You Need to Know!",
       body:
-          "That's it! Check back every now and again to annotate your compost images.",
+          "That's it! Check back every now and again to annotate your compost images. Happy Composting!",
       image: const Icon(Icons.check_circle, size: 100),
     ),
   ];
