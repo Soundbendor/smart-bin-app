@@ -37,6 +37,15 @@ flutter:
   assets:
     - assets/images/
 
+  fonts:
+  - family: Georama
+    fonts:
+      - asset: assets/fonts/Georama-Bold.ttf
+  - family: GolosText
+    fonts:
+      - asset: assets/fonts/GolosText-Regular.ttf
+      - asset: assets/fonts/GolosText-SemiBold.ttf
+
 flutter_native_splash:
   color: "#ffffff"
   image: assets/images/app_logo.png
