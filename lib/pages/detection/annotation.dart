@@ -48,7 +48,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
     ui.Image image = await boundary.toImage(pixelRatio: 3.0);
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     _capturedImage = byteData?.buffer.asUint8List();
-    debug("Captured image size: ${_capturedImage?.length} bytes");
     setState(() {});
   }
 
@@ -56,14 +55,10 @@ class _AnnotationPageState extends State<AnnotationPage> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     AnnotationNotifier notifier = context.read<AnnotationNotifier>();
-    print(notifier.currentDetection);
-    print(widget.detectionId);
     if (notifier.currentDetection != widget.detectionId) {
       notifier.reset();
       notifier.setDetection(widget.detectionId);
     }
-    print(notifier.currentDetection);
-    print(widget.detectionId);
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -144,7 +139,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
               ElevatedButton(
                   onPressed: () {
                     captureImage();
-                    notifier.resetAnnotation();
+                    notifier.reset();
                   },
                   child: Text("Complete Annotations",
                       style: textTheme.labelLarge!.copyWith(
