@@ -121,7 +121,6 @@ Widget build(BuildContext context) {
   if (imageUrl.startsWith(&quot;http&quot;)) {
     return Image.network(
       imageUrl,
-      key: key,
       errorBuilder: errorBuilder ?? onError,
       scale: scale,
       width: width,
@@ -143,7 +142,6 @@ Widget build(BuildContext context) {
   } else {
     return Image.asset(
       imageUrl,
-      key: key,
       errorBuilder: errorBuilder ?? onError,
       scale: scale,
       width: width,

@@ -22,7 +22,7 @@ class ScanList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const textSize = 20.0;
+    const textSize = 40.0;
     return Column(
       children: [
         SizedBox(

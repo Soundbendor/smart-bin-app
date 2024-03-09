@@ -85,12 +85,13 @@
   List&lt;Map&lt;String, dynamic&gt;&gt; detections = await db.query(
     &quot;detections&quot;,
     where: &quot;imageId = ?&quot;,
-    whereArgs: [postDetectionData[&#39;imageId&#39;]],
+    whereArgs: [postDetectionData[&#39;img_id&#39;]],
   );
 
   if (detections[0].isNotEmpty) {
     Detection detection = Detection.fromMap(detections[0]);
     detection.postDetectImgLink = postDetectionData[&#39;img_link&#39;];
+    detection.boxes = postDetectionData[&quot;boxes&quot;];
     detection.update();
   }
 }</code></pre>

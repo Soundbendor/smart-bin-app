@@ -87,10 +87,10 @@
         final messageType = jsonData[&#39;type&#39;];
         if (messageType == &#39;pre_detection&#39;) {
           debug(&#39;Emitted predetection was received&#39;);
-          &#47;&#47; await updatePreDetection(jsonData[&quot;pre_detection&quot;], database);
+          await updatePreDetection(await jsonDecode(jsonData[&quot;pre_detection&quot;]));
         } else if (messageType == &#39;post_detection&#39;) {
           debug(&#39;Emitted postdetection was received&#39;);
-          &#47;&#47; await updatePostDetection(jsonData[&quot;post_detection&quot;], database);
+          await addPostDetectionLink(jsonDecode(jsonData[&quot;post_detection&quot;]));
         }
       } catch (e) {
         debug(&#39;Error decoding JSON: $e&#39;);
@@ -100,7 +100,7 @@
       debug(&#39;Socket Closed&#39;);
     },
     onError: (error) {
-      debug(&#39;Socket Error: $error&#39;);
+      debug(&quot;Socket Error: $error&quot;);
     },
   );
 }</code></pre>

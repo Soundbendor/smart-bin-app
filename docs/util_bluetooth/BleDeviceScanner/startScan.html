@@ -74,9 +74,11 @@
 <section class="desc markdown">
   <p>Starts scanning for devices.</p>
 <p><code>serviceFilter</code> is a list of service UUIDs to filter by. If null, all devices will be scanned.</p>
-<p>Throws a <a href="../../util_bluetooth_exception/BleBluetoothDisabledException-class.html">BleBluetoothDisabledException</a> if Bluetooth is not turned on.
-Throws a <a href="../../util_bluetooth_exception/BleBluetoothNotSupportedException-class.html">BleBluetoothNotSupportedException</a> if Bluetooth is not supported on the device.
-Throws a <a href="../../util_bluetooth_exception/BlePermissionException-class.html">BlePermissionException</a> if the necessary permissions are not granted.</p>
+<ul>
+<li>Throws a <a href="../../util_bluetooth_exception/BleBluetoothDisabledException-class.html">BleBluetoothDisabledException</a> if Bluetooth is not turned on.</li>
+<li>Throws a <a href="../../util_bluetooth_exception/BleBluetoothNotSupportedException-class.html">BleBluetoothNotSupportedException</a> if Bluetooth is not supported on the device.</li>
+<li>Throws a <a href="../../util_bluetooth_exception/BlePermissionException-class.html">BlePermissionException</a> if the necessary permissions are not granted.</li>
+</ul>
 </section>
 
 
@@ -84,6 +86,7 @@ Throws a <a href="../../util_bluetooth_exception/BlePermissionException-class.ht
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; startScan({List&lt;Uuid&gt;? serviceFilter}) async {
+  await ensureInitialized();
   &#47;&#47; check permissions and Bluetooth support
   if (await FlutterBluePlus.isSupported) {
     await requestBluetoothPermissions();
@@ -99,6 +102,10 @@ Throws a <a href="../../util_bluetooth_exception/BlePermissionException-class.ht
   _scanSubscription = _reactiveScanner
       .scanForDevices(withServices: serviceFilter ?? [])
       .listen(_handleDiscoveredDevice);
+  _scanSubscription!.onError((error) {
+    debug(&quot;BleDeviceScanner: Error scanning for devices: $error&quot;);
+    stopScan();
+  });
   _runDeviceTimer();
 }</code></pre>
 </section>

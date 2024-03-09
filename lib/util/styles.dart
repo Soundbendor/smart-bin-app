@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 final mainColorScheme = ColorScheme(
-  primary: Colors.blue,
+  primary: const Color.fromARGB(255, 22, 151, 201),
   onPrimary: Colors.white,
   secondary: Colors.blueAccent.shade700,
   onSecondary: Colors.white,
-  tertiary: Colors.green.shade700,
+  tertiary: const Color.fromARGB(255, 116, 193, 164),
   onTertiary: Colors.white,
   error: Colors.red,
   onError: Colors.red.shade700,
-  background: Colors.white,
-  onBackground: Colors.black,
+  background: const Color(0xFFeef8f4),
+  onBackground: const Color(0xFF333333),
   brightness: Brightness.light,
   surface: Colors.grey.shade200,
   onSurface: Colors.black,
@@ -18,23 +18,34 @@ final mainColorScheme = ColorScheme(
 
 final mainTheme = ThemeData(
   colorScheme: mainColorScheme,
+
   textTheme: const TextTheme(
-    headlineLarge: TextStyle(
-      fontSize: 30,
+    displayLarge: TextStyle(
+      fontSize: 45,
       fontWeight: FontWeight.bold,
+      fontFamily: 'Georama', // Specify the font family
+    ),
+      headlineLarge: TextStyle(
+      fontSize: 30,
+      fontWeight: FontWeight.normal,
+      fontFamily: 'GolosText', // Specify the font family
     ),
   ),
+
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
       backgroundColor: mainColorScheme.primary,
       foregroundColor: mainColorScheme.onPrimary,
     ),
   ),
+
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-        backgroundColor: mainColorScheme.primary,
-        foregroundColor: mainColorScheme.onPrimary),
+      backgroundColor: mainColorScheme.primary,
+      foregroundColor: mainColorScheme.onPrimary,
+    ),
   ),
+
   cardTheme: CardTheme(
     surfaceTintColor: mainColorScheme.onSurface,
     shadowColor: mainColorScheme.onBackground,
@@ -43,4 +54,9 @@ final mainTheme = ThemeData(
       borderRadius: BorderRadius.circular(10),
     ),
   ),
+
+);
+
+final bluetoothBorderRadius = RoundedRectangleBorder(
+  borderRadius: BorderRadius.circular(15),
 );

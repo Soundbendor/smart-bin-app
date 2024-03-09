@@ -107,6 +107,17 @@
 
 </dd>
 
+        <dt id="isBonded" class="property">
+  <span class="name"><a href="../util_bluetooth/BleDevice/isBonded.html">isBonded</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> 
+
+</dt>
+<dd>
+  Whether the device is bonded.
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
         <dt id="isConnected" class="property">
   <span class="name"><a href="../util_bluetooth/BleDevice/isConnected.html">isConnected</a></span>
   <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> 
@@ -223,6 +234,32 @@
 
 </dd>
 
+        <dt id="onBondChange" class="callable">
+  <span class="name"><a href="../util_bluetooth/BleDevice/onBondChange.html">onBondChange</a></span><span class="signature">(<wbr><span class="parameter" id="onBondChange-param-callback"><span class="type-annotation">dynamic</span> <span class="parameter-name">callback</span>(<span class="parameter" id="param-"><span class="type-annotation"><a href="https://pub.dev/documentation/flutter_blue_plus/1.31.16/flutter_blue_plus/BluetoothBondState.html">BluetoothBondState</a></span></span>)</span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Creates a listener which is run when the device's bond state changes.
+  
+
+</dd>
+
+        <dt id="onBonded" class="callable">
+  <span class="name"><a href="../util_bluetooth/BleDevice/onBonded.html">onBonded</a></span><span class="signature">(<wbr><span class="parameter" id="onBonded-param-callback"><span class="type-annotation">dynamic</span> <span class="parameter-name">callback</span>(<span class="parameter" id="param-"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Null-class.html">Null</a></span></span>)</span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Creates a listener which is run when the device is bonded.
+  
+
+</dd>
+
         <dt id="once" class="callable">
   <span class="name"><a href="../util_bluetooth/BleDevice/once.html">once</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="once-param-type"><span class="type-annotation"><a href="../util_bluetooth/BleDeviceClientEvents.html">BleDeviceClientEvents</a></span> <span class="parameter-name">type</span>, </span><span class="parameter" id="once-param-callback"><span class="type-annotation">dynamic</span> <span class="parameter-name">callback</span>(<span class="parameter" id="param-"><span class="type-annotation">T</span></span>)</span>)
     <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span>
@@ -323,6 +360,19 @@
 </dt>
 <dd>
   Unsubscribes from a characteristic.
+  
+
+</dd>
+
+        <dt id="waitForPair" class="callable">
+  <span class="name"><a href="../util_bluetooth/BleDevice/waitForPair.html">waitForPair</a></span><span class="signature">(<wbr><span class="parameter" id="waitForPair-param-timeout">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">timeout</span>}</span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Waits for the device to be paired. (Android only)
   
 
 </dd>
