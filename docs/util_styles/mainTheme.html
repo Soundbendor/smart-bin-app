@@ -74,23 +74,34 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">final mainTheme = ThemeData(
   colorScheme: mainColorScheme,
+
   textTheme: const TextTheme(
-    headlineLarge: TextStyle(
-      fontSize: 30,
+    displayLarge: TextStyle(
+      fontSize: 45,
       fontWeight: FontWeight.bold,
+      fontFamily: &#39;Georama&#39;, &#47;&#47; Specify the font family
+    ),
+      headlineLarge: TextStyle(
+      fontSize: 30,
+      fontWeight: FontWeight.normal,
+      fontFamily: &#39;GolosText&#39;, &#47;&#47; Specify the font family
     ),
   ),
+
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
       backgroundColor: mainColorScheme.primary,
       foregroundColor: mainColorScheme.onPrimary,
     ),
   ),
+
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-        backgroundColor: mainColorScheme.primary,
-        foregroundColor: mainColorScheme.onPrimary),
+      backgroundColor: mainColorScheme.primary,
+      foregroundColor: mainColorScheme.onPrimary,
+    ),
   ),
+
   cardTheme: CardTheme(
     surfaceTintColor: mainColorScheme.onSurface,
     shadowColor: mainColorScheme.onBackground,
@@ -99,6 +110,7 @@
       borderRadius: BorderRadius.circular(10),
     ),
   ),
+
 );</code></pre>
 </section>
 
