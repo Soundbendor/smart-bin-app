@@ -79,6 +79,21 @@ class AnnotationNotifier extends ChangeNotifier {
   List<DrawingSegment> currentAnnotationHistory = [];
   DrawingSegment? combinedCurrentAnnotation;
   int startIndex = 0;
+  String? currentDetection;
+
+  void reset() {
+    label = null;
+    allAnnotations = [];
+    currentAnnotation = [];
+    currentAnnotationHistory = [];
+    combinedCurrentAnnotation = null;
+    startIndex = 0;
+    currentDetection = null;
+  }
+
+  void setDetection(String id) {
+    currentDetection = id;
+  }
 
   String? getLabel() {
     return label;
@@ -93,16 +108,16 @@ class AnnotationNotifier extends ChangeNotifier {
     return allAnnotations;
   }
 
+  void startCurrentAnnotation(DrawingSegment segment) {
+    currentAnnotation.add(segment);
+    notifyListeners();
+  }
+
   void addToAllAnnotations() {
     combinedCurrentAnnotation = combineCurrentSegments();
     if (combinedCurrentAnnotation != null && label != null) {
       allAnnotations.add([label, combinedCurrentAnnotation!.toFloatList()]);
     }
-    notifyListeners();
-  }
-
-  void addToCurrentAnnotation(DrawingSegment segment) {
-    currentAnnotation.add(segment);
     notifyListeners();
   }
 

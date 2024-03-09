@@ -13,20 +13,13 @@ import 'package:provider/provider.dart';
 /// Page used for annotating an individual detection image
 class AnnotationPage extends StatefulWidget {
   /// The link for the image to be annotated
-  late final Future<String>? imageLink;
-
-  AnnotationPage({super.key, String? imageLink, String? detectionId}) {
-    if (imageLink != null) {
-      this.imageLink = Future.value(imageLink);
-    } else if (detectionId != null) {
-      this.imageLink = Future(() async {
-        return Detection.find(detectionId)
-            .then((detection) => detection!.preDetectImgLink);
-      });
-    } else {
-      throw ArgumentError(
-          "AnnotationPage requires either an imageLink or a detectionId");
-    }
+  late final Future<String> imageLink;
+  final String detectionId;
+  AnnotationPage({super.key, required this.detectionId}) {
+    imageLink = Future(() async {
+      return Detection.find(detectionId)
+          .then((detection) => detection!.preDetectImgLink);
+    });
   }
 
   @override
@@ -34,6 +27,11 @@ class AnnotationPage extends StatefulWidget {
 }
 
 class _AnnotationPageState extends State<AnnotationPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   /// Key for the RepaintBoundary widget that's used to capture the annotated image
   final GlobalKey _captureKey = GlobalKey();
 
@@ -58,6 +56,14 @@ class _AnnotationPageState extends State<AnnotationPage> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     AnnotationNotifier notifier = context.read<AnnotationNotifier>();
+    print(notifier.currentDetection);
+    print(widget.detectionId);
+    if (notifier.currentDetection != widget.detectionId) {
+      notifier.reset();
+      notifier.setDetection(widget.detectionId);
+    }
+    print(notifier.currentDetection);
+    print(widget.detectionId);
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -104,7 +110,8 @@ class _AnnotationPageState extends State<AnnotationPage> {
               Text('Current Label: ${notifier.label}'),
               ElevatedButton(
                 onPressed: () {
-                  GoRouter.of(context).push("/main/label");
+                  GoRouter.of(context)
+                      .push("/main/detection/${widget.detectionId}/label");
                 },
                 child: Text(
                   "Select Label",

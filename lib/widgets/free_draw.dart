@@ -19,9 +19,6 @@ class FreeDraw extends StatefulWidget {
 }
 
 class _FreeDrawState extends State<FreeDraw> {
-  /// List of DrawingSegments that make up the current annotation
-  var annotation = <DrawingSegment>[];
-
   /// The DrawingSegment being actively updated
   DrawingSegment? currentDrawingSegment;
 
@@ -32,8 +29,8 @@ class _FreeDrawState extends State<FreeDraw> {
 
   @override
   void initState() {
-    super.initState();
     imageKey = GlobalKey();
+    super.initState();
   }
 
   @override
@@ -52,9 +49,9 @@ class _FreeDrawState extends State<FreeDraw> {
                     id: DateTime.now().microsecondsSinceEpoch,
                     offsets: [details.localPosition],
                   );
-                  notifier.addToCurrentAnnotation(currentDrawingSegment!);
+                  notifier.startCurrentAnnotation(
+                      currentDrawingSegment!);
                   notifier.updateCurrentAnnotationHistory();
-                  // annotation.add(currentDrawingSegment!);
                 }
               });
             },
@@ -69,7 +66,6 @@ class _FreeDrawState extends State<FreeDraw> {
                   currentDrawingSegment = currentDrawingSegment?.copyWith(
                     offsets: currentDrawingSegment!.offsets..add(localPosition),
                   );
-                  // annotation.last = currentDrawingSegment!;
                   notifier.updateCurrentAnnotation(currentDrawingSegment!);
                   notifier.updateCurrentAnnotationHistory();
                 }

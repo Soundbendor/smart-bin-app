@@ -48,27 +48,28 @@ List<RouteBase> getRoutes() {
                   builder: (BuildContext context, GoRouterState state) {
                     return const DetectionsPage();
                   }),
-              GoRoute(
-                path: 'label',
-                builder: (context, state) => LabelAnnotation(),
-              ),
               // `/main/detection/:detectionId` - detection page with detailed information
               GoRoute(
-                  path: 'detection/:detectionId',
-                  builder: (BuildContext context, GoRouterState state) {
-                    return DetectionPage.fromId(
-                        detectionId: state.pathParameters['detectionId']!);
-                  },
-                  routes: [
-                    // `/main/detection/:detectionId/annotation` - annotation page
-                    GoRoute(
-                      path: 'annotation',
-                      builder: (BuildContext context, GoRouterState state) {
-                        return AnnotationPage(
-                            detectionId: state.pathParameters['detectionId']!);
-                      },
-                    ),
-                  ]),
+                path: 'detection/:detectionId',
+                builder: (BuildContext context, GoRouterState state) {
+                  return DetectionPage.fromId(
+                      detectionId: state.pathParameters['detectionId']!);
+                },
+                routes: [
+                  // `/main/detection/:detectionId/annotation` - annotation page
+                  GoRoute(
+                    path: 'annotation',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return AnnotationPage(
+                          detectionId: state.pathParameters['detectionId']!);
+                    },
+                  ),
+                  GoRoute(
+                    path: 'label',
+                    builder: (context, state) => LabelAnnotation(),
+                  ),
+                ],
+              ),
               // `/main/faq` - frequently asked questions
               GoRoute(
                 name: 'faq',
