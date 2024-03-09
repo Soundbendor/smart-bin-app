@@ -193,20 +193,23 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     return timeStamp;
   }
 
-  // TODO: Execute this in main, but don't tie it to the UI
-  // - it could modify data in a provider instead
   /// Initialize WebSocket channel and subscribe
-  void initWebSocket() {
-    channel = IOWebSocketChannel.connect('ws://10.0.2.2:8000/subscribe');
-    final subscriptionMessage = {"type": "subscribe", "channel": "1"};
-    channel.sink.add(jsonEncode(subscriptionMessage));
-    final timeStamp = getLatestTimestamp();
-    final requestMessage = {
-      "type": "request_data",
-      "after": timeStamp.toString(),
-      "channel": "1"
-    };
-    channel.sink.add(jsonEncode(requestMessage));
-    handleMessages(channel);
+  void initWebSocket() async {
+    channel = IOWebSocketChannel.connect('ws://10.0.2.2:8000/api/model/subscribe');
+    try {
+      await channel.ready; // https://github.com/dart-lang/web_socket_channel/issues/38
+      final subscriptionMessage = {"type": "subscribe", "channel": "1"};
+      channel.sink.add(jsonEncode(subscriptionMessage));
+      final timeStamp = getLatestTimestamp();
+      final requestMessage = {
+        "type": "request_data",
+        "after": timeStamp.toString(),
+        "channel": "1"
+      };
+      channel.sink.add(jsonEncode(requestMessage));
+      handleMessages(channel);
+    } catch (e) {
+      debug("Connect Error: $e");
+    }
   }
 }
