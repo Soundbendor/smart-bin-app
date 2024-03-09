@@ -1,10 +1,46 @@
+import 'package:binsight_ai/widgets/background.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:binsight_ai/widgets/background.dart';
 
 /// The splash screen prompting the user to continue setting up their application.
-class SplashPage extends StatelessWidget {
+class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
+
+  @override
+  State<SplashPage> createState() => _SplashPageState();
+}
+
+class _SplashPageState extends State<SplashPage> {
+  // Define opacity states for individual elements on the page
+  double _text1Opacity = 0;
+  double _text2Opacity = 0;
+  double _button1Opacity = 0;
+
+  // Trigger the animation upon opening the page
+  @override
+  void initState() {
+    super.initState();
+    runAnimation();
+  }
+
+  // Awaits each animation in order to delay their appearance order
+  void runAnimation() async {
+    await Future.delayed(
+        const Duration(seconds: 1),
+        () => setState(() {
+              _text1Opacity = 1;
+            }));
+    await Future.delayed(
+        const Duration(seconds: 1),
+        () => setState(() {
+              _text2Opacity = 1;
+            }));
+    await Future.delayed(
+        const Duration(seconds: 1),
+        () => setState(() {
+              _button1Opacity = 1;
+            }));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,48 +51,49 @@ class SplashPage extends StatelessWidget {
         imageURL: "assets/images/welcome.png",
         child: Center(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Flexible(
-                flex: 5,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.only(
-                            left: 16, right: 16, bottom: 30, top: 160),
-                        child: Text(
-                          "Welcome",
-                          style: textTheme.displayLarge,
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 80, right: 80, top: 20, bottom: 20),
-                      child: Text(
-                        "Let's get you connected to your bin!",
-                        style: textTheme.headlineLarge!.copyWith(
-                          color: colorScheme.onBackground,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            foregroundColor: colorScheme.onPrimary,
-                            padding: const EdgeInsets.all(16.0),
-                            textStyle: textTheme.labelLarge,
-                            backgroundColor: colorScheme.primary),
-                        onPressed: () {
-                          context.goNamed('bluetooth');
-                        },
-                        child: const Text('Continue'),
-                      ),
-                    ),
-                  ],
+              SizedBox(height: MediaQuery.of(context).size.height * .20),
+              AnimatedOpacity(
+                opacity: _text1Opacity,
+                duration: const Duration(milliseconds: 500),
+                child: Text(
+                  "Welcome!",
+                  style: textTheme.displayLarge,
                 ),
               ),
-              Flexible(flex: 3, child: Container())
+              SizedBox(height: MediaQuery.of(context).size.height * .05),
+              AnimatedOpacity(
+                opacity: _text2Opacity,
+                duration: const Duration(milliseconds: 500),
+                child: Text(
+                  "Let's get you connected to your bin.",
+                  style: textTheme.headlineLarge!.copyWith(
+                      color: colorScheme.onBackground,
+                      fontWeight: FontWeight.normal),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * .10),
+              AnimatedOpacity(
+                opacity: _button1Opacity,
+                duration: const Duration(milliseconds: 500),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      elevation: 5,
+                      foregroundColor: colorScheme.onPrimary,
+                      padding: EdgeInsets.symmetric(
+                          vertical: MediaQuery.of(context).size.width * .05,
+                          horizontal: 50),
+                      textStyle: textTheme.titleLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
+                      backgroundColor: const Color(0xFF74C1A4)),
+                  onPressed: () {
+                    (_button1Opacity < 1) ? null : context.goNamed('bluetooth');
+                  },
+                  child: const Text('Get Started'),
+                ),
+              ),
             ],
           ),
         ),
