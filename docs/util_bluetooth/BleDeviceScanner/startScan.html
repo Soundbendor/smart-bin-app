@@ -86,6 +86,7 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; startScan({List&lt;Uuid&gt;? serviceFilter}) async {
+  await ensureInitialized();
   &#47;&#47; check permissions and Bluetooth support
   if (await FlutterBluePlus.isSupported) {
     await requestBluetoothPermissions();
@@ -101,6 +102,10 @@
   _scanSubscription = _reactiveScanner
       .scanForDevices(withServices: serviceFilter ?? [])
       .listen(_handleDiscoveredDevice);
+  _scanSubscription!.onError((error) {
+    debug(&quot;BleDeviceScanner: Error scanning for devices: $error&quot;);
+    stopScan();
+  });
   _runDeviceTimer();
 }</code></pre>
 </section>
