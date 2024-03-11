@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:binsight_ai/pages/setup/intro_sequence.dart';
 import 'package:binsight_ai/util/styles.dart';
 import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:flutter/material.dart';
@@ -124,7 +125,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
     isScanning = false;
     Provider.of<WifiResultNotifier>(context, listen: false)
         .setWifiResult(wifiResult);
-    GoRouter.of(context).goNamed('wifi');
+    context.findAncestorStateOfType<SetupScreenState>()!.setupKey.currentState?.next();
   }
 
   @override
@@ -227,7 +228,7 @@ The error was: ${(error as BleOperationFailureException).message}.
                   stopScanning();
                   Provider.of<DeviceNotifier>(context, listen: false)
                       .resetDevice();
-                  GoRouter.of(context).goNamed("bluetooth");
+                  context.findAncestorStateOfType<SetupScreenState>()!.setupKey.currentState?.previous();
                 },
                 child: Text(
                   "Back",

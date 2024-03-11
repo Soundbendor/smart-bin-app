@@ -94,7 +94,7 @@ List<RouteBase> getRoutes() {
         name: 'set-up',
         path: '/set-up',
         builder: (BuildContext context, GoRouterState state) {
-          return SetupScreen();
+          return const SetupScreen();
         },
         routes: [
           // `/set-up/bluetooth` - bluetooth set up page

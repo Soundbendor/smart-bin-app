@@ -1,3 +1,4 @@
+import 'package:binsight_ai/pages/setup/intro_sequence.dart';
 import 'package:binsight_ai/util/styles.dart';
 import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:flutter/material.dart';
@@ -83,7 +84,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
               ),
               () {
                 if (!context.mounted) return;
-                GoRouter.of(context).goNamed('wifi-scan');
+                context.findAncestorStateOfType<SetupScreenState>()!.setupKey.currentState?.next();
                 dialogIsVisible = false;
               },
             );
@@ -253,6 +254,7 @@ class _BluetoothListState extends State<BluetoothList> {
 
     return Scaffold(
       body: CustomBackground(
+        imageURL: 'assets/images/bluetooth_screen.png',
         child: Column(
           children: [
             ScanList(

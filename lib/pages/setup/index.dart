@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:binsight_ai/pages/setup/intro_sequence.dart';
 import 'package:binsight_ai/widgets/background.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:introduction_screen/introduction_screen.dart';
 
 /// The splash screen prompting the user to continue setting up their application.
 class SplashPage extends StatefulWidget {
@@ -17,7 +19,6 @@ class _SplashPageState extends State<SplashPage> {
   double _text1Opacity = 0;
   double _text2Opacity = 0;
   double _button1Opacity = 0;
-  final Completer<void> _animationCompleter = Completer<void>();
 
   // Trigger the animation upon opening the page
   @override
@@ -51,35 +52,30 @@ class _SplashPageState extends State<SplashPage> {
     });
   }
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       body: CustomBackground(
-        imageURL: "assets/images/welcome.png",
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: MediaQuery.of(context).size.height * .20),
-              AnimatedOpacity(
-                opacity: _text1Opacity,
-                duration: const Duration(milliseconds: 500),
-                child: Text(
-                  "Welcome!",
-                  style: textTheme.displayLarge,
-                ),
+        imageURL: "assets/images/splash_screen.png",
+        child: Column(
+          children: [
+            SizedBox(height: MediaQuery.of(context).size.height * .15),
+            AnimatedOpacity(
+              opacity: _text1Opacity,
+              duration: const Duration(milliseconds: 500),
+              child: Text(
+                "Welcome!",
+                style: textTheme.displayLarge,
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * .05),
-              AnimatedOpacity(
-                opacity: _text2Opacity,
-                duration: const Duration(milliseconds: 500),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * .05),
+            AnimatedOpacity(
+              opacity: _text2Opacity,
+              duration: const Duration(milliseconds: 500),
+              child: Padding(
+                padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
                 child: Text(
                   "Let's get you connected to your bin.",
                   style: textTheme.headlineLarge!.copyWith(
@@ -88,28 +84,28 @@ class _SplashPageState extends State<SplashPage> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * .10),
-              AnimatedOpacity(
-                opacity: _button1Opacity,
-                duration: const Duration(milliseconds: 500),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      elevation: 5,
-                      foregroundColor: colorScheme.onPrimary,
-                      padding: EdgeInsets.symmetric(
-                          vertical: MediaQuery.of(context).size.width * .05,
-                          horizontal: 50),
-                      textStyle: textTheme.titleLarge!
-                          .copyWith(fontWeight: FontWeight.bold),
-                      backgroundColor: const Color(0xFF74C1A4)),
-                  onPressed: () {
-                    (_button1Opacity < 1) ? null : context.goNamed('bluetooth');
-                  },
-                  child: const Text('Get Started'),
-                ),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * .05),
+            AnimatedOpacity(
+              opacity: _button1Opacity,
+              duration: const Duration(milliseconds: 500),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    elevation: 5,
+                    foregroundColor: colorScheme.onPrimary,
+                    padding: EdgeInsets.symmetric(
+                        vertical: MediaQuery.of(context).size.width * .05,
+                        horizontal: 50),
+                    textStyle: textTheme.titleLarge!
+                        .copyWith(fontWeight: FontWeight.bold),
+                    backgroundColor: const Color(0xFF74C1A4)),
+                onPressed: () {
+                  (_button1Opacity < 1) ? null : context.findAncestorStateOfType<SetupScreenState>()!.setupKey.currentState?.next();
+                },
+                child: const Text('Get Started'),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

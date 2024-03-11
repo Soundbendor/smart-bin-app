@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:binsight_ai/pages/setup/intro_sequence.dart';
 import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -91,7 +92,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                GoRouter.of(context).goNamed("wifi-scan");
+                context.findAncestorStateOfType<SetupScreenState>()!.setupKey.currentState?.previous();
               },
               child: Text("Back",
                   style: textTheme.labelLarge!.copyWith(

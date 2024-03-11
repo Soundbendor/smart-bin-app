@@ -15,7 +15,11 @@ class CustomBackground extends StatelessWidget {
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage(imageURL), fit: BoxFit.cover),
+        image: DecorationImage(
+          // alignment: Alignment.bottomCenter,
+          image: AssetImage(imageURL),
+          fit: BoxFit.cover,
+        ),
       ),
       child: child,
     );
