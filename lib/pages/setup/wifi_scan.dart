@@ -3,7 +3,6 @@ import 'package:binsight_ai/pages/setup/intro_sequence.dart';
 import 'package:binsight_ai/util/styles.dart';
 import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:binsight_ai/util/async_ops.dart';
 import 'package:binsight_ai/util/bluetooth_dialog_strings.dart';

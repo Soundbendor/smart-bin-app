@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:binsight_ai/pages/setup/intro_sequence.dart';
 import 'package:binsight_ai/widgets/background.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:introduction_screen/introduction_screen.dart';
 
 /// The splash screen prompting the user to continue setting up their application.
 class SplashPage extends StatefulWidget {
