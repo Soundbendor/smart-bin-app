@@ -8,7 +8,9 @@ import 'package:introduction_screen/introduction_screen.dart';
 
 /// Introduction screen for explaining the usage of the app to new users.
 class SetupScreen extends StatefulWidget {
-  const SetupScreen({super.key});
+  const SetupScreen({super.key, this.startPageIndex = 0});
+
+  final int startPageIndex;
 
   @override
   State<SetupScreen> createState() => SetupScreenState();
@@ -21,13 +23,14 @@ class SetupScreenState extends State<SetupScreen> {
   Widget build(BuildContext context) {
     return IntroductionScreen(
       key: setupKey,
-      rawPages: const [
-        LoadScreen(),
-        SplashPage(),
-        BluetoothPage(),
-        WifiScanPage(),
-        WifiConfigurationPage(),
+      rawPages: [
+        LoadScreen(transitionKey: setupKey),
+        SplashPage(transitionKey: setupKey),
+        BluetoothPage(transitionKey: setupKey),
+        WifiScanPage(transitionKey: setupKey),
+        WifiConfigurationPage(transitionKey: setupKey),
       ],
+      initialPage: widget.startPageIndex,
       freeze: true,
       animationDuration: 750,
       showDoneButton: false,

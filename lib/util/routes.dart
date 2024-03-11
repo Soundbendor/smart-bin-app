@@ -1,7 +1,6 @@
 import 'package:binsight_ai/pages/setup/intro_sequence.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:binsight_ai/pages/setup/wifi_configuration.dart';
 import 'package:binsight_ai/pages/detection/annotation.dart';
 import 'package:binsight_ai/pages/detection/detection.dart';
 import 'package:binsight_ai/pages/detection/index.dart';
@@ -9,8 +8,6 @@ import 'package:binsight_ai/pages/main/faq.dart';
 import 'package:binsight_ai/pages/main/help.dart';
 import 'package:binsight_ai/pages/main/user_guide.dart';
 import 'package:binsight_ai/pages/main/home.dart';
-import 'package:binsight_ai/pages/setup/bluetooth.dart';
-import 'package:binsight_ai/pages/setup/wifi_scan.dart';
 import 'package:binsight_ai/widgets/navigation_shell.dart';
 
 // Used for testing
@@ -102,21 +99,21 @@ List<RouteBase> getRoutes() {
             name: 'bluetooth',
             path: 'bluetooth',
             builder: (BuildContext context, GoRouterState state) {
-              return const BluetoothPage();
+              return const SetupScreen(startPageIndex: 2);
             },
           ),
           GoRoute(
               name: 'wifi-scan',
               path: 'wifi-scan',
               builder: (BuildContext context, GoRouterState state) {
-                return const WifiScanPage();
+                return const SetupScreen(startPageIndex: 3);
               }),
           // `/set-up/wifi` - selecting wifi page
           GoRoute(
               name: 'wifi',
               path: 'wifi',
               builder: (BuildContext context, GoRouterState state) {
-                return const WifiConfigurationPage();
+                return const SetupScreen(startPageIndex: 4);
               }),
         ]),
   ];
