@@ -25,21 +25,9 @@ class _SplashPageState extends State<SplashPage> {
 
   // Awaits each animation in order to delay their appearance order
   void runAnimation() async {
-    await Future.delayed(
-        const Duration(seconds: 1),
-        () => setState(() {
-              _text1Opacity = 1;
-            }));
-    await Future.delayed(
-        const Duration(seconds: 1),
-        () => setState(() {
-              _text2Opacity = 1;
-            }));
-    await Future.delayed(
-        const Duration(seconds: 1),
-        () => setState(() {
-              _button1Opacity = 1;
-            }));
+    await Future.delayed(const Duration(seconds: 1), () => setState(() {_text1Opacity = 1;}));
+    await Future.delayed(const Duration(seconds: 1), () => setState(() {_text2Opacity = 1;}));
+    await Future.delayed(const Duration(seconds: 1), () => setState(() {_button1Opacity = 1;}));
   }
 
   @override
