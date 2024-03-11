@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:binsight_ai/widgets/background.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +17,7 @@ class _SplashPageState extends State<SplashPage> {
   double _text1Opacity = 0;
   double _text2Opacity = 0;
   double _button1Opacity = 0;
+  final Completer<void> _animationCompleter = Completer<void>();
 
   // Trigger the animation upon opening the page
   @override
@@ -25,10 +28,33 @@ class _SplashPageState extends State<SplashPage> {
 
   // Awaits each animation in order to delay their appearance order
   void runAnimation() async {
-    await Future.delayed(const Duration(seconds: 1), () => setState(() {_text1Opacity = 1;}));
-    await Future.delayed(const Duration(seconds: 1), () => setState(() {_text2Opacity = 1;}));
-    await Future.delayed(const Duration(seconds: 1), () => setState(() {_button1Opacity = 1;}));
+    await Future.delayed(const Duration(seconds: 1), () {
+      if (mounted) {
+        setState(() {
+          _text1Opacity = 1;
+        });
+      }
+    });
+    await Future.delayed(const Duration(seconds: 1), () {
+      if (mounted) {
+        setState(() {
+          _text2Opacity = 1;
+        });
+      }
+    });
+    await Future.delayed(const Duration(seconds: 1), () {
+      if (mounted) {
+        setState(() {
+          _button1Opacity = 1;
+        });
+      }
+    });
   }
+
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
