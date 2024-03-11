@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:binsight_ai/pages/setup/intro_sequence.dart';
 import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:introduction_screen/introduction_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/util/bluetooth_bin_data.dart';
@@ -16,7 +16,9 @@ import 'package:binsight_ai/widgets/background.dart';
 
 /// Widget for configuring the wifi credentials of the compost bin
 class WifiConfigurationPage extends StatefulWidget {
-  const WifiConfigurationPage({super.key});
+  const WifiConfigurationPage({super.key, required this.transitionKey});
+
+  final GlobalKey<IntroductionScreenState> transitionKey;
 
   @override
   State<WifiConfigurationPage> createState() => _WifiConfigurationPageState();
@@ -92,7 +94,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                context.findAncestorStateOfType<SetupScreenState>()!.setupKey.currentState?.previous();
+                widget.transitionKey.currentState?.previous();
               },
               child: Text("Back",
                   style: textTheme.labelLarge!.copyWith(

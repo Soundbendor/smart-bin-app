@@ -1,12 +1,14 @@
 import 'dart:async';
 
-import 'package:binsight_ai/pages/setup/intro_sequence.dart';
 import 'package:binsight_ai/widgets/background.dart';
 import 'package:flutter/material.dart';
+import 'package:introduction_screen/introduction_screen.dart';
 
 /// The splash screen prompting the user to continue setting up their application.
 class SplashPage extends StatefulWidget {
-  const SplashPage({super.key});
+  const SplashPage({super.key, required this.transitionKey});
+
+  final GlobalKey<IntroductionScreenState> transitionKey;
 
   @override
   State<SplashPage> createState() => _SplashPageState();
@@ -98,7 +100,7 @@ class _SplashPageState extends State<SplashPage> {
                         .copyWith(fontWeight: FontWeight.bold),
                     backgroundColor: const Color(0xFF74C1A4)),
                 onPressed: () {
-                  (_button1Opacity < 1) ? null : context.findAncestorStateOfType<SetupScreenState>()!.setupKey.currentState?.next();
+                  (_button1Opacity < 1) ? null : widget.transitionKey.currentState?.next();
                 },
                 child: const Text('Get Started'),
               ),
