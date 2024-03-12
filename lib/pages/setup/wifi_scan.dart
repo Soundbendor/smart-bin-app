@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:binsight_ai/util/styles.dart';
 import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:flutter/material.dart';
-import 'package:introduction_screen/introduction_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:binsight_ai/util/async_ops.dart';
 import 'package:binsight_ai/util/bluetooth_dialog_strings.dart';
@@ -18,9 +17,7 @@ import 'package:binsight_ai/widgets/scan_list.dart';
 
 /// Displays the WiFi configuration page with background and padding.
 class WifiScanPage extends StatefulWidget {
-  const WifiScanPage({super.key, required this.transitionKey});
-
-  final GlobalKey<IntroductionScreenState> transitionKey;
+  const WifiScanPage({super.key});
 
   @override
   State<WifiScanPage> createState() => _WifiScanPageState();
@@ -126,7 +123,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
     isScanning = false;
     Provider.of<WifiResultNotifier>(context, listen: false)
         .setWifiResult(wifiResult);
-    widget.transitionKey.currentState?.next();
+    Provider.of<SetupKeyNotifier>(context).setupKey.currentState?.next();
   }
 
   @override
@@ -229,7 +226,7 @@ The error was: ${(error as BleOperationFailureException).message}.
                   stopScanning();
                   Provider.of<DeviceNotifier>(context, listen: false)
                       .resetDevice();
-                  widget.transitionKey.currentState?.previous();
+                  Provider.of<SetupKeyNotifier>(context).setupKey.currentState?.previous();
                 },
                 child: Text(
                   "Back",

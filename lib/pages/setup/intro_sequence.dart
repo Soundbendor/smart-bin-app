@@ -3,8 +3,10 @@ import 'package:binsight_ai/pages/setup/index.dart';
 import 'package:binsight_ai/pages/setup/load_screen.dart';
 import 'package:binsight_ai/pages/setup/wifi_configuration.dart';
 import 'package:binsight_ai/pages/setup/wifi_scan.dart';
+import 'package:binsight_ai/util/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:provider/provider.dart';
 
 /// Introduction screen for explaining the usage of the app to new users.
 class SetupScreen extends StatefulWidget {
@@ -17,18 +19,18 @@ class SetupScreen extends StatefulWidget {
 }
 
 class SetupScreenState extends State<SetupScreen> {
-  final setupKey = GlobalKey<IntroductionScreenState>();
-
   @override
   Widget build(BuildContext context) {
+    GlobalKey<IntroductionScreenState> setupKey =
+        Provider.of<SetupKeyNotifier>(context).setupKey;
     return IntroductionScreen(
       key: setupKey,
-      rawPages: [
-        LoadScreen(transitionKey: setupKey),
-        SplashPage(transitionKey: setupKey),
-        BluetoothPage(transitionKey: setupKey),
-        WifiScanPage(transitionKey: setupKey),
-        WifiConfigurationPage(transitionKey: setupKey),
+      rawPages: const [
+        LoadScreen(),
+        SplashPage(),
+        BluetoothPage(),
+        WifiScanPage(),
+        WifiConfigurationPage(),
       ],
       initialPage: widget.startPageIndex,
       freeze: true,

@@ -2,6 +2,7 @@ import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/util/wifi_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
+import 'package:introduction_screen/introduction_screen.dart';
 
 /// Notifies listeners of changes to the device.
 ///
@@ -87,4 +88,8 @@ class WifiResultNotifier with ChangeNotifier {
     wifiResult = newWifiResult;
     notifyListeners();
   }
+}
+
+class SetupKeyNotifier {
+  final setupKey = GlobalKey<IntroductionScreenState>();
 }

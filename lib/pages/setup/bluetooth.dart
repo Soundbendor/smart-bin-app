@@ -2,7 +2,6 @@ import 'package:binsight_ai/util/styles.dart';
 import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:introduction_screen/introduction_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
@@ -16,9 +15,7 @@ import 'package:binsight_ai/widgets/scan_list.dart';
 
 /// Page which displays scanned Bluetooth devices.
 class BluetoothPage extends StatefulWidget {
-  const BluetoothPage({super.key, required this.transitionKey});
-
-  final GlobalKey<IntroductionScreenState> transitionKey;
+  const BluetoothPage({super.key});
 
   @override
   State<BluetoothPage> createState() => _BluetoothPageState();
@@ -86,7 +83,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
               ),
               () {
                 if (!context.mounted) return;
-                widget.transitionKey.currentState?.next();
+                Provider.of<SetupKeyNotifier>(context).setupKey.currentState?.next();
                 dialogIsVisible = false;
               },
             );

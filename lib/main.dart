@@ -123,6 +123,8 @@ void main() async {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => DeviceNotifier()),
+    ChangeNotifierProvider(create: (_) => WifiResultNotifier()),
+    Provider(create: (_) => SetupKeyNotifier()),
   ], child: BinsightAiApp(skipSetUp: devices.isEmpty)));
 }
 
@@ -195,9 +197,11 @@ class _BinsightAiAppState extends State<BinsightAiApp>
 
   /// Initialize WebSocket channel and subscribe
   void initWebSocket() async {
-    channel = IOWebSocketChannel.connect('ws://10.0.2.2:8000/api/model/subscribe');
+    channel =
+        IOWebSocketChannel.connect('ws://10.0.2.2:8000/api/model/subscribe');
     try {
-      await channel.ready; // https://github.com/dart-lang/web_socket_channel/issues/38
+      await channel
+          .ready; // https://github.com/dart-lang/web_socket_channel/issues/38
       final subscriptionMessage = {"type": "subscribe", "channel": "1"};
       channel.sink.add(jsonEncode(subscriptionMessage));
       final timeStamp = getLatestTimestamp();
