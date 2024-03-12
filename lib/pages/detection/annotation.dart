@@ -50,6 +50,14 @@ class _AnnotationPageState extends State<AnnotationPage> {
   /// List of annotations, each annotation having a label and a list of Offsets
   List<List<dynamic>> annotationsList = [];
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showAnnotationPopup();
+    });
+  }
+
   /// Function to capture the annotated image
   ///
   /// Uses the RepaintBoundary's key to obtain the RenderObject, and converts it
@@ -64,6 +72,26 @@ class _AnnotationPageState extends State<AnnotationPage> {
     setState(() {});
   }
 
+  /// Renders the popup that educates the user on how to properly annotate their composted items
+  void _showAnnotationPopup() {
+    final textTheme = Theme.of(context).textTheme;
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            surfaceTintColor: Colors.transparent,
+              title: Text('How to Annotate', style: textTheme.headlineLarge),
+              content: Column(children: [
+                Image.asset('assets/images/annotation.gif'),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("Close"))
+              ]));
+        });
+  }
+
   /// Renders the popup that prompts input for a label of the current annotation
   void _showPopup() {
     TextEditingController userInputController = TextEditingController();
@@ -74,6 +102,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
         final textTheme = Theme.of(context).textTheme;
         final colorScheme = Theme.of(context).colorScheme;
         return AlertDialog(
+          surfaceTintColor: Colors.transparent,
           title: Text('Label Annotation', style: textTheme.headlineLarge),
           content: Column(
             children: [
@@ -82,6 +111,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
               TextField(
                 controller: userInputController,
                 style: textTheme.bodyMedium,
+                showCursor: true,
               ),
             ],
           ),
