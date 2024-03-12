@@ -7,6 +7,7 @@ import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/widgets/free_draw.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Page used for annotating an individual detection image
 class AnnotationPage extends StatefulWidget {
@@ -47,14 +48,27 @@ class _AnnotationPageState extends State<AnnotationPage> {
   /// Input entered by user to label the current annotation
   String? userInput;
 
+  /// User's decision to show annotation tutorial upon opening annotation screen
+  bool? dontShowAgain = false;
+
   /// List of annotations, each annotation having a label and a list of Offsets
   List<List<dynamic>> annotationsList = [];
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _showAnnotationPopup();
+    initPreferences();
+    if (dontShowAgain == false) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showAnnotationPopup();
+      });
+    }
+  }
+
+  void initPreferences() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      dontShowAgain = preferences.getBool('dontShowAgain') ?? false;
     });
   }
 
@@ -79,16 +93,37 @@ class _AnnotationPageState extends State<AnnotationPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            surfaceTintColor: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
               title: Text('How to Annotate', style: textTheme.headlineLarge),
-              content: Column(children: [
-                Image.asset('assets/images/annotation.gif'),
-                TextButton(
-                    onPressed: () {
+              content: Column(
+                children: [
+                  Image.asset('assets/images/annotation.gif'),
+                  TextButton(
+                    onPressed: () async {
+                      SharedPreferences preferences = await SharedPreferences.getInstance();
+                      preferences.setBool('dontShowAgain', dontShowAgain!);
+                      if (!mounted) return;
                       Navigator.of(context).pop();
                     },
-                    child: const Text("Close"))
-              ]));
+                    child: const Text("Close"),
+                  ),
+                  Row(
+                    children: [
+                      StatefulBuilder(builder:
+                          (BuildContext context, StateSetter setState) {
+                        return Checkbox(
+                          checkColor: Colors.black,
+                          value: dontShowAgain,
+                          onChanged: (value) {
+                            setState(() => dontShowAgain = value!);
+                          },
+                        );
+                      }),
+                      const Text("Don't show this screen again"),
+                    ],
+                  ),
+                ],
+              ));
         });
   }
 
