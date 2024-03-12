@@ -4,11 +4,10 @@ import 'package:binsight_ai/util/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:binsight_ai/database/models/detection.dart';
-import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/widgets/free_draw.dart';
-import 'package:provider/provider.dart';
 
 /// Page used for annotating an individual detection image
 class AnnotationPage extends StatefulWidget {
@@ -122,7 +121,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                   } else {
                     String message;
                     if (notifier.label == null) {
-                      message = "Please Enter A Label For Current Annotation";
+                      message = "Please Enter a Label for Current Annotation";
                     } else {
                       message = "Please Draw Your Annotation";
                     }
@@ -156,7 +155,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
           ),
         ),
       ),
-      //Undo and redo buttons
+      // Undo and redo buttons
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [

@@ -1,11 +1,9 @@
-import 'package:binsight_ai/util/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/detections.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/widgets/image.dart';
-import 'package:provider/provider.dart';
 
 /// Displays information about a single detection.
 class DetectionPage extends StatelessWidget {

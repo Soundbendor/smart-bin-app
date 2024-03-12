@@ -41,7 +41,7 @@ class _FreeDrawState extends State<FreeDraw> {
           width: 300,
           height: 300,
           child: GestureDetector(
-            //When first touching within the image, create a single Offset
+            // When first touching within the image, create a single Offset
             onPanStart: (details) {
               setState(() {
                 if (_isPointOnImage(details.localPosition)) {
@@ -55,8 +55,8 @@ class _FreeDrawState extends State<FreeDraw> {
                 }
               });
             },
-            //When dragging your finger, update the current drawing's offsets to include the new point
-            //Update the most recent segment in the annotation's list of Segments
+            // When dragging your finger, update the current drawing's offsets to include the new point
+            // Update the most recent segment in the annotation's list of Segments
             onPanUpdate: (details) {
               setState(() {
                 if (currentDrawingSegment != null &&
@@ -74,7 +74,7 @@ class _FreeDrawState extends State<FreeDraw> {
             onPanEnd: (_) {
               currentDrawingSegment = null;
             },
-            //Render the drawing on top of the image
+            // Render the drawing on top of the image
             child: Stack(
               children: [
                 DynamicImage(widget.imageLink,
@@ -114,8 +114,8 @@ class DrawingPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, ui.Size size) {
-    //Draws a line between each drawingSegment's Offsets
-    //for each segment in drawingSegments
+    // Draws a line between each drawingSegment's Offsets
+    // for each segment in drawingSegments
     for (var drawingSegment in drawingSegments) {
       final paint = Paint()
         ..color = Colors.black
