@@ -99,21 +99,26 @@
                   }),
               &#47;&#47; `&#47;main&#47;detection&#47;:detectionId` - detection page with detailed information
               GoRoute(
-                  path: &#39;detection&#47;:detectionId&#39;,
-                  builder: (BuildContext context, GoRouterState state) {
-                    return DetectionPage.fromId(
-                        detectionId: state.pathParameters[&#39;detectionId&#39;]!);
-                  },
-                  routes: [
-                    &#47;&#47; `&#47;main&#47;detection&#47;:detectionId&#47;annotation` - annotation page
-                    GoRoute(
-                        path: &#39;annotation&#39;,
-                        builder: (BuildContext context, GoRouterState state) {
-                          return AnnotationPage(
-                              detectionId:
-                                  state.pathParameters[&#39;detectionId&#39;]!);
-                        }),
-                  ]),
+                path: &#39;detection&#47;:detectionId&#39;,
+                builder: (BuildContext context, GoRouterState state) {
+                  return DetectionPage.fromId(
+                      detectionId: state.pathParameters[&#39;detectionId&#39;]!);
+                },
+                routes: [
+                  &#47;&#47; `&#47;main&#47;detection&#47;:detectionId&#47;annotation` - annotation page
+                  GoRoute(
+                    path: &#39;annotation&#39;,
+                    builder: (BuildContext context, GoRouterState state) {
+                      return AnnotationPage(
+                          detectionId: state.pathParameters[&#39;detectionId&#39;]!);
+                    },
+                  ),
+                  GoRoute(
+                    path: &#39;label&#39;,
+                    builder: (context, state) =&gt; LabelAnnotation(),
+                  ),
+                ],
+              ),
               &#47;&#47; `&#47;main&#47;faq` - frequently asked questions
               GoRoute(
                 name: &#39;faq&#39;,

@@ -63,8 +63,7 @@
     <section class="multi-line-signature">
       
       <span class="name ">AnnotationPage</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="-param-key">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
-<li><span class="parameter" id="-param-imageLink"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">imageLink</span>, </span></li>
-<li><span class="parameter" id="-param-detectionId"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">detectionId</span>}</span></li>
+<li><span class="parameter" id="-param-detectionId"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">detectionId</span>}</span></li>
 </ol>)
     </section>
 
@@ -74,18 +73,11 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">AnnotationPage({super.key, String? imageLink, String? detectionId}) {
-  if (imageLink != null) {
-    this.imageLink = Future.value(imageLink);
-  } else if (detectionId != null) {
-    this.imageLink = Future(() async {
-      return Detection.find(detectionId)
-          .then((detection) =&gt; detection!.preDetectImgLink);
-    });
-  } else {
-    throw ArgumentError(
-        &quot;AnnotationPage requires either an imageLink or a detectionId&quot;);
-  }
+  <pre class="language-dart"><code class="language-dart">AnnotationPage({super.key, required this.detectionId}) {
+  imageLink = Future(() async {
+    return Detection.find(detectionId)
+        .then((detection) =&gt; detection!.preDetectImgLink);
+  });
 }</code></pre>
 </section>
 

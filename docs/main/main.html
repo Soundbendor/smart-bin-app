@@ -181,6 +181,7 @@
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) =&gt; DeviceNotifier()),
+    ChangeNotifierProvider(create: (_) =&gt; AnnotationNotifier()),
   ], child: BinsightAiApp(skipSetUp: devices.isNotEmpty)));
 }</code></pre>
 </section>
