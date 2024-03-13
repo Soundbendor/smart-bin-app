@@ -148,7 +148,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.all(16),
