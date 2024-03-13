@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/widgets/free_draw.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Page used for annotating an individual detection image
 class AnnotationPage extends StatefulWidget {
@@ -26,16 +27,33 @@ class AnnotationPage extends StatefulWidget {
 }
 
 class _AnnotationPageState extends State<AnnotationPage> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   /// Key for the RepaintBoundary widget that's used to capture the annotated image
   final GlobalKey _captureKey = GlobalKey();
 
   /// List of unsigned integers representing the bytes of the captured image
   Uint8List? _capturedImage;
+
+  /// User's decision to show annotation tutorial upon opening annotation screen
+  bool? dontShowAgain = false;
+
+  @override
+  void initState() {
+    super.initState();
+    initPreferences();
+  }
+
+  /// Recalls user's decision of whether to show the annotation guide or not
+  void initPreferences() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      dontShowAgain = preferences.getBool('dontShowAgain') ?? false;
+    });
+    if (dontShowAgain == false) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showAnnotationPopup();
+      });
+    }
+  }
 
   /// Function to capture the annotated image
   ///
@@ -48,6 +66,67 @@ class _AnnotationPageState extends State<AnnotationPage> {
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     _capturedImage = byteData?.buffer.asUint8List();
     setState(() {});
+  }
+
+  /// Renders the popup that educates the user on how to properly annotate their composted items
+  void _showAnnotationPopup() {
+    final textTheme = Theme.of(context).textTheme;
+    showDialog(
+        context: context,
+        // Don't allow the user to dismiss the dialog to ensure the preference is set
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            surfaceTintColor: Colors.transparent,
+            title: Center(
+                child: Text('How to Annotate', style: textTheme.headlineLarge)),
+            content: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Display annotation gif with border
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 2.0)),
+                  child: Image.asset('assets/images/annotation.gif'),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                      "Trace the composted item with your finger as accurately as possible."),
+                ),
+                Row(
+                  children: [
+                    // Gives dialog's context the ability to update state (for checkbox)
+                    StatefulBuilder(
+                        builder: (BuildContext context, StateSetter setState) {
+                      return Checkbox(
+                        checkColor: Colors.black,
+                        value: dontShowAgain,
+                        onChanged: (value) {
+                          setState(() => dontShowAgain = value!);
+                        },
+                      );
+                    }),
+                    const Text("Don't show this screen again"),
+                  ],
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  SharedPreferences preferences =
+                      await SharedPreferences.getInstance();
+                  preferences.setBool('dontShowAgain', dontShowAgain!);
+                  if (!mounted) return;
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Close"),
+              ),
+            ],
+          );
+        });
   }
 
   @override
