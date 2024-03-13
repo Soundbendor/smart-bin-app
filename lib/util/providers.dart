@@ -94,7 +94,8 @@ class WifiResultNotifier with ChangeNotifier {
 class SetupKeyNotifier {
   final setupKey = GlobalKey<IntroductionScreenState>();
 }
-/// Notifiers listeners of changes to the annotation state
+
+/// Notifies listeners of changes to the annotation state
 class AnnotationNotifier extends ChangeNotifier {
   /// Current label
   String? label;
