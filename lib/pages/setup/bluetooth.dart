@@ -83,8 +83,8 @@ class _BluetoothPageState extends State<BluetoothPage> {
               ),
               () {
                 if (!context.mounted) return;
-                Provider.of<SetupKeyNotifier>(context).setupKey.currentState?.next();
-                dialogIsVisible = false;
+                Provider.of<SetupKeyNotifier>(context, listen: false).setupKey.currentState?.next();
+                Navigator.of(context).pop();
               },
             );
             return BluetoothAlertBox(
