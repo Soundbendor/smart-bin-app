@@ -32,6 +32,9 @@ class AnnotationPage extends StatefulWidget {
 }
 
 class _AnnotationPageState extends State<AnnotationPage> {
+  /// Whether the user has started drawing on the image
+  bool drawStarted = false;
+
   /// Key for the RepaintBoundary widget that's used to capture the annotated image
   final GlobalKey _captureKey = GlobalKey();
 
@@ -92,7 +95,8 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 // Display annotation gif with border
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
-                  decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 2.0)),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black, width: 2.0)),
                   child: Image.asset('assets/images/annotation.gif'),
                 ),
                 const Padding(
@@ -168,24 +172,80 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 ),
               ),
               FutureBuilder(
-                  future: widget.imageLink,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else {
-                      return RepaintBoundary(
-                        key: _captureKey,
-                        child: SizedBox(
-                          width: 300,
-                          height: 300,
-                          child: FreeDraw(
-                            imageLink: snapshot.data as String,
+                future: widget.imageLink,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else {
+                    return Stack(
+                      children: [
+                        RepaintBoundary(
+                          key: _captureKey,
+                          child: SizedBox(
+                            width: 300,
+                            height: 300,
+                            child: FreeDraw(
+                              imageLink: snapshot.data as String,
+                            ),
                           ),
                         ),
-                      );
-                    }
-                  }),
-              Text('Current Label: ${notifier.label}'),
+                        if (!drawStarted)
+                          Positioned(
+                            child: GestureDetector(
+                              onTap: () => setState(() {
+                                drawStarted = true;
+                              }),
+                              child: Container(
+                                width: 300,
+                                height: 300,
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.5),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Tap to start",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displaySmall!
+                                        .copyWith(
+                                          color: Colors.white,
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  }
+                },
+              ),
+              SizedBox(
+                width: 300,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton.filled(
+                            onPressed: () {
+                              notifier.undo();
+                            },
+                            icon: const Icon(Icons.undo)),
+                        IconButton.filled(
+                            onPressed: () {
+                              notifier.redo();
+                            },
+                            icon: const Icon(Icons.redo)),
+                      ],
+                    ),
+                    Text(notifier.label == null
+                        ? 'No label selected yet'
+                        : 'Current Label: ${notifier.label}'),
+                  ],
+                ),
+              ),
               ElevatedButton(
                 onPressed: () {
                   GoRouter.of(context)
@@ -238,27 +298,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
             ],
           ),
         ),
-      ),
-      // Undo and redo buttons
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            heroTag: "Undo",
-            onPressed: () {
-              notifier.undo();
-            },
-            child: const Icon(Icons.undo),
-          ),
-          const SizedBox(width: 16),
-          FloatingActionButton(
-            heroTag: "Redo",
-            onPressed: () {
-              notifier.redo();
-            },
-            child: const Icon(Icons.redo),
-          ),
-        ],
       ),
     );
   }
