@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
+import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/widgets/free_draw.dart';
 import 'package:binsight_ai/widgets/heading.dart';
@@ -204,12 +205,9 @@ class _AnnotationPageState extends State<AnnotationPage> {
                                 child: Center(
                                   child: Text(
                                     "Tap to start",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .displaySmall!
-                                        .copyWith(
-                                          color: Colors.white,
-                                        ),
+                                    style: textTheme.displaySmall!.copyWith(
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -222,62 +220,89 @@ class _AnnotationPageState extends State<AnnotationPage> {
               ),
               SizedBox(
                 width: 300,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
                   children: [
                     Row(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        IconButton.filled(
-                            onPressed: () {
-                              notifier.undo();
-                            },
-                            icon: const Icon(Icons.undo)),
-                        IconButton.filled(
-                            onPressed: () {
-                              notifier.redo();
-                            },
-                            icon: const Icon(Icons.redo)),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton.filled(
+                                onPressed: () {
+                                  notifier.undo();
+                                },
+                                icon: const Icon(Icons.undo)),
+                            IconButton.filled(
+                                onPressed: () {
+                                  notifier.redo();
+                                },
+                                icon: const Icon(Icons.redo)),
+                          ],
+                        ),
+                        Text(
+                          notifier.label == null
+                              ? 'No label selected yet'
+                              : 'Current Label: ${notifier.label}',
+                          style: textTheme.labelLarge,
+                        ),
                       ],
                     ),
-                    Text(notifier.label == null
-                        ? 'No label selected yet'
-                        : 'Current Label: ${notifier.label}'),
+                    Row(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            GoRouter.of(context).push(
+                                "/main/detection/${widget.detectionId}/label");
+                          },
+                          child: Text(
+                            notifier.label == null
+                                ? "Add Label"
+                                : "Change Label",
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        ElevatedButton(
+                          style: !notifier.isCompleteAnnotation()
+                              ? Theme.of(context)
+                                  .elevatedButtonTheme
+                                  .style!
+                                  .copyWith(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      Theme.of(context).colorScheme.surface,
+                                    ),
+                                  )
+                              : null,
+                          onPressed: () {
+                            if (notifier.isCompleteAnnotation()) {
+                              notifier.addToAllAnnotations();
+                            } else {
+                              String message;
+                              if (notifier.label == null) {
+                                message =
+                                    "Please Enter a Label for Current Annotation";
+                              } else {
+                                message = "Please Draw Your Annotation";
+                              }
+                              debug(message);
+                            }
+                          },
+                          child: Text(
+                            "Save",
+                            style: textTheme.labelLarge!.copyWith(
+                              color: notifier.isCompleteAnnotation()
+                                  ? Theme.of(context).colorScheme.onPrimary
+                                  : Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  GoRouter.of(context)
-                      .push("/main/detection/${widget.detectionId}/label");
-                },
-                child: Text(
-                  "Select Label",
-                  style: textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  if (notifier.isCompleteAnnotation()) {
-                    notifier.addToAllAnnotations();
-                  } else {
-                    String message;
-                    if (notifier.label == null) {
-                      message = "Please Enter a Label for Current Annotation";
-                    } else {
-                      message = "Please Draw Your Annotation";
-                    }
-                    print(message);
-                  }
-                },
-                child: Text(
-                  "Save Current Label",
-                  style: textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                ),
+              const SizedBox(
+                height: 40,
               ),
               ElevatedButton(
                   onPressed: () {
