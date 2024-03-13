@@ -244,7 +244,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                           Text(
                             notifier.label == null
                                 ? 'No label selected yet'
-                                : 'Current Label: ${notifier.label}',
+                                : 'Selected Label: ${notifier.label}',
                             style: textTheme.labelLarge,
                           ),
                         ],
