@@ -54,8 +54,7 @@ class _FreeDrawState extends State<FreeDraw> {
                     id: DateTime.now().microsecondsSinceEpoch,
                     offsets: [details.localPosition],
                   );
-                  notifier.startCurrentAnnotation(
-                      currentDrawingSegment!);
+                  notifier.startCurrentAnnotation(currentDrawingSegment!);
                   notifier.updateCurrentAnnotationHistory();
                 }
               });
@@ -87,7 +86,7 @@ class _FreeDrawState extends State<FreeDraw> {
                 CustomPaint(
                   painter: DrawingPainter(
                     activeSegments: notifier.currentAnnotation,
-                    allSegments: [],
+                    allSegments: notifier.oldAnnotations,
                   ),
                 ),
               ],
@@ -124,23 +123,28 @@ class DrawingPainter extends CustomPainter {
   void paint(Canvas canvas, ui.Size size) {
     // Draws a line between each drawingSegment's Offsets
     // for each segment in drawingSegments
-    for (var drawingSegment in activeSegments) {
-      final paint = Paint()
-        ..color = Colors.blue
-        ..isAntiAlias = true
-        ..strokeWidth = 2.0
-        ..strokeCap = StrokeCap.round;
+    void drawSegments(List<DrawingSegment> segments, Color color) {
+      for (var drawingSegment in segments) {
+        final paint = Paint()
+          ..color = color
+          ..isAntiAlias = true
+          ..strokeWidth = 2.0
+          ..strokeCap = StrokeCap.round;
 
-      for (var i = 0; i < drawingSegment.offsets.length; i++) {
-        var notLastOffset = i != drawingSegment.offsets.length - 1;
+        for (var i = 0; i < drawingSegment.offsets.length; i++) {
+          var notLastOffset = i != drawingSegment.offsets.length - 1;
 
-        if (notLastOffset) {
-          final current = drawingSegment.offsets[i];
-          final next = drawingSegment.offsets[i + 1];
-          canvas.drawLine(current, next, paint);
+          if (notLastOffset) {
+            final current = drawingSegment.offsets[i];
+            final next = drawingSegment.offsets[i + 1];
+            canvas.drawLine(current, next, paint);
+          }
         }
       }
     }
+
+    drawSegments(activeSegments, Colors.blue);
+    drawSegments(allSegments, Colors.black);
   }
 
   @override

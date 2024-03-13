@@ -278,6 +278,8 @@ class _AnnotationPageState extends State<AnnotationPage> {
                             onPressed: () {
                               if (notifier.isCompleteAnnotation()) {
                                 notifier.addToAllAnnotations();
+                                notifier.clearCurrentAnnotation();
+                                notifier.label = null;
                               } else {
                                 String message;
                                 if (notifier.label == null) {
@@ -312,8 +314,11 @@ class _AnnotationPageState extends State<AnnotationPage> {
               ),
               ElevatedButton(
                   onPressed: () {
-                    captureImage();
-                    notifier.reset();
+                    notifier.clearCurrentAnnotation();
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      captureImage();
+                      notifier.reset();
+                    });
                   },
                   child: Text("Complete Annotations",
                       style: textTheme.labelLarge!.copyWith(

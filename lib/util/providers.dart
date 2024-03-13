@@ -110,15 +110,13 @@ class AnnotationNotifier extends ChangeNotifier {
 
   /// List of segments for the current annotation
   List<DrawingSegment> currentAnnotation = [];
+  List<DrawingSegment> oldAnnotations = [];
 
   /// History of segments for the current annotation
   List<DrawingSegment> currentAnnotationHistory = [];
 
   /// Single segment containing all Offsets in the current annotation
   DrawingSegment? combinedCurrentAnnotation;
-
-  /// Index tracking where to start combining annotations from within the currentAnnotation
-  int startIndex = 0;
 
   /// Id of the detection currently being annotated
   String? currentDetection;
@@ -127,10 +125,10 @@ class AnnotationNotifier extends ChangeNotifier {
   void reset() {
     label = null;
     allAnnotations = [];
+    oldAnnotations = [];
     currentAnnotation = [];
     currentAnnotationHistory = [];
     combinedCurrentAnnotation = null;
-    startIndex = 0;
     currentDetection = null;
   }
 
@@ -191,16 +189,20 @@ class AnnotationNotifier extends ChangeNotifier {
 
   /// From the start index on in the currentAnnotation list, combine all segments into one
   DrawingSegment? combineCurrentSegments() {
-    if (startIndex < 0 || startIndex >= currentAnnotation.length) return null;
-
     DrawingSegment combinedSegments =
-        DrawingSegment(id: currentAnnotation[startIndex].id, offsets: []);
+        DrawingSegment(id: currentAnnotation[0].id, offsets: []);
 
-    for (int i = startIndex; i < currentAnnotation.length; i++) {
+    for (int i = 0; i < currentAnnotation.length; i++) {
+      oldAnnotations.add(currentAnnotation[i]);
       combinedSegments.offsets.addAll(currentAnnotation[i].offsets);
-      startIndex++;
     }
     return combinedSegments;
+  }
+
+  /// Clear the current annotation
+  void clearCurrentAnnotation() {
+    currentAnnotation = [];
+    notifyListeners();
   }
 
   /// Check if the current annotation has both a drawing and a label
