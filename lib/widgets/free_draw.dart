@@ -143,8 +143,8 @@ class DrawingPainter extends CustomPainter {
       }
     }
 
-    drawSegments(activeSegments, Colors.blue);
     drawSegments(allSegments, Colors.black);
+    drawSegments(activeSegments, Colors.blue);
   }
 
   @override
