@@ -39,9 +39,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
   /// Key for the RepaintBoundary widget that's used to capture the annotated image
   final GlobalKey _captureKey = GlobalKey();
 
-  /// List of unsigned integers representing the bytes of the captured image
-  Uint8List? _capturedImage;
-
   /// User's decision to show annotation tutorial upon opening annotation screen
   bool? dontShowAgain = false;
 
@@ -64,7 +61,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
     }
   }
 
-  /// Function to capture the annotated image
+  /// Captures the annotated image
   ///
   /// Uses the RepaintBoundary's key to obtain the RenderObject, and converts it
   /// to it into a Uint8List to be used with Image.memory
@@ -73,7 +70,8 @@ class _AnnotationPageState extends State<AnnotationPage> {
         _captureKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
     ui.Image image = await boundary.toImage(pixelRatio: 3.0);
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    _capturedImage = byteData?.buffer.asUint8List();
+    final capturedImage = byteData?.buffer.asUint8List();
+    debug("Captured Image Size: ${capturedImage?.length}");
     setState(() {});
   }
 

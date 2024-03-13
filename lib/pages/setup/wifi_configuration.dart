@@ -40,7 +40,8 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
   void initState() {
     super.initState();
     setState(() {
-      wifiResult = Provider.of<WifiResultNotifier>(context, listen: false).wifiResult;
+      wifiResult =
+          Provider.of<WifiResultNotifier>(context, listen: false).wifiResult;
     });
   }
 
@@ -100,7 +101,10 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                Provider.of<SetupKeyNotifier>(context).setupKey.currentState?.previous();
+                Provider.of<SetupKeyNotifier>(context)
+                    .setupKey
+                    .currentState
+                    ?.previous();
               },
               child: Text("Back",
                   style: textTheme.labelLarge!.copyWith(
