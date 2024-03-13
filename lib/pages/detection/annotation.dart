@@ -58,11 +58,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
   void initState() {
     super.initState();
     initPreferences();
-    if (dontShowAgain == false) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showAnnotationPopup();
-      });
-    }
   }
 
   void initPreferences() async {
@@ -70,6 +65,11 @@ class _AnnotationPageState extends State<AnnotationPage> {
     setState(() {
       dontShowAgain = preferences.getBool('dontShowAgain') ?? false;
     });
+    if (dontShowAgain == false) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showAnnotationPopup();
+      });
+    }
   }
 
   /// Function to capture the annotated image
@@ -93,37 +93,44 @@ class _AnnotationPageState extends State<AnnotationPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              surfaceTintColor: Colors.transparent,
-              title: Text('How to Annotate', style: textTheme.headlineLarge),
-              content: Column(
-                children: [
-                  Image.asset('assets/images/annotation.gif'),
-                  TextButton(
-                    onPressed: () async {
-                      SharedPreferences preferences = await SharedPreferences.getInstance();
-                      preferences.setBool('dontShowAgain', dontShowAgain!);
-                      if (!mounted) return;
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text("Close"),
-                  ),
-                  Row(
-                    children: [
-                      StatefulBuilder(builder:
-                          (BuildContext context, StateSetter setState) {
-                        return Checkbox(
-                          checkColor: Colors.black,
-                          value: dontShowAgain,
-                          onChanged: (value) {
-                            setState(() => dontShowAgain = value!);
-                          },
-                        );
-                      }),
-                      const Text("Don't show this screen again"),
-                    ],
-                  ),
-                ],
-              ));
+            surfaceTintColor: Colors.transparent,
+            title: Text('How to Annotate', style: textTheme.headlineLarge),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset('assets/images/annotation.gif'),
+                Row(
+                  children: [
+                    StatefulBuilder(
+                        builder: (BuildContext context, StateSetter setState) {
+                      return Checkbox(
+                        checkColor: Colors.black,
+                        value: dontShowAgain,
+                        onChanged: (value) {
+                          setState(() => dontShowAgain = value!);
+                        },
+                      );
+                    }),
+                    const Text("Don't show this screen again"),
+                  ],
+                ),
+                const Text(
+                    "Trace the composted item with your finger or a stylus as closely as possible"),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  SharedPreferences preferences =
+                      await SharedPreferences.getInstance();
+                  preferences.setBool('dontShowAgain', dontShowAgain!);
+                  if (!mounted) return;
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Close"),
+              ),
+            ],
+          );
         });
   }
 
