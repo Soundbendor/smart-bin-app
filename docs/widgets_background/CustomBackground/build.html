@@ -122,7 +122,11 @@ Widget build(BuildContext context) {
     height: MediaQuery.of(context).size.height,
     width: MediaQuery.of(context).size.width,
     decoration: BoxDecoration(
-      image: DecorationImage(image: AssetImage(imageURL), fit: BoxFit.cover),
+      image: DecorationImage(
+        &#47;&#47; alignment: Alignment.bottomCenter,
+        image: AssetImage(imageURL),
+        fit: BoxFit.cover,
+      ),
     ),
     child: child,
   );
