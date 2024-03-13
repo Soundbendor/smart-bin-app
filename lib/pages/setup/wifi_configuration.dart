@@ -58,9 +58,13 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<WifiResultNotifier>(context);
+    if (provider.wifiResult != null) {
+      ssidController.text = provider.wifiResult!.ssid;
+    }
     return Scaffold(
       body: CustomBackground(
-        imageURL: "assets/images/FlowersBackground.png",
+        imageURL: "assets/images/wifi_config_screen.png",
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
