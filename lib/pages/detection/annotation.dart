@@ -33,9 +33,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
   /// List of unsigned integers representing the bytes of the captured image
   Uint8List? _capturedImage;
 
-  //Points and label for the captured annotation
-  DrawingSegment? _capturedPoint;
-
   /// User's decision to show annotation tutorial upon opening annotation screen
   bool? dontShowAgain = false;
 
