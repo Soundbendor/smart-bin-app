@@ -86,7 +86,8 @@ class _FreeDrawState extends State<FreeDraw> {
                     key: imageKey, fit: BoxFit.cover),
                 CustomPaint(
                   painter: DrawingPainter(
-                    drawingSegments: notifier.currentAnnotation,
+                    activeSegments: notifier.currentAnnotation,
+                    allSegments: [],
                   ),
                 ),
               ],
@@ -111,19 +112,21 @@ class _FreeDrawState extends State<FreeDraw> {
 /// To be used as the painter within the CustomPaint widget, providing the
 /// implementation of paint, specifying what to paint and what data to use
 class DrawingPainter extends CustomPainter {
-  final List<DrawingSegment> drawingSegments;
+  final List<DrawingSegment> activeSegments;
+  final List<DrawingSegment> allSegments;
 
   DrawingPainter({
-    required this.drawingSegments,
+    required this.activeSegments,
+    required this.allSegments,
   });
 
   @override
   void paint(Canvas canvas, ui.Size size) {
     // Draws a line between each drawingSegment's Offsets
     // for each segment in drawingSegments
-    for (var drawingSegment in drawingSegments) {
+    for (var drawingSegment in activeSegments) {
       final paint = Paint()
-        ..color = Colors.black
+        ..color = Colors.blue
         ..isAntiAlias = true
         ..strokeWidth = 2.0
         ..strokeCap = StrokeCap.round;
