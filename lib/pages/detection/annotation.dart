@@ -73,6 +73,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
     final textTheme = Theme.of(context).textTheme;
     showDialog(
         context: context,
+        // Don't allow the user to dismiss the dialog to ensure the preference is set
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -83,6 +84,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               mainAxisSize: MainAxisSize.min,
               children: [
+                // Display annotation gif with border
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 2.0)),
@@ -95,6 +97,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 ),
                 Row(
                   children: [
+                    // Gives dialog's context the ability to update state (for checkbox)
                     StatefulBuilder(
                         builder: (BuildContext context, StateSetter setState) {
                       return Checkbox(

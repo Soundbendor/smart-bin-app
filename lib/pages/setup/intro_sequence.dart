@@ -23,6 +23,7 @@ class SetupScreenState extends State<SetupScreen> {
   Widget build(BuildContext context) {
     GlobalKey<IntroductionScreenState> setupKey =
         Provider.of<SetupKeyNotifier>(context).setupKey;
+    // Creates setup sequence with just the raw pages and animation controller key
     return IntroductionScreen(
       key: setupKey,
       rawPages: const [
