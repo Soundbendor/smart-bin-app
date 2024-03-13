@@ -121,11 +121,21 @@ void main() async {
     }
   }
 
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => DeviceNotifier()),
-    ChangeNotifierProvider(create: (_) => WifiResultNotifier()),
-    Provider(create: (_) => SetupKeyNotifier()),
-  ], child: BinsightAiApp(skipSetUp: devices.isEmpty)));
+  runApp(
+    MultiProvider(
+      providers: [
+        // Notifies listeners of the status of the Bluetooth-connected compost bin.
+        ChangeNotifierProvider(create: (_) => DeviceNotifier()),
+        // Notifies listeners of the selected WiFi network.
+        ChangeNotifierProvider(create: (_) => WifiResultNotifier()),
+        // Provides a global key used for controlling page animation.
+        Provider(create: (_) => SetupKeyNotifier()),
+        // Notifies listeners of changes to the current annotation's state.
+        ChangeNotifierProvider(create: (_) => AnnotationNotifier()),
+      ],
+      child: BinsightAiApp(skipSetUp: devices.isNotEmpty),
+    ),
+  );
 }
 
 /// The root of the application. Contains the GoRouter and MaterialApp wrappers.

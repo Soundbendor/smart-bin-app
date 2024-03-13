@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:provider/provider.dart';
 
+/// Loading screen that is displayed to the user on app startup
 class LoadScreen extends StatefulWidget {
   const LoadScreen({super.key});
 
@@ -17,15 +18,9 @@ class _LoadScreenState extends State<LoadScreen> {
   @override
   void initState() {
     super.initState();
-    initKey();
+    transitionKey = Provider.of<SetupKeyNotifier>(context, listen: false).setupKey;
     Future.delayed(const Duration(seconds: 3),
         () => transitionKey.currentState?.next());
-  }
-
-  initKey() {
-    setState(() {
-      transitionKey = Provider.of<SetupKeyNotifier>(context, listen: false).setupKey;
-    });
   }
 
   @override
