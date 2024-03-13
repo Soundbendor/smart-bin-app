@@ -315,22 +315,47 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 ),
               );
             }),
-            const SizedBox(
-              height: 40,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                notifier.clearCurrentAnnotation();
-                Future.delayed(const Duration(milliseconds: 100), () {
-                  captureImage();
-                  notifier.reset();
-                });
-              },
-              child: Text(
-                "Complete Annotations",
-                style: textTheme.labelLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(),
+                  SizedBox(
+                    width: 300,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            style: Theme.of(context)
+                                .elevatedButtonTheme
+                                .style!
+                                .copyWith(
+                                  backgroundColor: MaterialStateProperty.all(
+                                    Theme.of(context).colorScheme.tertiary,
+                                  ),
+                                ),
+                            onPressed: () {
+                              notifier.clearCurrentAnnotation();
+                              Future.delayed(const Duration(milliseconds: 100),
+                                  () {
+                                captureImage();
+                                notifier.reset();
+                              });
+                            },
+                            child: Text(
+                              "Done",
+                              style: textTheme.labelLarge!.copyWith(
+                                color: Theme.of(context).colorScheme.onTertiary,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
