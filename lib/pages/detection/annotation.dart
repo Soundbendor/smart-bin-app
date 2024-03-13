@@ -94,7 +94,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text(
-                      "Trace the composted item with your finger or a stylus as accurately as possible."),
+                      "Trace the composted item with your finger as accurately as possible."),
                 ),
                 Row(
                   children: [
