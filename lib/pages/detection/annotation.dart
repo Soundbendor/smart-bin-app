@@ -129,7 +129,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                   SharedPreferences preferences =
                       await SharedPreferences.getInstance();
                   preferences.setBool('dontShowAgain', dontShowAgain!);
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   Navigator.of(context).pop();
                 },
                 child: const Text("Close"),
@@ -230,14 +230,26 @@ class _AnnotationPageState extends State<AnnotationPage> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton.filled(
-                                  onPressed: () {
-                                    notifier.undo();
-                                  },
+                                  disabledColor: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withAlpha(150),
+                                  onPressed: notifier.canUndo()
+                                      ? () {
+                                          notifier.undo();
+                                        }
+                                      : null,
                                   icon: const Icon(Icons.undo)),
                               IconButton.filled(
-                                  onPressed: () {
-                                    notifier.redo();
-                                  },
+                                  disabledColor: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withAlpha(150),
+                                  onPressed: notifier.canRedo()
+                                      ? () {
+                                          notifier.redo();
+                                        }
+                                      : null,
                                   icon: const Icon(Icons.redo)),
                             ],
                           ),

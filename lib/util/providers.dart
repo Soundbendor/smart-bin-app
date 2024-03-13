@@ -110,6 +110,8 @@ class AnnotationNotifier extends ChangeNotifier {
 
   /// List of segments for the current annotation
   List<DrawingSegment> currentAnnotation = [];
+
+  /// List of segments for all annotations
   List<DrawingSegment> oldAnnotations = [];
 
   /// History of segments for the current annotation
@@ -170,17 +172,27 @@ class AnnotationNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Checks whether the current annotation can be undone
+  bool canUndo() {
+    return currentAnnotation.isNotEmpty && currentAnnotationHistory.isNotEmpty;
+  }
+
   /// Remove the last segment in the current annotation
   void undo() {
-    if (currentAnnotation.isNotEmpty && currentAnnotationHistory.isNotEmpty) {
+    if (canUndo()) {
       currentAnnotation.removeLast();
     }
     notifyListeners();
   }
 
+  /// Checks whether the current annotation can be redone
+  bool canRedo() {
+    return currentAnnotation.length < currentAnnotationHistory.length;
+  }
+
   /// Pull from the history to add the most recently removed segment to the current annotation
   void redo() {
-    if (currentAnnotation.length < currentAnnotationHistory.length) {
+    if (canRedo()) {
       final index = currentAnnotation.length;
       currentAnnotation.add(currentAnnotationHistory[index]);
     }
@@ -202,6 +214,7 @@ class AnnotationNotifier extends ChangeNotifier {
   /// Clear the current annotation
   void clearCurrentAnnotation() {
     currentAnnotation = [];
+    updateCurrentAnnotationHistory();
     notifyListeners();
   }
 
