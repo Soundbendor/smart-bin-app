@@ -91,14 +91,26 @@ class _AnnotationPageState extends State<AnnotationPage> {
     final textTheme = Theme.of(context).textTheme;
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
             surfaceTintColor: Colors.transparent,
-            title: Text('How to Annotate', style: textTheme.headlineLarge),
+            title: Center(
+                child: Text('How to Annotate', style: textTheme.headlineLarge)),
             content: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset('assets/images/annotation.gif'),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 2.0)),
+                  child: Image.asset('assets/images/annotation.gif'),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                      "Trace the composted item with your finger or a stylus as accurately as possible."),
+                ),
                 Row(
                   children: [
                     StatefulBuilder(
@@ -114,8 +126,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
                     const Text("Don't show this screen again"),
                   ],
                 ),
-                const Text(
-                    "Trace the composted item with your finger or a stylus as closely as possible"),
               ],
             ),
             actions: [
