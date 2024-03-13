@@ -1,9 +1,11 @@
 // This file tests the entry point.
+import 'package:binsight_ai/util/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:binsight_ai/main.dart';
 import 'package:binsight_ai/util/routes.dart';
+import 'package:provider/provider.dart';
 import '../shared.dart';
 
 void main() {
@@ -32,7 +34,7 @@ void main() {
     ]);
 
     await widgetTester.pumpWidget(makeTestableWidget(
-        child: const BinsightAiApp(skipSetUp: false),
+        child: MultiProvider(providers: [Provider(create: (_) => SetupKeyNotifier())], child: const BinsightAiApp(skipSetUp: false)),
         size: const Size(800, 600)));
     await widgetTester.pumpAndSettle(const Duration(seconds: 10));
     expect(router!.routerDelegate.currentConfiguration.last.matchedLocation,

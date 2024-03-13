@@ -1,7 +1,9 @@
 import 'package:binsight_ai/util/print.dart';
+import 'package:binsight_ai/util/wifi_scan.dart';
 import 'package:binsight_ai/widgets/free_draw.dart';
 import 'package:flutter/material.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
+import 'package:introduction_screen/introduction_screen.dart';
 
 /// Notifies listeners of changes to the device.
 ///
@@ -71,7 +73,29 @@ class DeviceNotifier with ChangeNotifier {
   }
 }
 
-/// Notifiers listeners of changes to the annotation state
+class WifiResultNotifier with ChangeNotifier {
+  WifiScanResult? wifiResult;
+
+  /// An error that occurred during the connection process.
+  Exception? error;
+
+  /// Whether an error occurred during the connection process.
+  bool hasError() {
+    return error != null;
+  }
+
+  /// Sets the device to the new device and notifies listeners.
+  void setWifiResult(WifiScanResult newWifiResult) {
+    wifiResult = newWifiResult;
+    notifyListeners();
+  }
+}
+
+class SetupKeyNotifier {
+  final setupKey = GlobalKey<IntroductionScreenState>();
+}
+
+/// Notifies listeners of changes to the annotation state
 class AnnotationNotifier extends ChangeNotifier {
   /// Current label
   String? label;

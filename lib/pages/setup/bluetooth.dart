@@ -83,7 +83,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
               ),
               () {
                 if (!context.mounted) return;
-                GoRouter.of(context).goNamed('wifi-scan');
+                Provider.of<SetupKeyNotifier>(context).setupKey.currentState?.next();
                 dialogIsVisible = false;
               },
             );
@@ -253,6 +253,7 @@ class _BluetoothListState extends State<BluetoothList> {
 
     return Scaffold(
       body: CustomBackground(
+        imageURL: 'assets/images/bluetooth_screen.png',
         child: Column(
           children: [
             ScanList(
