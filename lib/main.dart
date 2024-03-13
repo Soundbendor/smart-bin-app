@@ -125,6 +125,7 @@ void main() async {
     ChangeNotifierProvider(create: (_) => DeviceNotifier()),
     ChangeNotifierProvider(create: (_) => WifiResultNotifier()),
     Provider(create: (_) => SetupKeyNotifier()),
+    ChangeNotifierProvider(create: (_) => AnnotationNotifier()),
   ], child: BinsightAiApp(skipSetUp: devices.isEmpty)));
 }
 
