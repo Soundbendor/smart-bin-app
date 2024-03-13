@@ -320,39 +320,65 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(),
-                  SizedBox(
-                    width: 300,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ElevatedButton(
-                            style: Theme.of(context)
-                                .elevatedButtonTheme
-                                .style!
-                                .copyWith(
-                                  backgroundColor: MaterialStateProperty.all(
-                                    Theme.of(context).colorScheme.tertiary,
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      border: Border(
+                        top: BorderSide(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withAlpha(150),
+                          width: 4,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 300,
+                          height: 100,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                ElevatedButton(
+                                  style: Theme.of(context)
+                                      .elevatedButtonTheme
+                                      .style!
+                                      .copyWith(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
+                                        ),
+                                      ),
+                                  onPressed: () {
+                                    notifier.clearCurrentAnnotation();
+                                    Future.delayed(
+                                        const Duration(milliseconds: 100),
+                                        () {
+                                      captureImage();
+                                      notifier.reset();
+                                    });
+                                  },
+                                  child: Text(
+                                    "Done",
+                                    style: textTheme.labelLarge!.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onTertiary,
+                                    ),
                                   ),
                                 ),
-                            onPressed: () {
-                              notifier.clearCurrentAnnotation();
-                              Future.delayed(const Duration(milliseconds: 100),
-                                  () {
-                                captureImage();
-                                notifier.reset();
-                              });
-                            },
-                            child: Text(
-                              "Done",
-                              style: textTheme.labelLarge!.copyWith(
-                                color: Theme.of(context).colorScheme.onTertiary,
-                              ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
