@@ -121,12 +121,17 @@ void main() async {
     }
   }
 
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => DeviceNotifier()),
-    ChangeNotifierProvider(create: (_) => WifiResultNotifier()),
-    Provider(create: (_) => SetupKeyNotifier()),
-    ChangeNotifierProvider(create: (_) => AnnotationNotifier()),
-  ], child: BinsightAiApp(skipSetUp: devices.isEmpty)));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => DeviceNotifier()),
+        ChangeNotifierProvider(create: (_) => WifiResultNotifier()),
+        Provider(create: (_) => SetupKeyNotifier()),
+        ChangeNotifierProvider(create: (_) => AnnotationNotifier()),
+      ],
+      child: BinsightAiApp(skipSetUp: devices.isNotEmpty),
+    ),
+  );
 }
 
 /// The root of the application. Contains the GoRouter and MaterialApp wrappers.
