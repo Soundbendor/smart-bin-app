@@ -207,7 +207,7 @@ The error was: ${(error as BleOperationFailureException).message}.
       },
       child: Scaffold(
         body: CustomBackground(
-          imageURL: "assets/images/FlowersBackground.png",
+          imageURL: "assets/images/wifi_scan_screen.png",
           child: Column(
             children: [
               ScanList(

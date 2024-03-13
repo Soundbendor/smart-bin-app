@@ -60,7 +60,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       body: CustomBackground(
-        imageURL: "assets/images/FlowersBackground.png",
+        imageURL: "assets/images/wifi_config_screen.png",
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
