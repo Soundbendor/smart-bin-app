@@ -69,7 +69,7 @@ class _DetectionsPageState extends State<DetectionsPage> {
                       return Theme.of(context).colorScheme.surface;
                     })),
                 Text(
-                  "Toggle Size",
+                  "Image Size",
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
               ],
