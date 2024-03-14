@@ -53,62 +53,71 @@ class _DetectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Column(children: [
-      GestureDetector(
-          child: Center(
-            child: DynamicImage(detection.preDetectImgLink,
-                width: 350, height: 350),
-          ),
-          onTap: () => GoRouter.of(context)
-              .push("/main/detection/${detection.imageId}/annotation")),
-      const SizedBox(height: 16),
-      SizedBox(
-        width: 400,
-        child: Row(
-          children: [
-            Expanded(
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Temperature:", style: textTheme.labelLarge),
-                    Text(
-                      "Humidity:",
-                      style: textTheme.labelLarge,
-                    ),
-                    Text(
-                      "eCO2:",
-                      style: textTheme.labelLarge,
-                    ),
-                    Text(
-                      "tVOC:",
-                      style: textTheme.labelLarge,
-                    ),
-                  ],
-                ),
+    final colorScheme = Theme.of(context).colorScheme;
+    return Card(
+      color: colorScheme.background,
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Column(children: [
+          GestureDetector(
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: DynamicImage(detection.preDetectImgLink,
+                    width: 350, height: 350),
               ),
-            ),
-            Expanded(
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(detection.temperature.toString(),
-                        style: textTheme.labelLarge),
-                    Text(detection.humidity.toString(),
-                        style: textTheme.labelLarge),
-                    Text(detection.co2.toString(), 
-                        style: textTheme.labelLarge),
-                    Text(detection.vo2.toString(), 
-                        style: textTheme.labelLarge),
-                  ],
+              onTap: () => GoRouter.of(context)
+                  .push("/main/detection/${detection.imageId}/annotation")),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: 400,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Temperature:", style: textTheme.labelLarge),
+                        Text(
+                          "Humidity:",
+                          style: textTheme.labelLarge,
+                        ),
+                        Text(
+                          "eCO2:",
+                          style: textTheme.labelLarge,
+                        ),
+                        Text(
+                          "tVOC:",
+                          style: textTheme.labelLarge,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+                Expanded(
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(detection.temperature.toString(),
+                            style: textTheme.labelLarge),
+                        Text(detection.humidity.toString(),
+                            style: textTheme.labelLarge),
+                        Text(detection.co2.toString(),
+                            style: textTheme.labelLarge),
+                        Text(detection.vo2.toString(),
+                            style: textTheme.labelLarge),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      )
-    ]);
+          )
+        ]),
+      ),
+    );
   }
 }
 
