@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-///
+/// Styled background that applies a BoxDecoration with a specified asset image URL.
 class CustomBackground extends StatelessWidget {
   const CustomBackground(
-      {super.key,
-      required this.child,
-      this.imageURL = "assets/images/background2.JPG"});
+      {super.key, required this.child, required this.imageURL});
   final Widget child;
   final String imageURL;
 
@@ -16,7 +14,6 @@ class CustomBackground extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         image: DecorationImage(
-          // alignment: Alignment.bottomCenter,
           image: AssetImage(imageURL),
           fit: BoxFit.cover,
         ),
