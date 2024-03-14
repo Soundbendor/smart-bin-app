@@ -1,10 +1,14 @@
+// Flutter imports:
 import 'dart:convert';
+import 'package:flutter/material.dart';
 
+// Package imports:
+import 'package:go_router/go_router.dart';
+
+// Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/circular_chart.dart';
 import 'package:binsight_ai/widgets/line_chart.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

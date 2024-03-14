@@ -1,14 +1,19 @@
+// Flutter imports:
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:binsight_ai/util/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
+// Package imports:
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:binsight_ai/database/models/detection.dart';
-import 'package:binsight_ai/widgets/heading.dart';
-import 'package:binsight_ai/widgets/free_draw.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+// Project imports:
+import 'package:binsight_ai/database/models/detection.dart';
+import 'package:binsight_ai/util/providers.dart';
+import 'package:binsight_ai/widgets/free_draw.dart';
+import 'package:binsight_ai/widgets/heading.dart';
 
 /// Page used for annotating an individual detection image
 class AnnotationPage extends StatefulWidget {
