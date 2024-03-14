@@ -1,9 +1,13 @@
+// Flutter imports:
 import 'dart:async';
+import 'package:flutter/material.dart';
 
+// Package imports:
+import 'package:provider/provider.dart';
+
+// Project imports:
 import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/widgets/background.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 /// The splash screen prompting the user to continue setting up their application.
 class SplashPage extends StatefulWidget {

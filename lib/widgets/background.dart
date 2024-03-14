@@ -1,3 +1,4 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
 
 /// Styled background that applies a BoxDecoration with a specified asset image URL.

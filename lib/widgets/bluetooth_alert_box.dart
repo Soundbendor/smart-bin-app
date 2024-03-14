@@ -1,5 +1,8 @@
-import 'package:binsight_ai/util/styles.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Flutter imports:
+import 'package:binsight_ai/util/styles.dart';
 
 class BluetoothAlertBox extends StatelessWidget {
   const BluetoothAlertBox({

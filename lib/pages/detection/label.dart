@@ -1,7 +1,12 @@
-import 'package:binsight_ai/util/providers.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
+// Project imports:
+import 'package:binsight_ai/util/providers.dart';
 
 class LabelAnnotation extends StatelessWidget {
   const LabelAnnotation({super.key});

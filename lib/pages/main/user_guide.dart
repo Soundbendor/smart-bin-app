@@ -1,4 +1,7 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:binsight_ai/widgets/heading.dart';
 
 /// Displays the User Guide
