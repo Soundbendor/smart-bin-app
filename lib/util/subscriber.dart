@@ -1,9 +1,14 @@
+// Flutter imports:
 import 'dart:convert';
+
+// Package imports:
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:binsight_ai/util/print.dart';
+
+// Project imports:
 import 'package:binsight_ai/database/connection.dart';
 import 'package:binsight_ai/database/models/detection.dart';
+import 'package:binsight_ai/util/print.dart';
 
 /// Handles messages from the WebSocket channel.
 void handleMessages(WebSocketChannel channel) {

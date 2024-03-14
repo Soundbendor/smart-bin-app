@@ -1,5 +1,8 @@
-import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
+import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 
 class ErrorDialog extends StatelessWidget {
   const ErrorDialog({

@@ -1,15 +1,20 @@
+// Flutter imports:
 import 'dart:convert';
-import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
+
+// Package imports:
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:binsight_ai/util/print.dart';
+
+// Project imports:
+import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/util/bluetooth_bin_data.dart';
+import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/util/wifi_scan.dart';
-import 'package:binsight_ai/database/models/device.dart';
-import 'package:binsight_ai/widgets/error_dialog.dart';
 import 'package:binsight_ai/widgets/background.dart';
+import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
+import 'package:binsight_ai/widgets/error_dialog.dart';
 
 // TODO: handle potential case where incoming JSON is invalid
 
