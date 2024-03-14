@@ -35,6 +35,26 @@ final mainTheme = ThemeData(
       fontWeight: FontWeight.normal,
       fontFamily: 'GolosText', // Specify the font family
     ),
+      headlineMedium: TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'GolosText', // Specify the font family
+    ),
+      labelLarge: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.normal,
+      fontFamily: 'GolosText', // Specify the font family
+    ),
+      titleMedium: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'GolosText', // Specify the font family
+    ),
+      bodyMedium: TextStyle(
+      fontSize: 10,
+      fontWeight: FontWeight.normal,
+      fontFamily: 'GolosText', // Specify the font family
+    ),
   ),
 
   textButtonTheme: TextButtonThemeData(
@@ -52,7 +72,7 @@ final mainTheme = ThemeData(
   ),
 
   cardTheme: CardTheme(
-    surfaceTintColor: mainColorScheme.onSurface,
+    surfaceTintColor: Colors.white,
     shadowColor: mainColorScheme.onBackground,
     elevation: 5,
     shape: RoundedRectangleBorder(
