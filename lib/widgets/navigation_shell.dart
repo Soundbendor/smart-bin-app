@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/widgets/top_nav_bar.dart';
@@ -29,7 +30,7 @@ class NavigationShell extends StatelessWidget {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
+            icon: Icon(FontAwesomeIcons.carrot),
             label: 'Detections',
           ),
         ],
