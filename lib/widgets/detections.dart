@@ -59,7 +59,7 @@ class DetectionLargeListItem extends StatelessWidget {
         onTap: () => onTileTap(context, detection),
         child: Card(
           // Background color of the card
-          color: colorScheme.background,
+          color: colorScheme.onPrimary,
           child: Padding(
             padding: const EdgeInsets.all(9.0),
             child: Column(
@@ -132,7 +132,7 @@ class DetectionSmallListItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () => onTileTap(context, detection),
         child: Card(
-          color: colorScheme.background,
+          color: colorScheme.onPrimary,
           child: ListTile(
             leading: DynamicImage(detection.preDetectImgLink),
             title:

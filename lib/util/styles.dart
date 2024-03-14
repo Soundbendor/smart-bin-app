@@ -72,6 +72,7 @@ final mainTheme = ThemeData(
   ),
 
   cardTheme: CardTheme(
+    color: Colors.white,
     surfaceTintColor: Colors.white,
     shadowColor: mainColorScheme.onBackground,
     elevation: 4,

@@ -59,13 +59,33 @@ class _HomePageState extends State<HomePage> {
               style: Theme.of(context).textTheme.displayMedium,
             ),
           ),
-          SizedBox(height: 10),
-          if (latest != null)
-            LabelButton(
-              detection: latest,
-              text: "Label Your Latest Annotation!",
+                    SizedBox(height: 10),
+          if (latest != null) ...[
+            GestureDetector(
+              onTap: () => GoRouter.of(context)
+                  .push("/main/detection/${latest!.imageId}"),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Placeholder(
+                        fallbackHeight: 200,
+                        color: Colors.grey,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "Tap to Annotate Latest Image",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          SizedBox(height: 20),
+          ],
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(

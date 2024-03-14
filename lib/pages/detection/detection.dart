@@ -55,7 +55,7 @@ class _DetectionCard extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
     return Card(
-      color: colorScheme.background,
+      color: colorScheme.onPrimary,
       child: Padding(
         padding: const EdgeInsets.all(5.0),
         child: Column(children: [
