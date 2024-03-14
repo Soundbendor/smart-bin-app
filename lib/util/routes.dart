@@ -1,7 +1,11 @@
-import 'package:binsight_ai/pages/setup/intro_sequence.dart';
-import 'package:binsight_ai/pages/detection/label.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:go_router/go_router.dart';
+
+// Project imports:
+import 'package:binsight_ai/pages/detection/label.dart';
 import 'package:binsight_ai/pages/detection/annotation.dart';
 import 'package:binsight_ai/pages/detection/detection.dart';
 import 'package:binsight_ai/pages/detection/index.dart';
@@ -9,6 +13,7 @@ import 'package:binsight_ai/pages/main/faq.dart';
 import 'package:binsight_ai/pages/main/help.dart';
 import 'package:binsight_ai/pages/main/user_guide.dart';
 import 'package:binsight_ai/pages/main/home.dart';
+import 'package:binsight_ai/pages/setup/intro_sequence.dart';
 import 'package:binsight_ai/widgets/navigation_shell.dart';
 
 // Used for testing

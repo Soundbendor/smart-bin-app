@@ -1,5 +1,10 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:url_launcher/url_launcher_string.dart';
+
+// Project imports:
 import 'package:binsight_ai/widgets/heading.dart';
 
 /// Displays the Help page with dropdown sections for Help, and Contact Us email connection
