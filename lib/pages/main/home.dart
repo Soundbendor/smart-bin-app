@@ -13,16 +13,18 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+/// The home page of the application, displaying the user's latest image detection
+/// and a visual summary of their detections.
 class _HomePageState extends State<HomePage> {
-  //All detections
+  // All detections
   List<Detection> detections = [];
-  //Map item names to total count of the item
+  // Map item names to total count of the item
   Map<String, int> labelCounts = {};
-  //Map day to total compost weight
+  // Map day to total compost weight
   Map<DateTime, double> weightCounts = {};
   late Future loadDetectionFuture;
 
-  //Load all the detections upon building
+  // Load all the detections upon building
   @override
   void initState() {
     loadDetectionFuture = Detection.all().then((value) async {
@@ -35,47 +37,115 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+    
     populateCounts();
+    
     Detection? latest;
     if (detections.isNotEmpty) {
       latest = detections[0];
     }
+
     return SingleChildScrollView(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              "Review",
+              style: Theme.of(context).textTheme.displayMedium,
+            ),
+          ),
+          SizedBox(height: 10),
           if (latest != null)
             LabelButton(
-                detection: latest, text: "Label Your Latest Annotation!"),
-          CircleChart(
-            data: labelCounts,
-            title: "Detections by food category",
+              detection: latest,
+              text: "Label Your Latest Annotation!",
+            ),
+          SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              "Recap",
+              style: Theme.of(context).textTheme.displayMedium,
+            ),
           ),
-          FractionallySizedBox(
-              widthFactor: 0.9,
-              child: LineChart(data: weightCounts, title: "Compost Over Time"))
+          SizedBox(height: 10),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    "Detections by Food Category",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  SizedBox(height: 10),
+                  CircleChart(
+                    data: labelCounts,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              "Trends",
+              style: Theme.of(context).textTheme.displayMedium,
+            ),
+          ),
+          SizedBox(height: 10),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    "Compost Over Time",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  SizedBox(height: 10),
+                  FractionallySizedBox(
+                    widthFactor: 0.9,
+                    child: LineChart(
+                      data: weightCounts,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 20),
         ],
       ),
     );
   }
 
-  //Function to populate the weightCounts and labelCounts
+  /// Function to populate the weightCounts and labelCounts
   void populateCounts() {
     if (detections.isNotEmpty) {
-      //Turn detections to a list of maps
+      // Turn detections to a list of maps
       List<Map<String, dynamic>> detectionsMaps =
           detections.map((detection) => detection.toMap()).toList();
-      //Loop over all detections and increment the counts accordingly
+      // Loop over all detections and increment the counts accordingly
       for (Map<String, dynamic> detection in detectionsMaps) {
         DateTime timestamp = DateTime.parse(detection["timestamp"]);
         DateTime monthDay =
             DateTime(timestamp.year, timestamp.month, timestamp.day);
-        //Extract month and day from each timestamp, and use that as the key
+        // Extract month and day from each timestamp, and use that as the key
         weightCounts[monthDay] =
             (weightCounts[monthDay] ?? 0.0) + detection["weight"];
         if (detection["boxes"] != null) {
           String boxes = detection["boxes"];
           List<dynamic> boxesList = jsonDecode(boxes);
-          //If the boxes field is populated, loop over the list and extract the name that's at index 0 of each item
+          // If the boxes field is populated, loop over the list and extract the name that's at index 0 of each item
           for (var label in boxesList) {
             String name = label[0];
             labelCounts[name] = (labelCounts[name] ?? 0) + 1;
@@ -86,7 +156,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-//Button to navigate to the latest detection's page
+/// Button to navigate to the latest detection's page
 class LabelButton extends StatelessWidget {
   const LabelButton({
     super.key,
