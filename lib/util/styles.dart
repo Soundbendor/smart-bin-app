@@ -74,7 +74,7 @@ final mainTheme = ThemeData(
   cardTheme: CardTheme(
     surfaceTintColor: Colors.white,
     shadowColor: mainColorScheme.onBackground,
-    elevation: 5,
+    elevation: 4,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10),
     ),

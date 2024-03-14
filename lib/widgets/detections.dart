@@ -126,14 +126,23 @@ class DetectionSmallListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return ListTile(
-      leading: DynamicImage(detection.preDetectImgLink),
-      title:
-          Text(formatDetectionTitle(detection), style: textTheme.titleMedium),
-      subtitle:
-          Text(detection.timestamp.toString(), style: textTheme.bodyMedium),
-      trailing: const Icon(Icons.arrow_forward_ios),
-      onTap: () => onTileTap(context, detection),
+    final colorScheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: GestureDetector(
+        onTap: () => onTileTap(context, detection),
+        child: Card(
+          color: colorScheme.background,
+          child: ListTile(
+            leading: DynamicImage(detection.preDetectImgLink),
+            title:
+                Text(formatDetectionTitle(detection), style: textTheme.titleMedium),
+            subtitle:
+                Text(detection.timestamp.toString(), style: textTheme.bodyMedium),
+            trailing: const Icon(Icons.arrow_forward_ios),
+          ),
+        ),
+      ),
     );
   }
 }
