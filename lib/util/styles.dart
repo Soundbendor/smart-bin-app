@@ -25,6 +25,11 @@ final mainTheme = ThemeData(
       fontWeight: FontWeight.bold,
       fontFamily: 'Georama', // Specify the font family
     ),
+      displayMedium: TextStyle(
+      fontSize: 30,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'Georama', // Specify the font family
+    ),
       headlineLarge: TextStyle(
       fontSize: 30,
       fontWeight: FontWeight.normal,

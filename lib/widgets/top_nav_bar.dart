@@ -95,6 +95,8 @@ class _TopNavBarState extends State<TopNavBar> {
                 Navigator.pop(context);
               },
             ),
+            // Current version number
+            // TODO: create a version number that is updated automatically
             const ListTile(
               title: Text(
                 'Version 1.0.0',
