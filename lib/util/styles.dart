@@ -25,8 +25,33 @@ final mainTheme = ThemeData(
       fontWeight: FontWeight.bold,
       fontFamily: 'Georama', // Specify the font family
     ),
-    headlineLarge: TextStyle(
+      displayMedium: TextStyle(
       fontSize: 30,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'Georama', // Specify the font family
+    ),
+      headlineLarge: TextStyle(
+      fontSize: 30,
+      fontWeight: FontWeight.normal,
+      fontFamily: 'GolosText', // Specify the font family
+    ),
+      headlineMedium: TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'GolosText', // Specify the font family
+    ),
+      labelLarge: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.normal,
+      fontFamily: 'GolosText', // Specify the font family
+    ),
+      titleMedium: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'GolosText', // Specify the font family
+    ),
+      bodyMedium: TextStyle(
+      fontSize: 10,
       fontWeight: FontWeight.normal,
       fontFamily: 'GolosText', // Specify the font family
     ),
@@ -44,9 +69,10 @@ final mainTheme = ThemeData(
     ),
   ),
   cardTheme: CardTheme(
-    surfaceTintColor: mainColorScheme.onSurface,
+    color: Colors.white,
+    surfaceTintColor: Colors.white,
     shadowColor: mainColorScheme.onBackground,
-    elevation: 5,
+    elevation: 4,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10),
     ),

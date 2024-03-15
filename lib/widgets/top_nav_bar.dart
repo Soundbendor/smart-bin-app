@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:go_router/go_router.dart';
 
+// Project imports:
+import 'package:binsight_ai/util/styles.dart';
+
 /// Top navigation bar widget burger menu with slide out drawer functionality.
 class TopNavBar extends StatefulWidget {
   const TopNavBar({
@@ -29,67 +32,79 @@ class _TopNavBarState extends State<TopNavBar> {
   Widget build(BuildContext context) {
     // When user opens the drawer, it is added to the navigation stack.
     return Drawer(
-      // Add a ListView to the drawer. This ensures the user can scroll
-      // through the options in the drawer if there isn't enough vertical
-      // space to fit everything.
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Color.fromRGBO(25, 192, 147, 1),
-            ),
-            child: Text(
-              'Binsight.ai',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
+      child: Container(
+        color: mainTheme.colorScheme.background,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/bird_branch.png'),
+                  fit: BoxFit.cover,
+                ),
+                color: Color(0xFFeef8f4),
+              ),
+              child: Text(
+                'Binsight.ai',
+                style: mainTheme.textTheme.displayLarge?.copyWith(
+                  color: const Color(0xFF333333),
+                  fontSize: 24,
+                ),
               ),
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.home),
-            title: const Text('Home'),
-            selected: _selectedIndex == 0,
-            onTap: () {
-              // Update the state of the app.
-              _onItemTapped(0);
-              GoRouter.of(context).goNamed('main');
-              // Then close the drawer.
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.list),
-            title: const Text('FAQ'),
-            selected: _selectedIndex == 1,
-            onTap: () {
-              _onItemTapped(1);
-              GoRouter.of(context).goNamed('faq');
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.book_outlined),
-            title: const Text('User Guide'),
-            selected: _selectedIndex == 2,
-            onTap: () {
-              _onItemTapped(2);
-              GoRouter.of(context).goNamed('user_guide');
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.question_mark_outlined),
-            title: const Text('Help'),
-            selected: _selectedIndex == 3,
-            onTap: () {
-              _onItemTapped(3);
-              GoRouter.of(context).goNamed('help');
-              Navigator.pop(context);
-            },
-          ),
-        ],
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text('Home'),
+              selected: _selectedIndex == 0,
+              onTap: () {
+                // Update the state of the app.
+                _onItemTapped(0);
+                GoRouter.of(context).goNamed('main');
+                // Then close the drawer.
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.list),
+              title: const Text('FAQ'),
+              selected: _selectedIndex == 1,
+              onTap: () {
+                _onItemTapped(1);
+                GoRouter.of(context).goNamed('faq');
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.book_outlined),
+              title: const Text('User Guide'),
+              selected: _selectedIndex == 2,
+              onTap: () {
+                _onItemTapped(2);
+                GoRouter.of(context).goNamed('user_guide');
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.question_mark_outlined),
+              title: const Text('Help'),
+              selected: _selectedIndex == 3,
+              onTap: () {
+                _onItemTapped(3);
+                GoRouter.of(context).goNamed('help');
+                Navigator.pop(context);
+              },
+            ),
+            // Current version number
+            // TODO: create a version number that is updated automatically
+            const ListTile(
+              title: Text(
+                'Version 1.0.0',
+                style: TextStyle(fontSize: 10, color: Colors.grey),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
