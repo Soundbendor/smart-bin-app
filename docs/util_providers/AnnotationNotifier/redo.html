@@ -79,7 +79,7 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">void redo() {
-  if (currentAnnotation.length &lt; currentAnnotationHistory.length) {
+  if (canRedo()) {
     final index = currentAnnotation.length;
     currentAnnotation.add(currentAnnotationHistory[index]);
   }

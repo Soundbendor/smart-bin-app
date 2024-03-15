@@ -121,23 +121,28 @@ obtain the correct rendering size.</p>
 void paint(Canvas canvas, ui.Size size) {
   &#47;&#47; Draws a line between each drawingSegment&#39;s Offsets
   &#47;&#47; for each segment in drawingSegments
-  for (var drawingSegment in drawingSegments) {
-    final paint = Paint()
-      ..color = Colors.black
-      ..isAntiAlias = true
-      ..strokeWidth = 2.0
-      ..strokeCap = StrokeCap.round;
+  void drawSegments(List&lt;DrawingSegment&gt; segments, Color color) {
+    for (var drawingSegment in segments) {
+      final paint = Paint()
+        ..color = color
+        ..isAntiAlias = true
+        ..strokeWidth = 2.0
+        ..strokeCap = StrokeCap.round;
 
-    for (var i = 0; i &lt; drawingSegment.offsets.length; i++) {
-      var notLastOffset = i != drawingSegment.offsets.length - 1;
+      for (var i = 0; i &lt; drawingSegment.offsets.length; i++) {
+        var notLastOffset = i != drawingSegment.offsets.length - 1;
 
-      if (notLastOffset) {
-        final current = drawingSegment.offsets[i];
-        final next = drawingSegment.offsets[i + 1];
-        canvas.drawLine(current, next, paint);
+        if (notLastOffset) {
+          final current = drawingSegment.offsets[i];
+          final next = drawingSegment.offsets[i + 1];
+          canvas.drawLine(current, next, paint);
+        }
       }
     }
   }
+
+  drawSegments(allSegments, Colors.black);
+  drawSegments(activeSegments, Colors.blue);
 }</code></pre>
 </section>
 
