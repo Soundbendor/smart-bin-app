@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the reset method from the AnnotationNotifier class, for the Dart programming language.">
-  <title>reset method - AnnotationNotifier class - providers library - Dart API</title>
+  <meta name="description" content="API docs for the canRedo method from the AnnotationNotifier class, for the Dart programming language.">
+  <title>canRedo method - AnnotationNotifier class - providers library - Dart API</title>
 
 
   
@@ -31,9 +31,9 @@
     <li><a href="../../index.html">binsight_ai</a></li>
     <li><a href="../../util_providers/util_providers-library.html">util&#47;providers.dart</a></li>
     <li><a href="../../util_providers/AnnotationNotifier-class.html">AnnotationNotifier</a></li>
-    <li class="self-crumb">reset method</li>
+    <li class="self-crumb">canRedo method</li>
   </ol>
-  <div class="self-name">reset</div>
+  <div class="self-name">canRedo</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -57,35 +57,29 @@
       data-above-sidebar="util_providers&#47;AnnotationNotifier-class-sidebar.html"
       data-below-sidebar="">
       <div>
-<h1><span class="kind-method">reset</span> method 
+<h1><span class="kind-method">canRedo</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
 
-<span class="returntype">void</span>
-<span class="name ">reset</span>(<wbr>)
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+<span class="name ">canRedo</span>(<wbr>)
 
       
 
     </section>
     
 <section class="desc markdown">
-  <p>Reset annotation state</p>
+  <p>Checks whether the current annotation can be redone</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">void reset() {
-  label = null;
-  allAnnotations = [];
-  oldAnnotations = [];
-  currentAnnotation = [];
-  currentAnnotationHistory = [];
-  combinedCurrentAnnotation = null;
-  currentDetection = null;
+  <pre class="language-dart"><code class="language-dart">bool canRedo() {
+  return currentAnnotation.length &lt; currentAnnotationHistory.length;
 }</code></pre>
 </section>
 
@@ -104,7 +98,7 @@
     <li><a href="../../index.html">binsight_ai</a></li>
     <li><a href="../../util_providers/util_providers-library.html">providers</a></li>
     <li><a href="../../util_providers/AnnotationNotifier-class.html">AnnotationNotifier</a></li>
-    <li class="self-crumb">reset method</li>
+    <li class="self-crumb">canRedo method</li>
 </ol>
 
 

@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the reset method from the AnnotationNotifier class, for the Dart programming language.">
-  <title>reset method - AnnotationNotifier class - providers library - Dart API</title>
+  <meta name="description" content="API docs for the oldAnnotations property from the AnnotationNotifier class, for the Dart programming language.">
+  <title>oldAnnotations property - AnnotationNotifier class - providers library - Dart API</title>
 
 
   
@@ -31,9 +31,9 @@
     <li><a href="../../index.html">binsight_ai</a></li>
     <li><a href="../../util_providers/util_providers-library.html">util&#47;providers.dart</a></li>
     <li><a href="../../util_providers/AnnotationNotifier-class.html">AnnotationNotifier</a></li>
-    <li class="self-crumb">reset method</li>
+    <li class="self-crumb">oldAnnotations property</li>
   </ol>
-  <div class="self-name">reset</div>
+  <div class="self-name">oldAnnotations</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -57,36 +57,25 @@
       data-above-sidebar="util_providers&#47;AnnotationNotifier-class-sidebar.html"
       data-below-sidebar="">
       <div>
-<h1><span class="kind-method">reset</span> method 
+<h1><span class="kind-property">oldAnnotations</span> property 
 </h1></div>
 
-    <section class="multi-line-signature">
-      
+        <section class="multi-line-signature">
+          
+          <a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../widgets_free_draw/DrawingSegment-class.html">DrawingSegment</a></span>&gt;</span>
+          <span class="name ">oldAnnotations</span>
+          <div class="features"><span class="feature">getter/setter pair</span></div>
 
-<span class="returntype">void</span>
-<span class="name ">reset</span>(<wbr>)
-
-      
-
-    </section>
-    
+        </section>
+        
 <section class="desc markdown">
-  <p>Reset annotation state</p>
+  <p>List of segments for all annotations</p>
 </section>
 
-
-    
+        
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">void reset() {
-  label = null;
-  allAnnotations = [];
-  oldAnnotations = [];
-  currentAnnotation = [];
-  currentAnnotationHistory = [];
-  combinedCurrentAnnotation = null;
-  currentDetection = null;
-}</code></pre>
+  <pre class="language-dart"><code class="language-dart">List&lt;DrawingSegment&gt; oldAnnotations = [];</code></pre>
 </section>
 
 
@@ -104,7 +93,7 @@
     <li><a href="../../index.html">binsight_ai</a></li>
     <li><a href="../../util_providers/util_providers-library.html">providers</a></li>
     <li><a href="../../util_providers/AnnotationNotifier-class.html">AnnotationNotifier</a></li>
-    <li class="self-crumb">reset method</li>
+    <li class="self-crumb">oldAnnotations property</li>
 </ol>
 
 

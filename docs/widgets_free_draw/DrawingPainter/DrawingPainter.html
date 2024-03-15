@@ -62,7 +62,8 @@
 
     <section class="multi-line-signature">
       
-      <span class="name ">DrawingPainter</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="-param-drawingSegments">{<span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../widgets_free_draw/DrawingSegment-class.html">DrawingSegment</a></span>&gt;</span></span> <span class="parameter-name">drawingSegments</span>}</span></li>
+      <span class="name ">DrawingPainter</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="-param-activeSegments">{<span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../widgets_free_draw/DrawingSegment-class.html">DrawingSegment</a></span>&gt;</span></span> <span class="parameter-name">activeSegments</span>, </span></li>
+<li><span class="parameter" id="-param-allSegments"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../widgets_free_draw/DrawingSegment-class.html">DrawingSegment</a></span>&gt;</span></span> <span class="parameter-name">allSegments</span>}</span></li>
 </ol>)
     </section>
 
@@ -73,7 +74,8 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">DrawingPainter({
-  required this.drawingSegments,
+  required this.activeSegments,
+  required this.allSegments,
 });</code></pre>
 </section>
 
