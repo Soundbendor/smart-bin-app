@@ -23,9 +23,10 @@ class _LoadScreenState extends State<LoadScreen> {
   @override
   void initState() {
     super.initState();
-    transitionKey = Provider.of<SetupKeyNotifier>(context, listen: false).setupKey;
-    Future.delayed(const Duration(seconds: 3),
-        () => transitionKey.currentState?.next());
+    transitionKey =
+        Provider.of<SetupKeyNotifier>(context, listen: false).setupKey;
+    Future.delayed(
+        const Duration(seconds: 3), () => transitionKey.currentState?.next());
   }
 
   @override

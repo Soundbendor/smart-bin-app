@@ -128,7 +128,10 @@ class _WifiScanPageState extends State<WifiScanPage> {
     isScanning = false;
     Provider.of<WifiResultNotifier>(context, listen: false)
         .setWifiResult(wifiResult);
-    Provider.of<SetupKeyNotifier>(context, listen: false).setupKey.currentState?.next();
+    Provider.of<SetupKeyNotifier>(context, listen: false)
+        .setupKey
+        .currentState
+        ?.next();
   }
 
   @override
@@ -231,7 +234,10 @@ The error was: ${(error as BleOperationFailureException).message}.
                   stopScanning();
                   Provider.of<DeviceNotifier>(context, listen: false)
                       .resetDevice();
-                  Provider.of<SetupKeyNotifier>(context, listen: false).setupKey.currentState?.previous();
+                  Provider.of<SetupKeyNotifier>(context, listen: false)
+                      .setupKey
+                      .currentState
+                      ?.previous();
                 },
                 child: Text(
                   "Back",

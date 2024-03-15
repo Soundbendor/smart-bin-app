@@ -65,7 +65,7 @@ List<RouteBase> getRoutes() {
                   ),
                   GoRoute(
                     path: 'label',
-                    builder: (context, state) => LabelAnnotation(),
+                    builder: (context, state) => const LabelAnnotation(),
                   ),
                 ],
               ),
