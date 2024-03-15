@@ -79,14 +79,12 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">DrawingSegment? combineCurrentSegments() {
-  if (startIndex &lt; 0 || startIndex &gt;= currentAnnotation.length) return null;
-
   DrawingSegment combinedSegments =
-      DrawingSegment(id: currentAnnotation[startIndex].id, offsets: []);
+      DrawingSegment(id: currentAnnotation[0].id, offsets: []);
 
-  for (int i = startIndex; i &lt; currentAnnotation.length; i++) {
+  for (int i = 0; i &lt; currentAnnotation.length; i++) {
+    oldAnnotations.add(currentAnnotation[i]);
     combinedSegments.offsets.addAll(currentAnnotation[i].offsets);
-    startIndex++;
   }
   return combinedSegments;
 }</code></pre>

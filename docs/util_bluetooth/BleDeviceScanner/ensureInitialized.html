@@ -76,7 +76,8 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; ensureInitialized() async {
-  if (FlutterBluePlus.adapterStateNow != BluetoothAdapterState.unknown) return;
+  if (FlutterBluePlus.adapterStateNow != BluetoothAdapterState.unknown)
+    return;
   final stream = FlutterBluePlus.adapterState;
   await stream.first;
 }</code></pre>
