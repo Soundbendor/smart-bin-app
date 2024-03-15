@@ -59,13 +59,36 @@ class _DetectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Column(children: [
-      GestureDetector(
-          child: Center(
-            child: DynamicImage(detection.preDetectImgLink,
-                width: 350, height: 350),
-          ),
-          onTap: () => GoRouter.of(context)
-              .push("/main/detection/${detection.imageId}/annotation")),
+      SizedBox(
+        width: 350,
+        height: 350,
+        child: Stack(
+          children: [
+            Center(
+              child: DynamicImage(detection.preDetectImgLink,
+                  width: 350, height: 350),
+            ),
+            Positioned(
+              bottom: 8,
+              right: 8,
+              child: IconButton(
+                onPressed: () {
+                  GoRouter.of(context)
+                      .push("/main/detection/${detection.imageId}/annotation");
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primary.withAlpha(200),
+                  ),
+                  shape: MaterialStateProperty.all(const CircleBorder()),
+                ),
+                color: Theme.of(context).colorScheme.onPrimary,
+                icon: const Icon(Icons.edit, size: 30),
+              ),
+            ),
+          ],
+        ),
+      ),
       const SizedBox(height: 16),
       SizedBox(
         width: 400,

@@ -42,8 +42,7 @@ class StyledIntroScreen extends StatelessWidget {
     ),
     PageViewModel(
       title: "Have Questions or Need Help?",
-      body:
-          "Check out our FAQ page, or scroll through our help section!",
+      body: "Check out our FAQ page, or scroll through our help section!",
       image: const Icon(Icons.question_mark, size: 100),
     ),
     PageViewModel(

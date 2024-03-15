@@ -88,7 +88,10 @@ class _BluetoothPageState extends State<BluetoothPage> {
               ),
               () {
                 if (!context.mounted) return;
-                Provider.of<SetupKeyNotifier>(context, listen: false).setupKey.currentState?.next();
+                Provider.of<SetupKeyNotifier>(context, listen: false)
+                    .setupKey
+                    .currentState
+                    ?.next();
                 Navigator.of(context).pop();
               },
             );
