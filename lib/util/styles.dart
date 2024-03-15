@@ -1,3 +1,4 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
 
 final mainColorScheme = ColorScheme(
@@ -18,7 +19,6 @@ final mainColorScheme = ColorScheme(
 
 final mainTheme = ThemeData(
   colorScheme: mainColorScheme,
-
   textTheme: const TextTheme(
     displayLarge: TextStyle(
       fontSize: 45,
@@ -56,21 +56,18 @@ final mainTheme = ThemeData(
       fontFamily: 'GolosText', // Specify the font family
     ),
   ),
-
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
       backgroundColor: mainColorScheme.primary,
       foregroundColor: mainColorScheme.onPrimary,
     ),
   ),
-
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: mainColorScheme.primary,
       foregroundColor: mainColorScheme.onPrimary,
     ),
   ),
-
   cardTheme: CardTheme(
     color: Colors.white,
     surfaceTintColor: Colors.white,
@@ -80,7 +77,6 @@ final mainTheme = ThemeData(
       borderRadius: BorderRadius.circular(10),
     ),
   ),
-
 );
 
 final bluetoothBorderRadius = RoundedRectangleBorder(

@@ -1,8 +1,13 @@
+// Flutter imports:
 import 'dart:ui' as ui;
+import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:provider/provider.dart';
+
+// Project imports:
 import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/widgets/image.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 /// Widget with logic to annotate and render detection images
 class FreeDraw extends StatefulWidget {
@@ -49,8 +54,7 @@ class _FreeDrawState extends State<FreeDraw> {
                     id: DateTime.now().microsecondsSinceEpoch,
                     offsets: [details.localPosition],
                   );
-                  notifier.startCurrentAnnotation(
-                      currentDrawingSegment!);
+                  notifier.startCurrentAnnotation(currentDrawingSegment!);
                   notifier.updateCurrentAnnotationHistory();
                 }
               });
@@ -81,7 +85,8 @@ class _FreeDrawState extends State<FreeDraw> {
                     key: imageKey, fit: BoxFit.cover),
                 CustomPaint(
                   painter: DrawingPainter(
-                    drawingSegments: notifier.currentAnnotation,
+                    activeSegments: notifier.currentAnnotation,
+                    allSegments: notifier.oldAnnotations,
                   ),
                 ),
               ],
@@ -106,33 +111,40 @@ class _FreeDrawState extends State<FreeDraw> {
 /// To be used as the painter within the CustomPaint widget, providing the
 /// implementation of paint, specifying what to paint and what data to use
 class DrawingPainter extends CustomPainter {
-  final List<DrawingSegment> drawingSegments;
+  final List<DrawingSegment> activeSegments;
+  final List<DrawingSegment> allSegments;
 
   DrawingPainter({
-    required this.drawingSegments,
+    required this.activeSegments,
+    required this.allSegments,
   });
 
   @override
   void paint(Canvas canvas, ui.Size size) {
     // Draws a line between each drawingSegment's Offsets
     // for each segment in drawingSegments
-    for (var drawingSegment in drawingSegments) {
-      final paint = Paint()
-        ..color = Colors.black
-        ..isAntiAlias = true
-        ..strokeWidth = 2.0
-        ..strokeCap = StrokeCap.round;
+    void drawSegments(List<DrawingSegment> segments, Color color) {
+      for (var drawingSegment in segments) {
+        final paint = Paint()
+          ..color = color
+          ..isAntiAlias = true
+          ..strokeWidth = 2.0
+          ..strokeCap = StrokeCap.round;
 
-      for (var i = 0; i < drawingSegment.offsets.length; i++) {
-        var notLastOffset = i != drawingSegment.offsets.length - 1;
+        for (var i = 0; i < drawingSegment.offsets.length; i++) {
+          var notLastOffset = i != drawingSegment.offsets.length - 1;
 
-        if (notLastOffset) {
-          final current = drawingSegment.offsets[i];
-          final next = drawingSegment.offsets[i + 1];
-          canvas.drawLine(current, next, paint);
+          if (notLastOffset) {
+            final current = drawingSegment.offsets[i];
+            final next = drawingSegment.offsets[i + 1];
+            canvas.drawLine(current, next, paint);
+          }
         }
       }
     }
+
+    drawSegments(allSegments, Colors.black);
+    drawSegments(activeSegments, Colors.blue);
   }
 
   @override

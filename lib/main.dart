@@ -15,9 +15,9 @@ import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/util/routes.dart';
 import 'package:binsight_ai/util/styles.dart';
 import 'package:binsight_ai/util/subscriber.dart';
+import 'package:binsight_ai/database/connection.dart';
 import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/database/models/detection.dart';
-import 'package:binsight_ai/database/connection.dart';
 
 /// Entry point of the application
 void main() async {

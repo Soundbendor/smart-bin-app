@@ -1,9 +1,14 @@
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:introduction_screen/introduction_screen.dart';
+
+// Project imports:
+import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/util/wifi_scan.dart';
 import 'package:binsight_ai/widgets/free_draw.dart';
-import 'package:flutter/material.dart';
-import 'package:binsight_ai/util/bluetooth.dart';
-import 'package:introduction_screen/introduction_screen.dart';
 
 /// Notifies listeners of changes to the device.
 ///
@@ -106,14 +111,14 @@ class AnnotationNotifier extends ChangeNotifier {
   /// List of segments for the current annotation
   List<DrawingSegment> currentAnnotation = [];
 
+  /// List of segments for all annotations
+  List<DrawingSegment> oldAnnotations = [];
+
   /// History of segments for the current annotation
   List<DrawingSegment> currentAnnotationHistory = [];
 
   /// Single segment containing all Offsets in the current annotation
   DrawingSegment? combinedCurrentAnnotation;
-
-  /// Index tracking where to start combining annotations from within the currentAnnotation
-  int startIndex = 0;
 
   /// Id of the detection currently being annotated
   String? currentDetection;
@@ -122,10 +127,10 @@ class AnnotationNotifier extends ChangeNotifier {
   void reset() {
     label = null;
     allAnnotations = [];
+    oldAnnotations = [];
     currentAnnotation = [];
     currentAnnotationHistory = [];
     combinedCurrentAnnotation = null;
-    startIndex = 0;
     currentDetection = null;
   }
 
@@ -167,17 +172,27 @@ class AnnotationNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Checks whether the current annotation can be undone
+  bool canUndo() {
+    return currentAnnotation.isNotEmpty && currentAnnotationHistory.isNotEmpty;
+  }
+
   /// Remove the last segment in the current annotation
   void undo() {
-    if (currentAnnotation.isNotEmpty && currentAnnotationHistory.isNotEmpty) {
+    if (canUndo()) {
       currentAnnotation.removeLast();
     }
     notifyListeners();
   }
 
+  /// Checks whether the current annotation can be redone
+  bool canRedo() {
+    return currentAnnotation.length < currentAnnotationHistory.length;
+  }
+
   /// Pull from the history to add the most recently removed segment to the current annotation
   void redo() {
-    if (currentAnnotation.length < currentAnnotationHistory.length) {
+    if (canRedo()) {
       final index = currentAnnotation.length;
       currentAnnotation.add(currentAnnotationHistory[index]);
     }
@@ -186,16 +201,21 @@ class AnnotationNotifier extends ChangeNotifier {
 
   /// From the start index on in the currentAnnotation list, combine all segments into one
   DrawingSegment? combineCurrentSegments() {
-    if (startIndex < 0 || startIndex >= currentAnnotation.length) return null;
-
     DrawingSegment combinedSegments =
-        DrawingSegment(id: currentAnnotation[startIndex].id, offsets: []);
+        DrawingSegment(id: currentAnnotation[0].id, offsets: []);
 
-    for (int i = startIndex; i < currentAnnotation.length; i++) {
+    for (int i = 0; i < currentAnnotation.length; i++) {
+      oldAnnotations.add(currentAnnotation[i]);
       combinedSegments.offsets.addAll(currentAnnotation[i].offsets);
-      startIndex++;
     }
     return combinedSegments;
+  }
+
+  /// Clear the current annotation
+  void clearCurrentAnnotation() {
+    currentAnnotation = [];
+    updateCurrentAnnotationHistory();
+    notifyListeners();
   }
 
   /// Check if the current annotation has both a drawing and a label
