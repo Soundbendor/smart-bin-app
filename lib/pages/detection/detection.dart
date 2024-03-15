@@ -58,83 +58,90 @@ class _DetectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Column(children: [
-      SizedBox(
-        width: 350,
-        height: 350,
-        child: Stack(
-          children: [
-            Center(
-              child: DynamicImage(detection.preDetectImgLink,
-                  width: 350, height: 350),
-            ),
-            Positioned(
-              bottom: 8,
-              right: 8,
-              child: IconButton(
-                onPressed: () {
-                  GoRouter.of(context)
-                      .push("/main/detection/${detection.imageId}/annotation");
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    Theme.of(context).colorScheme.primary.withAlpha(200),
+    final colorScheme = Theme.of(context).colorScheme;
+    return Card(
+      color: colorScheme.onPrimary,
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Column(children: [
+          SizedBox(
+            width: 350,
+            height: 350,
+            child: Stack(
+              children: [
+                Center(
+                  child: DynamicImage(detection.preDetectImgLink,
+                      width: 350, height: 350),
+                ),
+                Positioned(
+                  bottom: 8,
+                  right: 8,
+                  child: IconButton(
+                    onPressed: () {
+                      GoRouter.of(context).push(
+                          "/main/detection/${detection.imageId}/annotation");
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                        Theme.of(context).colorScheme.primary.withAlpha(200),
+                      ),
+                      shape: MaterialStateProperty.all(const CircleBorder()),
+                    ),
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    icon: const Icon(Icons.edit, size: 30),
                   ),
-                  shape: MaterialStateProperty.all(const CircleBorder()),
                 ),
-                color: Theme.of(context).colorScheme.onPrimary,
-                icon: const Icon(Icons.edit, size: 30),
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: 400,
+            child: Row(
+              children: [
+                Expanded(
+                    child: Center(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Temperature:", style: textTheme.labelLarge),
+                        Text(
+                          "Humidity:",
+                          style: textTheme.labelLarge,
+                        ),
+                        Text(
+                          "eCO2:",
+                          style: textTheme.labelLarge,
+                        ),
+                        Text(
+                          "tVOC:",
+                          style: textTheme.labelLarge,
+                        ),
+                      ]),
+                )),
+                Expanded(
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(detection.temperature.toString(),
+                            style: textTheme.labelLarge),
+                        Text(detection.humidity.toString(),
+                            style: textTheme.labelLarge),
+                        Text(detection.co2.toString(),
+                            style: textTheme.labelLarge),
+                        Text(detection.vo2.toString(),
+                            style: textTheme.labelLarge),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ]),
       ),
-      const SizedBox(height: 16),
-      SizedBox(
-        width: 400,
-        child: Row(
-          children: [
-            Expanded(
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Temperature:", style: textTheme.labelLarge),
-                    Text(
-                      "Humidity:",
-                      style: textTheme.labelLarge,
-                    ),
-                    Text(
-                      "eCO2:",
-                      style: textTheme.labelLarge,
-                    ),
-                    Text(
-                      "tVOC:",
-                      style: textTheme.labelLarge,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(detection.temperature.toString(),
-                        style: textTheme.bodyMedium),
-                    Text(detection.humidity.toString(),
-                        style: textTheme.bodyMedium),
-                    Text(detection.co2.toString(), style: textTheme.bodyMedium),
-                    Text(detection.vo2.toString(), style: textTheme.bodyMedium),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      )
-    ]);
+    );
   }
 }
 
