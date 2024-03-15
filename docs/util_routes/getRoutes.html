@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the getRoutes function from the routes library, for the Dart programming language.">
+  <title>getRoutes function - routes library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">binsight_ai</a></li>
+    <li><a href="../util_routes/util_routes-library.html">util&#47;routes.dart</a></li>
+    <li class="self-crumb">getRoutes function</li>
+  </ol>
+  <div class="self-name">getRoutes</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        brightness_4
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        brightness_5
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="util_routes&#47;util_routes-library-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-function">getRoutes</span> function 
+ 
+</h1></div>
+
+    <section class="multi-line-signature">
+        
+
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/go_router/13.2.1/go_router/RouteBase-class.html">RouteBase</a></span>&gt;</span></span>
+<span class="name ">getRoutes</span>(<wbr>)
+
+        
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">List&lt;RouteBase&gt; getRoutes() {
+  return [
+    ShellRoute(
+      builder: (BuildContext context, GoRouterState state, Widget child) {
+        return NavigationShell(child: child);
+      },
+      routes: &lt;GoRoute&gt;[
+        &#47;&#47; `&#47;main` - home page
+        GoRoute(
+            name: &#39;main&#39;,
+            path: &#39;&#47;main&#39;,
+            builder: (BuildContext context, GoRouterState state) {
+              return const HomePage();
+            },
+            routes: [
+              &#47;&#47; `&#47;main&#47;detections` - list of detections
+              GoRoute(
+                  name: &#39;detections&#39;,
+                  path: &#39;detections&#39;,
+                  builder: (BuildContext context, GoRouterState state) {
+                    return const DetectionsPage();
+                  }),
+              &#47;&#47; `&#47;main&#47;detection&#47;:detectionId` - detection page with detailed information
+              GoRoute(
+                path: &#39;detection&#47;:detectionId&#39;,
+                builder: (BuildContext context, GoRouterState state) {
+                  return DetectionPage.fromId(
+                      detectionId: state.pathParameters[&#39;detectionId&#39;]!);
+                },
+                routes: [
+                  &#47;&#47; `&#47;main&#47;detection&#47;:detectionId&#47;annotation` - annotation page
+                  GoRoute(
+                    path: &#39;annotation&#39;,
+                    builder: (BuildContext context, GoRouterState state) {
+                      return AnnotationPage(
+                          detectionId: state.pathParameters[&#39;detectionId&#39;]!);
+                    },
+                  ),
+                  GoRoute(
+                    path: &#39;label&#39;,
+                    builder: (context, state) =&gt; const LabelAnnotation(),
+                  ),
+                ],
+              ),
+              &#47;&#47; `&#47;main&#47;faq` - frequently asked questions
+              GoRoute(
+                name: &#39;faq&#39;,
+                path: &#39;faq&#39;,
+                builder: (BuildContext context, GoRouterState state) {
+                  return const FAQ();
+                },
+              ),
+              &#47;&#47; `&#47;main&#47;user_guide` - user guide
+              GoRoute(
+                name: &#39;user_guide&#39;,
+                path: &#39;user_guide&#39;,
+                builder: (BuildContext context, GoRouterState state) {
+                  return const UserGuide();
+                },
+              ),
+              &#47;&#47; `&#47;main&#47;help` - help page
+              GoRoute(
+                name: &#39;help&#39;,
+                path: &#39;help&#39;,
+                builder: (BuildContext context, GoRouterState state) {
+                  return const HelpPage();
+                },
+              ),
+            ]),
+      ],
+    ),
+
+    &#47;&#47; `&#47;set-up` - set up &#47; welcome page
+    GoRoute(
+        name: &#39;set-up&#39;,
+        path: &#39;&#47;set-up&#39;,
+        builder: (BuildContext context, GoRouterState state) {
+          return const SetupScreen();
+        },
+        routes: [
+          &#47;&#47; `&#47;set-up&#47;bluetooth` - bluetooth set up page
+          GoRoute(
+            name: &#39;bluetooth&#39;,
+            path: &#39;bluetooth&#39;,
+            builder: (BuildContext context, GoRouterState state) {
+              return const SetupScreen(startPageIndex: 2);
+            },
+          ),
+          GoRoute(
+              name: &#39;wifi-scan&#39;,
+              path: &#39;wifi-scan&#39;,
+              builder: (BuildContext context, GoRouterState state) {
+                return const SetupScreen(startPageIndex: 3);
+              }),
+          &#47;&#47; `&#47;set-up&#47;wifi` - selecting wifi page
+          GoRoute(
+              name: &#39;wifi&#39;,
+              path: &#39;wifi&#39;,
+              builder: (BuildContext context, GoRouterState state) {
+                return const SetupScreen(startPageIndex: 4);
+              }),
+        ]),
+  ];
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">binsight_ai</a></li>
+    <li><a href="../util_routes/util_routes-library.html">routes</a></li>
+    <li class="self-crumb">getRoutes function</li>
+</ol>
+
+
+    <h5>routes library</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-left-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    binsight_ai
+      0.1.0
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the startScan method from the BleDeviceScanner class, for the Dart programming language.">
+  <title>startScan method - BleDeviceScanner class - bluetooth library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">binsight_ai</a></li>
+    <li><a href="../../util_bluetooth/util_bluetooth-library.html">util&#47;bluetooth.dart</a></li>
+    <li><a href="../../util_bluetooth/BleDeviceScanner-class.html">BleDeviceScanner</a></li>
+    <li class="self-crumb">startScan method</li>
+  </ol>
+  <div class="self-name">startScan</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        brightness_4
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        brightness_5
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="util_bluetooth&#47;BleDeviceScanner-class-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-method">startScan</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="name ">startScan</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="startScan-param-serviceFilter">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/reactive_ble_platform_interface/5.3.1/reactive_ble_platform_interface/Uuid-class.html">Uuid</a></span>&gt;</span>?</span> <span class="parameter-name">serviceFilter</span>}</span></li>
+</ol>)
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Starts scanning for devices.</p>
+<p><code>serviceFilter</code> is a list of service UUIDs to filter by. If null, all devices will be scanned.</p>
+<ul>
+<li>Throws a <a href="../../util_bluetooth_exception/BleBluetoothDisabledException-class.html">BleBluetoothDisabledException</a> if Bluetooth is not turned on.</li>
+<li>Throws a <a href="../../util_bluetooth_exception/BleBluetoothNotSupportedException-class.html">BleBluetoothNotSupportedException</a> if Bluetooth is not supported on the device.</li>
+<li>Throws a <a href="../../util_bluetooth_exception/BlePermissionException-class.html">BlePermissionException</a> if the necessary permissions are not granted.</li>
+</ul>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; startScan({List&lt;Uuid&gt;? serviceFilter}) async {
+  await ensureInitialized();
+  &#47;&#47; check permissions and Bluetooth support
+  if (await FlutterBluePlus.isSupported) {
+    await requestBluetoothPermissions();
+    if (FlutterBluePlus.adapterStateNow != BluetoothAdapterState.on &amp;&amp;
+        FlutterBluePlus.adapterStateNow != BluetoothAdapterState.unknown) {
+      throw BleBluetoothDisabledException(&quot;Bluetooth is not turned on&quot;);
+    }
+  } else {
+    throw BleBluetoothNotSupportedException(
+        &quot;Bluetooth is not supported on this device&quot;);
+  }
+  isScanning = true;
+  _scanSubscription = _reactiveScanner
+      .scanForDevices(withServices: serviceFilter ?? [])
+      .listen(_handleDiscoveredDevice);
+  _scanSubscription!.onError((error) {
+    debug(&quot;BleDeviceScanner: Error scanning for devices: $error&quot;);
+    stopScan();
+  });
+  _runDeviceTimer();
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">binsight_ai</a></li>
+    <li><a href="../../util_bluetooth/util_bluetooth-library.html">bluetooth</a></li>
+    <li><a href="../../util_bluetooth/BleDeviceScanner-class.html">BleDeviceScanner</a></li>
+    <li class="self-crumb">startScan method</li>
+</ol>
+
+
+    <h5>BleDeviceScanner class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    binsight_ai
+      0.1.0
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

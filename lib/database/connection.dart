@@ -1,18 +1,23 @@
+// Flutter imports:
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
+
+// Package imports:
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+
+// Project imports:
 import 'package:binsight_ai/database/model.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/database/models/device.dart';
 
 // Modify this when making changes to models
 // The entire app should be restarted when changing the schema
-const int databaseVersion = 2;
+const int databaseVersion = 4;
 
 Database? _database;
 
+/// Creates and migrates the tables used internally.
 Future<void> createTables(
     Database database, List<Model> models, bool isMigration) async {
   for (Model model in models) {
@@ -78,6 +83,6 @@ Future<void> closeDatabaseConnection() async {
 }
 
 // The following are mainly for testing purposes
-void setDatabase(Database db) {
+void setDatabase(Database? db) {
   _database = db;
 }

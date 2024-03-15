@@ -1,20 +1,51 @@
+// Package imports:
 import 'package:sqflite/sqflite.dart';
+
+// Project imports:
 import 'package:binsight_ai/database/connection.dart';
 import 'package:binsight_ai/database/model.dart';
 
+/// The detection model.
+///
+/// Contains all the information about a detection.
 class Detection extends Model {
+  /// The image ID.
   String imageId;
+
+  /// The link to the pre-detection image.
   String preDetectImgLink;
+
+  /// The link to the post-detection image.
   String? postDetectImgLink;
+
+  /// The link to the depth map image.
   String? depthMapImgLink;
+
+  /// The link to the IR image.
   String? irImgLink;
+
+  // The weight value.
   double? weight;
+
+  /// The humidity value.
   double? humidity;
+
+  /// The temperature value.
   double? temperature;
+
+  /// The CO2 value.
   double? co2;
+
+  /// The VO2 value.
   double? vo2;
+
+  /// The bounding boxes, in JSON format.
   String? boxes;
+
+  /// The timestamp of the detection.
   DateTime timestamp;
+
+  /// The device ID.
   String deviceId;
 
   Detection({
@@ -33,11 +64,19 @@ class Detection extends Model {
     this.boxes,
   });
 
+  /// Creates a blank device for testing or retrieving properties of the model.
   Detection.createDefault()
       : imageId = "1",
         preDetectImgLink = "assets/images/placeholder.png",
         timestamp = DateTime.now(),
         deviceId = "1";
+
+  /// Creates a null object pattern equivalent for a Detection that is not found.
+  Detection.notFound()
+      : imageId = "-1",
+        preDetectImgLink = "assets/images/placeholder.png",
+        timestamp = DateTime.now(),
+        deviceId = "-1";
 
   @override
   Map<String, dynamic> toMap() {
@@ -58,16 +97,46 @@ class Detection extends Model {
     };
   }
 
+  static Future<Detection?> find(String imageId) async {
+    Database db = await getDatabaseConnection();
+    List<Map<String, dynamic>> results = await db.query("detections",
+        where: "imageId = ?", whereArgs: [imageId], limit: 1);
+    if (results.isEmpty) {
+      return null;
+    }
+    return Detection.fromMap(results.first);
+  }
+
+  static Detection fromMap(Map<String, dynamic> map) {
+    return Detection(
+      imageId: map['imageId'],
+      preDetectImgLink: map['preDetectImgLink'],
+      timestamp: DateTime.parse(map['timestamp']),
+      deviceId: map['deviceId'],
+      postDetectImgLink: map['postDetectImgLink'],
+      depthMapImgLink: map['depthMapImgLink'],
+      irImgLink: map['irImgLink'],
+      weight: map['weight']?.toDouble(),
+      humidity: map['humidity']?.toDouble(),
+      temperature: map['temperature']?.toDouble(),
+      co2: map['co2']?.toDouble(),
+      vo2: map['vo2']?.toDouble(),
+      boxes: map['boxes'],
+    );
+  }
+
   @override
   String get tableName => "detections";
 
   @override
   String get schema => """
     (
-      preDetectImgLink TEXT PRIMARY KEY,
+      imageId TEXT PRIMARY KEY,
+      preDetectImgLink TEXT,
       postDetectImgLink TEXT,
       depthMapImgLink TEXT,
       irImgLink TEXT,
+      weight DOUBLE,
       humidity DOUBLE,
       temperature DOUBLE,
       co2 DOUBLE,
@@ -80,9 +149,39 @@ class Detection extends Model {
   """;
 
   @override
+  Future<void> update() async {
+    Database db = await getDatabaseConnection();
+    await db
+        .update(tableName, toMap(), where: "imageId = ?", whereArgs: [imageId]);
+  }
+
+  @override
   Future<void> delete() async {
     Database db = await getDatabaseConnection();
-    await db.delete(tableName,
-        where: "preDetectImgLink = ?", whereArgs: [preDetectImgLink]);
+    await db.delete(tableName, where: "imageId = ?", whereArgs: [imageId]);
+  }
+
+  /// Returns all detections.
+  static Future<List<Detection>> all() async {
+    Database db = await getDatabaseConnection();
+    List<Map<String, dynamic>> results =
+        await db.query("detections", orderBy: "timestamp DESC");
+    return results
+        .map((result) => Detection.fromMap(
+              result,
+            ))
+        .toList();
+  }
+
+  /// Returns the latest detection in the local database, null Detection if none found.
+  static Future<Detection> latest() async {
+    Database db = await getDatabaseConnection();
+    List<Map<String, dynamic>> results =
+        await db.query("detections", orderBy: "timestamp DESC");
+    if (results.isNotEmpty) {
+      return Detection.fromMap(results.first);
+    } else {
+      return Detection.notFound();
+    }
   }
 }

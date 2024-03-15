@@ -1,5 +1,7 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
 
+/// Creates a heading with large text
 class Heading extends StatelessWidget {
   final String text;
 
@@ -10,22 +12,15 @@ class Heading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Container(
       width: double.infinity,
-      decoration: const UnderlineTabIndicator(
-        borderSide: BorderSide(
-          color: Colors.black,
-          width: 2,
-        ),
-      ),
       margin: const EdgeInsets.only(bottom: 10),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        // Text displaying the heading
         Text(
           text,
-          style: const TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-          ),
+          style: textTheme.displayMedium,
           textAlign: TextAlign.left,
         ),
       ]),
