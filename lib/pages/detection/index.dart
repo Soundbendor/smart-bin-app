@@ -29,14 +29,67 @@ class _DetectionsPageState extends State<DetectionsPage> {
 
   @override
   void initState() {
-    loadDetectionFuture = Detection.all().then((value) async {
-      setState(() {
-        detections = value;
-      });
-    });
+    loadDetectionFuture = loadDetections(context, showSnackBar: false);
     super.initState();
   }
 
+  /// Displays a dialog that asks the user if they would like to check their
+  /// WiFi status or not.
+  Future checkWifi() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: const Text("Check WiFi Connection?"),
+              actions: [
+                TextButton(
+                  style: TextButton.styleFrom(backgroundColor: Colors.red),
+                  onPressed: () {},
+                  child: const Text("No"),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(backgroundColor: Colors.green),
+                  onPressed: () {},
+                  child: const Text("Yes"),
+                ),
+              ]);
+        });
+  }
+
+  /// Function that returns all detections from the database after a simulated delay.
+  ///
+  /// If [showSnackBar] is true, the snackBar will be rendered after the refresh.
+  /// If [showSnackBar] is false, the snackBar will not be rendered after the refresh.
+  ///
+  /// Tapping the snackBar will trigger a call to [checkWifi].
+  Future<void> loadDetections(BuildContext context,
+      {bool showSnackBar = true}) {
+    return Future.delayed(const Duration(seconds: 2), () {
+      return Detection.all().then((value) async {
+        // Access the detections before the refresh to compare afterwards
+        List<Detection> previousDetections = detections;
+        setState(() {
+          detections = value;
+        });
+        // If the new detections list is larger than the old one, there are new detections
+        bool different = previousDetections.length != detections.length;
+        if (showSnackBar) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              duration: const Duration(seconds: 5),
+              content: Text(different
+                  ? "New detections found. Happy annotating!"
+                  : "No new detections found. Tap here if you were expecting some."),
+              backgroundColor: different ? Colors.green : Colors.red,
+              action: SnackBarAction(label: "Check", onPressed: checkWifi),
+            ),
+          );
+        }
+      });
+    });
+  }
+
+  // Toggles the small/large detection card size
   void onToggleSwitch(bool value) {
     setState(() {
       sizeToggle = value;
@@ -53,6 +106,7 @@ class _DetectionsPageState extends State<DetectionsPage> {
             Row(
               children: [
                 const Expanded(child: Heading(text: "Detections")),
+                // The switch to toggle detection card size
                 Switch(
                     value: sizeToggle,
                     onChanged: onToggleSwitch,
@@ -77,6 +131,7 @@ class _DetectionsPageState extends State<DetectionsPage> {
                 ),
               ],
             ),
+            // Display a loading icon until the detections are gathered from the database
             FutureBuilder(
                 future: loadDetectionFuture,
                 builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
@@ -87,7 +142,7 @@ class _DetectionsPageState extends State<DetectionsPage> {
                               ? DetectionListType.large
                               : DetectionListType.small,
                           detections: detections,
-                        );
+                          loadDetections: loadDetections);
                 })
           ],
         ),

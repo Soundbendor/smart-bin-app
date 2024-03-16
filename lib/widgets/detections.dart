@@ -162,11 +162,13 @@ enum DetectionListType { large, small }
 class DetectionList extends StatelessWidget {
   final List<Detection> detections;
   final DetectionListType size;
+  final Function loadDetections;
 
   const DetectionList({
     super.key,
     required this.detections,
     this.size = DetectionListType.small,
+    required this.loadDetections,
   });
 
   @override
@@ -178,22 +180,28 @@ class DetectionList extends StatelessWidget {
     } else {
       if (size == DetectionListType.large) {
         return Expanded(
-          child: ListView.builder(
-            itemCount: detections.length,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (context, index) {
-              return DetectionLargeListItem(detection: detections[index]);
-            },
+          child: RefreshIndicator(
+            onRefresh: () => loadDetections(context),
+            child: ListView.builder(
+              itemCount: detections.length,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context, index) {
+                return DetectionLargeListItem(detection: detections[index]);
+              },
+            ),
           ),
         );
       } else {
         return Expanded(
-          child: ListView.builder(
-            itemCount: detections.length,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (context, index) {
-              return DetectionSmallListItem(detection: detections[index]);
-            },
+          child: RefreshIndicator(
+            onRefresh: () => loadDetections(context),
+            child: ListView.builder(
+              itemCount: detections.length,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context, index) {
+                return DetectionSmallListItem(detection: detections[index]);
+              },
+            ),
           ),
         );
       }
