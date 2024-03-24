@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:binsight_ai/util/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:binsight_ai/database/models/detection.dart';
@@ -28,8 +30,11 @@ class AnnotationPage extends StatefulWidget {
 class _AnnotationPageState extends State<AnnotationPage> {
   @override
   void initState() {
+    readJson();
     super.initState();
   }
+
+  List labels = [];
 
   /// Key for the RepaintBoundary widget that's used to capture the annotated image
   final GlobalKey _captureKey = GlobalKey();
@@ -48,6 +53,15 @@ class _AnnotationPageState extends State<AnnotationPage> {
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     _capturedImage = byteData?.buffer.asUint8List();
     setState(() {});
+  }
+
+  Future<void> readJson() async {
+    final String response =
+        await rootBundle.loadString('assets/data/labels.json');
+    final data = await json.decode(response);
+    setState(() {
+      labels = data;
+    });
   }
 
   @override
@@ -104,8 +118,18 @@ class _AnnotationPageState extends State<AnnotationPage> {
               Text('Current Label: ${notifier.label}'),
               ElevatedButton(
                 onPressed: () {
-                  GoRouter.of(context)
-                      .push("/main/detection/${widget.detectionId}/label");
+                  labels.isNotEmpty
+                      ? showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text("Select A Label"),
+                              content: Text(labels[0]["Category"]),
+                            );
+                          },
+                        )
+                      : const Padding(padding: EdgeInsets.zero);
+                  context.read<AnnotationNotifier>().setLabel("Carrot");
                 },
                 child: Text(
                   "Select Label",
