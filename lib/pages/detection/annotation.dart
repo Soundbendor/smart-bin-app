@@ -427,7 +427,6 @@ class MyAlertDialog extends StatelessWidget {
       ),
       content: SizedBox(
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -470,14 +469,28 @@ class MyAlertDialog extends StatelessWidget {
                   ),
                 ),
               ),
-              TextButton(
-                  onPressed: () {
-                    context
-                        .read<AnnotationNotifier>()
-                        .setLabel(controller.getPickedItems()[0]["Label"]);
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Submit"))
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        if (controller.getPickedItems().isNotEmpty) {
+                          context.read<AnnotationNotifier>().setLabel(
+                              controller.getPickedItems()[0]["Label"]);
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      child: const Text("Submit"),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text("Cancel"),
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),
