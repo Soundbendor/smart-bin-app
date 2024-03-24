@@ -118,13 +118,14 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  &#47;&#47;Create sorted chartdata for graph construction using the date and weights in data
+
+  &#47;&#47; Create sorted chartdata for graph construction using the date and weights in data
   List&lt;_ChartData&gt; lineData = data.entries
       .map((entry) =&gt; _ChartData(entry.key, entry.value))
       .toList();
   lineData.sort((a, b) =&gt; a.timestamp.compareTo(b.timestamp));
 
-  &#47;&#47;If there is not a weeks worth of data, fill the rest of the week with zeros
+  &#47;&#47; If there is not a weeks worth of data, fill the rest of the week with zeros
   while (lineData.length &lt; 7) {
     DateTime latestTimestamp = lineData.isNotEmpty
         ? lineData
@@ -136,9 +137,8 @@ Widget build(BuildContext context) {
     lineData.add(_ChartData(nextDay, 0.0));
   }
 
-  &#47;&#47;Use the cartesian chart with the _ChartData, specifying the main axis as date time
+  &#47;&#47; Use the cartesian chart with the _ChartData, specifying the main axis as date time
   return SfCartesianChart(
-    title: ChartTitle(text: title),
     primaryXAxis: DateTimeAxis(
       isVisible: true,
       dateFormat: DateFormat(&#39;M&#47;d&#39;),
@@ -185,7 +185,7 @@ Widget build(BuildContext context) {
 <footer>
   <span class="no-break">
     binsight_ai
-      0.1.0
+      1.0.0
   </span>
 
   

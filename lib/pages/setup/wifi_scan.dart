@@ -1,33 +1,37 @@
+// Flutter imports:
 import 'dart:convert';
-import 'package:binsight_ai/util/styles.dart';
-import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
+
+// Project imports:
 import 'package:binsight_ai/util/async_ops.dart';
-import 'package:binsight_ai/util/bluetooth_dialog_strings.dart';
-import 'package:binsight_ai/util/print.dart';
-import 'package:binsight_ai/util/bluetooth.dart';
-import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/util/bluetooth_bin_data.dart';
+import 'package:binsight_ai/util/bluetooth.dart';
+import 'package:binsight_ai/util/bluetooth_dialog_strings.dart';
 import 'package:binsight_ai/util/bluetooth_exception.dart';
+import 'package:binsight_ai/util/print.dart';
+import 'package:binsight_ai/util/providers.dart';
+import 'package:binsight_ai/util/styles.dart';
 import 'package:binsight_ai/util/wifi_scan.dart';
 import 'package:binsight_ai/widgets/background.dart';
+import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:binsight_ai/widgets/error_dialog.dart';
 import 'package:binsight_ai/widgets/scan_list.dart';
 
 /// Displays the WiFi configuration page with background and padding.
 class WifiScanPage extends StatefulWidget {
-  const WifiScanPage({super.key, required this.device});
-
-  /// The Bluetooth device to retrieve information from
-  final BleDevice device;
+  const WifiScanPage({super.key});
 
   @override
   State<WifiScanPage> createState() => _WifiScanPageState();
 }
 
 class _WifiScanPageState extends State<WifiScanPage> {
+  /// The Bluetooth device to retrieve information from
+  BleDevice? device;
+
   /// The list of WiFi networks scanned.
   List<WifiScanResult> wifiResults = [];
 
@@ -46,7 +50,14 @@ class _WifiScanPageState extends State<WifiScanPage> {
   @override
   void initState() {
     super.initState();
+    initDevice();
     startScanning();
+  }
+
+  void initDevice() {
+    setState(() {
+      device = Provider.of<DeviceNotifier>(context, listen: false).device;
+    });
   }
 
   /// Begins the subscription for WiFi networks scan.
@@ -55,7 +66,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
       setState(() {
         isScanning = true;
       });
-      await widget.device.subscribeToCharacteristic(
+      await device!.subscribeToCharacteristic(
           serviceId: mainServiceId,
           characteristicId: wifiListCharacteristicId,
           onNotification: (data) {
@@ -83,7 +94,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
 
   /// Stops scanning for WiFi networks.
   void stopScanning() {
-    widget.device
+    device!
         .unsubscribeFromCharacteristic(
             serviceId: mainServiceId,
             characteristicId: wifiListCharacteristicId)
@@ -96,7 +107,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
   void fetchWifiList() async {
     try {
       if (wifiResults.isNotEmpty) return;
-      final List<dynamic> parsed = jsonDecode(utf8.decode(await widget.device
+      final List<dynamic> parsed = jsonDecode(utf8.decode(await device!
           .readCharacteristic(
               serviceId: mainServiceId,
               characteristicId: wifiListCharacteristicId)));
@@ -115,7 +126,12 @@ class _WifiScanPageState extends State<WifiScanPage> {
   void goToWifiConfiguration(WifiScanResult wifiResult) {
     stopScanning();
     isScanning = false;
-    GoRouter.of(context).goNamed('wifi', extra: wifiResult);
+    Provider.of<WifiResultNotifier>(context, listen: false)
+        .setWifiResult(wifiResult);
+    Provider.of<SetupKeyNotifier>(context, listen: false)
+        .setupKey
+        .currentState
+        ?.next();
   }
 
   @override
@@ -199,7 +215,7 @@ The error was: ${(error as BleOperationFailureException).message}.
       },
       child: Scaffold(
         body: CustomBackground(
-          imageURL: "assets/images/FlowersBackground.png",
+          imageURL: "assets/images/wifi_scan_screen.png",
           child: Column(
             children: [
               ScanList(
@@ -218,7 +234,10 @@ The error was: ${(error as BleOperationFailureException).message}.
                   stopScanning();
                   Provider.of<DeviceNotifier>(context, listen: false)
                       .resetDevice();
-                  GoRouter.of(context).goNamed("bluetooth");
+                  Provider.of<SetupKeyNotifier>(context, listen: false)
+                      .setupKey
+                      .currentState
+                      ?.previous();
                 },
                 child: Text(
                   "Back",

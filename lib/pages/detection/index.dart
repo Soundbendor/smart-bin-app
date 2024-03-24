@@ -1,4 +1,7 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/detections.dart';
 import 'package:binsight_ai/widgets/heading.dart';
@@ -69,7 +72,7 @@ class _DetectionsPageState extends State<DetectionsPage> {
                       return Theme.of(context).colorScheme.surface;
                     })),
                 Text(
-                  "Toggle Size",
+                  "Image Size",
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
               ],

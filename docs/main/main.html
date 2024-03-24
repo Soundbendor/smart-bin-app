@@ -179,9 +179,21 @@
     }
   }
 
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) =&gt; DeviceNotifier()),
-  ], child: BinsightAiApp(skipSetUp: devices.isNotEmpty)));
+  runApp(
+    MultiProvider(
+      providers: [
+        &#47;&#47; Notifies listeners of the status of the Bluetooth-connected compost bin.
+        ChangeNotifierProvider(create: (_) =&gt; DeviceNotifier()),
+        &#47;&#47; Notifies listeners of the selected WiFi network.
+        ChangeNotifierProvider(create: (_) =&gt; WifiResultNotifier()),
+        &#47;&#47; Provides a global key used for controlling page animation.
+        Provider(create: (_) =&gt; SetupKeyNotifier()),
+        &#47;&#47; Notifies listeners of changes to the current annotation&#39;s state.
+        ChangeNotifierProvider(create: (_) =&gt; AnnotationNotifier()),
+      ],
+      child: BinsightAiApp(skipSetUp: devices.isNotEmpty),
+    ),
+  );
 }</code></pre>
 </section>
 
@@ -215,7 +227,7 @@
 <footer>
   <span class="no-break">
     binsight_ai
-      0.1.0
+      1.0.0
   </span>
 
   

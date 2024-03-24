@@ -1,10 +1,15 @@
+// Flutter imports:
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
+// Package imports:
 import 'package:events_emitter/events_emitter.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+// Project imports:
 import 'package:binsight_ai/util/bluetooth_exception.dart';
 import 'package:binsight_ai/util/print.dart';
 
@@ -584,7 +589,8 @@ class BleDeviceScanner {
   StreamSubscription? _scanSubscription;
 
   Future<void> ensureInitialized() async {
-    if (FlutterBluePlus.adapterStateNow != BluetoothAdapterState.unknown) return;
+    if (FlutterBluePlus.adapterStateNow != BluetoothAdapterState.unknown)
+      return;
     final stream = FlutterBluePlus.adapterState;
     await stream.first;
   }

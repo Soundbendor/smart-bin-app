@@ -1,4 +1,7 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:binsight_ai/widgets/heading.dart';
 
 /// Displays the FAQ page with dropdown section for content

@@ -1,15 +1,20 @@
-import 'package:binsight_ai/util/styles.dart';
-import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:binsight_ai/util/providers.dart';
+
+// Project imports:
+import 'package:binsight_ai/util/async_ops.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/bluetooth_bin_data.dart';
 import 'package:binsight_ai/util/bluetooth_dialog_strings.dart';
-import 'package:binsight_ai/util/async_ops.dart';
 import 'package:binsight_ai/util/print.dart';
+import 'package:binsight_ai/util/providers.dart';
+import 'package:binsight_ai/util/styles.dart';
 import 'package:binsight_ai/widgets/background.dart';
+import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:binsight_ai/widgets/error_dialog.dart';
 import 'package:binsight_ai/widgets/scan_list.dart';
 
@@ -83,8 +88,11 @@ class _BluetoothPageState extends State<BluetoothPage> {
               ),
               () {
                 if (!context.mounted) return;
-                GoRouter.of(context).goNamed('wifi-scan');
-                dialogIsVisible = false;
+                Provider.of<SetupKeyNotifier>(context, listen: false)
+                    .setupKey
+                    .currentState
+                    ?.next();
+                Navigator.of(context).pop();
               },
             );
             return BluetoothAlertBox(
@@ -253,6 +261,7 @@ class _BluetoothListState extends State<BluetoothList> {
 
     return Scaffold(
       body: CustomBackground(
+        imageURL: 'assets/images/bluetooth_screen.png',
         child: Column(
           children: [
             ScanList(

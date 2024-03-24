@@ -1,9 +1,19 @@
-import 'dart:convert';
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:binsight_ai/widgets/image.dart';
-import 'package:binsight_ai/database/models/detection.dart';
 
+// Package imports:
+import 'dart:convert';
+import 'package:go_router/go_router.dart';
+
+// Project imports:
+import 'package:binsight_ai/database/models/detection.dart';
+import 'package:binsight_ai/widgets/image.dart';
+
+/// Build a title string for each detection. 
+/// 
+/// If the detection has been analyzed,
+/// the title will include the labels of the detected objects. If the detection
+/// has not been analyzed, the title will indicate that the detection is pending.
 String formatDetectionTitle(Detection detection) {
   if (detection.boxes != null) {
     final boxData = jsonDecode(detection.boxes!);
@@ -22,6 +32,7 @@ String formatDetectionTitle(Detection detection) {
   }
 }
 
+/// Navigate to the detection detail page when a detection tile is tapped.
 void onTileTap(BuildContext context, Detection detection) {
   GoRouter.of(context).push("/main/detection/${detection.imageId}");
 }
@@ -47,17 +58,19 @@ class DetectionLargeListItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () => onTileTap(context, detection),
         child: Card(
+          // Background color of the card
+          color: colorScheme.onPrimary,
           child: Padding(
             padding: const EdgeInsets.all(9.0),
             child: Column(
               children: [
                 Text(formatDetectionTitle(detection),
-                    style: textTheme.headlineSmall),
+                    style: textTheme.headlineMedium),
                 Container(
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: colorScheme.onSurface,
-                        width: 2,
+                        width: 1,
                       ),
                     ),
                     margin: const EdgeInsets.only(bottom: 12, top: 12),
@@ -80,9 +93,9 @@ class DetectionLargeListItem extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(detection.temperature.toString(),
-                                style: textTheme.bodyMedium),
+                                style: textTheme.labelLarge),
                             Text(detection.humidity.toString(),
-                                style: textTheme.bodyMedium),
+                                style: textTheme.labelLarge),
                           ],
                         ),
                       ),
@@ -113,14 +126,23 @@ class DetectionSmallListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return ListTile(
-      leading: DynamicImage(detection.preDetectImgLink),
-      title:
-          Text(formatDetectionTitle(detection), style: textTheme.titleMedium),
-      subtitle:
-          Text(detection.timestamp.toString(), style: textTheme.bodyMedium),
-      trailing: const Icon(Icons.arrow_forward_ios),
-      onTap: () => onTileTap(context, detection),
+    final colorScheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: GestureDetector(
+        onTap: () => onTileTap(context, detection),
+        child: Card(
+          color: colorScheme.onPrimary,
+          child: ListTile(
+            leading: DynamicImage(detection.preDetectImgLink),
+            title:
+                Text(formatDetectionTitle(detection), style: textTheme.titleMedium),
+            subtitle:
+                Text(detection.timestamp.toString(), style: textTheme.bodyMedium),
+            trailing: const Icon(Icons.arrow_forward_ios),
+          ),
+        ),
+      ),
     );
   }
 }

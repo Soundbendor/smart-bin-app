@@ -1,3 +1,4 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
 
 final mainColorScheme = ColorScheme(
@@ -18,10 +19,14 @@ final mainColorScheme = ColorScheme(
 
 final mainTheme = ThemeData(
   colorScheme: mainColorScheme,
-
   textTheme: const TextTheme(
     displayLarge: TextStyle(
       fontSize: 45,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'Georama', // Specify the font family
+    ),
+      displayMedium: TextStyle(
+      fontSize: 30,
       fontWeight: FontWeight.bold,
       fontFamily: 'Georama', // Specify the font family
     ),
@@ -30,31 +35,48 @@ final mainTheme = ThemeData(
       fontWeight: FontWeight.normal,
       fontFamily: 'GolosText', // Specify the font family
     ),
+      headlineMedium: TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'GolosText', // Specify the font family
+    ),
+      labelLarge: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.normal,
+      fontFamily: 'GolosText', // Specify the font family
+    ),
+      titleMedium: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'GolosText', // Specify the font family
+    ),
+      bodyMedium: TextStyle(
+      fontSize: 10,
+      fontWeight: FontWeight.normal,
+      fontFamily: 'GolosText', // Specify the font family
+    ),
   ),
-
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
       backgroundColor: mainColorScheme.primary,
       foregroundColor: mainColorScheme.onPrimary,
     ),
   ),
-
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: mainColorScheme.primary,
       foregroundColor: mainColorScheme.onPrimary,
     ),
   ),
-
   cardTheme: CardTheme(
-    surfaceTintColor: mainColorScheme.onSurface,
+    color: Colors.white,
+    surfaceTintColor: Colors.white,
     shadowColor: mainColorScheme.onBackground,
-    elevation: 5,
+    elevation: 4,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10),
     ),
   ),
-
 );
 
 final bluetoothBorderRadius = RoundedRectangleBorder(

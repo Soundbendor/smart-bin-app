@@ -1,9 +1,11 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:binsight_ai/util/providers.dart';
-import 'package:binsight_ai/util/wifi_scan.dart';
-import 'package:binsight_ai/pages/setup/wifi_configuration.dart';
+
+// Project imports:
+import 'package:binsight_ai/pages/detection/label.dart';
 import 'package:binsight_ai/pages/detection/annotation.dart';
 import 'package:binsight_ai/pages/detection/detection.dart';
 import 'package:binsight_ai/pages/detection/index.dart';
@@ -11,9 +13,7 @@ import 'package:binsight_ai/pages/main/faq.dart';
 import 'package:binsight_ai/pages/main/help.dart';
 import 'package:binsight_ai/pages/main/user_guide.dart';
 import 'package:binsight_ai/pages/main/home.dart';
-import 'package:binsight_ai/pages/setup/index.dart';
-import 'package:binsight_ai/pages/setup/bluetooth.dart';
-import 'package:binsight_ai/pages/setup/wifi_scan.dart';
+import 'package:binsight_ai/pages/setup/intro_sequence.dart';
 import 'package:binsight_ai/widgets/navigation_shell.dart';
 
 // Used for testing
@@ -98,31 +98,29 @@ List<RouteBase> getRoutes() {
         name: 'set-up',
         path: '/set-up',
         builder: (BuildContext context, GoRouterState state) {
-          return const SplashPage();
+          return const SetupScreen();
         },
         routes: [
           // `/set-up/bluetooth` - bluetooth set up page
           GoRoute(
-              name: 'bluetooth',
-              path: 'bluetooth',
-              builder: (BuildContext context, GoRouterState state) {
-                return const BluetoothPage();
-              }),
+            name: 'bluetooth',
+            path: 'bluetooth',
+            builder: (BuildContext context, GoRouterState state) {
+              return const SetupScreen(startPageIndex: 2);
+            },
+          ),
           GoRoute(
               name: 'wifi-scan',
               path: 'wifi-scan',
               builder: (BuildContext context, GoRouterState state) {
-                final device =
-                    Provider.of<DeviceNotifier>(context, listen: false).device;
-                return WifiScanPage(device: device!);
+                return const SetupScreen(startPageIndex: 3);
               }),
           // `/set-up/wifi` - selecting wifi page
           GoRoute(
               name: 'wifi',
               path: 'wifi',
               builder: (BuildContext context, GoRouterState state) {
-                return WifiConfigurationPage(
-                    wifiResult: state.extra as WifiScanResult);
+                return const SetupScreen(startPageIndex: 4);
               }),
         ]),
   ];

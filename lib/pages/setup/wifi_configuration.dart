@@ -1,32 +1,49 @@
+// Flutter imports:
 import 'dart:convert';
-import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
+
+// Package imports:
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:binsight_ai/util/print.dart';
+
+// Project imports:
+import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/util/bluetooth_bin_data.dart';
+import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/util/wifi_scan.dart';
-import 'package:binsight_ai/database/models/device.dart';
-import 'package:binsight_ai/widgets/error_dialog.dart';
 import 'package:binsight_ai/widgets/background.dart';
+import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
+import 'package:binsight_ai/widgets/error_dialog.dart';
 
 // TODO: handle potential case where incoming JSON is invalid
 
 /// Widget for configuring the wifi credentials of the compost bin
-class WifiConfigurationPage extends StatelessWidget {
-  WifiConfigurationPage({super.key, required this.wifiResult}) {
-    ssidController.text = wifiResult.ssid;
-  }
+class WifiConfigurationPage extends StatefulWidget {
+  const WifiConfigurationPage({super.key});
 
+  @override
+  State<WifiConfigurationPage> createState() => _WifiConfigurationPageState();
+}
+
+class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
   /// The wifi scan result
-  final WifiScanResult wifiResult;
+  WifiScanResult? wifiResult;
 
   /// Controller for the SSID text field
   final TextEditingController ssidController = TextEditingController();
 
   /// Controller for the password text field
   final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      wifiResult =
+          Provider.of<WifiResultNotifier>(context, listen: false).wifiResult;
+    });
+  }
 
   /// Sends the wifi credentials to the compost bin
   void sendCredentials(BuildContext context) {
@@ -47,9 +64,13 @@ class WifiConfigurationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final provider = Provider.of<WifiResultNotifier>(context);
+    if (provider.wifiResult != null) {
+      ssidController.text = provider.wifiResult!.ssid;
+    }
     return Scaffold(
       body: CustomBackground(
-        imageURL: "assets/images/FlowersBackground.png",
+        imageURL: "assets/images/wifi_config_screen.png",
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -80,7 +101,10 @@ class WifiConfigurationPage extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                GoRouter.of(context).goNamed("wifi-scan");
+                Provider.of<SetupKeyNotifier>(context)
+                    .setupKey
+                    .currentState
+                    ?.previous();
               },
               child: Text("Back",
                   style: textTheme.labelLarge!.copyWith(

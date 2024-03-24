@@ -63,7 +63,7 @@
     <section class="multi-line-signature">
         
 
-<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/go_router/13.2.0/go_router/RouteBase-class.html">RouteBase</a></span>&gt;</span></span>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/go_router/13.2.1/go_router/RouteBase-class.html">RouteBase</a></span>&gt;</span></span>
 <span class="name ">getRoutes</span>(<wbr>)
 
         
@@ -99,21 +99,26 @@
                   }),
               &#47;&#47; `&#47;main&#47;detection&#47;:detectionId` - detection page with detailed information
               GoRoute(
-                  path: &#39;detection&#47;:detectionId&#39;,
-                  builder: (BuildContext context, GoRouterState state) {
-                    return DetectionPage.fromId(
-                        detectionId: state.pathParameters[&#39;detectionId&#39;]!);
-                  },
-                  routes: [
-                    &#47;&#47; `&#47;main&#47;detection&#47;:detectionId&#47;annotation` - annotation page
-                    GoRoute(
-                        path: &#39;annotation&#39;,
-                        builder: (BuildContext context, GoRouterState state) {
-                          return AnnotationPage(
-                              detectionId:
-                                  state.pathParameters[&#39;detectionId&#39;]!);
-                        }),
-                  ]),
+                path: &#39;detection&#47;:detectionId&#39;,
+                builder: (BuildContext context, GoRouterState state) {
+                  return DetectionPage.fromId(
+                      detectionId: state.pathParameters[&#39;detectionId&#39;]!);
+                },
+                routes: [
+                  &#47;&#47; `&#47;main&#47;detection&#47;:detectionId&#47;annotation` - annotation page
+                  GoRoute(
+                    path: &#39;annotation&#39;,
+                    builder: (BuildContext context, GoRouterState state) {
+                      return AnnotationPage(
+                          detectionId: state.pathParameters[&#39;detectionId&#39;]!);
+                    },
+                  ),
+                  GoRoute(
+                    path: &#39;label&#39;,
+                    builder: (context, state) =&gt; const LabelAnnotation(),
+                  ),
+                ],
+              ),
               &#47;&#47; `&#47;main&#47;faq` - frequently asked questions
               GoRoute(
                 name: &#39;faq&#39;,
@@ -147,31 +152,29 @@
         name: &#39;set-up&#39;,
         path: &#39;&#47;set-up&#39;,
         builder: (BuildContext context, GoRouterState state) {
-          return const SplashPage();
+          return const SetupScreen();
         },
         routes: [
           &#47;&#47; `&#47;set-up&#47;bluetooth` - bluetooth set up page
           GoRoute(
-              name: &#39;bluetooth&#39;,
-              path: &#39;bluetooth&#39;,
-              builder: (BuildContext context, GoRouterState state) {
-                return const BluetoothPage();
-              }),
+            name: &#39;bluetooth&#39;,
+            path: &#39;bluetooth&#39;,
+            builder: (BuildContext context, GoRouterState state) {
+              return const SetupScreen(startPageIndex: 2);
+            },
+          ),
           GoRoute(
               name: &#39;wifi-scan&#39;,
               path: &#39;wifi-scan&#39;,
               builder: (BuildContext context, GoRouterState state) {
-                final device =
-                    Provider.of&lt;DeviceNotifier&gt;(context, listen: false).device;
-                return WifiScanPage(device: device!);
+                return const SetupScreen(startPageIndex: 3);
               }),
           &#47;&#47; `&#47;set-up&#47;wifi` - selecting wifi page
           GoRoute(
               name: &#39;wifi&#39;,
               path: &#39;wifi&#39;,
               builder: (BuildContext context, GoRouterState state) {
-                return WifiConfigurationPage(
-                    wifiResult: state.extra as WifiScanResult);
+                return const SetupScreen(startPageIndex: 4);
               }),
         ]),
   ];
@@ -208,7 +211,7 @@
 <footer>
   <span class="no-break">
     binsight_ai
-      0.1.0
+      1.0.0
   </span>
 
   
