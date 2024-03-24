@@ -1,4 +1,3 @@
-import 'package:binsight_ai/pages/detection/label.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -63,10 +62,6 @@ List<RouteBase> getRoutes() {
                       return AnnotationPage(
                           detectionId: state.pathParameters['detectionId']!);
                     },
-                  ),
-                  GoRoute(
-                    path: 'label',
-                    builder: (context, state) => LabelAnnotation(),
                   ),
                 ],
               ),

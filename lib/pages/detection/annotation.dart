@@ -1,15 +1,16 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:binsight_ai/util/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:multiple_search_selection/createable/create_options.dart';
 import 'package:provider/provider.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/widgets/free_draw.dart';
+import 'package:multiple_search_selection/multiple_search_selection.dart';
 
 /// Page used for annotating an individual detection image
 class AnnotationPage extends StatefulWidget {
@@ -63,6 +64,8 @@ class _AnnotationPageState extends State<AnnotationPage> {
       labels = data;
     });
   }
+
+  final MultipleSearchController controller = MultipleSearchController();
 
   @override
   Widget build(BuildContext context) {
@@ -122,14 +125,13 @@ class _AnnotationPageState extends State<AnnotationPage> {
                       ? showDialog(
                           context: context,
                           builder: (context) {
-                            return AlertDialog(
-                              title: const Text("Select A Label"),
-                              content: Text(labels[0]["Category"]),
+                            return MyAlertDialog(
+                              labels: labels,
+                              controller: controller,
                             );
                           },
                         )
                       : const Padding(padding: EdgeInsets.zero);
-                  context.read<AnnotationNotifier>().setLabel("Carrot");
                 },
                 child: Text(
                   "Select Label",
@@ -199,6 +201,79 @@ class _AnnotationPageState extends State<AnnotationPage> {
             child: const Icon(Icons.redo),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class MyAlertDialog extends StatelessWidget {
+  const MyAlertDialog({super.key, required this.labels, required this.controller});
+
+  final List labels;
+  final MultipleSearchController controller;
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text(
+        "Select A Label",
+        textAlign: TextAlign.center,
+      ),
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              MultipleSearchSelection.creatable(
+                controller: controller,
+                clearAllButton: const Text(
+                  "Clear",
+                  textAlign: TextAlign.center,
+                ),
+                maxSelectedItems: 1,
+                searchField: const TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search Labels',
+                  ),
+                ),
+                items: labels,
+                pickedItemBuilder: (label) {
+                  return Text(
+                    "Selected Label: ${label["Label"]}",
+                    textAlign: TextAlign.center,
+                  );
+                },
+                fieldToCheck: (label) {
+                  return label["Label"];
+                },
+                itemBuilder: (label, index) {
+                  return Text(label["Label"]);
+                },
+                pickedItemsContainerBuilder: (pickedItems) {
+                  return pickedItems.isNotEmpty
+                      ? Center(child: pickedItems[0])
+                      : const Padding(padding: EdgeInsets.zero);
+                },
+                createOptions: CreateOptions(
+                  pickCreated: true,
+                  create: (text) => {"Category": "None", "Label": "$text"},
+                  createBuilder: (text) => Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Create "$text"'),
+                  ),
+                ),
+              ),
+              TextButton(
+                  onPressed: () {
+                    context
+                        .read<AnnotationNotifier>()
+                        .setLabel(controller.getPickedItems()[0]["Label"]);
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Submit"))
+            ],
+          ),
+        ),
       ),
     );
   }
