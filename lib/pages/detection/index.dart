@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/detections.dart';
 import 'package:binsight_ai/widgets/heading.dart';
+import 'package:go_router/go_router.dart';
 
 /// Displays the detections with padding and a size toggle button.
 class DetectionsPage extends StatefulWidget {
@@ -40,19 +41,27 @@ class _DetectionsPageState extends State<DetectionsPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              title: const Text("Check WiFi Connection?"),
-              actions: [
-                TextButton(
-                  style: TextButton.styleFrom(backgroundColor: Colors.red),
-                  onPressed: () {},
-                  child: const Text("No"),
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(backgroundColor: Colors.green),
-                  onPressed: () {},
-                  child: const Text("Yes"),
-                ),
-              ]);
+            title: const Text("Check WiFi Connection?"),
+            actions: [
+              TextButton(
+                style: TextButton.styleFrom(backgroundColor: Colors.red),
+                onPressed: () {
+                  // Removes the dialog
+                  Navigator.of(context).pop();
+                },
+                child: const Text("No"),
+              ),
+              TextButton(
+                style: TextButton.styleFrom(backgroundColor: Colors.green),
+                onPressed: () {
+                  // Removes the dialog and takes the user back to the bluetooth setup screen
+                  Navigator.of(context).pop();
+                  GoRouter.of(context).pushReplacementNamed("bluetooth");
+                },
+                child: const Text("Yes"),
+              ),
+            ],
+          );
         });
   }
 
@@ -72,16 +81,23 @@ class _DetectionsPageState extends State<DetectionsPage> {
           detections = value;
         });
         // If the new detections list is larger than the old one, there are new detections
-        bool different = previousDetections.length != detections.length;
+        bool areNewDetections = previousDetections.length != detections.length;
         if (showSnackBar) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              duration: const Duration(seconds: 5),
-              content: Text(different
-                  ? "New detections found. Happy annotating!"
-                  : "No new detections found. Tap here if you were expecting some."),
-              backgroundColor: different ? Colors.green : Colors.red,
+              duration: const Duration(seconds: 15),
+              content: Text(
+                areNewDetections
+                    ? "New detections found. Happy annotating!"
+                    : "No new detections found. Tap here if you were expecting some.",
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+              ),
+              backgroundColor: areNewDetections ? Colors.green : Colors.blue,
               action: SnackBarAction(label: "Check", onPressed: checkWifi),
+              showCloseIcon: true,
             ),
           );
         }
