@@ -35,6 +35,7 @@ class AnnotationPage extends StatefulWidget {
 }
 
 class _AnnotationPageState extends State<AnnotationPage> {
+  /// List of labels user can choose from
   List labels = [];
 
   /// Whether the user has started drawing on the image
@@ -53,6 +54,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
     initPreferences();
   }
 
+  /// Reads json file containing the possible labels
   Future<void> readJson() async {
     final String response =
         await rootBundle.loadString('assets/data/labels.json');
@@ -412,11 +414,15 @@ class _AnnotationPageState extends State<AnnotationPage> {
   }
 }
 
+
+/// Custom alert dialog that prompts the user to search and select for a label
 class MyAlertDialog extends StatelessWidget {
   const MyAlertDialog(
       {super.key, required this.labels, required this.controller});
 
+  /// List of labels the dialog will provide as options
   final List labels;
+  /// Controller for the text input associated with searching
   final MultipleSearchController controller;
   @override
   Widget build(BuildContext context) {
@@ -430,6 +436,7 @@ class MyAlertDialog extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              // Create MultipleSearchSelection widget with the ability to create new items
               MultipleSearchSelection.creatable(
                 controller: controller,
                 clearAllButton: const Text(
@@ -449,6 +456,7 @@ class MyAlertDialog extends StatelessWidget {
                     textAlign: TextAlign.center,
                   );
                 },
+                //Each label has a category, we want to search the Labels
                 fieldToCheck: (label) {
                   return label["Label"];
                 },
@@ -460,6 +468,7 @@ class MyAlertDialog extends StatelessWidget {
                       ? Center(child: pickedItems[0])
                       : const Padding(padding: EdgeInsets.zero);
                 },
+                // Options associated with creating a new item when searched item isn't found
                 createOptions: CreateOptions(
                   pickCreated: true,
                   create: (text) => {"Category": "None", "Label": text},
@@ -476,6 +485,7 @@ class MyAlertDialog extends StatelessWidget {
                   children: [
                     TextButton(
                       onPressed: () {
+                        // Only pop out of the dialog when pressing submit if you've selected a label
                         if (controller.getPickedItems().isNotEmpty) {
                           context.read<AnnotationNotifier>().setLabel(
                               controller.getPickedItems()[0]["Label"]);
