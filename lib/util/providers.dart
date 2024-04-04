@@ -106,7 +106,7 @@ class AnnotationNotifier extends ChangeNotifier {
   String? label;
 
   /// List of all annotations for a single image
-  List<List<dynamic>> allAnnotations = [];
+  List allAnnotations = [];
 
   /// List of segments for the current annotation
   List<DrawingSegment> currentAnnotation = [];
@@ -155,8 +155,13 @@ class AnnotationNotifier extends ChangeNotifier {
   void addToAllAnnotations() {
     combinedCurrentAnnotation = combineCurrentSegments();
     if (combinedCurrentAnnotation != null && label != null) {
-      allAnnotations.add([label, combinedCurrentAnnotation!.toFloatList()]);
+      // allAnnotations.add([label, combinedCurrentAnnotation!.toFloatList()]);
+      allAnnotations.add({
+        "category_name": label,
+        "xy_coord_list": combinedCurrentAnnotation!.toFloatList()
+      });
     }
+    debug(allAnnotations);
     notifyListeners();
   }
 

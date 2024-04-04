@@ -19,6 +19,31 @@ import 'package:binsight_ai/database/connection.dart';
 import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 
+const String exampleBoxes = '''
+[ 
+  {
+    "category_name": "Apple",
+    "xy_coord_list": [
+      [11.1, 16.4],
+      [11.3, 16.5]
+    ]
+  },
+  {
+    "category_name": "Orange",
+    "xy_coord_list": [
+      [11.1, 16.4],
+      [11.3, 16.5]
+    ]
+  },
+  {
+    "category_name": "Banana",
+    "xy_coord_list": [
+      [11.1, 16.4],
+      [11.3, 16.5]
+    ]
+  }
+]''';
+
 /// Entry point of the application
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,80 +65,80 @@ void main() async {
     if (detections.isEmpty) {
       var fakeDetections = [
         Detection(
-            imageId: "test-10",
-            preDetectImgLink: "https://placehold.co/512x512.png",
-            timestamp: DateTime.now().subtract(const Duration(days: 6)),
-            deviceId: "test",
-            postDetectImgLink: "https://placehold.co/513x513.png",
-            depthMapImgLink: "https://placehold.co/514x514.png",
-            irImgLink: "https://placehold.co/515x515.png",
-            weight: 27.0,
-            humidity: 0.5,
-            temperature: 20.0,
-            co2: 0.5,
-            vo2: 0.5,
-            boxes:
-                '[["Apple", [11.1, 16.4]], ["Orange", [10.0, 292.7]], ["Banana", [10.0, 292.7]]]'),
+          imageId: "test-10",
+          preDetectImgLink: "https://placehold.co/512x512.png",
+          timestamp: DateTime.now().subtract(const Duration(days: 6)),
+          deviceId: "test",
+          postDetectImgLink: "https://placehold.co/513x513.png",
+          depthMapImgLink: "https://placehold.co/514x514.png",
+          irImgLink: "https://placehold.co/515x515.png",
+          weight: 27.0,
+          humidity: 0.5,
+          temperature: 20.0,
+          co2: 0.5,
+          vo2: 0.5,
+          boxes: exampleBoxes,
+        ),
         Detection(
-            imageId: "test-9",
-            preDetectImgLink: "https://placehold.co/512x512.png",
-            timestamp: DateTime.now().subtract(const Duration(days: 5)),
-            deviceId: "test",
-            postDetectImgLink: "https://placehold.co/513x513.png",
-            depthMapImgLink: "https://placehold.co/514x514.png",
-            irImgLink: "https://placehold.co/515x515.png",
-            weight: 10.0,
-            humidity: 0.5,
-            temperature: 20.0,
-            co2: 0.5,
-            vo2: 0.5,
-            boxes:
-                '[["Apple", [11.1, 16.4]], ["Orange", [10.0, 292.7]], ["Banana", [10.0, 292.7]]]'),
+          imageId: "test-9",
+          preDetectImgLink: "https://placehold.co/512x512.png",
+          timestamp: DateTime.now().subtract(const Duration(days: 5)),
+          deviceId: "test",
+          postDetectImgLink: "https://placehold.co/513x513.png",
+          depthMapImgLink: "https://placehold.co/514x514.png",
+          irImgLink: "https://placehold.co/515x515.png",
+          weight: 10.0,
+          humidity: 0.5,
+          temperature: 20.0,
+          co2: 0.5,
+          vo2: 0.5,
+          boxes: exampleBoxes,
+        ),
         Detection(
-            imageId: "test-8",
-            preDetectImgLink: "https://placehold.co/512x512.png",
-            timestamp: DateTime.now().subtract(const Duration(days: 4)),
-            deviceId: "test",
-            postDetectImgLink: "https://placehold.co/513x513.png",
-            depthMapImgLink: "https://placehold.co/514x514.png",
-            irImgLink: "https://placehold.co/515x515.png",
-            weight: 40.0,
-            humidity: 0.5,
-            temperature: 20.0,
-            co2: 0.5,
-            vo2: 0.5,
-            boxes:
-                '[["Apple", [11.1, 16.4]], ["Orange", [10.0, 292.7]], ["Banana", [10.0, 292.7]]]'),
+          imageId: "test-8",
+          preDetectImgLink: "https://placehold.co/512x512.png",
+          timestamp: DateTime.now().subtract(const Duration(days: 4)),
+          deviceId: "test",
+          postDetectImgLink: "https://placehold.co/513x513.png",
+          depthMapImgLink: "https://placehold.co/514x514.png",
+          irImgLink: "https://placehold.co/515x515.png",
+          weight: 40.0,
+          humidity: 0.5,
+          temperature: 20.0,
+          co2: 0.5,
+          vo2: 0.5,
+          boxes: exampleBoxes,
+        ),
         Detection(
-            imageId: "test-7",
-            preDetectImgLink: "https://placehold.co/512x512.png",
-            timestamp: DateTime.now().subtract(const Duration(days: 3)),
-            deviceId: "test",
-            postDetectImgLink: "https://placehold.co/513x513.png",
-            depthMapImgLink: "https://placehold.co/514x514.png",
-            irImgLink: "https://placehold.co/515x515.png",
-            weight: 16.0,
-            humidity: 0.5,
-            temperature: 20.0,
-            co2: 0.5,
-            vo2: 0.5,
-            boxes:
-                '[["Apple", [11.1, 16.4]], ["Orange", [10.0, 292.7]], ["Banana", [10.0, 292.7]]]'),
+          imageId: "test-7",
+          preDetectImgLink: "https://placehold.co/512x512.png",
+          timestamp: DateTime.now().subtract(const Duration(days: 3)),
+          deviceId: "test",
+          postDetectImgLink: "https://placehold.co/513x513.png",
+          depthMapImgLink: "https://placehold.co/514x514.png",
+          irImgLink: "https://placehold.co/515x515.png",
+          weight: 16.0,
+          humidity: 0.5,
+          temperature: 20.0,
+          co2: 0.5,
+          vo2: 0.5,
+          boxes: exampleBoxes,
+        ),
         Detection(
-            imageId: "test-6",
-            preDetectImgLink: "https://placehold.co/512x512.png",
-            timestamp: DateTime.now().subtract(const Duration(days: 2)),
-            deviceId: "test",
-            postDetectImgLink: "https://placehold.co/513x513.png",
-            depthMapImgLink: "https://placehold.co/514x514.png",
-            irImgLink: "https://placehold.co/515x515.png",
-            weight: 30.0,
-            humidity: 0.5,
-            temperature: 20.0,
-            co2: 0.5,
-            vo2: 0.5,
-            boxes:
-                '[["Apple", [11.1, 16.4]], ["Orange", [10.0, 292.7]], ["Banana", [10.0, 292.7]]]'),
+          imageId: "test-6",
+          preDetectImgLink: "https://placehold.co/512x512.png",
+          timestamp: DateTime.now().subtract(const Duration(days: 2)),
+          deviceId: "test",
+          postDetectImgLink: "https://placehold.co/513x513.png",
+          depthMapImgLink: "https://placehold.co/514x514.png",
+          irImgLink: "https://placehold.co/515x515.png",
+          weight: 30.0,
+          humidity: 0.5,
+          temperature: 20.0,
+          co2: 0.5,
+          vo2: 0.5,
+          boxes: exampleBoxes,
+        ),
       ];
       for (final detection in fakeDetections) {
         await detection.save();

@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'dart:convert';
+import 'package:binsight_ai/util/print.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -115,21 +116,18 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(height: 10),
           Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    "Detections by Food Category",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 10),
-                  CircleChart(
-                    data: labelCounts,
-                  ),
-                ],
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  "Detections by Food Category",
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 10),
+                CircleChart(
+                  data: labelCounts,
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 20),
@@ -183,13 +181,12 @@ class _HomePageState extends State<HomePage> {
         // Extract month and day from each timestamp, and use that as the key
         weightCounts[monthDay] =
             (weightCounts[monthDay] ?? 0.0) + detection["weight"];
+
         if (detection["boxes"] != null) {
-          String boxes = detection["boxes"];
-          List<dynamic> boxesList = jsonDecode(boxes);
-          // If the boxes field is populated, loop over the list and extract the name that's at index 0 of each item
+          List<dynamic> boxesList = jsonDecode(detection["boxes"]);
           for (var label in boxesList) {
-            String name = label[0];
-            labelCounts[name] = (labelCounts[name] ?? 0) + 1;
+            labelCounts[label["category_name"]] =
+                (labelCounts[label["category_name"]] ?? 0) + 1;
           }
         }
       }
