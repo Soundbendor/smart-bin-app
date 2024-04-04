@@ -6,15 +6,14 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 
 /// Line chart to show total weight of compost by day
-class LineChart extends StatelessWidget {
+class BarChart extends StatelessWidget {
   // Map with the day as the key and total weight of compost as the value
   final Map<DateTime, double> data;
 
-  const LineChart({super.key, required this.data});
+  const BarChart({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
-
     // Create sorted chartdata for graph construction using the date and weights in data
     List<_ChartData> lineData = data.entries
         .map((entry) => _ChartData(entry.key, entry.value))
@@ -39,8 +38,8 @@ class LineChart extends StatelessWidget {
         isVisible: true,
         dateFormat: DateFormat('M/d'),
       ),
-      series: <LineSeries<_ChartData, DateTime>>[
-        LineSeries<_ChartData, DateTime>(
+      series: <ColumnSeries<_ChartData, DateTime>>[
+        ColumnSeries<_ChartData, DateTime>(
           dataSource: lineData,
           xValueMapper: (_ChartData detection, _) => detection.timestamp,
           yValueMapper: (_ChartData detection, _) => detection.weight,

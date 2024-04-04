@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 10),
                   FractionallySizedBox(
                     widthFactor: 0.9,
-                    child: LineChart(
+                    child: BarChart(
                       data: weightCounts,
                     ),
                   ),
