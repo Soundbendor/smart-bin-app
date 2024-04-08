@@ -9,9 +9,9 @@ import 'package:flutter/services.dart';
 // Package imports:
 import 'package:go_router/go_router.dart';
 import 'package:multiple_search_selection/createable/create_options.dart';
+import 'package:multiple_search_selection/multiple_search_selection.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:multiple_search_selection/multiple_search_selection.dart';
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/print.dart';
@@ -286,6 +286,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                                 color: Theme.of(context).colorScheme.onPrimary,
                               ),
                             ),
+                            // If the labels json loaded in from assets/data is not empty, show the dialog popup, otherwise don't
                             onPressed: () {
                               labels.isNotEmpty
                                   ? showDialog(
