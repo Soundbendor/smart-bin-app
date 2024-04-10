@@ -1,5 +1,4 @@
 // Flutter imports:
-import 'package:binsight_ai/widgets/statistic_card.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -10,6 +9,7 @@ import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/detections.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/widgets/image.dart';
+import 'package:binsight_ai/widgets/statistic_card.dart';
 
 /// Displays information about a single detection.
 class DetectionPage extends StatelessWidget {
@@ -29,6 +29,7 @@ class DetectionPage extends StatelessWidget {
           child: Column(
             children: [
               _BackToListButton(),
+              const SizedBox(height: 16),
               _DetectionHeader(detectionFuture: detectionFuture),
               const SizedBox(height: 16),
               FutureBuilder(
@@ -38,8 +39,8 @@ class DetectionPage extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
                   } else {
-                    final detection = snapshot.data;
-                    return _DetectionCard(detection: detection!);
+                    final detection = snapshot.data!;
+                    return _DetectionCard(detection: detection);
                   }
                 },
               )
@@ -135,7 +136,7 @@ class _DetectionCard extends StatelessWidget {
   }
 }
 
-/// The header for the detection page, which displays the title.
+/// The header for the detection page, which displays the title and timestamp.
 class _DetectionHeader extends StatelessWidget {
   const _DetectionHeader({
     required this.detectionFuture,
@@ -151,7 +152,17 @@ class _DetectionHeader extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Heading(text: "Loading...");
           } else {
-            return Heading(text: formatDetectionTitle(snapshot.data!));
+            final detection = snapshot.data!;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Heading(text: formatDetectionTitle(detection)),
+                Text(
+                  "Timestamp: ${detection.timestamp}",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            );
           }
         });
   }
