@@ -62,7 +62,12 @@ class _DetectionCard extends StatelessWidget {
     return Card(
       color: colorScheme.onPrimary,
       child: Padding(
-        padding: const EdgeInsets.all(5.0),
+        padding: const EdgeInsets.only(
+          top: 20,
+          left: 5,
+          right: 5,
+          bottom: 5,
+        ),
         child: SingleChildScrollView(
           child: Column(children: [
             SizedBox(
@@ -100,14 +105,26 @@ class _DetectionCard extends StatelessWidget {
               width: 400,
               child: Wrap(
                 children: [
-                  StatisticCard(title: "Temperature", value: detection.temperature.toString()),
-                  StatisticCard(title: "Weight", value: detection.weight.toString()),
-                  StatisticCard(title: "Total Weight", value: detection.totalWeight.toString()),
-                  StatisticCard(title: "Humidity", value: detection.humidity.toString()),
-                  StatisticCard(title: "CO2 Equivalent", value: detection.co2.toString()),
-                  StatisticCard(title: "Total Volatile Organic Compounds", value: detection.vo2.toString()),
-                  StatisticCard(title: "Pressure", value: detection.pressure.toString()),
-                  StatisticCard(title: "Indoor Air Quality", value: detection.iaq.toString()),
+                  StatisticCard(
+                      title: "Temperature",
+                      value: detection.temperature.toString()),
+                  StatisticCard(
+                      title: "Weight", value: detection.weight.toString()),
+                  StatisticCard(
+                      title: "Total Weight",
+                      value: detection.totalWeight.toString()),
+                  StatisticCard(
+                      title: "Humidity", value: detection.humidity.toString()),
+                  StatisticCard(
+                      title: "CO2 Equivalent", value: detection.co2.toString()),
+                  StatisticCard(
+                      title: "Total Volatile Organic Compounds",
+                      value: detection.vo2.toString()),
+                  StatisticCard(
+                      title: "Pressure", value: detection.pressure.toString()),
+                  StatisticCard(
+                      title: "Indoor Air Quality",
+                      value: detection.iaq.toString()),
                 ],
               ),
             )
