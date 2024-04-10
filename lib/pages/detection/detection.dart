@@ -9,6 +9,7 @@ import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/detections.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/widgets/image.dart';
+import 'package:binsight_ai/widgets/statistic_card.dart';
 
 /// Displays information about a single detection.
 class DetectionPage extends StatelessWidget {
@@ -28,6 +29,7 @@ class DetectionPage extends StatelessWidget {
           child: Column(
             children: [
               _BackToListButton(),
+              const SizedBox(height: 16),
               _DetectionHeader(detectionFuture: detectionFuture),
               const SizedBox(height: 16),
               FutureBuilder(
@@ -37,8 +39,8 @@ class DetectionPage extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
                   } else {
-                    final detection = snapshot.data;
-                    return _DetectionCard(detection: detection!);
+                    final detection = snapshot.data!;
+                    return _DetectionCard(detection: detection);
                   }
                 },
               )
@@ -57,95 +59,84 @@ class _DetectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
     return Card(
       color: colorScheme.onPrimary,
       child: Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Column(children: [
-          SizedBox(
-            width: 350,
-            height: 350,
-            child: Stack(
-              children: [
-                Center(
-                  child: DynamicImage(detection.preDetectImgLink,
-                      width: 350, height: 350),
-                ),
-                Positioned(
-                  bottom: 8,
-                  right: 8,
-                  child: IconButton(
-                    onPressed: () {
-                      GoRouter.of(context).push(
-                          "/main/detection/${detection.imageId}/annotation");
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.primary.withAlpha(200),
+        padding: const EdgeInsets.only(
+          top: 20,
+          left: 5,
+          right: 5,
+          bottom: 5,
+        ),
+        child: SingleChildScrollView(
+          child: Column(children: [
+            SizedBox(
+              width: 350,
+              height: 350,
+              child: Stack(
+                children: [
+                  Center(
+                    child: DynamicImage(detection.preDetectImgLink,
+                        width: 350, height: 350),
+                  ),
+                  Positioned(
+                    bottom: 8,
+                    right: 8,
+                    child: IconButton(
+                      onPressed: () {
+                        GoRouter.of(context).push(
+                            "/main/detection/${detection.imageId}/annotation");
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.primary.withAlpha(200),
+                        ),
+                        shape: MaterialStateProperty.all(const CircleBorder()),
                       ),
-                      shape: MaterialStateProperty.all(const CircleBorder()),
-                    ),
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    icon: const Icon(Icons.edit, size: 30),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: 400,
-            child: Row(
-              children: [
-                Expanded(
-                    child: Center(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Temperature:", style: textTheme.labelLarge),
-                        Text(
-                          "Humidity:",
-                          style: textTheme.labelLarge,
-                        ),
-                        Text(
-                          "eCO2:",
-                          style: textTheme.labelLarge,
-                        ),
-                        Text(
-                          "tVOC:",
-                          style: textTheme.labelLarge,
-                        ),
-                      ]),
-                )),
-                Expanded(
-                  child: Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(detection.temperature.toString(),
-                            style: textTheme.labelLarge),
-                        Text(detection.humidity.toString(),
-                            style: textTheme.labelLarge),
-                        Text(detection.co2.toString(),
-                            style: textTheme.labelLarge),
-                        Text(detection.vo2.toString(),
-                            style: textTheme.labelLarge),
-                      ],
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      icon: const Icon(Icons.edit, size: 30),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          )
-        ]),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: 400,
+              child: Wrap(
+                children: [
+                  StatisticCard(
+                      title: "Temperature",
+                      value: detection.temperature.toString()),
+                  StatisticCard(
+                      title: "Weight", value: detection.weight.toString()),
+                  StatisticCard(
+                      title: "Total Weight",
+                      value: detection.totalWeight.toString()),
+                  StatisticCard(
+                      title: "Humidity", value: detection.humidity.toString()),
+                  StatisticCard(
+                      title: "CO2 Equivalent", value: detection.co2.toString()),
+                  StatisticCard(
+                      title: "Total Volatile Organic Compounds",
+                      value: detection.vo2.toString()),
+                  StatisticCard(
+                      title: "Pressure", value: detection.pressure.toString()),
+                  StatisticCard(
+                      title: "Indoor Air Quality",
+                      value: detection.iaq.toString()),
+                ],
+              ),
+            )
+          ]),
+        ),
       ),
     );
   }
 }
 
-/// The header for the detection page, which displays the title.
+/// The header for the detection page, which displays the title and timestamp.
 class _DetectionHeader extends StatelessWidget {
   const _DetectionHeader({
     required this.detectionFuture,
@@ -161,7 +152,17 @@ class _DetectionHeader extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Heading(text: "Loading...");
           } else {
-            return Heading(text: formatDetectionTitle(snapshot.data!));
+            final detection = snapshot.data!;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Heading(text: formatDetectionTitle(detection)),
+                Text(
+                  "Timestamp: ${detection.timestamp}",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            );
           }
         });
   }
