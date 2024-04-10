@@ -24,19 +24,28 @@ class Detection extends Model {
   /// The link to the IR image.
   String? irImgLink;
 
-  // The weight value.
+  /// The total weight value.
+  double? totalWeight;
+
+  // The weight value (delta).
   double? weight;
 
   /// The humidity value.
   double? humidity;
 
+  /// The pressure value.
+  double? pressure;
+
   /// The temperature value.
   double? temperature;
+
+  /// The IAQ value (Indoor Air Quality).
+  double? iaq;
 
   /// The CO2 value.
   double? co2;
 
-  /// The VO2 value.
+  /// The TVOC value (Total volatile organic compounds).
   double? vo2;
 
   /// The bounding boxes, in JSON format.
@@ -62,6 +71,9 @@ class Detection extends Model {
     this.co2,
     this.vo2,
     this.boxes,
+    this.totalWeight,
+    this.pressure,
+    this.iaq,
   });
 
   /// Creates a blank device for testing or retrieving properties of the model.
@@ -91,6 +103,9 @@ class Detection extends Model {
       "temperature": temperature,
       "co2": co2,
       "vo2": vo2,
+      "totalWeight": totalWeight,
+      "pressure": pressure,
+      "iaq": iaq,
       "boxes": boxes,
       "timestamp": timestamp.toIso8601String(),
       "deviceId": deviceId,
@@ -108,6 +123,7 @@ class Detection extends Model {
   }
 
   static Detection fromMap(Map<String, dynamic> map) {
+    // Note: As of this commit, the actual server schema is not known. This is just a placeholder.
     return Detection(
       imageId: map['imageId'],
       preDetectImgLink: map['preDetectImgLink'],
@@ -121,6 +137,9 @@ class Detection extends Model {
       temperature: map['temperature']?.toDouble(),
       co2: map['co2']?.toDouble(),
       vo2: map['vo2']?.toDouble(),
+      totalWeight: map['totalWeight']?.toDouble(),
+      pressure: map['pressure']?.toDouble(),
+      iaq: map['iaq']?.toDouble(),
       boxes: map['boxes'],
     );
   }
@@ -141,6 +160,9 @@ class Detection extends Model {
       temperature DOUBLE,
       co2 DOUBLE,
       vo2 DOUBLE,
+      totalWeight DOUBLE,
+      pressure DOUBLE,
+      iaq DOUBLE,
       boxes TEXT,
       timestamp DATETIME NOT NULL,
       deviceId VARCHAR(255) NOT NULL,
