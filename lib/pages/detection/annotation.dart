@@ -1,7 +1,6 @@
 // Flutter imports:
 import 'dart:convert';
 import 'dart:ui' as ui;
-import 'package:binsight_ai/util/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/print.dart';
+import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/widgets/free_draw.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 
@@ -50,12 +50,12 @@ class _AnnotationPageState extends State<AnnotationPage> {
   @override
   void initState() {
     super.initState();
-    readJson();
+    loadLabels();
     initPreferences();
   }
 
   /// Reads json file containing the possible labels
-  Future<void> readJson() async {
+  Future<void> loadLabels() async {
     final String response =
         await rootBundle.loadString('assets/data/labels.json');
     final data = await json.decode(response);
@@ -415,7 +415,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
   }
 }
 
-
 /// Custom alert dialog that prompts the user to search and select for a label
 class MyAlertDialog extends StatelessWidget {
   const MyAlertDialog(
@@ -423,6 +422,7 @@ class MyAlertDialog extends StatelessWidget {
 
   /// List of labels the dialog will provide as options
   final List labels;
+
   /// Controller for the text input associated with searching
   final MultipleSearchController controller;
   @override

@@ -2,6 +2,7 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// Package imports:
 
 // Project imports:
 import 'package:binsight_ai/util/providers.dart';

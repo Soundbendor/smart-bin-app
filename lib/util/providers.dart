@@ -1,5 +1,4 @@
 // Flutter imports:
-import 'package:binsight_ai/widgets/free_draw.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -9,6 +8,7 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/util/wifi_scan.dart';
+import 'package:binsight_ai/widgets/free_draw.dart';
 
 /// Notifies listeners of changes to the device.
 ///
