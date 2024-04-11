@@ -1,14 +1,16 @@
 // Flutter imports:
-import 'dart:typed_data';
+import 'dart:convert';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:go_router/go_router.dart';
+import 'package:multiple_search_selection/createable/create_options.dart';
+import 'package:multiple_search_selection/multiple_search_selection.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/print.dart';
@@ -33,6 +35,9 @@ class AnnotationPage extends StatefulWidget {
 }
 
 class _AnnotationPageState extends State<AnnotationPage> {
+  /// List of labels user can choose from
+  List labels = [];
+
   /// Whether the user has started drawing on the image
   bool drawStarted = false;
 
@@ -45,7 +50,18 @@ class _AnnotationPageState extends State<AnnotationPage> {
   @override
   void initState() {
     super.initState();
+    loadLabels();
     initPreferences();
+  }
+
+  /// Reads json file containing the possible labels
+  Future<void> loadLabels() async {
+    final String response =
+        await rootBundle.loadString('assets/data/labels.json');
+    final data = await json.decode(response);
+    setState(() {
+      labels = data;
+    });
   }
 
   /// Recalls user's decision of whether to show the annotation guide or not
@@ -136,6 +152,8 @@ class _AnnotationPageState extends State<AnnotationPage> {
           );
         });
   }
+
+  final MultipleSearchController controller = MultipleSearchController();
 
   @override
   Widget build(BuildContext context) {
@@ -262,15 +280,26 @@ class _AnnotationPageState extends State<AnnotationPage> {
                       Row(
                         children: [
                           ElevatedButton(
-                            onPressed: () {
-                              GoRouter.of(context).push(
-                                  "/main/detection/${widget.detectionId}/label");
-                            },
                             child: Text(
-                              notifier.label == null
-                                  ? "Add Label"
-                                  : "Change Label",
+                              "Select Label",
+                              style: textTheme.labelLarge!.copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
                             ),
+                            // If the labels json loaded in from assets/data is not empty, show the dialog popup, otherwise don't
+                            onPressed: () {
+                              labels.isNotEmpty
+                                  ? showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return MyAlertDialog(
+                                          labels: labels,
+                                          controller: controller,
+                                        );
+                                      },
+                                    )
+                                  : const Padding(padding: EdgeInsets.zero);
+                            },
                           ),
                           const SizedBox(width: 8),
                           ElevatedButton(
@@ -380,6 +409,101 @@ class _AnnotationPageState extends State<AnnotationPage> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Custom alert dialog that prompts the user to search and select for a label
+class MyAlertDialog extends StatelessWidget {
+  const MyAlertDialog(
+      {super.key, required this.labels, required this.controller});
+
+  /// List of labels the dialog will provide as options
+  final List labels;
+
+  /// Controller for the text input associated with searching
+  final MultipleSearchController controller;
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text(
+        "Select A Label",
+        textAlign: TextAlign.center,
+      ),
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Create MultipleSearchSelection widget with the ability to create new items
+              MultipleSearchSelection.creatable(
+                controller: controller,
+                clearAllButton: const Text(
+                  "Clear",
+                  textAlign: TextAlign.center,
+                ),
+                maxSelectedItems: 1,
+                searchField: const TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search Labels',
+                  ),
+                ),
+                items: labels,
+                pickedItemBuilder: (label) {
+                  return Text(
+                    "Selected Label: ${label["Label"]}",
+                    textAlign: TextAlign.center,
+                  );
+                },
+                //Each label has a category, we want to search the Labels
+                fieldToCheck: (label) {
+                  return label["Label"];
+                },
+                itemBuilder: (label, index) {
+                  return Text(label["Label"]);
+                },
+                pickedItemsContainerBuilder: (pickedItems) {
+                  return pickedItems.isNotEmpty
+                      ? Center(child: pickedItems[0])
+                      : const Padding(padding: EdgeInsets.zero);
+                },
+                // Options associated with creating a new item when searched item isn't found
+                createOptions: CreateOptions(
+                  pickCreated: true,
+                  create: (text) => {"Category": "None", "Label": text},
+                  createBuilder: (text) => Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Create "$text"'),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        // Only pop out of the dialog when pressing submit if you've selected a label
+                        if (controller.getPickedItems().isNotEmpty) {
+                          context.read<AnnotationNotifier>().setLabel(
+                              controller.getPickedItems()[0]["Label"]);
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      child: const Text("Submit"),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text("Cancel"),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
