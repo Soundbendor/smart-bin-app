@@ -188,7 +188,7 @@ class _HomePageState extends State<HomePage> {
           List<dynamic> boxesList = jsonDecode(boxes);
           // If the boxes field is populated, loop over the list and extract the name that's at index 0 of each item
           for (var label in boxesList) {
-            String name = label[0];
+            String name = label['category_name'];
             labelCounts[name] = (labelCounts[name] ?? 0) + 1;
           }
         }
