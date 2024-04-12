@@ -63,10 +63,6 @@ List<RouteBase> getRoutes() {
                           detectionId: state.pathParameters['detectionId']!);
                     },
                   ),
-                  GoRoute(
-                    path: 'label',
-                    builder: (context, state) => const LabelAnnotation(),
-                  ),
                 ],
               ),
               // `/main/faq` - frequently asked questions

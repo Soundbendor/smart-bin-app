@@ -41,6 +41,13 @@ const String exampleBoxes = '''
       [11.1, 16.4],
       [11.3, 16.5]
     ]
+  },
+  {
+    "category_name": "Milk",
+    "xy_coord_list": [
+      [11.1, 16.4],
+      [11.3, 16.5]
+    ]
   }
 ]''';
 

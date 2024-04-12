@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:binsight_ai/util/print.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:go_router/go_router.dart';
@@ -30,7 +31,8 @@ class _HomePageState extends State<HomePage> {
   // Map day to total compost weight
   Map<DateTime, double> weightCounts = {};
   late Future loadDetectionFuture;
-
+  //Label data
+  Map categories = {};
   // Load all detections from the database
   @override
   void initState() {
@@ -40,6 +42,16 @@ class _HomePageState extends State<HomePage> {
       });
     });
     super.initState();
+    loadCategories();
+  }
+
+  Future<void> loadCategories() async {
+    final String response =
+        await rootBundle.loadString('assets/data/categories.json');
+    final data = await json.decode(response);
+    setState(() {
+      categories = data;
+    });
   }
 
   // Build the home page
@@ -185,8 +197,12 @@ class _HomePageState extends State<HomePage> {
         if (detection["boxes"] != null) {
           List<dynamic> boxesList = jsonDecode(detection["boxes"]);
           for (var label in boxesList) {
-            labelCounts[label["category_name"]] =
-                (labelCounts[label["category_name"]] ?? 0) + 1;
+            String name = label['category_name'];
+            name = name.toLowerCase();
+            String? category = categories[name];
+            category ??= categories['${name}s'];
+            category ??= "Undefined";
+            labelCounts[category] = (labelCounts[category] ?? 0) + 1;
           }
         }
       }
