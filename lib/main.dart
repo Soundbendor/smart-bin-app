@@ -168,7 +168,7 @@ void main() async {
         // Notifies listeners of changes to the current annotation's state.
         ChangeNotifierProvider(create: (_) => AnnotationNotifier()),
       ],
-      child: BinsightAiApp(skipSetUp: devices.isNotEmpty),
+      child: BinsightAiApp(skipSetUp: devices.isEmpty),
     ),
   );
 }

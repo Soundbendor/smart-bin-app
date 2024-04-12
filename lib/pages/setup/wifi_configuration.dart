@@ -76,7 +76,10 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Connect Bin to WiFi', style: textTheme.headlineMedium),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Connect Bin to WiFi', style: textTheme.headlineSmall),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: TextField(
@@ -103,7 +106,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                Provider.of<SetupKeyNotifier>(context)
+                Provider.of<SetupKeyNotifier>(context, listen: false)
                     .setupKey
                     .currentState
                     ?.previous();
