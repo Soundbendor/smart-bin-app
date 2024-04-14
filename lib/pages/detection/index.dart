@@ -1,12 +1,16 @@
 // Flutter imports:
+import 'dart:ffi';
+
 import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/providers.dart';
+import 'package:binsight_ai/util/smart_bin_device.dart';
 import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/detections.dart';
+import 'package:binsight_ai/util/bluetooth_bin_data.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +47,15 @@ class _DetectionsPageState extends State<DetectionsPage> {
     BleDevice bledevice = BleDevice.fromId(device.id);
     if (!mounted) return;
     Provider.of<DeviceNotifier>(context, listen: false).setDevice(bledevice);
+    await Provider.of<DeviceNotifier>(context, listen: false).connect();
     Provider.of<DeviceNotifier>(context, listen: false).listenForConnectionEvents();
+
+    final statusCharacteristic = await Provider.of<DeviceNotifier>(context, listen: false).device?.readCharacteristic(serviceId: mainServiceId, characteristicId: wifiStatusCharacteristicId);
+    
+    final Map<String, dynamic> statusJson = await SmartBinDevice.decodeCharacteristic(context, statusCharacteristic!);
+    if (statusJson["success"]) {
+      final bool wifiConnectedToInternet = statusJson["internet_access"];
+    }
   }
 
   /// Displays a dialog that asks the user if they would like to check their
@@ -75,6 +87,9 @@ class _DetectionsPageState extends State<DetectionsPage> {
                     );
                   });
                   connectToDevice(context);
+                  // once it connects, read the characteristic that says if it's connected or not
+                  
+
                 },
                 child: const Text("Yes"),
               ),

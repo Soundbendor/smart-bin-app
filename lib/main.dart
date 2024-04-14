@@ -67,7 +67,7 @@ void main() async {
     // development code to add fake data
 
     if (devices.isEmpty) {
-      await db.insert("devices", {"id": "test"});
+      // await db.insert("devices", {"id": "test"});
       devices = await Device.all();
     }
 
@@ -168,7 +168,7 @@ void main() async {
         // Notifies listeners of changes to the current annotation's state.
         ChangeNotifierProvider(create: (_) => AnnotationNotifier()),
       ],
-      child: BinsightAiApp(skipSetUp: devices.isEmpty),
+      child: BinsightAiApp(skipSetUp: devices.isNotEmpty),
     ),
   );
 }
