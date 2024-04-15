@@ -84,7 +84,8 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text('Connect Bin to WiFi', style: textTheme.headlineSmall),
+              child:
+                  Text('Connect Bin to WiFi', style: textTheme.headlineSmall),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -198,6 +199,7 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
             "ssid": ssid,
             "password": password,
           }));
+      await Future.delayed(const Duration(seconds: 2));
       await verifyStatus();
     } on Exception catch (e) {
       debug(e);

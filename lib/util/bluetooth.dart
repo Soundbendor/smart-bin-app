@@ -234,6 +234,7 @@ class BleDevice {
       try {
         await _device.connect();
         debug("BleDevice[connect]: Connection initialized successfully");
+        await Future.delayed(const Duration(seconds: 2));
         await _pair();
         break;
       } catch (e) {
