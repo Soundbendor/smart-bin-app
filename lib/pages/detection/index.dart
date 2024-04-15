@@ -43,19 +43,48 @@ class _DetectionsPageState extends State<DetectionsPage> {
   }
 
   void connectToDevice(BuildContext context) async {
+    late final bool wifiConnectedToInternet;
     Device device = (await Device.all()).first;
     BleDevice bledevice = BleDevice.fromId(device.id);
-    if (!mounted) return;
+    if (!context.mounted) return;
     Provider.of<DeviceNotifier>(context, listen: false).setDevice(bledevice);
     await Provider.of<DeviceNotifier>(context, listen: false).connect();
+    if (!context.mounted) return;
     Provider.of<DeviceNotifier>(context, listen: false).listenForConnectionEvents();
 
     final statusCharacteristic = await Provider.of<DeviceNotifier>(context, listen: false).device?.readCharacteristic(serviceId: mainServiceId, characteristicId: wifiStatusCharacteristicId);
     
+    if (!context.mounted) return;
     final Map<String, dynamic> statusJson = await SmartBinDevice.decodeCharacteristic(context, statusCharacteristic!);
     if (statusJson["success"]) {
-      final bool wifiConnectedToInternet = statusJson["internet_access"];
+      wifiConnectedToInternet = statusJson["internet_access"];
     }
+
+    Navigator.of(context).pop();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("WiFi Connection Status"),
+          content: Text(wifiConnectedToInternet ? "All good! You were already connected." : "Oops! You are disconnected. Reconnect now?"),
+          actions: !wifiConnectedToInternet ? <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Yes"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text ("No"),
+            )
+          ] : null,
+        );
+      },
+    );
   }
 
   /// Displays a dialog that asks the user if they would like to check their
