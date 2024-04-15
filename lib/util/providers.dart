@@ -155,7 +155,6 @@ class AnnotationNotifier extends ChangeNotifier {
   void addToAllAnnotations() {
     combinedCurrentAnnotation = combineCurrentSegments();
     if (combinedCurrentAnnotation != null && label != null) {
-      // allAnnotations.add([label, combinedCurrentAnnotation!.toFloatList()]);
       allAnnotations.add({
         "category_name": label,
         "xy_coord_list": combinedCurrentAnnotation!.toFloatList()
