@@ -63,7 +63,7 @@ void main() async {
   var devices = await Device.all();
 
   if (kDebugMode) {
-    final db = await getDatabaseConnection();
+    // final db = await getDatabaseConnection();
     // development code to add fake data
 
     if (devices.isEmpty) {

@@ -88,10 +88,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
               const Duration(
                 seconds: 2,
               ),
-              () async {
-                final db = await getDatabaseConnection();
-                await db.insert("devices", {"id": device.id});
-                if (!context.mounted) return;
+              () {
                 Provider.of<SetupKeyNotifier>(context, listen: false)
                     .setupKey
                     .currentState

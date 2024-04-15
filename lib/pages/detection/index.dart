@@ -60,7 +60,7 @@ class _DetectionsPageState extends State<DetectionsPage> {
       wifiConnectedToInternet = statusJson["internet_access"];
     }
 
-    Navigator.of(context).pop();
+    // Navigator.of(context).pop();
 
     showDialog(
       context: context,

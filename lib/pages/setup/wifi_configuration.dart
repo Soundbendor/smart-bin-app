@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 // Package imports:
+import 'package:binsight_ai/database/connection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +58,13 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
               ssid: ssidController.text,
               password: passwordController.text,
               onErrorClosed: () {},
-              onComplete: () {
+              onComplete: () async {
+                // final deviceId = Provider.of<DeviceNotifier>(context, listen: false).device!.id;
+                // Once the user has finalized their Bluetooth device choice, add it to db
+                // final db = await getDatabaseConnection();
+                // await db.insert("devices", {"id": deviceId});
+                // if (!context.mounted) return;
+                // Take the user to main
                 GoRouter.of(context).go("/main");
               });
         });
