@@ -1,1810 +1,2720 @@
 [
-    {
-        "Category": "Fruit",
-        "Label": "acai berries"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "blackberries"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "blueberries"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "boysenberries"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "cranberries"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "currants"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "dewberries"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "goji berries"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "gooseberries"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "huckleberries"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "kiwifruit"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "lingonberries (cowberries)"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "loganberries"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "mulberries"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "raspberries"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "strawberries"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "cantaloupe"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "casaba"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "honeydew"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "watermelon"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "apples"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "apricots"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "Asian pears"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "atemoya"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "bananas"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "Buddha’s hand"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "cactus pears"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "calamondin"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "cherimoya"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "cherries"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "dates"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "dragon fruit"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "durian"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "feijoas"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "figs"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "fruit cocktail"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "grapefruit"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "grapes"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "guava"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "jackfruit"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "kumquats"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "lemons"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "limes"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "loquats"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "lychee"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "mangoes"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "mangosteen"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "nectarines"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "oranges"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "papaya"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "passion fruit"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "pawpaws"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "peaches"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "pears"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "persimmons"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "pineapple"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "plums"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "pluots"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "pomegranate"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "pomelos"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "prickly pears"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "prunes"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "quince"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "raisins"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "rambutan"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "rhubarb"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "sapote"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "satsuma"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "soursop"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "star fruit"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "tamarind"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "tangerines"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "tangelos"
-    },
-    {
-        "Category": "Fruit",
-        "Label": "tejocote"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "amaranth leaves"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "arugula (rocket)"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "basil"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "beet greens"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "bitter melon leaves"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "bok choy"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "broccoli"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "broccoli rabe (rapini)"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "broccolini"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "chamnamul"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "chard"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "chrysanthemum leaves"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "cilantro"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "collard greens"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "cress"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "dandelion greens"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "dark-green leafy lettuce"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "endive"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "escarole"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "kale"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "lambsquarters"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "mesclun"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "mixed greens"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "mustard greens"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "nettles"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "poke greens"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "romaine lettuce"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "spinach"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "Swiss chard"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "taro leaves"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "turnip greens"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "watercress"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "acorn squash"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "butternut squash"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "calabaza"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "carrots"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "hubbard squash"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "kabocha squash"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "pimento/pimiento"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "pumpkin"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "red and orange bell peppers"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "red chili peppers"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "red peppers, sweet"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "sweet potatoes"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "tomatoes"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "winter squash"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "bayo beans"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "bean burger"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "black beans"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "black-eyed peas"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "brown beans"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "chickpeas (garbanzo beans)"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "cow peas"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "edamame (young soybeans)"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "falafel (spiced, mashed chickpeas)"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "fava beans (broad beans)"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "hummus (chickpea spread)"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "kidney beans"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "lentils"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "lima beans"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "mung beans"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "navy beans"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "pigeon peas"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "pink beans"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "pinto beans"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "soy beans"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "split peas"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "white beans"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "breadfruit"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "burdock root"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "cassava"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "corn"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "fufu"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "green bananas"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "green lima beans"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "green peas"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "hominy"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "jicama"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "lotus root"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "parsnips"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "plantains"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "potatoes, white"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "potato chips"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "potatoes, fried"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "salsify"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "tapioca"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "taro root (dasheen or yautia)"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "water chestnuts"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "yams"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "yuca"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "alfalfa sprouts"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "arrowroot"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "artichokes"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "asparagus"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "avocado"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "bamboo shoots"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "bean sprouts"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "beets"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "bitter melon (bitter gourd, balsam pear)"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "broccoflower"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "Brussels sprouts"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "cabbage"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "cactus pads (nopales)"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "cauliflower"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "celeriac"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "celery"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "chayote (mirliton)"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "chives"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "cucumbers"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "daikon"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "drumstick pods (moringa)"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "eggplant"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "fennel bulb"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "fiddlehead ferns"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "garlic"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "ginger root"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "green peppers"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "green beans"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "hearts of palm"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "Jerusalem artichokes (sunchokes)"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "jute"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "kohlrabi"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "leeks"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "lettuce, iceberg"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "luffa (Chinese okra)"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "mushrooms"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "okra"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "onions"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "pattypan squash"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "purslane"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "radicchio"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "radishes"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "red cabbage"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "rutabaga"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "seaweed"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "scallions"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "snow peas"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "sorrel"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "spaghetti squash"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "tomatillos"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "turnips"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "wax beans"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "yellow squash"
-    },
-    {
-        "Category": "Vegetable",
-        "Label": "zucchini"
-    },
-    {
-        "Category": "Grains",
-        "Label": "amaranth"
-    },
-    {
-        "Category": "Grains",
-        "Label": "barley"
-    },
-    {
-        "Category": "Grains",
-        "Label": "brown rice"
-    },
-    {
-        "Category": "Grains",
-        "Label": "buckwheat"
-    },
-    {
-        "Category": "Grains",
-        "Label": "bulgur (cracked wheat)"
-    },
-    {
-        "Category": "Grains",
-        "Label": "dark rye"
-    },
-    {
-        "Category": "Grains",
-        "Label": "injera"
-    },
-    {
-        "Category": "Grains",
-        "Label": "kamut"
-    },
-    {
-        "Category": "Grains",
-        "Label": "millet"
-    },
-    {
-        "Category": "Grains",
-        "Label": "muesli"
-    },
-    {
-        "Category": "Grains",
-        "Label": "oatmeal"
-    },
-    {
-        "Category": "Grains",
-        "Label": "oats"
-    },
-    {
-        "Category": "Grains",
-        "Label": "popcorn"
-    },
-    {
-        "Category": "Grains",
-        "Label": "quinoa"
-    },
-    {
-        "Category": "Grains",
-        "Label": "rolled oats"
-    },
-    {
-        "Category": "Grains",
-        "Label": "sorghum"
-    },
-    {
-        "Category": "Grains",
-        "Label": "spelt"
-    },
-    {
-        "Category": "Grains",
-        "Label": "teff"
-    },
-    {
-        "Category": "Grains",
-        "Label": "triticale"
-    },
-    {
-        "Category": "Grains",
-        "Label": "whole grain chips"
-    },
-    {
-        "Category": "Grains",
-        "Label": "whole grain cornmeal"
-    },
-    {
-        "Category": "Grains",
-        "Label": "whole rye"
-    },
-    {
-        "Category": "Grains",
-        "Label": "whole wheat bread"
-    },
-    {
-        "Category": "Grains",
-        "Label": "whole wheat cereal flakes"
-    },
-    {
-        "Category": "Grains",
-        "Label": "whole wheat chapati"
-    },
-    {
-        "Category": "Grains",
-        "Label": "whole wheat crackers"
-    },
-    {
-        "Category": "Grains",
-        "Label": "whole wheat pasta"
-    },
-    {
-        "Category": "Grains",
-        "Label": "whole wheat sandwich buns and rolls"
-    },
-    {
-        "Category": "Grains",
-        "Label": "whole wheat tortillas"
-    },
-    {
-        "Category": "Grains",
-        "Label": "wild rice"
-    },
-    {
-        "Category": "Grains",
-        "Label": "bagels"
-    },
-    {
-        "Category": "Grains",
-        "Label": "biscuits"
-    },
-    {
-        "Category": "Grains",
-        "Label": "breadcrumbs"
-    },
-    {
-        "Category": "Grains",
-        "Label": "cakes"
-    },
-    {
-        "Category": "Grains",
-        "Label": "challah bread"
-    },
-    {
-        "Category": "Grains",
-        "Label": "cookies"
-    },
-    {
-        "Category": "Grains",
-        "Label": "brownies"
-    },
-    {
-        "Category": "Grains",
-        "Label": "corn flakes"
-    },
-    {
-        "Category": "Grains",
-        "Label": "corn tortilla"
-    },
-    {
-        "Category": "Grains",
-        "Label": "cornbread"
-    },
-    {
-        "Category": "Grains",
-        "Label": "couscous"
-    },
-    {
-        "Category": "Grains",
-        "Label": "crackers, saltine"
-    },
-    {
-        "Category": "Grains",
-        "Label": "cream of rice"
-    },
-    {
-        "Category": "Grains",
-        "Label": "cream of wheat"
-    },
-    {
-        "Category": "Grains",
-        "Label": "doughnuts"
-    },
-    {
-        "Category": "Grains",
-        "Label": "muffins"
-    },
-    {
-        "Category": "Grains",
-        "Label": "flour tortilla"
-    },
-    {
-        "Category": "Grains",
-        "Label": "French bread"
-    },
-    {
-        "Category": "Grains",
-        "Label": "grits"
-    },
-    {
-        "Category": "Grains",
-        "Label": "masa"
-    },
-    {
-        "Category": "Grains",
-        "Label": "matzo"
-    },
-    {
-        "Category": "Grains",
-        "Label": "naan"
-    },
-    {
-        "Category": "Grains",
-        "Label": "noodles"
-    },
-    {
-        "Category": "Grains",
-        "Label": "pancakes"
-    },
-    {
-        "Category": "Grains",
-        "Label": "pasta (spaghetti, macaroni)"
-    },
-    {
-        "Category": "Grains",
-        "Label": "pie/pastry crusts"
-    },
-    {
-        "Category": "Grains",
-        "Label": "pita bread"
-    },
-    {
-        "Category": "Grains",
-        "Label": "pizza crust"
-    },
-    {
-        "Category": "Grains",
-        "Label": "polenta"
-    },
-    {
-        "Category": "Grains",
-        "Label": "pretzels"
-    },
-    {
-        "Category": "Grains",
-        "Label": "ramen noodles"
-    },
-    {
-        "Category": "Grains",
-        "Label": "refined-grain cereals"
-    },
-    {
-        "Category": "Grains",
-        "Label": "refined-grain crackers"
-    },
-    {
-        "Category": "Grains",
-        "Label": "rice cakes"
-    },
-    {
-        "Category": "Grains",
-        "Label": "rice paper (spring roll wrappers)"
-    },
-    {
-        "Category": "Grains",
-        "Label": "rice vermicelli"
-    },
-    {
-        "Category": "Grains",
-        "Label": "waffles"
-    },
-    {
-        "Category": "Grains",
-        "Label": "white bread"
-    },
-    {
-        "Category": "Grains",
-        "Label": "white rice"
-    },
-    {
-        "Category": "Grains",
-        "Label": "white sandwich buns and rolls"
-    },
-    {
-        "Category": "Meat",
-        "Label": "beef"
-    },
-    {
-        "Category": "Meat",
-        "Label": "goat"
-    },
-    {
-        "Category": "Meat",
-        "Label": "ham"
-    },
-    {
-        "Category": "Meat",
-        "Label": "lamb"
-    },
-    {
-        "Category": "Meat",
-        "Label": "pork"
-    },
-    {
-        "Category": "Meat",
-        "Label": "beef"
-    },
-    {
-        "Category": "Meat",
-        "Label": "bear"
-    },
-    {
-        "Category": "Meat",
-        "Label": "bison"
-    },
-    {
-        "Category": "Meat",
-        "Label": "deer"
-    },
-    {
-        "Category": "Meat",
-        "Label": "elk"
-    },
-    {
-        "Category": "Meat",
-        "Label": "moose"
-    },
-    {
-        "Category": "Meat",
-        "Label": "opossum"
-    },
-    {
-        "Category": "Meat",
-        "Label": "rabbit"
-    },
-    {
-        "Category": "Meat",
-        "Label": "raccoon"
-    },
-    {
-        "Category": "Meat",
-        "Label": "squirrel"
-    },
-    {
-        "Category": "Meat",
-        "Label": "venison"
-    },
-    {
-        "Category": "Meat",
-        "Label": "brain"
-    },
-    {
-        "Category": "Meat",
-        "Label": "chitterlings"
-    },
-    {
-        "Category": "Meat",
-        "Label": "giblets"
-    },
-    {
-        "Category": "Meat",
-        "Label": "gizzard"
-    },
-    {
-        "Category": "Meat",
-        "Label": "heart"
-    },
-    {
-        "Category": "Meat",
-        "Label": "kidney"
-    },
-    {
-        "Category": "Meat",
-        "Label": "liver"
-    },
-    {
-        "Category": "Meat",
-        "Label": "stomach"
-    },
-    {
-        "Category": "Meat",
-        "Label": "sweetbreads"
-    },
-    {
-        "Category": "Meat",
-        "Label": "tongue"
-    },
-    {
-        "Category": "Meat",
-        "Label": "tripe"
-    },
-    {
-        "Category": "Meat",
-        "Label": "chicken"
-    },
-    {
-        "Category": "Meat",
-        "Label": "Cornish hen"
-    },
-    {
-        "Category": "Meat",
-        "Label": "dove"
-    },
-    {
-        "Category": "Meat",
-        "Label": "duck"
-    },
-    {
-        "Category": "Meat",
-        "Label": "goose"
-    },
-    {
-        "Category": "Meat",
-        "Label": "ostrich"
-    },
-    {
-        "Category": "Meat",
-        "Label": "pheasant"
-    },
-    {
-        "Category": "Meat",
-        "Label": "quail"
-    },
-    {
-        "Category": "Meat",
-        "Label": "turkey"
-    },
-    {
-        "Category": "Meat",
-        "Label": "cold cuts / cured meat"
-    },
-    {
-        "Category": "Meat",
-        "Label": "bacon"
-    },
-    {
-        "Category": "Meat",
-        "Label": "hot dogs"
-    },
-    {
-        "Category": "Meat",
-        "Label": "sausages"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "almonds"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "almond butter"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "Brazil nuts"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "cashew butter"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "cashews"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "chestnuts"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "chia seeds"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "flax seeds"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "hazelnuts (filberts)"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "macadamia nuts"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "mixed nuts"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "peanut butter"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "peanuts"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "pecans"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "pine nuts"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "pistachios"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "pumpkin seeds"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "sesame butter or paste (tahini)"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "sesame seeds"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "sunflower butter"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "sunflower seeds"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "tempeh"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "texturized vegetable protein (TVP)"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "tofu (made from soybeans)"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "veggie burgers (made from soybeans)"
-    },
-    {
-        "Category": "Nuts, Seeds, Soy",
-        "Label": "walnuts"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "black sea bass"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "catfish"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "cod"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "flounder"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "freshwater trout"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "haddock"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "hake"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "halibut"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "herring"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "mackerel"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "mullet"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "perch"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "pollock"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "salmon"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "sea bass"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "snapper"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "sole"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "sushi"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "tilapia"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "whiting"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "clams"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "crab"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "crayfish"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "lobster"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "mussels"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "octopus"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "oysters"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "scallops"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "shrimp"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "squid (calamari)"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "anchovies"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "freshwater trout"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "herring"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "light tuna"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "salmon"
-    },
-    {
-        "Category": "Seafood",
-        "Label": "sardines"
-    },
-    {
-        "Category": "Eggs",
-        "Label": "chicken eggs"
-    },
-    {
-        "Category": "Eggs",
-        "Label": "duck eggs"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "buttermilk"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "fat-free (skim) milk"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "flavored milks"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "lactose-free milks"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "low fat (1%) milk"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "reduced fat (2%) milk"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "whole milk"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "frozen yogurt"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "ice milk"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "ice cream"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "lassi"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "puddings"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "sherbet"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "smoothies"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "soy milk"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "yogurt (milk-based)"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "kefir"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "yogurt (soy-milk)"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "cheddar"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "Gouda"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "mozzarella"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "muenster"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "parmesan"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "provolone"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "Romano"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "Swiss"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "brie"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "camembert"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "cottage cheese"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "feta"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "ricotta"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "American cheese"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "queso blanco"
-    },
-    {
-        "Category": "Dairy",
-        "Label": "queso fresco"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "tea bags and grounds"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "coffee grounds"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "bones"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "gristle"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "poultry skin"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "grease, cooking oil"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "flowers"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "leaves"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "paper towel rolls"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "egg shells"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "nut shells"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "seafood shells"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "lint"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "pencil shavings"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "pet hair"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "fruit and vegetable peels"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "shredded paper"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "corn husks"
-    },
-    {
-        "Category": "Non-edible",
-        "Label": "pulp, fruit and vegetable"
-    },
-    {
-        "Category": "Prepared",
-        "Label": "pizza"
-    },
-    {
-        "Category": "Prepared",
-        "Label": "dumplings"
-    },
-    {
-        "Category": "Prepared",
-        "Label": "burritos"
-    },
-    {
-        "Category": "Prepared",
-        "Label": "burgers"
-    },
-    {
-        "Category": "Prepared",
-        "Label": "stir-fry"
-    },
-    {
-        "Category": "Prepared",
-        "Label": "lo/chow mein"
-    },
-    {
-        "Category": "Prepared",
-        "Label": "egg roll"
+  {
+    "Label": {
+      "name": "acai berries",
+      "category": "Fruit"
     }
+  },
+  {
+    "Label": {
+      "name": "blackberries",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "blueberries",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "boysenberries",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "cranberries",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "currants",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "dewberries",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "goji berries",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "gooseberries",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "huckleberries",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "kiwifruit",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "lingonberries (cowberries)",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "loganberries",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "mulberries",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "raspberries",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "strawberries",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "cantaloupe",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "casaba",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "honeydew",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "watermelon",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "apples",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "apricots",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "Asian pears",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "atemoya",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "bananas",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "Buddha’s hand",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "cactus pears",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "calamondin",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "cherimoya",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "cherries",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "dates",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "dragon fruit",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "durian",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "feijoas",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "figs",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "fruit cocktail",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "grapefruit",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "grapes",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "guava",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "jackfruit",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "kumquats",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "lemons",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "limes",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "loquats",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "lychee",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "mangoes",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "mangosteen",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "nectarines",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "oranges",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "papaya",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "passion fruit",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "pawpaws",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "peaches",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "pears",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "persimmons",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "pineapple",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "plums",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "pluots",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "pomegranate",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "pomelos",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "prickly pears",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "prunes",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "quince",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "raisins",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "rambutan",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "rhubarb",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "sapote",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "satsuma",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "soursop",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "star fruit",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "tamarind",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "tangerines",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "tangelos",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "tejocote",
+      "category": "Fruit"
+    }
+  },
+  {
+    "Label": {
+      "name": "amaranth leaves",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "arugula (rocket)",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "basil",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "beet greens",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "bitter melon leaves",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "bok choy",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "broccoli",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "broccoli rabe (rapini)",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "broccolini",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "chamnamul",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "chard",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "chrysanthemum leaves",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "cilantro",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "collard greens",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "cress",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "dandelion greens",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "dark-green leafy lettuce",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "endive",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "escarole",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "kale",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "lambsquarters",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "mesclun",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "mixed greens",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "mustard greens",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "nettles",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "poke greens",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "romaine lettuce",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "spinach",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "Swiss chard",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "taro leaves",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "turnip greens",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "watercress",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "acorn squash",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "butternut squash",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "calabaza",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "carrots",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "hubbard squash",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "kabocha squash",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "pimento/pimiento",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "pumpkin",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "red and orange bell peppers",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "red chili peppers",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "red peppers, sweet",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "sweet potatoes",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "tomatoes",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "winter squash",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "bayo beans",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "bean burger",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "black beans",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "black-eyed peas",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "brown beans",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "chickpeas (garbanzo beans)",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "cow peas",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "edamame (young soybeans)",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "falafel (spiced, mashed chickpeas)",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "fava beans (broad beans)",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "hummus (chickpea spread)",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "kidney beans",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "lentils",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "lima beans",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "mung beans",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "navy beans",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "pigeon peas",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "pink beans",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "pinto beans",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "soy beans",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "split peas",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "white beans",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "breadfruit",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "burdock root",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "cassava",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "corn",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "fufu",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "green bananas",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "green lima beans",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "green peas",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "hominy",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "jicama",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "lotus root",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "parsnips",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "plantains",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "potatoes, white",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "potato chips",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "potatoes, fried",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "salsify",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "tapioca",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "taro root (dasheen or yautia)",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "water chestnuts",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "yams",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "yuca",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "alfalfa sprouts",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "arrowroot",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "artichokes",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "asparagus",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "avocado",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "bamboo shoots",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "bean sprouts",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "beets",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "bitter melon (bitter gourd, balsam pear)",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "broccoflower",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "Brussels sprouts",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "cabbage",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "cactus pads (nopales)",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "cauliflower",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "celeriac",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "celery",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "chayote (mirliton)",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "chives",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "cucumbers",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "daikon",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "drumstick pods (moringa)",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "eggplant",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "fennel bulb",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "fiddlehead ferns",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "garlic",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "ginger root",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "green peppers",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "green beans",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "hearts of palm",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "Jerusalem artichokes (sunchokes)",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "jute",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "kohlrabi",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "leeks",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "lettuce, iceberg",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "luffa (Chinese okra)",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "mushrooms",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "okra",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "onions",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "pattypan squash",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "purslane",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "radicchio",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "radishes",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "red cabbage",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "rutabaga",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "seaweed",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "scallions",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "snow peas",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "sorrel",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "spaghetti squash",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "tomatillos",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "turnips",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "wax beans",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "yellow squash",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "zucchini",
+      "category": "Vegetable"
+    }
+  },
+  {
+    "Label": {
+      "name": "amaranth",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "barley",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "brown rice",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "buckwheat",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "bulgur (cracked wheat)",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "dark rye",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "injera",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "kamut",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "millet",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "muesli",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "oatmeal",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "oats",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "popcorn",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "quinoa",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "rolled oats",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "sorghum",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "spelt",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "teff",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "triticale",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "whole grain chips",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "whole grain cornmeal",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "whole rye",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "whole wheat bread",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "whole wheat cereal flakes",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "whole wheat chapati",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "whole wheat crackers",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "whole wheat pasta",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "whole wheat sandwich buns and rolls",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "whole wheat tortillas",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "wild rice",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "bagels",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "biscuits",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "breadcrumbs",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "cakes",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "challah bread",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "cookies",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "brownies",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "corn flakes",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "corn tortilla",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "cornbread",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "couscous",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "crackers, saltine",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "cream of rice",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "cream of wheat",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "doughnuts",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "muffins",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "flour tortilla",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "French bread",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "grits",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "masa",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "matzo",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "naan",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "noodles",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "pancakes",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "pasta (spaghetti, macaroni)",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "pie/pastry crusts",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "pita bread",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "pizza crust",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "polenta",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "pretzels",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "ramen noodles",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "refined-grain cereals",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "refined-grain crackers",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "rice cakes",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "rice paper (spring roll wrappers)",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "rice vermicelli",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "waffles",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "white bread",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "white rice",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "white sandwich buns and rolls",
+      "category": "Grains"
+    }
+  },
+  {
+    "Label": {
+      "name": "beef",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "goat",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "ham",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "lamb",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "pork",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "beef",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "bear",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "bison",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "deer",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "elk",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "moose",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "opossum",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "rabbit",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "raccoon",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "squirrel",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "venison",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "brain",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "chitterlings",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "giblets",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "gizzard",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "heart",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "kidney",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "liver",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "stomach",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "sweetbreads",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "tongue",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "tripe",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "chicken",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "Cornish hen",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "dove",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "duck",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "goose",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "ostrich",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "pheasant",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "quail",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "turkey",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "cold cuts / cured meat",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "bacon",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "hot dogs",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "sausages",
+      "category": "Meat"
+    }
+  },
+  {
+    "Label": {
+      "name": "almonds",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "almond butter",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "Brazil nuts",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "cashew butter",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "cashews",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "chestnuts",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "chia seeds",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "flax seeds",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "hazelnuts (filberts)",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "macadamia nuts",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "mixed nuts",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "peanut butter",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "peanuts",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "pecans",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "pine nuts",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "pistachios",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "pumpkin seeds",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "sesame butter or paste (tahini)",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "sesame seeds",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "sunflower butter",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "sunflower seeds",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "tempeh",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "texturized vegetable protein (TVP)",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "tofu (made from soybeans)",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "veggie burgers (made from soybeans)",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "walnuts",
+      "category": "Nuts, Seeds, Soy"
+    }
+  },
+  {
+    "Label": {
+      "name": "black sea bass",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "catfish",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "cod",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "flounder",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "freshwater trout",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "haddock",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "hake",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "halibut",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "herring",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "mackerel",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "mullet",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "perch",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "pollock",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "salmon",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "sea bass",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "snapper",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "sole",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "sushi",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "tilapia",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "whiting",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "clams",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "crab",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "crayfish",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "lobster",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "mussels",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "octopus",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "oysters",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "scallops",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "shrimp",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "squid (calamari)",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "anchovies",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "freshwater trout",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "herring",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "light tuna",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "salmon",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "sardines",
+      "category": "Seafood"
+    }
+  },
+  {
+    "Label": {
+      "name": "chicken eggs",
+      "category": "Eggs"
+    }
+  },
+  {
+    "Label": {
+      "name": "duck eggs",
+      "category": "Eggs"
+    }
+  },
+  {
+    "Label": {
+      "name": "buttermilk",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "fat-free (skim) milk",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "flavored milks",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "lactose-free milks",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "low fat (1%) milk",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "reduced fat (2%) milk",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "whole milk",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "frozen yogurt",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "ice milk",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "milk",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "ice cream",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "lassi",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "puddings",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "sherbet",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "smoothies",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "soy milk",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "yogurt (milk-based)",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "kefir",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "yogurt (soy-milk)",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "cheddar",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "Gouda",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "mozzarella",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "muenster",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "parmesan",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "provolone",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "Romano",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "Swiss",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "brie",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "camembert",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "cottage cheese",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "feta",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "ricotta",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "American cheese",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "queso blanco",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "queso fresco",
+      "category": "Dairy"
+    }
+  },
+  {
+    "Label": {
+      "name": "tea bags and grounds",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "coffee grounds",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "bones",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "gristle",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "poultry skin",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "grease, cooking oil",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "flowers",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "leaves",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "paper towel rolls",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "egg shells",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "nut shells",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "seafood shells",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "lint",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "pencil shavings",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "pet hair",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "fruit and vegetable peels",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "shredded paper",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "corn husks",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "pulp, fruit and vegetable",
+      "category": "Non-edible"
+    }
+  },
+  {
+    "Label": {
+      "name": "pizza",
+      "category": "Prepared"
+    }
+  },
+  {
+    "Label": {
+      "name": "dumplings",
+      "category": "Prepared"
+    }
+  },
+  {
+    "Label": {
+      "name": "burritos",
+      "category": "Prepared"
+    }
+  },
+  {
+    "Label": {
+      "name": "burgers",
+      "category": "Prepared"
+    }
+  },
+  {
+    "Label": {
+      "name": "stir-fry",
+      "category": "Prepared"
+    }
+  },
+  {
+    "Label": {
+      "name": "lo/chow mein",
+      "category": "Prepared"
+    }
+  },
+  {
+    "Label": {
+      "name": "egg roll",
+      "category": "Prepared"
+    }
+  }
 ]

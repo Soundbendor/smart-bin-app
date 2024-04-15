@@ -1,6 +1,7 @@
 // Flutter imports:
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:go_router/go_router.dart';
@@ -29,7 +30,8 @@ class _HomePageState extends State<HomePage> {
   // Map day to total compost weight
   Map<DateTime, double> weightCounts = {};
   late Future loadDetectionFuture;
-
+  //Label data
+  Map categories = {};
   // Load all detections from the database
   @override
   void initState() {
@@ -39,6 +41,16 @@ class _HomePageState extends State<HomePage> {
       });
     });
     super.initState();
+    loadCategories();
+  }
+
+  Future<void> loadCategories() async {
+    final String response =
+        await rootBundle.loadString('assets/data/categories.json');
+    final data = await json.decode(response);
+    setState(() {
+      categories = data;
+    });
   }
 
   // Build the home page
@@ -115,21 +127,18 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(height: 10),
           Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    "Detections by Food Category",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 10),
-                  CircleChart(
-                    data: labelCounts,
-                  ),
-                ],
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  "Detections by Food Category",
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 10),
+                CircleChart(
+                  data: labelCounts,
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 20),
@@ -154,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 10),
                   FractionallySizedBox(
                     widthFactor: 0.9,
-                    child: LineChart(
+                    child: BarChart(
                       data: weightCounts,
                     ),
                   ),
@@ -183,13 +192,16 @@ class _HomePageState extends State<HomePage> {
         // Extract month and day from each timestamp, and use that as the key
         weightCounts[monthDay] =
             (weightCounts[monthDay] ?? 0.0) + detection["weight"];
+
         if (detection["boxes"] != null) {
-          String boxes = detection["boxes"];
-          List<dynamic> boxesList = jsonDecode(boxes);
-          // If the boxes field is populated, loop over the list and extract the name that's at index 0 of each item
+          List<dynamic> boxesList = jsonDecode(detection["boxes"]);
           for (var label in boxesList) {
             String name = label['category_name'];
-            labelCounts[name] = (labelCounts[name] ?? 0) + 1;
+            name = name.toLowerCase();
+            String? category = categories[name];
+            category ??= categories['${name}s'];
+            category ??= "Undefined";
+            labelCounts[category] = (labelCounts[category] ?? 0) + 1;
           }
         }
       }
