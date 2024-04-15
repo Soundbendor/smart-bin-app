@@ -29,7 +29,6 @@ class AnnotationPage extends StatefulWidget {
           .then((detection) => detection!.preDetectImgLink);
     });
   }
-
   @override
   State<AnnotationPage> createState() => _AnnotationPageState();
 }
@@ -75,20 +74,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
         _showAnnotationPopup();
       });
     }
-  }
-
-  /// Captures the annotated image
-  ///
-  /// Uses the RepaintBoundary's key to obtain the RenderObject, and converts it
-  /// to it into a Uint8List to be used with Image.memory
-  void captureImage() async {
-    RenderRepaintBoundary boundary =
-        _captureKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-    ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    final capturedImage = byteData?.buffer.asUint8List();
-    debug("Captured Image Size: ${capturedImage?.length}");
-    setState(() {});
   }
 
   /// Renders the popup that educates the user on how to properly annotate their composted items
@@ -385,7 +370,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
                                     notifier.clearCurrentAnnotation();
                                     Future.delayed(
                                         const Duration(milliseconds: 100), () {
-                                      captureImage();
                                       notifier.reset();
                                     });
                                   },
@@ -453,16 +437,16 @@ class MyAlertDialog extends StatelessWidget {
                 items: labels,
                 pickedItemBuilder: (label) {
                   return Text(
-                    "Selected Label: ${label["Label"]}",
+                    "Selected Label: ${label["Label"]["name"]}",
                     textAlign: TextAlign.center,
                   );
                 },
                 //Each label has a category, we want to search the Labels
                 fieldToCheck: (label) {
-                  return label["Label"];
+                  return label["Label"]["name"];
                 },
                 itemBuilder: (label, index) {
-                  return Text(label["Label"]);
+                  return Text(label["Label"]["name"]);
                 },
                 pickedItemsContainerBuilder: (pickedItems) {
                   return pickedItems.isNotEmpty
@@ -472,7 +456,9 @@ class MyAlertDialog extends StatelessWidget {
                 // Options associated with creating a new item when searched item isn't found
                 createOptions: CreateOptions(
                   pickCreated: true,
-                  create: (text) => {"Category": "None", "Label": text},
+                  create: (text) => {
+                    "Label": {"name": text, "category": "Undefined"}
+                  },
                   createBuilder: (text) => Align(
                     alignment: Alignment.centerLeft,
                     child: Text('Create "$text"'),
@@ -489,7 +475,7 @@ class MyAlertDialog extends StatelessWidget {
                         // Only pop out of the dialog when pressing submit if you've selected a label
                         if (controller.getPickedItems().isNotEmpty) {
                           context.read<AnnotationNotifier>().setLabel(
-                              controller.getPickedItems()[0]["Label"]);
+                              controller.getPickedItems()[0]["Label"]["name"]);
                           Navigator.of(context).pop();
                         }
                       },
