@@ -166,21 +166,28 @@ class BleDevice {
 
   /// Creates a subscription to the device's bond state.
   void _createBondStateSubscription() {
-    final stream = _device.bondState.listen((status) {
-      if (status == BluetoothBondState.bonded) {
-        isBonded = true;
-        emit(BleDeviceClientEvents.bonded, null);
-        debug("BleDevice[_createBondStateSubscription]: Device bonded");
-      } else if (status == BluetoothBondState.none) {
-        isBonded = false;
-        debug("BleDevice[_createBondStateSubscription]: Device not bonded");
-      } else if (status == BluetoothBondState.bonding) {
-        isBonded = false;
-        debug("BleDevice[_createBondStateSubscription]: Device bonding");
-      }
-      emit(BleDeviceClientEvents.bondChange, status);
-    });
-    _device.cancelWhenDisconnected(stream, delayed: true);
+    if (!Platform.isAndroid) {
+      isBonded = true;
+      emit(BleDeviceClientEvents.bonded, null);
+      debug(
+          "BleDevice[_createBondStateSubscription]: Device likely bonded (iOS)");
+    } else {
+      final stream = _device.bondState.listen((status) {
+        if (status == BluetoothBondState.bonded) {
+          isBonded = true;
+          emit(BleDeviceClientEvents.bonded, null);
+          debug("BleDevice[_createBondStateSubscription]: Device bonded");
+        } else if (status == BluetoothBondState.none) {
+          isBonded = false;
+          debug("BleDevice[_createBondStateSubscription]: Device not bonded");
+        } else if (status == BluetoothBondState.bonding) {
+          isBonded = false;
+          debug("BleDevice[_createBondStateSubscription]: Device bonding");
+        }
+        emit(BleDeviceClientEvents.bondChange, status);
+      });
+      _device.cancelWhenDisconnected(stream, delayed: true);
+    }
     _rebuildSubscriptionList.add([_BleSubscriptionType.bond]);
   }
 
@@ -327,7 +334,7 @@ class BleDevice {
   }
 
   Future<void> _updateServices() async {
-    if (!Platform.isAndroid) {
+    if (Platform.isAndroid) {
       debug("BleDevice[waitForPair]: Pairing complete, clearing GATT cache");
       await _device.clearGattCache();
     }

@@ -1,5 +1,4 @@
 // Flutter imports:
-import 'package:binsight_ai/database/connection.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
