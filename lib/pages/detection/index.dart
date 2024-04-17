@@ -17,10 +17,10 @@ class DetectionsPage extends StatefulWidget {
   const DetectionsPage({super.key});
 
   @override
-  State<DetectionsPage> createState() => _DetectionsPageState();
+  State<DetectionsPage> createState() => DetectionsPageState();
 }
 
-class _DetectionsPageState extends State<DetectionsPage> {
+class DetectionsPageState extends State<DetectionsPage> {
   /// Whether to display the detections in a large or small format.
   ///
   /// When [sizeToggle] is true, the detections are displayed in a large card format.
@@ -47,38 +47,51 @@ class _DetectionsPageState extends State<DetectionsPage> {
     Provider.of<DeviceNotifier>(context, listen: false).setDevice(bledevice);
     await Provider.of<DeviceNotifier>(context, listen: false).connect();
     if (!context.mounted) return;
-    Provider.of<DeviceNotifier>(context, listen: false).listenForConnectionEvents();
+    Provider.of<DeviceNotifier>(context, listen: false)
+        .listenForConnectionEvents();
 
-    final statusCharacteristic = await Provider.of<DeviceNotifier>(context, listen: false).device?.readCharacteristic(serviceId: mainServiceId, characteristicId: wifiStatusCharacteristicId);
+    final statusCharacteristic =
+        await Provider.of<DeviceNotifier>(context, listen: false)
+            .device
+            ?.readCharacteristic(
+                serviceId: mainServiceId,
+                characteristicId: wifiStatusCharacteristicId);
 
     if (!context.mounted) return;
-    final Map<String, dynamic> statusJson = await SmartBinDevice.decodeCharacteristic(context, statusCharacteristic!);
+    final Map<String, dynamic> statusJson =
+        await SmartBinDevice.decodeCharacteristic(
+            context, statusCharacteristic!);
     if (statusJson["success"]) {
       wifiConnectedToInternet = statusJson["internet_access"];
     }
 
     // Navigator.of(context).pop();
+    if (!context.mounted) return;
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("WiFi Connection Status"),
-          content: Text(wifiConnectedToInternet ? "All good! You were already connected." : "Oops! You are disconnected. Reconnect now?"),
-          actions: !wifiConnectedToInternet ? <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Yes"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text ("No"),
-            )
-          ] : null,
+          content: Text(wifiConnectedToInternet
+              ? "All good! You were already connected."
+              : "Oops! You are disconnected. Reconnect now?"),
+          actions: !wifiConnectedToInternet
+              ? <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("Yes"),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("No"),
+                  )
+                ]
+              : null,
         );
       },
     );
@@ -106,16 +119,15 @@ class _DetectionsPageState extends State<DetectionsPage> {
                 onPressed: () {
                   // Removes the dialog and takes the user back to the bluetooth setup screen
                   Navigator.of(context).pop();
-                  showDialog(context: context,
-                  builder: (BuildContext context) {
-                    return const AlertDialog(
-                      title: Text("Connecting..."),
-                    );
-                  });
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const AlertDialog(
+                          title: Text("Connecting..."),
+                        );
+                      });
                   connectToDevice(context);
                   // once it connects, read the characteristic that says if it's connected or not
-
-
                 },
                 child: const Text("Yes"),
               ),
@@ -203,6 +215,10 @@ class _DetectionsPageState extends State<DetectionsPage> {
                 Text(
                   "Image Size",
                   style: Theme.of(context).textTheme.labelMedium,
+                ),
+                IconButton(
+                  onPressed: () => loadDetections,
+                  icon: const Icon(Icons.refresh),
                 ),
               ],
             ),
