@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the build method from the MyAlertDialog class, for the Dart programming language.">
-  <title>build method - MyAlertDialog class - annotation library - Dart API</title>
+  <meta name="description" content="API docs for the build method from the BarChart class, for the Dart programming language.">
+  <title>build method - BarChart class - line_chart library - Dart API</title>
 
 
   
@@ -29,8 +29,8 @@
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">binsight_ai</a></li>
-    <li><a href="../../pages_detection_annotation/pages_detection_annotation-library.html">pages&#47;detection&#47;annotation.dart</a></li>
-    <li><a href="../../pages_detection_annotation/MyAlertDialog-class.html">MyAlertDialog</a></li>
+    <li><a href="../../widgets_line_chart/widgets_line_chart-library.html">widgets&#47;line_chart.dart</a></li>
+    <li><a href="../../widgets_line_chart/BarChart-class.html">BarChart</a></li>
     <li class="self-crumb">build method</li>
   </ol>
   <div class="self-name">build</div>
@@ -54,7 +54,7 @@
   <div
       id="dartdoc-main-content"
       class="main-content"
-      data-above-sidebar="pages_detection_annotation&#47;MyAlertDialog-class-sidebar.html"
+      data-above-sidebar="widgets_line_chart&#47;BarChart-class-sidebar.html"
       data-below-sidebar="">
       <div>
 <h1><span class="kind-method">build</span> method 
@@ -104,7 +104,7 @@ and</li>
 <li>any ambient state obtained from the <code>context</code> using
 <a href="https://api.flutter.dev/flutter/widgets/BuildContext/dependOnInheritedWidgetOfExactType.html">BuildContext.dependOnInheritedWidgetOfExactType</a>.</li>
 </ul>
-<p>If a widget's <a href="../../pages_detection_annotation/MyAlertDialog/build.html">build</a> method is to depend on anything else, use a
+<p>If a widget's <a href="../../widgets_line_chart/BarChart/build.html">build</a> method is to depend on anything else, use a
 <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a> instead.</p>
 <p>See also:</p>
 <ul>
@@ -118,87 +118,37 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  return AlertDialog(
-    title: const Text(
-      &quot;Select A Label&quot;,
-      textAlign: TextAlign.center,
+  &#47;&#47; Create sorted chartdata for graph construction using the date and weights in data
+  List&lt;_ChartData&gt; lineData = data.entries
+      .map((entry) =&gt; _ChartData(entry.key, entry.value))
+      .toList();
+  lineData.sort((a, b) =&gt; a.timestamp.compareTo(b.timestamp));
+
+  &#47;&#47; If there is not a weeks worth of data, fill the rest of the week with zeros
+  while (lineData.length &lt; 7) {
+    DateTime latestTimestamp = lineData.isNotEmpty
+        ? lineData
+            .map((data) =&gt; data.timestamp)
+            .reduce((a, b) =&gt; a.isAfter(b) ? a : b)
+        : DateTime.now();
+
+    DateTime nextDay = latestTimestamp.add(const Duration(days: 1));
+    lineData.add(_ChartData(nextDay, 0.0));
+  }
+
+  &#47;&#47; Use the cartesian chart with the _ChartData, specifying the main axis as date time
+  return SfCartesianChart(
+    primaryXAxis: DateTimeAxis(
+      isVisible: true,
+      dateFormat: DateFormat(&#39;M&#47;d&#39;),
     ),
-    content: SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            &#47;&#47; Create MultipleSearchSelection widget with the ability to create new items
-            MultipleSearchSelection.creatable(
-              controller: controller,
-              clearAllButton: const Text(
-                &quot;Clear&quot;,
-                textAlign: TextAlign.center,
-              ),
-              maxSelectedItems: 1,
-              searchField: const TextField(
-                decoration: InputDecoration(
-                  hintText: &#39;Search Labels&#39;,
-                ),
-              ),
-              items: labels,
-              pickedItemBuilder: (label) {
-                return Text(
-                  &quot;Selected Label: ${label[&quot;Label&quot;][&quot;name&quot;]}&quot;,
-                  textAlign: TextAlign.center,
-                );
-              },
-              &#47;&#47;Each label has a category, we want to search the Labels
-              fieldToCheck: (label) {
-                return label[&quot;Label&quot;][&quot;name&quot;];
-              },
-              itemBuilder: (label, index) {
-                return Text(label[&quot;Label&quot;][&quot;name&quot;]);
-              },
-              pickedItemsContainerBuilder: (pickedItems) {
-                return pickedItems.isNotEmpty
-                    ? Center(child: pickedItems[0])
-                    : const Padding(padding: EdgeInsets.zero);
-              },
-              &#47;&#47; Options associated with creating a new item when searched item isn&#39;t found
-              createOptions: CreateOptions(
-                pickCreated: true,
-                create: (text) =&gt; {
-                  &quot;Label&quot;: {&quot;name&quot;: text, &quot;category&quot;: &quot;Undefined&quot;}
-                },
-                createBuilder: (text) =&gt; Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(&#39;Create &quot;$text&quot;&#39;),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      &#47;&#47; Only pop out of the dialog when pressing submit if you&#39;ve selected a label
-                      if (controller.getPickedItems().isNotEmpty) {
-                        context.read&lt;AnnotationNotifier&gt;().setLabel(
-                            controller.getPickedItems()[0][&quot;Label&quot;][&quot;name&quot;]);
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    child: const Text(&quot;Submit&quot;),
-                  ),
-                  TextButton(
-                    onPressed: () =&gt; Navigator.of(context).pop(),
-                    child: const Text(&quot;Cancel&quot;),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
+    series: &lt;ColumnSeries&lt;_ChartData, DateTime&gt;&gt;[
+      ColumnSeries&lt;_ChartData, DateTime&gt;(
+        dataSource: lineData,
+        xValueMapper: (_ChartData detection, _) =&gt; detection.timestamp,
+        yValueMapper: (_ChartData detection, _) =&gt; detection.weight,
       ),
-    ),
+    ],
   );
 }</code></pre>
 </section>
@@ -216,13 +166,13 @@ Widget build(BuildContext context) {
 
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">binsight_ai</a></li>
-    <li><a href="../../pages_detection_annotation/pages_detection_annotation-library.html">annotation</a></li>
-    <li><a href="../../pages_detection_annotation/MyAlertDialog-class.html">MyAlertDialog</a></li>
+    <li><a href="../../widgets_line_chart/widgets_line_chart-library.html">line_chart</a></li>
+    <li><a href="../../widgets_line_chart/BarChart-class.html">BarChart</a></li>
     <li class="self-crumb">build method</li>
 </ol>
 
 
-    <h5>MyAlertDialog class</h5>
+    <h5>BarChart class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
 
