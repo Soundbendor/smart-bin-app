@@ -77,13 +77,14 @@ class DetectionsPageState extends State<DetectionsPage> {
         return AlertDialog(
           title: const Text("WiFi Connection Status"),
           content: Text(wifiConnectedToInternet
-              ? "All good! You were already connected."
-              : "Oops! You are disconnected. Reconnect now?"),
+              ? "All good! You were already connected, did you want to select a new network?."
+              : "Oops! Your bin was disconnected from the internet. Reconnect now?"),
           actions: !wifiConnectedToInternet
               ? <Widget>[
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
+                      Navigator.of(context).pushReplacementNamed("wifi-scan");
                     },
                     child: const Text("Yes"),
                   ),
@@ -108,6 +109,7 @@ class DetectionsPageState extends State<DetectionsPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("Check WiFi Connection?"),
+            content: Text("Note: This will require a Bluetooth Connection to your bin.", style: Theme.of(context).textTheme.bodyLarge),
             actions: [
               TextButton(
                 style: TextButton.styleFrom(backgroundColor: Colors.red),
