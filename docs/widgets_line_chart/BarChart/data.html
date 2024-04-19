@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the addToAllAnnotations method from the AnnotationNotifier class, for the Dart programming language.">
-  <title>addToAllAnnotations method - AnnotationNotifier class - providers library - Dart API</title>
+  <meta name="description" content="API docs for the data property from the BarChart class, for the Dart programming language.">
+  <title>data property - BarChart class - line_chart library - Dart API</title>
 
 
   
@@ -29,11 +29,11 @@
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">binsight_ai</a></li>
-    <li><a href="../../util_providers/util_providers-library.html">util&#47;providers.dart</a></li>
-    <li><a href="../../util_providers/AnnotationNotifier-class.html">AnnotationNotifier</a></li>
-    <li class="self-crumb">addToAllAnnotations method</li>
+    <li><a href="../../widgets_line_chart/widgets_line_chart-library.html">widgets&#47;line_chart.dart</a></li>
+    <li><a href="../../widgets_line_chart/BarChart-class.html">BarChart</a></li>
+    <li class="self-crumb">data property</li>
   </ol>
-  <div class="self-name">addToAllAnnotations</div>
+  <div class="self-name">data</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -54,41 +54,25 @@
   <div
       id="dartdoc-main-content"
       class="main-content"
-      data-above-sidebar="util_providers&#47;AnnotationNotifier-class-sidebar.html"
+      data-above-sidebar="widgets_line_chart&#47;BarChart-class-sidebar.html"
       data-below-sidebar="">
       <div>
-<h1><span class="kind-method">addToAllAnnotations</span> method 
+<h1><span class="kind-property">data</span> property 
 </h1></div>
 
-    <section class="multi-line-signature">
-      
+        <section class="multi-line-signature">
+          
+          <a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>&gt;</span>
+          <span class="name ">data</span>
+          <div class="features"><span class="feature">final</span></div>
 
-<span class="returntype">void</span>
-<span class="name ">addToAllAnnotations</span>(<wbr>)
+        </section>
+        
 
-      
-
-    </section>
-    
-<section class="desc markdown">
-  <p>Update list of all annotations</p>
-</section>
-
-
-    
+        
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">void addToAllAnnotations() {
-  combinedCurrentAnnotation = combineCurrentSegments();
-  if (combinedCurrentAnnotation != null &amp;&amp; label != null) {
-    allAnnotations.add({
-      &quot;category_name&quot;: label,
-      &quot;xy_coord_list&quot;: combinedCurrentAnnotation!.toFloatList()
-    });
-  }
-  debug(allAnnotations);
-  notifyListeners();
-}</code></pre>
+  <pre class="language-dart"><code class="language-dart">final Map&lt;DateTime, double&gt; data;</code></pre>
 </section>
 
 
@@ -104,13 +88,13 @@
 
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">binsight_ai</a></li>
-    <li><a href="../../util_providers/util_providers-library.html">providers</a></li>
-    <li><a href="../../util_providers/AnnotationNotifier-class.html">AnnotationNotifier</a></li>
-    <li class="self-crumb">addToAllAnnotations method</li>
+    <li><a href="../../widgets_line_chart/widgets_line_chart-library.html">line_chart</a></li>
+    <li><a href="../../widgets_line_chart/BarChart-class.html">BarChart</a></li>
+    <li class="self-crumb">data property</li>
 </ol>
 
 
-    <h5>AnnotationNotifier class</h5>
+    <h5>BarChart class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
 
