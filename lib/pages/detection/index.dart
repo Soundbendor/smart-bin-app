@@ -1,11 +1,14 @@
 // Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:rotating_icon_button/rotating_icon_button.dart';
+
+// Project imports:
 import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/providers/device_notifier.dart';
 import 'package:binsight_ai/util/smart_bin_device.dart';
-import 'package:flutter/material.dart';
-
-// Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/detections.dart';
 import 'package:binsight_ai/util/bluetooth_bin_data.dart';
@@ -216,9 +219,10 @@ class DetectionsPageState extends State<DetectionsPage> {
                   "Image Size",
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
-                IconButton(
-                  onPressed: () => loadDetections,
-                  icon: const Icon(Icons.refresh),
+                RotatingIconButton(
+                  onTap: () => loadDetections(context),
+                  rotateType: RotateType.full,
+                  child: const Icon(Icons.refresh, size: 40, weight: 75),
                 ),
               ],
             ),
