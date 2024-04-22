@@ -400,7 +400,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
 }
 
 /// Custom alert dialog that prompts the user to search and select for a label
-class MyAlertDialog extends StatelessWidget {
+class MyAlertDialog extends StatefulWidget {
   const MyAlertDialog(
       {super.key, required this.labels, required this.controller});
 
@@ -409,6 +409,14 @@ class MyAlertDialog extends StatelessWidget {
 
   /// Controller for the text input associated with searching
   final MultipleSearchController controller;
+
+  @override
+  State<MyAlertDialog> createState() => _MyAlertDialogState();
+}
+
+class _MyAlertDialogState extends State<MyAlertDialog> {
+  String? selectedLabel;
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -423,23 +431,32 @@ class MyAlertDialog extends StatelessWidget {
             children: [
               // Create MultipleSearchSelection widget with the ability to create new items
               MultipleSearchSelection.creatable(
-                controller: controller,
-                clearAllButton: const Text(
-                  "Clear",
-                  textAlign: TextAlign.center,
-                ),
+                controller: widget.controller,
+                onTapClearAll: () {
+                  setState(() {
+                    selectedLabel = null;
+                  });
+                },
                 maxSelectedItems: 1,
-                searchField: const TextField(
+                searchField: TextField(
                   decoration: InputDecoration(
-                    hintText: 'Search Labels',
+                    hintText: selectedLabel == null
+                        ? "Select A Label"
+                        : selectedLabel!,
+                    hintStyle: selectedLabel == null
+                        ? const TextStyle(color: Colors.grey)
+                        : const TextStyle(color: Colors.black),
                   ),
                 ),
-                items: labels,
+                showClearAllButton: false,
+                items: widget.labels,
+                onItemAdded: (item) {
+                  setState(() {
+                    selectedLabel = item["Label"]["name"];
+                  });
+                },
                 pickedItemBuilder: (label) {
-                  return Text(
-                    "Selected Label: ${label["Label"]["name"]}",
-                    textAlign: TextAlign.center,
-                  );
+                  return const Text("");
                 },
                 //Each label has a category, we want to search the Labels
                 fieldToCheck: (label) {
@@ -473,18 +490,41 @@ class MyAlertDialog extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         // Only pop out of the dialog when pressing submit if you've selected a label
-                        if (controller.getPickedItems().isNotEmpty) {
+                        if (widget.controller.getPickedItems().isNotEmpty) {
                           context.read<AnnotationNotifier>().setLabel(
-                              controller.getPickedItems()[0]["Label"]["name"]);
+                              widget.controller.getPickedItems()[0]["Label"]
+                                  ["name"]);
                           Navigator.of(context).pop();
                         }
                       },
                       child: const Text("Submit"),
                     ),
+                    selectedLabel != null
+                        ? TextButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.red)),
+                            onPressed: () => setState(
+                              () {
+                                selectedLabel = null;
+                                widget.controller.clearAllPickedItems();
+                              },
+                            ),
+                            child: const Text(
+                              "Clear",
+                            ),
+                          )
+                        : const Text(""),
                     TextButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.grey)),
                       onPressed: () => Navigator.of(context).pop(),
-                      child: const Text("Cancel"),
-                    )
+                      child: const Text(
+                        "Cancel",
+                      ),
+                    ),
                   ],
                 ),
               ),
