@@ -8,7 +8,6 @@ import 'package:flutter_test/flutter_test.dart';
 // Project imports:
 import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/providers/device_notifier.dart';
-import '../shared.dart';
 
 class FakeBleDevice extends BleDevice {
   FakeBleDevice({
@@ -47,8 +46,6 @@ class FakeBleDevice extends BleDevice {
 }
 
 void main() async {
-  testInit();
-
   test("Device can be set", () {
     final notifier = DeviceNotifier();
     final device = FakeBleDevice();
