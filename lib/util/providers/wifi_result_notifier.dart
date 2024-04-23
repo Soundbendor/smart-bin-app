@@ -1,7 +1,8 @@
 // Flutter imports:
-
-import 'package:binsight_ai/util/wifi_scan.dart';
 import 'package:flutter/material.dart';
+
+// Project imports:
+import 'package:binsight_ai/util/wifi_scan.dart';
 
 class WifiResultNotifier with ChangeNotifier {
   WifiScanResult? wifiResult;
