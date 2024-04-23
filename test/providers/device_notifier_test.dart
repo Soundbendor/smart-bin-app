@@ -24,9 +24,25 @@ class FakeBleDevice extends BleDevice {
   @override
   bool isConnected;
 
+  bool shouldThrowException = false;
+
   @override
   void disconnect() {
     isConnected = false;
+  }
+
+  @override
+  Future<void> connect() async {
+    if (shouldThrowException) {
+      throw Exception("Failed to connect");
+    }
+  }
+
+  @override
+  Future<void> waitForPair({int? timeout}) async {
+    if (shouldThrowException) {
+      throw Exception("Failed to pair");
+    }
   }
 }
 
@@ -92,6 +108,60 @@ void main() async {
     expect(notified, true);
     notified = false;
     device.emit(BleDeviceClientEvents.disconnected, null);
+    expect(notified, true);
+  });
+
+  test("Connecting to device succeeds and notifies listeners", () async {
+    final notifier = DeviceNotifier();
+    final device = FakeBleDevice();
+    bool notified = false;
+    notifier.addListener(() {
+      notified = true;
+    });
+    notifier.setDevice(device);
+    await notifier.connect();
+    expect(notifier.hasError(), false);
+    expect(notified, true);
+  });
+
+  test("Connecting to device fails and notifies listeners", () async {
+    final notifier = DeviceNotifier();
+    final device = FakeBleDevice();
+    bool notified = false;
+    notifier.addListener(() {
+      notified = true;
+    });
+    device.shouldThrowException = true;
+    notifier.setDevice(device);
+    await notifier.connect();
+    expect(notifier.hasError(), true);
+    expect(notified, true);
+  });
+
+  test("Pairing with device succeeds and notifies listeners", () async {
+    final notifier = DeviceNotifier();
+    final device = FakeBleDevice();
+    bool notified = false;
+    notifier.addListener(() {
+      notified = true;
+    });
+    notifier.setDevice(device);
+    await notifier.pair();
+    expect(notifier.hasError(), false);
+    expect(notified, true);
+  });
+
+  test("Pairing with device fails and notifies listeners", () async {
+    final notifier = DeviceNotifier();
+    final device = FakeBleDevice();
+    bool notified = false;
+    notifier.addListener(() {
+      notified = true;
+    });
+    device.shouldThrowException = true;
+    notifier.setDevice(device);
+    await notifier.pair();
+    expect(notifier.hasError(), true);
     expect(notified, true);
   });
 }
