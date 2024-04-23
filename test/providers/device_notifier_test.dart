@@ -1,11 +1,13 @@
-// Package imports:
-import 'package:binsight_ai/util/bluetooth.dart';
-import 'package:binsight_ai/util/providers/device_notifier.dart';
+// Flutter imports:
 import 'package:flutter/foundation.dart';
+
+// Package imports:
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 // Project imports:
+import 'package:binsight_ai/util/bluetooth.dart';
+import 'package:binsight_ai/util/providers/device_notifier.dart';
 import '../shared.dart';
 
 class FakeBleDevice extends BleDevice {
@@ -75,5 +77,21 @@ void main() async {
     notifier.setDevice(device);
     notifier.resetDevice();
     expect(device.isConnected, false);
+  });
+
+  test("Notifies listeners when connection status changes", () {
+    final notifier = DeviceNotifier();
+    final device = FakeBleDevice();
+    bool notified = false;
+    notifier.addListener(() {
+      notified = true;
+    });
+    notifier.setDevice(device);
+    notifier.listenForConnectionEvents();
+    device.emit(BleDeviceClientEvents.connected, null);
+    expect(notified, true);
+    notified = false;
+    device.emit(BleDeviceClientEvents.disconnected, null);
+    expect(notified, true);
   });
 }
