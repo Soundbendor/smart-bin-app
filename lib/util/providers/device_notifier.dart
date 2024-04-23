@@ -1,8 +1,9 @@
 // Flutter imports:
+import 'package:flutter/material.dart';
 
+// Project imports:
 import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/print.dart';
-import 'package:flutter/material.dart';
 
 /// Notifies listeners of changes to the device.
 ///
