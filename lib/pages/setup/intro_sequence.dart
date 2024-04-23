@@ -11,7 +11,7 @@ import 'package:binsight_ai/pages/setup/index.dart';
 import 'package:binsight_ai/pages/setup/load_screen.dart';
 import 'package:binsight_ai/pages/setup/wifi_configuration.dart';
 import 'package:binsight_ai/pages/setup/wifi_scan.dart';
-import 'package:binsight_ai/util/providers.dart';
+import 'package:binsight_ai/util/providers/setup_key_notifier.dart';
 
 /// Introduction screen for explaining the usage of the app to new users.
 class SetupScreen extends StatefulWidget {

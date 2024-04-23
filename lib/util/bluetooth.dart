@@ -589,8 +589,9 @@ class BleDeviceScanner {
   StreamSubscription? _scanSubscription;
 
   Future<void> ensureInitialized() async {
-    if (FlutterBluePlus.adapterStateNow != BluetoothAdapterState.unknown)
+    if (FlutterBluePlus.adapterStateNow != BluetoothAdapterState.unknown) {
       return;
+    }
     final stream = FlutterBluePlus.adapterState;
     await stream.first;
   }
