@@ -6,8 +6,8 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/widgets/background.dart';
+import 'package:binsight_ai/util/providers/setup_key_notifier.dart';
 
 /// Loading screen that is displayed to the user on app startup
 class LoadScreen extends StatefulWidget {

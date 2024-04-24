@@ -9,9 +9,9 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/main.dart';
 import 'package:binsight_ai/util/routes.dart';
+import 'package:binsight_ai/util/providers/setup_key_notifier.dart';
 import '../shared.dart';
 
 void main() {
