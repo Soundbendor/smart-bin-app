@@ -46,7 +46,7 @@ class _TopNavBarState extends State<TopNavBar> {
                 color: Color(0xFFeef8f4),
               ),
               child: Text(
-                'Binsight.ai',
+                'binsight.ai',
                 style: mainTheme.textTheme.displayLarge?.copyWith(
                   color: const Color(0xFF333333),
                   fontSize: 24,
