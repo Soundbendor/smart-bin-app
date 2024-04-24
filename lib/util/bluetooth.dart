@@ -150,7 +150,7 @@ class BleDevice {
   void _createConnectionStateSubscription() {
     final stream = _device.connectionState.listen((status) {
       if (status == BluetoothConnectionState.disconnected) {
-        _emit(BleDeviceClientEvents.disconnected, null);
+        emit(BleDeviceClientEvents.disconnected, null);
         if (_shouldBeConnected) {
           connect().onError((error, stackTrace) {
             debug(
@@ -168,7 +168,7 @@ class BleDevice {
     final stream = _device.bondState.listen((status) {
       if (status == BluetoothBondState.bonded) {
         isBonded = true;
-        _emit(BleDeviceClientEvents.bonded, null);
+        emit(BleDeviceClientEvents.bonded, null);
         debug("BleDevice[_createBondStateSubscription]: Device bonded");
       } else if (status == BluetoothBondState.none) {
         isBonded = false;
@@ -177,7 +177,7 @@ class BleDevice {
         isBonded = false;
         debug("BleDevice[_createBondStateSubscription]: Device bonding");
       }
-      _emit(BleDeviceClientEvents.bondChange, status);
+      emit(BleDeviceClientEvents.bondChange, status);
     });
     _device.cancelWhenDisconnected(stream, delayed: true);
     _rebuildSubscriptionList.add([_BleSubscriptionType.bond]);
@@ -247,7 +247,7 @@ class BleDevice {
     debug("BleDevice[connect]: Connected to device complete");
     isConnecting = false;
     _shouldBeConnected = true;
-    _emit(BleDeviceClientEvents.connected, null);
+    emit(BleDeviceClientEvents.connected, null);
   }
 
   /// Pairs the device and finds its services.
@@ -342,7 +342,7 @@ class BleDevice {
   void disconnect() {
     _shouldBeConnected = false;
     _device.disconnect().ignore();
-    _emit(BleDeviceClientEvents.disconnected, null);
+    emit(BleDeviceClientEvents.disconnected, null);
   }
 
   /// Reads a characteristic.
@@ -457,7 +457,7 @@ class BleDevice {
     try {
       await characteristic.setNotifyValue(true);
       final stream = characteristic.lastValueStream.listen((value) {
-        _emit(BleDeviceClientEvents.notification,
+        emit(BleDeviceClientEvents.notification,
             [serviceId, characteristicId, value]);
         if (onNotification != null) onNotification(value);
       });
@@ -545,7 +545,7 @@ class BleDevice {
   }
 
   /// Emits an event with data.
-  void _emit<T>(BleDeviceClientEvents event, T data) {
+  void emit<T>(BleDeviceClientEvents event, T data) {
     _emitter.emit(event.name, data);
   }
 
@@ -589,8 +589,9 @@ class BleDeviceScanner {
   StreamSubscription? _scanSubscription;
 
   Future<void> ensureInitialized() async {
-    if (FlutterBluePlus.adapterStateNow != BluetoothAdapterState.unknown)
+    if (FlutterBluePlus.adapterStateNow != BluetoothAdapterState.unknown) {
       return;
+    }
     final stream = FlutterBluePlus.adapterState;
     await stream.first;
   }
