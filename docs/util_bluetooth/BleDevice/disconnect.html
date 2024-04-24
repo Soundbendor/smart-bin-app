@@ -83,7 +83,7 @@ You may need to notify the user to manually disconnect from the device.</p>
   <pre class="language-dart"><code class="language-dart">void disconnect() {
   _shouldBeConnected = false;
   _device.disconnect().ignore();
-  _emit(BleDeviceClientEvents.disconnected, null);
+  emit(BleDeviceClientEvents.disconnected, null);
 }</code></pre>
 </section>
 

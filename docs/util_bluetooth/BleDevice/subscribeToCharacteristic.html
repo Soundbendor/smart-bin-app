@@ -116,7 +116,7 @@ The function is passed a <a href="https://api.flutter.dev/flutter/dart-core/List
   try {
     await characteristic.setNotifyValue(true);
     final stream = characteristic.lastValueStream.listen((value) {
-      _emit(BleDeviceClientEvents.notification,
+      emit(BleDeviceClientEvents.notification,
           [serviceId, characteristicId, value]);
       if (onNotification != null) onNotification(value);
     });
