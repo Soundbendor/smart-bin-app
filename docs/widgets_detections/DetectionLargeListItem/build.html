@@ -130,9 +130,17 @@ Widget build(BuildContext context) {
         child: Padding(
           padding: const EdgeInsets.all(9.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(formatDetectionTitle(detection),
-                  style: textTheme.headlineMedium),
+              Text(
+                formatDetectionTitle(detection),
+                style: textTheme.headlineMedium,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                &quot;Timestamp: ${detection.timestamp}&quot;,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
               Container(
                   decoration: BoxDecoration(
                     border: Border.all(

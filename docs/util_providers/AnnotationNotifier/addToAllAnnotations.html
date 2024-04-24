@@ -81,8 +81,12 @@
   <pre class="language-dart"><code class="language-dart">void addToAllAnnotations() {
   combinedCurrentAnnotation = combineCurrentSegments();
   if (combinedCurrentAnnotation != null &amp;&amp; label != null) {
-    allAnnotations.add([label, combinedCurrentAnnotation!.toFloatList()]);
+    allAnnotations.add({
+      &quot;category_name&quot;: label,
+      &quot;xy_coord_list&quot;: combinedCurrentAnnotation!.toFloatList()
+    });
   }
+  debug(allAnnotations);
   notifyListeners();
 }</code></pre>
 </section>

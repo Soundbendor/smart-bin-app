@@ -128,10 +128,10 @@ Widget build(BuildContext context) {
         color: colorScheme.onPrimary,
         child: ListTile(
           leading: DynamicImage(detection.preDetectImgLink),
-          title:
-              Text(formatDetectionTitle(detection), style: textTheme.titleMedium),
-          subtitle:
-              Text(detection.timestamp.toString(), style: textTheme.bodyMedium),
+          title: Text(formatDetectionTitle(detection),
+              style: textTheme.titleMedium),
+          subtitle: Text(detection.timestamp.toString(),
+              style: textTheme.bodyMedium),
           trailing: const Icon(Icons.arrow_forward_ios),
         ),
       ),
