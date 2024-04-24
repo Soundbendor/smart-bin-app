@@ -127,18 +127,21 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(height: 10),
           Card(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  "Detections by Food Category",
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 10),
-                CircleChart(
-                  data: labelCounts,
-                ),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    "Detections by Food Category",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 10),
+                  CircleChart(
+                    data: labelCounts,
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 20),
