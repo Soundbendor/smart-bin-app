@@ -11,7 +11,10 @@ import 'package:web_socket_channel/io.dart';
 
 // Project imports:
 import 'package:binsight_ai/util/print.dart';
-import 'package:binsight_ai/util/providers.dart';
+import 'package:binsight_ai/util/providers/annotation_notifier.dart';
+import 'package:binsight_ai/util/providers/device_notifier.dart';
+import 'package:binsight_ai/util/providers/setup_key_notifier.dart';
+import 'package:binsight_ai/util/providers/wifi_result_notifier.dart';
 import 'package:binsight_ai/util/routes.dart';
 import 'package:binsight_ai/util/styles.dart';
 import 'package:binsight_ai/util/subscriber.dart';
@@ -20,7 +23,7 @@ import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 
 const String exampleBoxes = '''
-[ 
+[
   {
     "category_name": "Apple",
     "xy_coord_list": [

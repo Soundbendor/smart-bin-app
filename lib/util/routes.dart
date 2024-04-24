@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports:
-import 'package:binsight_ai/pages/detection/label.dart';
 import 'package:binsight_ai/pages/detection/annotation.dart';
 import 'package:binsight_ai/pages/detection/detection.dart';
 import 'package:binsight_ai/pages/detection/index.dart';
