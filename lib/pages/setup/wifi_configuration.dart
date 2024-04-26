@@ -219,7 +219,7 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
       status = WifiConfigurationStatus.verifying;
     });
     int tries = 0;
-    while (tries < 5) {
+    while (tries < 10) {
       final now = DateTime.now();
       final statusData = await device.readCharacteristic(
           serviceId: mainServiceId,

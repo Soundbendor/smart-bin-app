@@ -43,24 +43,28 @@ class DetectionsPageState extends State<DetectionsPage> {
   }
 
   void connectToDevice(BuildContext context) async {
+    showDialog(context: context, builder: (BuildContext context) {
+      if 
+      return AlertDialog();
+      });
     late final bool wifiConnectedToInternet;
     Device device = (await Device.all()).first;
     BleDevice bledevice = BleDevice.fromId(device.id);
     if (!context.mounted) return;
-    Provider.of<DeviceNotifier>(context, listen: false).setDevice(bledevice);
-    await Provider.of<DeviceNotifier>(context, listen: false).connect();
-    if (!context.mounted) return;
-    Provider.of<DeviceNotifier>(context, listen: false)
-        .listenForConnectionEvents();
+    DeviceNotifier notifierProvider =
+        Provider.of<DeviceNotifier>(context, listen: false);
+    notifierProvider.setDevice(bledevice);
+    await notifierProvider.connect();
+    // if (!context.mounted) return;
+    notifierProvider.listenForConnectionEvents();
+    await notifierProvider.pair();
 
-    final statusCharacteristic =
-        await Provider.of<DeviceNotifier>(context, listen: false)
-            .device
-            ?.readCharacteristic(
-                serviceId: mainServiceId,
-                characteristicId: wifiStatusCharacteristicId);
+    final statusCharacteristic = await notifierProvider.device
+        ?.readCharacteristic(
+            serviceId: mainServiceId,
+            characteristicId: wifiStatusCharacteristicId);
 
-    if (!context.mounted) return;
+    // if (!context.mounted) return;
     final Map<String, dynamic> statusJson =
         await SmartBinDevice.decodeCharacteristic(
             context, statusCharacteristic!);
@@ -68,7 +72,7 @@ class DetectionsPageState extends State<DetectionsPage> {
       wifiConnectedToInternet = statusJson["internet_access"];
     }
 
-    // Navigator.of(context).pop();
+    Navigator.of(context).pop();
     if (!context.mounted) return;
 
     showDialog(
@@ -109,15 +113,29 @@ class DetectionsPageState extends State<DetectionsPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("Check WiFi Connection?"),
-            content: Text("Note: This will require a Bluetooth Connection to your bin.", style: Theme.of(context).textTheme.bodyLarge),
+            content: Text(
+                "Note: This will require a Bluetooth Connection to your bin.",
+                style: Theme.of(context).textTheme.bodyLarge),
             actions: [
               TextButton(
-                style: TextButton.styleFrom(backgroundColor: Colors.red),
+                style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
+                      backgroundColor: MaterialStateProperty.all(
+                        Theme.of(context).colorScheme.surface,
+                      ),
+                    ),
                 onPressed: () {
                   // Removes the dialog
                   Navigator.of(context).pop();
                 },
-                child: const Text("No"),
+                child: Text(
+                  "No",
+                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withAlpha(250),
+                      ),
+                ),
               ),
               TextButton(
                 style: TextButton.styleFrom(backgroundColor: Colors.green),
@@ -128,7 +146,17 @@ class DetectionsPageState extends State<DetectionsPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return const AlertDialog(
-                          title: Text("Connecting..."),
+                          title: Text("Connecting to Bluetooth"),
+                          content: SizedBox(
+                            height: 50,
+                            child: Center(
+                              child: SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: CircularProgressIndicator(),
+                              ),
+                            ),
+                          ),
                         );
                       });
                   connectToDevice(context);

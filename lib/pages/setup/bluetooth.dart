@@ -276,18 +276,6 @@ class _BluetoothListState extends State<BluetoothList> {
               inProgress: isScanning,
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                stopScanning();
-                GoRouter.of(context).goNamed('main');
-              },
-              child: Text(
-                "Skip Setup",
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-              ),
-            ),
           ],
         ),
       ),
