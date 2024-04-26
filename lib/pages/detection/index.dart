@@ -2,18 +2,18 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
+import 'package:provider/provider.dart';
 import 'package:rotating_icon_button/rotating_icon_button.dart';
 
 // Project imports:
-import 'package:binsight_ai/database/models/device.dart';
-import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/providers/device_notifier.dart';
-import 'package:binsight_ai/util/smart_bin_device.dart';
 import 'package:binsight_ai/database/models/detection.dart';
+import 'package:binsight_ai/util/async_ops.dart';
+import 'package:binsight_ai/util/bluetooth.dart';
+import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/widgets/detections.dart';
-import 'package:binsight_ai/util/bluetooth_bin_data.dart';
 import 'package:binsight_ai/widgets/heading.dart';
-import 'package:provider/provider.dart';
+import 'package:binsight_ai/widgets/wifi_check_dialog.dart';
 
 /// Displays the detections with padding and a size toggle button.
 class DetectionsPage extends StatefulWidget {
@@ -21,6 +21,18 @@ class DetectionsPage extends StatefulWidget {
 
   @override
   State<DetectionsPage> createState() => DetectionsPageState();
+}
+
+/// A status of the wifi's internet connection.
+enum WifiConnectedToInternet {
+  /// The wifi did not have an internet connection.
+  notConnected,
+
+  /// The status of the wifi internet connection is waiting to be read.
+  waiting,
+
+  /// The wifi did have an internet connection.
+  connected,
 }
 
 class DetectionsPageState extends State<DetectionsPage> {
@@ -42,67 +54,22 @@ class DetectionsPageState extends State<DetectionsPage> {
     super.initState();
   }
 
+  /// Creates and controls a dialog with its own context for the WiFi status check sequence.
+  Widget wifiStatusDialogBuilder(context) {
+    return const WifiCheckDialog();
+  }
+
+  /// Handles reconnecting to the user's device in order to read wifi status characteristic.
   void connectToDevice(BuildContext context) async {
-    showDialog(context: context, builder: (BuildContext context) {
-      if 
-      return AlertDialog();
-      });
-    late final bool wifiConnectedToInternet;
-    Device device = (await Device.all()).first;
-    BleDevice bledevice = BleDevice.fromId(device.id);
-    if (!context.mounted) return;
+    // Rebuild the user's device from its id to pair and connect
+    BleDevice bledevice =
+        BleDevice.fromId(sharedPreferences.getString("deviceID")!);
     DeviceNotifier notifierProvider =
         Provider.of<DeviceNotifier>(context, listen: false);
     notifierProvider.setDevice(bledevice);
     await notifierProvider.connect();
-    // if (!context.mounted) return;
     notifierProvider.listenForConnectionEvents();
     await notifierProvider.pair();
-
-    final statusCharacteristic = await notifierProvider.device
-        ?.readCharacteristic(
-            serviceId: mainServiceId,
-            characteristicId: wifiStatusCharacteristicId);
-
-    // if (!context.mounted) return;
-    final Map<String, dynamic> statusJson =
-        await SmartBinDevice.decodeCharacteristic(
-            context, statusCharacteristic!);
-    if (statusJson["success"]) {
-      wifiConnectedToInternet = statusJson["internet_access"];
-    }
-
-    Navigator.of(context).pop();
-    if (!context.mounted) return;
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("WiFi Connection Status"),
-          content: Text(wifiConnectedToInternet
-              ? "All good! You were already connected, did you want to select a new network?."
-              : "Oops! Your bin was disconnected from the internet. Reconnect now?"),
-          actions: !wifiConnectedToInternet
-              ? <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pushReplacementNamed("wifi-scan");
-                    },
-                    child: const Text("Yes"),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text("No"),
-                  )
-                ]
-              : null,
-        );
-      },
-    );
   }
 
   /// Displays a dialog that asks the user if they would like to check their
@@ -112,12 +79,18 @@ class DetectionsPageState extends State<DetectionsPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text("Check WiFi Connection?"),
+            title: Center(
+              child: Text(
+                "Check WiFi Connection?",
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+            ),
             content: Text(
                 "Note: This will require a Bluetooth Connection to your bin.",
-                style: Theme.of(context).textTheme.bodyLarge),
+                style: Theme.of(context).textTheme.labelLarge),
             actions: [
               TextButton(
+                // Style the button to match the "sad path" color scheme
                 style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
                       backgroundColor: MaterialStateProperty.all(
                         Theme.of(context).colorScheme.surface,
@@ -138,29 +111,20 @@ class DetectionsPageState extends State<DetectionsPage> {
                 ),
               ),
               TextButton(
+                // Style the button to match the "happy path" color scheme
                 style: TextButton.styleFrom(backgroundColor: Colors.green),
                 onPressed: () {
-                  // Removes the dialog and takes the user back to the bluetooth setup screen
                   Navigator.of(context).pop();
-                  showDialog(
+                  runSoon(() {
+                    // Begin connecting to the device
+                    connectToDevice(context);
+                    // Display the wifiStatusDialogBuilder throughout the entire WiFi status check process
+                    showDialog(
                       context: context,
-                      builder: (BuildContext context) {
-                        return const AlertDialog(
-                          title: Text("Connecting to Bluetooth"),
-                          content: SizedBox(
-                            height: 50,
-                            child: Center(
-                              child: SizedBox(
-                                width: 50,
-                                height: 50,
-                                child: CircularProgressIndicator(),
-                              ),
-                            ),
-                          ),
-                        );
-                      });
-                  connectToDevice(context);
-                  // once it connects, read the characteristic that says if it's connected or not
+                      builder: wifiStatusDialogBuilder,
+                      barrierDismissible: false,
+                    );
+                  });
                 },
                 child: const Text("Yes"),
               ),
@@ -258,17 +222,18 @@ class DetectionsPageState extends State<DetectionsPage> {
             ),
             // Display a loading icon until the detections are gathered from the database
             FutureBuilder(
-                future: loadDetectionFuture,
-                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-                  return snapshot.connectionState == ConnectionState.waiting
-                      ? const CircularProgressIndicator()
-                      : DetectionList(
-                          size: sizeToggle
-                              ? DetectionListType.large
-                              : DetectionListType.small,
-                          detections: detections,
-                          loadDetections: loadDetections);
-                })
+              future: loadDetectionFuture,
+              builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                return snapshot.connectionState == ConnectionState.waiting
+                    ? const CircularProgressIndicator()
+                    : DetectionList(
+                        size: sizeToggle
+                            ? DetectionListType.large
+                            : DetectionListType.small,
+                        detections: detections,
+                        loadDetections: loadDetections);
+              },
+            ),
           ],
         ),
       ),

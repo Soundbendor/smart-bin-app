@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'dart:convert';
+import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -231,23 +232,25 @@ The error was: ${(error as BleOperationFailureException).message}.
                 title: "Select Your Network!",
                 inProgress: isScanning,
               ),
-              ElevatedButton(
-                onPressed: () {
-                  stopScanning();
-                  Provider.of<DeviceNotifier>(context, listen: false)
-                      .resetDevice();
-                  Provider.of<SetupKeyNotifier>(context, listen: false)
-                      .setupKey
-                      .currentState
-                      ?.previous();
-                },
-                child: Text(
-                  "Back",
-                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
+              // Only display back button for introduction sequence
+              if (sharedPreferences.getString("deviceID") == null)
+                ElevatedButton(
+                  onPressed: () {
+                    stopScanning();
+                    Provider.of<DeviceNotifier>(context, listen: false)
+                        .resetDevice();
+                    Provider.of<SetupKeyNotifier>(context, listen: false)
+                        .setupKey
+                        .currentState
+                        ?.previous();
+                  },
+                  child: Text(
+                    "Back",
+                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                  ),
                 ),
-              ),
             ],
           ),
         ),

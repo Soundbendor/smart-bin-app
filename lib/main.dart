@@ -16,9 +16,9 @@ import 'package:binsight_ai/util/providers/device_notifier.dart';
 import 'package:binsight_ai/util/providers/setup_key_notifier.dart';
 import 'package:binsight_ai/util/providers/wifi_result_notifier.dart';
 import 'package:binsight_ai/util/routes.dart';
+import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/util/styles.dart';
 import 'package:binsight_ai/util/subscriber.dart';
-import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 
 const String exampleBoxes = '''
@@ -56,19 +56,13 @@ const String exampleBoxes = '''
 /// Entry point of the application
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Initialize shared preferences
+  await initPreferences();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
-  // Determine if there are devices in the database.
-  var devices = await Device.all();
 
   if (kDebugMode) {
     // final db = await getDatabaseConnection();
     // development code to add fake data
-
-    if (devices.isEmpty) {
-      // await db.insert("devices", {"id": "test"});
-      devices = await Device.all();
-    }
 
     final detections = await Detection.all();
     if (detections.isEmpty) {
@@ -167,7 +161,8 @@ void main() async {
         // Notifies listeners of changes to the current annotation's state.
         ChangeNotifierProvider(create: (_) => AnnotationNotifier()),
       ],
-      child: BinsightAiApp(skipSetUp: devices.isNotEmpty),
+      // Skip initial set up if user has already set up a device
+      child: BinsightAiApp(skipSetUp: sharedPreferences.getString("deviceID") != null),
     ),
   );
 }

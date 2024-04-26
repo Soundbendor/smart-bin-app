@@ -31,11 +31,11 @@ class SetupScreenState extends State<SetupScreen> {
     // Creates setup sequence with just the raw pages and animation controller key
     return IntroductionScreen(
       key: setupKey,
-      rawPages: const [
-        LoadScreen(),
-        SplashPage(),
-        BluetoothPage(),
-        WifiScanPage(),
+      rawPages: [
+        const LoadScreen(),
+        const SplashPage(),
+        const BluetoothPage(),
+        const WifiScanPage(),
         WifiConfigurationPage(),
       ],
       initialPage: widget.startPageIndex,

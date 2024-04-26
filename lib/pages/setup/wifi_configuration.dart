@@ -1,13 +1,14 @@
 // Flutter imports:
 import 'dart:convert';
+import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:binsight_ai/database/models/device.dart';
+import 'package:binsight_ai/util/bluetooth.dart';
+import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/util/bluetooth_bin_data.dart';
 import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/util/providers/device_notifier.dart';
@@ -17,8 +18,6 @@ import 'package:binsight_ai/util/wifi_scan.dart';
 import 'package:binsight_ai/widgets/background.dart';
 import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:binsight_ai/widgets/error_dialog.dart';
-
-// TODO: handle potential case where incoming JSON is invalid
 
 /// Widget for configuring the wifi credentials of the compost bin
 class WifiConfigurationPage extends StatefulWidget {
@@ -57,12 +56,9 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
               ssid: ssidController.text,
               password: passwordController.text,
               onErrorClosed: () {},
-              onComplete: () async {
-                // final deviceId = Provider.of<DeviceNotifier>(context, listen: false).device!.id;
-                // Once the user has finalized their Bluetooth device choice, add it to db
-                // final db = await getDatabaseConnection();
-                // await db.insert("devices", {"id": deviceId});
-                // if (!context.mounted) return;
+              onComplete: (bleDevice) async {
+                // Once the user has finalized their Bluetooth device choice, add it to preferences
+                sharedPreferences.setString("deviceID", bleDevice.id);
                 // Take the user to main
                 GoRouter.of(context).go("/main");
               });
@@ -104,6 +100,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
             ),
             ElevatedButton(
               onPressed: () {
+                // Send the values entered in ssid/password field to the bin
                 sendCredentials(context);
               },
               child: Text('Connect',
@@ -113,6 +110,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
             ),
             ElevatedButton(
               onPressed: () {
+                // Allows users to navigate back a page to modify their selected network
                 Provider.of<SetupKeyNotifier>(context, listen: false)
                     .setupKey
                     .currentState
@@ -123,7 +121,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
                     color: Theme.of(context).colorScheme.onPrimary,
                   )),
             ),
-          ], // Column children
+          ],
         ),
       ),
     );
@@ -163,7 +161,7 @@ class WifiConfigurationDialog extends StatefulWidget {
       required this.password});
 
   final Function() onErrorClosed;
-  final Function() onComplete;
+  final Function(BleDevice bleDevice) onComplete;
 
   final String ssid;
   final String password;
@@ -282,9 +280,8 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
     bool? internetAccess = statusJson["internet_access"];
     if (internetAccess != null && internetAccess && success) {
       if (!mounted) return;
-      saveBinData();
       Provider.of<DeviceNotifier>(context, listen: false).resetDevice();
-      widget.onComplete();
+      widget.onComplete(device);
     } else {
       if (!mounted) return;
       setState(() {
@@ -292,14 +289,6 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
         error = WifiConfigurationException("No internet access");
       });
     }
-  }
-
-  /// Saves the bin data to the database
-  void saveBinData() {
-    final device = Provider.of<DeviceNotifier>(context, listen: false).device!;
-    final databaseDevice = Device(
-        id: device.id); // TODO: Add more fields, confirm what id is stored
-    databaseDevice.save();
   }
 
   @override

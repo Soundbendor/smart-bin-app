@@ -40,7 +40,12 @@ final mainTheme = ThemeData(
       fontWeight: FontWeight.bold,
       fontFamily: 'GolosText', // Specify the font family
     ),
-    labelLarge: TextStyle(
+      headlineSmall: TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.normal,
+      fontFamily: 'GolosText', // Specify the font family
+    ),
+      labelLarge: TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.normal,
       fontFamily: 'GolosText', // Specify the font family

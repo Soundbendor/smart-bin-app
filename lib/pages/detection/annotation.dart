@@ -97,10 +97,11 @@ class _AnnotationPageState extends State<AnnotationPage> {
                       border: Border.all(color: Colors.black, width: 2.0)),
                   child: Image.asset('assets/images/annotation.gif'),
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                      "Trace the composted item with your finger as accurately as possible."),
+                      "Trace the composted item with your finger as accurately as possible.",
+                      style: Theme.of(context).textTheme.labelLarge),
                 ),
                 Row(
                   children: [
@@ -115,7 +116,8 @@ class _AnnotationPageState extends State<AnnotationPage> {
                         },
                       );
                     }),
-                    const Text("Don't show this screen again"),
+                    Text("Don't show this screen again",
+                        style: Theme.of(context).textTheme.labelLarge),
                   ],
                 ),
               ],
