@@ -69,6 +69,8 @@ class _WifiScanPageState extends State<WifiScanPage> {
       setState(() {
         isScanning = true;
       });
+      // While the current bin doesn't actually support scanning, we can still
+      // subscribe to it in the case it does eventually support it.
       await device!.subscribeToCharacteristic(
           serviceId: mainServiceId,
           characteristicId: wifiListCharacteristicId,
@@ -85,7 +87,11 @@ class _WifiScanPageState extends State<WifiScanPage> {
               // likely empty message
             }
           });
-      fetchWifiList();
+      while (true) {
+        await Future.delayed(const Duration(seconds: 5));
+        if (!isScanning) break;
+        fetchWifiList();
+      }
     } on Exception catch (e) {
       stopScanning();
       setState(() {

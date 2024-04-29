@@ -69,7 +69,7 @@ class DetectionsPageState extends State<DetectionsPage> {
     notifierProvider.setDevice(bledevice);
     await notifierProvider.connect();
     notifierProvider.listenForConnectionEvents();
-    await notifierProvider.pair();
+    // await notifierProvider.pair();
   }
 
   /// Displays a dialog that asks the user if they would like to check their
