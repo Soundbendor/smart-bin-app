@@ -80,19 +80,13 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  &#47;&#47; Initialize shared preferences
+  await initPreferences();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  &#47;&#47; Determine if there are devices in the database.
-  var devices = await Device.all();
-
   if (kDebugMode) {
-    final db = await getDatabaseConnection();
+    &#47;&#47; final db = await getDatabaseConnection();
     &#47;&#47; development code to add fake data
-
-    if (devices.isEmpty) {
-      await db.insert(&quot;devices&quot;, {&quot;id&quot;: &quot;test&quot;});
-      devices = await Device.all();
-    }
 
     final detections = await Detection.all();
     if (detections.isEmpty) {
@@ -191,7 +185,8 @@
         &#47;&#47; Notifies listeners of changes to the current annotation&#39;s state.
         ChangeNotifierProvider(create: (_) =&gt; AnnotationNotifier()),
       ],
-      child: BinsightAiApp(skipSetUp: devices.isNotEmpty),
+      &#47;&#47; Skip initial set up if user has already set up a device
+      child: BinsightAiApp(skipSetUp: sharedPreferences.getString(&quot;deviceID&quot;) != null),
     ),
   );
 }</code></pre>
