@@ -29,6 +29,7 @@ dependencies:
   multiple_search_selection: ^2.6.3
   shared_preferences: ^2.2.2
   font_awesome_flutter: ^10.7.0
+  rotating_icon_button: ^1.0.0
 
 
 dev_dependencies:

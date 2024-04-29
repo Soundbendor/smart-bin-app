@@ -1,9 +1,9 @@
-// Package imports:
+// Flutter imports:
 import 'package:flutter_test/flutter_test.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/connection.dart';
-import 'package:binsight_ai/database/models/device.dart';
+import 'package:binsight_ai/database/models/detection.dart';
 import '../shared.dart';
 
 void main() async {
@@ -21,13 +21,13 @@ void main() async {
     FakeDatabase db = FakeDatabase();
     setDatabase(db);
 
-    await createTables(db, [Device.createDefault()], false);
+    await createTables(db, [Detection.createDefault()], false);
 
     // find using regex in the list
     expect(db.queries.any((element) {
       return element.contains("CREATE TABLE") &&
-          element.contains(Device.createDefault().tableName) &&
-          element.contains(Device.createDefault().schema);
+          element.contains(Detection.createDefault().tableName) &&
+          element.contains(Detection.createDefault().schema);
     }), true);
 
     // No drops or inserts
@@ -40,13 +40,13 @@ void main() async {
     FakeDatabase db = FakeDatabase();
     setDatabase(db);
 
-    await createTables(db, [Device.createDefault()], true);
+    await createTables(db, [Detection.createDefault()], true);
 
     // find using regex in the list
     expect(db.queries.any((element) {
       return element.contains("CREATE TABLE") &&
-          element.contains(Device.createDefault().tableName) &&
-          element.contains(Device.createDefault().schema);
+          element.contains(Detection.createDefault().tableName) &&
+          element.contains(Detection.createDefault().schema);
     }), true);
 
     // drop and insert and alter
