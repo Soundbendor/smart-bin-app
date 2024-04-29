@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 // Project imports:
 import 'package:binsight_ai/widgets/heading.dart';
+import 'package:binsight_ai/pages/detection/index.dart';
 
 /// Displays the Help page with dropdown sections for Help, and Contact Us email connection
 class HelpPage extends StatelessWidget {
@@ -21,6 +22,7 @@ class HelpPage extends StatelessWidget {
           children: [
             _buildExpansionTile("Help", "Help Content", textTheme!),
             _buildContactUsExpansionTile(textTheme),
+            _buildWifiStatusExpansionTile(textTheme),
           ],
         ),
       ),
@@ -70,6 +72,50 @@ class HelpPage extends StatelessWidget {
                         ),
                         const SizedBox(width: 18.0),
                         Text('Email',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w500)),
+                      ],
+                    );
+                  }),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ExpansionTile widget for Contact Us section
+  ExpansionTile _buildWifiStatusExpansionTile(TextStyle textTheme) {
+    return ExpansionTile(
+      shape: Border.all(color: Colors.transparent),
+      title: const Heading(text: "Wi-Fi Status"),
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              const Text(
+                  "Need to check or change your Wi-Fi connection?"),
+              const SizedBox(height: 10.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: TextButton(
+                  onPressed: DetectionsPageState().checkWifi,
+                  child: Builder(builder: (context) {
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.wifi,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          size: 30,
+                        ),
+                        const SizedBox(width: 18.0),
+                        Text('Check Wi-Fi',
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.onPrimary,
                                 fontSize: 18.0,

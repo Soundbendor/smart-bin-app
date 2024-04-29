@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
@@ -88,7 +87,6 @@ class _BluetoothPageState extends State<BluetoothPage> {
                 seconds: 2,
               ),
               () {
-                if (!context.mounted) return;
                 Provider.of<SetupKeyNotifier>(context, listen: false)
                     .setupKey
                     .currentState
@@ -277,18 +275,6 @@ class _BluetoothListState extends State<BluetoothList> {
               inProgress: isScanning,
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                stopScanning();
-                GoRouter.of(context).goNamed('main');
-              },
-              child: Text(
-                "Skip Setup",
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-              ),
-            ),
           ],
         ),
       ),
