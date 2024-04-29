@@ -125,22 +125,28 @@ Widget build(BuildContext context) {
   } else {
     if (size == DetectionListType.large) {
       return Expanded(
-        child: ListView.builder(
-          itemCount: detections.length,
-          scrollDirection: Axis.vertical,
-          itemBuilder: (context, index) {
-            return DetectionLargeListItem(detection: detections[index]);
-          },
+        child: RefreshIndicator(
+          onRefresh: () =&gt; loadDetections(context),
+          child: ListView.builder(
+            itemCount: detections.length,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              return DetectionLargeListItem(detection: detections[index]);
+            },
+          ),
         ),
       );
     } else {
       return Expanded(
-        child: ListView.builder(
-          itemCount: detections.length,
-          scrollDirection: Axis.vertical,
-          itemBuilder: (context, index) {
-            return DetectionSmallListItem(detection: detections[index]);
-          },
+        child: RefreshIndicator(
+          onRefresh: () =&gt; loadDetections(context),
+          child: ListView.builder(
+            itemCount: detections.length,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              return DetectionSmallListItem(detection: detections[index]);
+            },
+          ),
         ),
       );
     }
