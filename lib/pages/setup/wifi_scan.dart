@@ -102,7 +102,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
   }
 
   /// Stops scanning for WiFi networks.
-  void stopScanning() { 
+  void stopScanning() {
     device!
         .unsubscribeFromCharacteristic(
             serviceId: mainServiceId,
@@ -116,14 +116,20 @@ class _WifiScanPageState extends State<WifiScanPage> {
   void fetchWifiList() async {
     try {
       if (wifiResults.isNotEmpty) return;
-      final List<dynamic> parsed = jsonDecode(utf8.decode(await device!
+      final decoded = utf8.decode(await device!
           .readCharacteristic(
               serviceId: mainServiceId,
-              characteristicId: wifiListCharacteristicId)));
-      if (wifiResults.isNotEmpty) {
+              characteristicId: wifiListCharacteristicId));
+              debug(decoded);
+      final Map<String, dynamic> parsed = jsonDecode(decoded);
+      if (parsed.isNotEmpty) {
+        final tempList = <WifiScanResult>[];
+        for (final key in parsed.keys) {
+          tempList.add(WifiScanResult(
+              key, parsed[key]["security"], parsed[key]["strength"]));
+        }
         setState(() {
-          wifiResults =
-              parsed.map((e) => WifiScanResult(e[0], e[1], e[2])).toList();
+          wifiResults = tempList;
         });
       }
     } catch (e) {
