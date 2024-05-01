@@ -102,7 +102,7 @@ class _WifiScanPageState extends State<WifiScanPage> {
   }
 
   /// Stops scanning for WiFi networks.
-  void stopScanning() {
+  void stopScanning() { 
     device!
         .unsubscribeFromCharacteristic(
             serviceId: mainServiceId,
