@@ -97,7 +97,6 @@ class _TopNavBarState extends State<TopNavBar> {
               },
             ),
             // Current version number
-            // TODO: create a version number that is updated automatically
             ListTile(
               title: VersionText(),
             ),
