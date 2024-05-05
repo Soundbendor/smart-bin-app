@@ -64,3 +64,27 @@ final wifiCredentialCharacteristicId =
 /// ]
 /// ```
 final wifiListCharacteristicId = Uuid.parse("31415924535897932384626433832793");
+
+/// The API service ID for the Bluetooth device.
+///
+/// Contains the API key/Device ID characteristic and heartbeat characteristic
+final apiServiceId = Uuid.parse("72604136186287082325955290141510");
+
+/// The characteristic ID for getting the heartbeat result to verify API is working.
+///
+/// Note: Unused by the app
+final heartBeatCharacteristicId =
+    Uuid.parse("72604136186287082325955290141511");
+
+/// The characteristic ID for the API key/Device ID.
+///
+/// May be read.
+///
+/// Returns a JSON object with the API key and device ID.
+/// ```js
+/// {
+///   "apiKey": "1234567890",
+///   "deviceID": "1234567890"
+/// }
+/// ```
+final apiKeyCharacteristicId = Uuid.parse("72604136186287082325955290141512");
