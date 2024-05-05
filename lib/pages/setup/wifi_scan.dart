@@ -233,7 +233,7 @@ The error was: ${(error as BleOperationFailureException).message}.
                 inProgress: isScanning,
               ),
               // Only display back button for introduction sequence
-              if (sharedPreferences.getString("deviceID") == null)
+              if (sharedPreferences.getString(SharedPreferencesKeys.deviceID) == null)
                 ElevatedButton(
                   onPressed: () {
                     stopScanning();

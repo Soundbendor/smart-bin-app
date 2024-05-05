@@ -58,7 +58,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
               onErrorClosed: () {},
               onComplete: (bleDevice) async {
                 // Once the user has finalized their Bluetooth device choice, add it to preferences
-                sharedPreferences.setString("deviceID", bleDevice.id);
+                sharedPreferences.setString(SharedPreferencesKeys.deviceID, bleDevice.id);
                 // Take the user to main
                 GoRouter.of(context).go("/main");
               });

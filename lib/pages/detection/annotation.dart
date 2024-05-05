@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'dart:convert';
+import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -65,7 +66,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
   void initPreferences() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      dontShowAgain = preferences.getBool('dontShowAgain') ?? false;
+      dontShowAgain = preferences.getBool(SharedPreferencesKeys.dontShowAgain) ?? false;
     });
     if (dontShowAgain == false) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -127,7 +128,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 onPressed: () async {
                   SharedPreferences preferences =
                       await SharedPreferences.getInstance();
-                  preferences.setBool('dontShowAgain', dontShowAgain!);
+                  preferences.setBool(SharedPreferencesKeys.dontShowAgain, dontShowAgain!);
                   if (!context.mounted) return;
                   Navigator.of(context).pop();
                 },
