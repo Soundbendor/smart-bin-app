@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'dart:convert';
+import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,28 +25,28 @@ import 'package:binsight_ai/database/models/detection.dart';
 const String exampleBoxes = '''
 [
   {
-    "category_name": "Apple",
+    "object_name": "Apple",
     "xy_coord_list": [
       [11.1, 16.4],
       [11.3, 16.5]
     ]
   },
   {
-    "category_name": "Orange",
+    "object_name": "Orange",
     "xy_coord_list": [
       [11.1, 16.4],
       [11.3, 16.5]
     ]
   },
   {
-    "category_name": "Banana",
+    "object_name": "Banana",
     "xy_coord_list": [
       [11.1, 16.4],
       [11.3, 16.5]
     ]
   },
   {
-    "category_name": "Milk",
+    "object_name": "Milk",
     "xy_coord_list": [
       [11.1, 16.4],
       [11.3, 16.5]
@@ -160,9 +161,11 @@ void main() async {
         Provider(create: (_) => SetupKeyNotifier()),
         // Notifies listeners of changes to the current annotation's state.
         ChangeNotifierProvider(create: (_) => AnnotationNotifier()),
+        ChangeNotifierProvider(create: (_) => DetectionNotifier()),
       ],
       // Skip initial set up if user has already set up a device
-      child: BinsightAiApp(skipSetUp: sharedPreferences.getString("deviceID") != null),
+      child: BinsightAiApp(
+          skipSetUp: sharedPreferences.getString("deviceID") == null),
     ),
   );
 }
