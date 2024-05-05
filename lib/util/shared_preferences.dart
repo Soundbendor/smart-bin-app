@@ -7,3 +7,10 @@ late SharedPreferences sharedPreferences;
 Future<void> initPreferences() async {
   sharedPreferences = await SharedPreferences.getInstance();
 }
+
+/// Keys for the SharedPreferences.
+class SharedPreferencesKeys {
+  static const String dontShowAgain = 'dontShowAgain';
+  static const String deviceID = 'deviceID';
+  static const String apiKey = 'compostApiKey';
+}
