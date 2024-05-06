@@ -215,6 +215,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     return timeStamp;
   }
 
+  /// Hits the api to retrieve all detections for a certain device after a date
   Future<void> fetchImageData(String devideID, String afterDate) async {
     const String url =
         'http://sb-binsight.dri.oregonstate.edu:30080/api/get_image_info';
