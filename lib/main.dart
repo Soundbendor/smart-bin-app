@@ -18,6 +18,7 @@ import 'package:binsight_ai/util/providers/annotation_notifier.dart';
 import 'package:binsight_ai/util/providers/device_notifier.dart';
 import 'package:binsight_ai/util/providers/setup_key_notifier.dart';
 import 'package:binsight_ai/util/providers/wifi_result_notifier.dart';
+
 import 'package:binsight_ai/util/routes.dart';
 import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/util/styles.dart';
