@@ -124,6 +124,7 @@ class Detection extends Model {
   static Detection fromMap(Map<String, dynamic> map) {
     // Note: As of this commit, the actual server schema is not known. This is just a placeholder.
     return Detection(
+      //TODO: Create new imageID instead of reusing timestamp
       imageId: map['timestamp'],
       timestamp: DateTime.parse(map['timestamp']),
       deviceId: map['deviceId'],
