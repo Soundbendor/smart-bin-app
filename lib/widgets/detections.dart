@@ -83,7 +83,7 @@ class DetectionLargeListItem extends StatelessWidget {
                     ),
                     margin: const EdgeInsets.only(bottom: 12, top: 12),
                     alignment: Alignment.center,
-                    child: DynamicImage(detection.preDetectImgLink,
+                    child: DynamicImage(detection.postDetectImgLink!,
                         width: 325, height: 325)),
                 SizedBox(
                   width: 250,
@@ -94,7 +94,7 @@ class DetectionLargeListItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Transcription:",
-                            style: textTheme.titleMedium),
+                                style: textTheme.titleMedium),
                           ],
                         ),
                       ),
@@ -142,13 +142,13 @@ class DetectionSmallListItem extends StatelessWidget {
           color: colorScheme.onPrimary,
           child: ListTile(
             leading: Container(
-                    decoration: BoxDecoration(
-        border: Border.all(
-          color: colorScheme.onSurface,
-          width: 1,
-        ),
-      ),
-              child: DynamicImage(detection.preDetectImgLink)),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: colorScheme.onSurface,
+                    width: 1,
+                  ),
+                ),
+                child: DynamicImage(detection.postDetectImgLink!)),
             title: Text(formatDetectionTitle(detection),
                 style: textTheme.titleMedium),
             subtitle: Text(detection.timestamp.toString(),

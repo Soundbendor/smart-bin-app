@@ -62,7 +62,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
         notifier.clearCurrentAnnotation();
         notifier.label = null;
       }
-      return d.preDetectImgLink;
+      return d.postDetectImgLink!;
     });
   }
 

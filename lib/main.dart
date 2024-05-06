@@ -1,5 +1,5 @@
 // Flutter imports:
-import 'package:binsight_ai/util/providers/detection_notifier.dart';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,10 +7,13 @@ import 'package:flutter/services.dart';
 // Package imports:
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/print.dart';
+import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:binsight_ai/util/providers/annotation_notifier.dart';
 import 'package:binsight_ai/util/providers/device_notifier.dart';
 import 'package:binsight_ai/util/providers/setup_key_notifier.dart';
@@ -61,13 +64,11 @@ void main() async {
   if (kDebugMode) {
     // final db = await getDatabaseConnection();
     // development code to add fake data
-
     final detections = await Detection.all();
     if (detections.isEmpty) {
       var fakeDetections = [
         Detection(
           imageId: "test-10",
-          preDetectImgLink: "https://placehold.co/512x512.png",
           timestamp: DateTime.now().subtract(const Duration(days: 6)),
           deviceId: "test",
           postDetectImgLink: "https://placehold.co/513x513.png",
@@ -86,7 +87,6 @@ void main() async {
         ),
         Detection(
           imageId: "test-9",
-          preDetectImgLink: "https://placehold.co/512x512.png",
           timestamp: DateTime.now().subtract(const Duration(days: 5)),
           deviceId: "test",
           postDetectImgLink: "https://placehold.co/513x513.png",
@@ -105,7 +105,6 @@ void main() async {
         ),
         Detection(
           imageId: "test-8",
-          preDetectImgLink: "https://placehold.co/512x512.png",
           timestamp: DateTime.now().subtract(const Duration(days: 4)),
           deviceId: "test",
           postDetectImgLink: "https://placehold.co/513x513.png",
@@ -124,7 +123,6 @@ void main() async {
         ),
         Detection(
           imageId: "test-7",
-          preDetectImgLink: "https://placehold.co/512x512.png",
           timestamp: DateTime.now().subtract(const Duration(days: 3)),
           deviceId: "test",
           postDetectImgLink: "https://placehold.co/513x513.png",
@@ -143,7 +141,6 @@ void main() async {
         ),
         Detection(
           imageId: "test-6",
-          preDetectImgLink: "https://placehold.co/512x512.png",
           timestamp: DateTime.now().subtract(const Duration(days: 2)),
           deviceId: "test",
           postDetectImgLink: "https://placehold.co/513x513.png",
@@ -162,9 +159,9 @@ void main() async {
           boxes: exampleBoxes,
         ),
       ];
-      for (final detection in fakeDetections) {
-        await detection.save();
-      }
+      // for (final detection in fakeDetections) {
+      //   await detection.save();
+      // }
     }
   }
 
@@ -206,6 +203,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    fetchImageData("REDACTED", '2023-01-01');
   }
 
   @override
@@ -249,4 +247,62 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     final timeStamp = latestDetection.timestamp;
     return timeStamp;
   }
+
+  Future<void> fetchImageData(String devideID, String afterDate) async {
+    const String url =
+        'http://sb-binsight.dri.oregonstate.edu:30080/api/get_image_info';
+    Map<String, String> queryParams = {
+      'deviceID': devideID,
+      'after_date': afterDate,
+      'page': '1',
+      'size': '10',
+    };
+
+    final Uri uri = Uri.parse(url).replace(queryParameters: queryParams);
+    await dotenv.load(fileName: ".env");
+    String apiKey = dotenv.env['API_KEY']!;
+    Map<String, String> headers = {
+      'accept': 'application/json',
+      'token': apiKey,
+    };
+    try {
+      final http.Response response = await http.get(uri, headers: headers);
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        debug(data);
+        List<dynamic> itemList = data['items'];
+        for (var item in itemList) {
+          Map<String, dynamic> adjustedMap = transformMap(item);
+          adjustedMap["boxes"] = exampleBoxes;
+          adjustedMap["postDetectImgLink"] = 'https://placehold.co/513x513.png';
+          Detection detection = Detection.fromMap(adjustedMap);
+          await detection.save();
+        }
+      } else {
+        debug('Failed with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+}
+
+/// Adjust new json map recieved from api to match existing schema
+
+Map<String, dynamic> transformMap(Map<String, dynamic> map) {
+  return {
+    'imageId': map['colorImage'],
+    'timestamp': DateTime.now().toIso8601String(),
+    'deviceId': map['deviceID'].toString(),
+    'postDetectImgLink': map['colorImage'],
+    'weight': map['weight_delta']?.toDouble(),
+    'humidity': map['humidity']?.toDouble(),
+    'temperature': map['temperature']?.toDouble(),
+    'co2': map['co2_eq']?.toDouble(),
+    'iaq': map['iaq']?.toDouble(),
+    'pressure': map['pressure']?.toDouble(),
+    'tvoc': map['tvoc']?.toDouble(),
+    'transcription': map['transcription'],
+  };
 }
