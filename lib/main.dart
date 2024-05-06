@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 // Package imports:
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:web_socket_channel/io.dart';
 
 // Project imports:
 import 'package:binsight_ai/util/print.dart';
@@ -178,7 +177,6 @@ class BinsightAiApp extends StatefulWidget {
 
 class _BinsightAiAppState extends State<BinsightAiApp>
     with WidgetsBindingObserver {
-  late IOWebSocketChannel channel;
 
   @override
   void initState() {
@@ -201,7 +199,6 @@ class _BinsightAiAppState extends State<BinsightAiApp>
 
   @override
   void dispose() {
-    channel.sink.close();
     super.dispose();
   }
 
