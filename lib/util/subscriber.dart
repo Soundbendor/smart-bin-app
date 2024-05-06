@@ -41,11 +41,8 @@ void handleMessages(WebSocketChannel channel) {
 Future<void> updatePreDetection(Map<String, dynamic> data) async {
   Detection detection = Detection(
     imageId: data['img_id'],
-    preDetectImgLink: data['img_link'],
     timestamp: DateTime.now(),
     deviceId: "device_id",
-    depthMapImgLink: data['depth_map_link'],
-    irImgLink: data['ir_link'], //Update name to name in pydantic model
     weight: data['weight'],
     humidity: data['humidity'],
     temperature: data['temperature'],

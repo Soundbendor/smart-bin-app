@@ -8,7 +8,8 @@ import 'package:flutter/services.dart';
 // Package imports:
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:web_socket_channel/io.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Project imports:
 import 'package:binsight_ai/util/print.dart';
@@ -19,7 +20,6 @@ import 'package:binsight_ai/util/providers/wifi_result_notifier.dart';
 import 'package:binsight_ai/util/routes.dart';
 import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/util/styles.dart';
-import 'package:binsight_ai/util/subscriber.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 
 const String exampleBoxes = '''
@@ -64,18 +64,14 @@ void main() async {
   if (kDebugMode) {
     // final db = await getDatabaseConnection();
     // development code to add fake data
-
     final detections = await Detection.all();
     if (detections.isEmpty) {
       var fakeDetections = [
         Detection(
           imageId: "test-10",
-          preDetectImgLink: "https://placehold.co/512x512.png",
           timestamp: DateTime.now().subtract(const Duration(days: 6)),
           deviceId: "test",
           postDetectImgLink: "https://placehold.co/513x513.png",
-          depthMapImgLink: "https://placehold.co/514x514.png",
-          irImgLink: "https://placehold.co/515x515.png",
           weight: 27.0,
           humidity: 0.5,
           temperature: 20.0,
@@ -85,12 +81,9 @@ void main() async {
         ),
         Detection(
           imageId: "test-9",
-          preDetectImgLink: "https://placehold.co/512x512.png",
           timestamp: DateTime.now().subtract(const Duration(days: 5)),
           deviceId: "test",
           postDetectImgLink: "https://placehold.co/513x513.png",
-          depthMapImgLink: "https://placehold.co/514x514.png",
-          irImgLink: "https://placehold.co/515x515.png",
           weight: 10.0,
           humidity: 0.5,
           temperature: 20.0,
@@ -100,12 +93,9 @@ void main() async {
         ),
         Detection(
           imageId: "test-8",
-          preDetectImgLink: "https://placehold.co/512x512.png",
           timestamp: DateTime.now().subtract(const Duration(days: 4)),
           deviceId: "test",
           postDetectImgLink: "https://placehold.co/513x513.png",
-          depthMapImgLink: "https://placehold.co/514x514.png",
-          irImgLink: "https://placehold.co/515x515.png",
           weight: 40.0,
           humidity: 0.5,
           temperature: 20.0,
@@ -115,12 +105,9 @@ void main() async {
         ),
         Detection(
           imageId: "test-7",
-          preDetectImgLink: "https://placehold.co/512x512.png",
           timestamp: DateTime.now().subtract(const Duration(days: 3)),
           deviceId: "test",
           postDetectImgLink: "https://placehold.co/513x513.png",
-          depthMapImgLink: "https://placehold.co/514x514.png",
-          irImgLink: "https://placehold.co/515x515.png",
           weight: 16.0,
           humidity: 0.5,
           temperature: 20.0,
@@ -130,12 +117,9 @@ void main() async {
         ),
         Detection(
           imageId: "test-6",
-          preDetectImgLink: "https://placehold.co/512x512.png",
           timestamp: DateTime.now().subtract(const Duration(days: 2)),
           deviceId: "test",
           postDetectImgLink: "https://placehold.co/513x513.png",
-          depthMapImgLink: "https://placehold.co/514x514.png",
-          irImgLink: "https://placehold.co/515x515.png",
           weight: 30.0,
           humidity: 0.5,
           temperature: 20.0,
@@ -144,9 +128,9 @@ void main() async {
           boxes: exampleBoxes,
         ),
       ];
-      for (final detection in fakeDetections) {
-        await detection.save();
-      }
+      // for (final detection in fakeDetections) {
+      //   await detection.save();
+      // }
     }
   }
 
@@ -182,13 +166,11 @@ class BinsightAiApp extends StatefulWidget {
 
 class _BinsightAiAppState extends State<BinsightAiApp>
     with WidgetsBindingObserver {
-  late IOWebSocketChannel channel;
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    initWebSocket();
+    fetchImageData('49269299245226', '2023-01-01');
   }
 
   @override
@@ -201,15 +183,11 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     // Reopened
     else if (state == AppLifecycleState.resumed) {
       debug("Opened");
-      if (channel.closeCode != null) {
-        initWebSocket();
-      }
     }
   }
 
   @override
   void dispose() {
-    channel.sink.close();
     super.dispose();
   }
 
@@ -237,25 +215,61 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     return timeStamp;
   }
 
-  /// Initialize WebSocket channel and subscribe
-  void initWebSocket() async {
-    channel =
-        IOWebSocketChannel.connect('ws://10.0.2.2:8000/api/model/subscribe');
+  Future<void> fetchImageData(String devideID, String afterDate) async {
+    const String url =
+        'http://sb-binsight.dri.oregonstate.edu:30080/api/get_image_info';
+    Map<String, String> queryParams = {
+      'deviceID': devideID,
+      'after_date': afterDate,
+      'page': '1',
+      'size': '10',
+    };
+
+    final Uri uri = Uri.parse(url).replace(queryParameters: queryParams);
+    await dotenv.load(fileName: ".env");
+    String apiKey = dotenv.env['API_KEY']!;
+    Map<String, String> headers = {
+      'accept': 'application/json',
+      'token': apiKey,
+    };
     try {
-      await channel
-          .ready; // https://github.com/dart-lang/web_socket_channel/issues/38
-      final subscriptionMessage = {"type": "subscribe", "channel": "1"};
-      channel.sink.add(jsonEncode(subscriptionMessage));
-      final timeStamp = getLatestTimestamp();
-      final requestMessage = {
-        "type": "request_data",
-        "after": timeStamp.toString(),
-        "channel": "1"
-      };
-      channel.sink.add(jsonEncode(requestMessage));
-      handleMessages(channel);
+      final http.Response response = await http.get(uri, headers: headers);
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        debug(data);
+        List<dynamic> itemList = data['items'];
+        for (var item in itemList) {
+          Map<String, dynamic> adjustedMap = transformMap(item);
+          adjustedMap["boxes"] = exampleBoxes;
+          adjustedMap["postDetectImgLink"] = 'https://placehold.co/513x513.png';
+          Detection detection = Detection.fromMap(adjustedMap);
+          await detection.save();
+        }
+      } else {
+        print('Failed with status code: ${response.statusCode}');
+      }
     } catch (e) {
-      debug("Connect Error: $e");
+      print('Error: $e');
     }
   }
+}
+
+/// Adjust new json map recieved from api to match existing schema
+
+Map<String, dynamic> transformMap(Map<String, dynamic> map) {
+  return {
+    'imageId': map['colorImage'],
+    'timestamp': DateTime.now().toIso8601String(),
+    'deviceId': map['deviceID'].toString(),
+    'postDetectImgLink': map['colorImage'],
+    'weight': map['weight_delta']?.toDouble(),
+    'humidity': map['humidity']?.toDouble(),
+    'temperature': map['temperature']?.toDouble(),
+    'co2': map['co2_eq']?.toDouble(),
+    'iaq': map['iaq']?.toDouble(),
+    'pressure': map['pressure']?.toDouble(),
+    'tvoc': map['tvoc']?.toDouble(),
+    'transcription': map['transcription'],
+  };
 }

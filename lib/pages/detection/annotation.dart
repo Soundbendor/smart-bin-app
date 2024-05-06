@@ -26,7 +26,7 @@ class AnnotationPage extends StatefulWidget {
   AnnotationPage({super.key, required this.detectionId}) {
     imageLink = Future(() async {
       return Detection.find(detectionId)
-          .then((detection) => detection!.preDetectImgLink);
+          .then((detection) => detection!.postDetectImgLink!);
     });
   }
   @override

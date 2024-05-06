@@ -82,7 +82,7 @@ class DetectionLargeListItem extends StatelessWidget {
                       ),
                     ),
                     margin: const EdgeInsets.only(bottom: 12, top: 12),
-                    child: DynamicImage(detection.preDetectImgLink,
+                    child: DynamicImage(detection.postDetectImgLink!,
                         width: 300, height: 300)),
                 SizedBox(
                   width: 250,
@@ -142,7 +142,7 @@ class DetectionSmallListItem extends StatelessWidget {
         child: Card(
           color: colorScheme.onPrimary,
           child: ListTile(
-            leading: DynamicImage(detection.preDetectImgLink),
+            leading: DynamicImage(detection.postDetectImgLink!),
             title: Text(formatDetectionTitle(detection),
                 style: textTheme.titleMedium),
             subtitle: Text(detection.timestamp.toString(),

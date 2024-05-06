@@ -77,7 +77,7 @@ class _DetectionCard extends StatelessWidget {
               child: Stack(
                 children: [
                   Center(
-                    child: DynamicImage(detection.preDetectImgLink,
+                    child: DynamicImage(detection.postDetectImgLink!,
                         width: 350, height: 350),
                   ),
                   Positioned(
@@ -111,9 +111,6 @@ class _DetectionCard extends StatelessWidget {
                       value: detection.temperature.toString()),
                   StatisticCard(
                       title: "Weight", value: detection.weight.toString()),
-                  StatisticCard(
-                      title: "Total Weight",
-                      value: detection.totalWeight.toString()),
                   StatisticCard(
                       title: "Humidity", value: detection.humidity.toString()),
                   StatisticCard(
