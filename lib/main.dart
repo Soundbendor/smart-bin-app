@@ -1,6 +1,5 @@
 // Flutter imports:
 import 'dart:convert';
-import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,11 +14,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/util/providers/annotation_notifier.dart';
 import 'package:binsight_ai/util/providers/device_notifier.dart';
+import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:binsight_ai/util/providers/setup_key_notifier.dart';
 import 'package:binsight_ai/util/providers/wifi_result_notifier.dart';
+
 import 'package:binsight_ai/util/routes.dart';
 import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/util/styles.dart';
+
 import 'package:binsight_ai/database/models/detection.dart';
 
 const String exampleBoxes = '''
