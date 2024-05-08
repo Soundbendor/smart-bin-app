@@ -308,7 +308,7 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
     sharedPreferences.setString(
         SharedPreferencesKeys.apiKey, credentialJson["apiKey"]);
     sharedPreferences.setString(
-        SharedPreferencesKeys.deviceApiID, credentialJson["deviceID"]);
+        SharedPreferencesKeys.deviceApiID, credentialJson["deviceID"].toString());
     sharedPreferences.setString(SharedPreferencesKeys.deviceID, device.id);
     widget.onComplete();
   }
