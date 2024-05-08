@@ -198,6 +198,7 @@ class _HomePageState extends State<HomePage> {
       // Turn detections to a list of maps
       List<Map<String, dynamic>> detectionsMaps =
           detections.map((detection) => detection.toMap()).toList();
+      debug('NUMBER OF DETECTIONS: ${detectionsMaps.length}');
       // Loop over all detections and increment the counts accordingly
       for (Map<String, dynamic> detection in detectionsMaps) {
         DateTime timestamp = DateTime.parse(detection["timestamp"]);
@@ -218,7 +219,6 @@ class _HomePageState extends State<HomePage> {
             category ??= "Undefined";
             labelCounts[category] = (labelCounts[category] ?? 0) + 1;
           }
-          debug(labelCounts);
         }
       }
     }
