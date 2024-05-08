@@ -186,7 +186,10 @@
         ChangeNotifierProvider(create: (_) =&gt; AnnotationNotifier()),
       ],
       &#47;&#47; Skip initial set up if user has already set up a device
-      child: BinsightAiApp(skipSetUp: sharedPreferences.getString(&quot;deviceID&quot;) != null),
+      child: BinsightAiApp(
+          skipSetUp:
+              sharedPreferences.getString(SharedPreferencesKeys.deviceID) !=
+                  null),
     ),
   );
 }</code></pre>
