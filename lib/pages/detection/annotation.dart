@@ -13,10 +13,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/print.dart';
-import 'package:binsight_ai/widgets/free_draw.dart';
-import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:binsight_ai/util/providers/annotation_notifier.dart';
+import 'package:binsight_ai/util/shared_preferences.dart';
+import 'package:binsight_ai/widgets/free_draw.dart';
+import 'package:binsight_ai/widgets/heading.dart';
 
 /// Page used for annotating an individual detection image
 class AnnotationPage extends StatefulWidget {
@@ -67,7 +68,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
   void initPreferences() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      dontShowAgain = preferences.getBool('dontShowAgain') ?? false;
+      dontShowAgain = preferences.getBool(SharedPreferencesKeys.dontShowAgain) ?? false;
     });
     if (dontShowAgain == false) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -129,7 +130,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 onPressed: () async {
                   SharedPreferences preferences =
                       await SharedPreferences.getInstance();
-                  preferences.setBool('dontShowAgain', dontShowAgain!);
+                  preferences.setBool(SharedPreferencesKeys.dontShowAgain, dontShowAgain!);
                   if (!context.mounted) return;
                   Navigator.of(context).pop();
                 },
