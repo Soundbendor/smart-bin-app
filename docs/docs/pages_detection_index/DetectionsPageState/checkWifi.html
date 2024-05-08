@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the checkWifi method from the DetectionsPageState class, for the Dart programming language.">
+  <title>checkWifi method - DetectionsPageState class - index library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">binsight_ai</a></li>
+    <li><a href="../../pages_detection_index/pages_detection_index-library.html">pages\detection\index.dart</a></li>
+    <li><a href="../../pages_detection_index/DetectionsPageState-class.html">DetectionsPageState</a></li>
+    <li class="self-crumb">checkWifi method</li>
+  </ol>
+  <div class="self-name">checkWifi</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        brightness_4
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        brightness_5
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="pages_detection_index&#47;DetectionsPageState-class-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-method">checkWifi</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a></span>
+<span class="name ">checkWifi</span>(<wbr>)
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Displays a dialog that asks the user if they would like to check their
+WiFi status or not.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Future checkWifi() {
+  return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(
+            child: Text(
+              &quot;Check WiFi Connection?&quot;,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+          ),
+          content: Text(
+              &quot;Note: This will require a Bluetooth Connection to your bin.&quot;,
+              style: Theme.of(context).textTheme.labelLarge),
+          actions: [
+            TextButton(
+              &#47;&#47; Style the button to match the &quot;sad path&quot; color scheme
+              style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
+                    backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.surface,
+                    ),
+                  ),
+              onPressed: () {
+                &#47;&#47; Removes the dialog
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                &quot;No&quot;,
+                style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withAlpha(250),
+                    ),
+              ),
+            ),
+            TextButton(
+              &#47;&#47; Style the button to match the &quot;happy path&quot; color scheme
+              style: TextButton.styleFrom(backgroundColor: Colors.green),
+              onPressed: () {
+                Navigator.of(context).pop();
+                runSoon(() {
+                  &#47;&#47; Begin connecting to the device
+                  connectToDevice(context);
+                  &#47;&#47; Display the wifiStatusDialogBuilder throughout the entire WiFi status check process
+                  showDialog(
+                    context: context,
+                    builder: wifiStatusDialogBuilder,
+                    barrierDismissible: false,
+                  );
+                });
+              },
+              child: const Text(&quot;Yes&quot;),
+            ),
+          ],
+        );
+      });
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">binsight_ai</a></li>
+    <li><a href="../../pages_detection_index/pages_detection_index-library.html">index</a></li>
+    <li><a href="../../pages_detection_index/DetectionsPageState-class.html">DetectionsPageState</a></li>
+    <li class="self-crumb">checkWifi method</li>
+</ol>
+
+
+    <h5>DetectionsPageState class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    binsight_ai
+      1.0.0
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

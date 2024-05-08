@@ -63,13 +63,13 @@ class DetectionsPageState extends State<DetectionsPage> {
   void connectToDevice(BuildContext context) async {
     // Rebuild the user's device from its id to pair and connect
     BleDevice bledevice =
-        BleDevice.fromId(sharedPreferences.getString("deviceID")!);
+        BleDevice.fromId(sharedPreferences.getString(SharedPreferencesKeys.deviceID)!);
     DeviceNotifier notifierProvider =
         Provider.of<DeviceNotifier>(context, listen: false);
     notifierProvider.setDevice(bledevice);
     await notifierProvider.connect();
     notifierProvider.listenForConnectionEvents();
-    await notifierProvider.pair();
+    // await notifierProvider.pair();
   }
 
   /// Displays a dialog that asks the user if they would like to check their
