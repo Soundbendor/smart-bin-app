@@ -41,7 +41,7 @@ class _FreeDrawState extends State<FreeDraw> {
   @override
   Widget build(BuildContext context) {
     return Consumer<AnnotationNotifier>(
-      builder: (context, notifier, crhild) {
+      builder: (context, notifier, child) {
         return SizedBox(
           width: 300,
           height: 300,
