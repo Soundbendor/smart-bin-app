@@ -26,14 +26,11 @@ class BluetoothPage extends StatefulWidget {
   State<BluetoothPage> createState() => _BluetoothPageState();
 }
 
-enum _PairingState { init, pairing, paired, ready }
-
 class _BluetoothPageState extends State<BluetoothPage> {
   /// Whether the dialog is currently visible.
   ///
   /// While mutable, changing this value doesn't require a rebuild.
   bool dialogIsVisible = false;
-  _PairingState pairingState = _PairingState.init;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +64,6 @@ class _BluetoothPageState extends State<BluetoothPage> {
         final error = deviceNotifier.error;
         if (device == null) return const SizedBox();
         if (deviceNotifier.hasError()) {
-          pairingState = _PairingState.init;
           final strings = getStringsFromException(error);
           return ErrorDialog(
               text: strings.title,
@@ -80,83 +76,36 @@ class _BluetoothPageState extends State<BluetoothPage> {
                 });
               });
         } else if (device.isConnected) {
-          if (device.isBonded && (pairingState == _PairingState.paired)) {
-            pairingState = _PairingState.ready;
-            Future.delayed(
-              const Duration(
-                seconds: 2,
-              ),
-              () {
-                Provider.of<SetupKeyNotifier>(context, listen: false)
-                    .setupKey
-                    .currentState
-                    ?.next();
-                Navigator.of(context).pop();
-              },
-            );
-            return BluetoothAlertBox(
-              title: Text(
-                "Bluetooth connection complete! Moving on...",
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              content: const SizedBox(
-                height: 50,
-                child: Center(
-                  child: SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: CircularProgressIndicator(),
-                  ),
+          Future.delayed(
+            const Duration(
+              seconds: 2,
+            ),
+            () {
+              Provider.of<SetupKeyNotifier>(context, listen: false)
+                  .setupKey
+                  .currentState
+                  ?.next();
+              Navigator.of(context).pop();
+            },
+          );
+          return BluetoothAlertBox(
+            title: Text(
+              "Bluetooth connection complete! Moving on...",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            content: const SizedBox(
+              height: 50,
+              child: Center(
+                child: SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: CircularProgressIndicator(),
                 ),
               ),
-            );
-          } else {
-            debug("Pairing: $pairingState");
-            if (pairingState == _PairingState.init) {
-              pairingState = _PairingState.pairing;
-              deviceNotifier.pair().then((value) {
-                pairingState = _PairingState.paired;
-              });
-            }
-            return BluetoothAlertBox(
-              title: Text(
-                "Pairing...",
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                      "To ensure proper functionality, please pair with the bin.\nYou may be prompted to pair more than once."),
-                  const SizedBox(height: 10),
-                  const SizedBox(
-                    height: 50,
-                    child: Center(
-                      child: SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      setState(() {
-                        dialogIsVisible = false;
-                        deviceNotifier.resetDevice();
-                      });
-                    },
-                    child: const Text("Cancel"),
-                  ),
-                ],
-              ),
-            );
-          }
+            ),
+          );
         } else {
-          pairingState = _PairingState.init;
           return BluetoothAlertBox(
             title: Text(
               "Connecting...",

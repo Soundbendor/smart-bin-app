@@ -1,5 +1,4 @@
 // Flutter imports:
-import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/services.dart';
 // Package imports:
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:web_socket_channel/io.dart';
 
 // Project imports:
 import 'package:binsight_ai/util/print.dart';
@@ -18,7 +16,6 @@ import 'package:binsight_ai/util/providers/wifi_result_notifier.dart';
 import 'package:binsight_ai/util/routes.dart';
 import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/util/styles.dart';
-import 'package:binsight_ai/util/subscriber.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 
 const String exampleBoxes = '''
@@ -162,7 +159,10 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AnnotationNotifier()),
       ],
       // Skip initial set up if user has already set up a device
-      child: BinsightAiApp(skipSetUp: sharedPreferences.getString("deviceID") != null),
+      child: BinsightAiApp(
+          skipSetUp:
+              sharedPreferences.getString(SharedPreferencesKeys.deviceID) !=
+                  null),
     ),
   );
 }
@@ -179,13 +179,10 @@ class BinsightAiApp extends StatefulWidget {
 
 class _BinsightAiAppState extends State<BinsightAiApp>
     with WidgetsBindingObserver {
-  late IOWebSocketChannel channel;
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    initWebSocket();
   }
 
   @override
@@ -198,15 +195,11 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     // Reopened
     else if (state == AppLifecycleState.resumed) {
       debug("Opened");
-      if (channel.closeCode != null) {
-        initWebSocket();
-      }
     }
   }
 
   @override
   void dispose() {
-    channel.sink.close();
     super.dispose();
   }
 
@@ -232,27 +225,5 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     final latestDetection = await Detection.latest();
     final timeStamp = latestDetection.timestamp;
     return timeStamp;
-  }
-
-  /// Initialize WebSocket channel and subscribe
-  void initWebSocket() async {
-    channel =
-        IOWebSocketChannel.connect('ws://10.0.2.2:8000/api/model/subscribe');
-    try {
-      await channel
-          .ready; // https://github.com/dart-lang/web_socket_channel/issues/38
-      final subscriptionMessage = {"type": "subscribe", "channel": "1"};
-      channel.sink.add(jsonEncode(subscriptionMessage));
-      final timeStamp = getLatestTimestamp();
-      final requestMessage = {
-        "type": "request_data",
-        "after": timeStamp.toString(),
-        "channel": "1"
-      };
-      channel.sink.add(jsonEncode(requestMessage));
-      handleMessages(channel);
-    } catch (e) {
-      debug("Connect Error: $e");
-    }
   }
 }
