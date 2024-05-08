@@ -1,6 +1,5 @@
 // Flutter imports:
 import 'dart:convert';
-import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -10,12 +9,14 @@ import 'package:multiple_search_selection/createable/create_options.dart';
 import 'package:multiple_search_selection/multiple_search_selection.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/print.dart';
+import 'package:binsight_ai/util/providers/annotation_notifier.dart';
+import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/widgets/free_draw.dart';
 import 'package:binsight_ai/widgets/heading.dart';
-import 'package:binsight_ai/util/providers/annotation_notifier.dart';
 
 /// Page used for annotating an individual detection image
 class AnnotationPage extends StatefulWidget {
