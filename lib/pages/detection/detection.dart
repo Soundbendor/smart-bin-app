@@ -63,12 +63,9 @@ class _DetectionCard extends StatelessWidget {
     return Card(
       color: colorScheme.onPrimary,
       child: Padding(
-        padding: const EdgeInsets.only(
-          top: 20,
-          left: 5,
-          right: 5,
-          bottom: 5,
-        ),
+        padding: const EdgeInsets.symmetric(
+            horizontal: 10, vertical: 5
+            ), 
         child: SingleChildScrollView(
           child: Column(children: [
             SizedBox(
@@ -81,9 +78,12 @@ class _DetectionCard extends StatelessWidget {
                         width: 350, height: 350),
                   ),
                   Positioned(
-                    bottom: 10,
+                    bottom: 16,
                     right: 8,
                     child: IconButton(
+                      icon: const Icon(Icons.edit),
+                      iconSize: 30,
+                      tooltip: "Annotate Image",
                       onPressed: () {
                         GoRouter.of(context).push(
                             "/main/detection/${detection.imageId}/annotation");
@@ -96,7 +96,6 @@ class _DetectionCard extends StatelessWidget {
                       ),
                       color: Theme.of(context).colorScheme.onPrimary,
                       splashColor: Theme.of(context).colorScheme.onSecondary,
-                      icon: const Icon(Icons.edit, size: 30),
                     ),
                   ),
                 ],
