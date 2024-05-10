@@ -60,7 +60,7 @@ class AnnotationNotifier extends ChangeNotifier {
     combinedCurrentAnnotation = combineCurrentSegments();
     if (combinedCurrentAnnotation != null && label != null) {
       allAnnotations.add({
-        "category_name": label,
+        "object_name": label,
         "xy_coord_list": combinedCurrentAnnotation!.toFloatList()
       });
     }
