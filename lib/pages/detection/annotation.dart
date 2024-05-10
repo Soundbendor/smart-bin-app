@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/print.dart';
+import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:binsight_ai/util/providers/annotation_notifier.dart';
 import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/widgets/free_draw.dart';
@@ -145,258 +146,278 @@ class _AnnotationPageState extends State<AnnotationPage> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    AnnotationNotifier notifier = context.read<AnnotationNotifier>();
-    if (notifier.currentDetection != widget.detectionId) {
-      notifier.reset();
-      notifier.setDetection(widget.detectionId);
+    AnnotationNotifier annotationNotifier = context.read<AnnotationNotifier>();
+    if (annotationNotifier.currentDetection != widget.detectionId) {
+      annotationNotifier.reset();
+      annotationNotifier.setDetection(widget.detectionId);
     }
-    return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  GestureDetector(
-                    child: Row(
-                      children: [
-                        const Icon(Icons.arrow_back_ios),
-                        Text("Back to detection", style: textTheme.labelLarge),
-                      ],
-                    ),
-                    onTap: () => GoRouter.of(context).pop(),
-                  ),
-                  const Heading(text: "Annotate Your Image"),
-                  const SizedBox(height: 16),
-                ],
-              ),
-            ),
-            FutureBuilder(
-              future: widget.imageLink,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else {
-                  return Stack(
-                    children: [
-                      RepaintBoundary(
-                        key: _captureKey,
-                        child: SizedBox(
-                          width: 300,
-                          height: 300,
-                          child: FreeDraw(
-                            imageLink: snapshot.data as String,
-                          ),
-                        ),
-                      ),
-                      if (!drawStarted)
-                        Positioned(
-                          child: GestureDetector(
-                            onTap: () => setState(() {
-                              drawStarted = true;
-                            }),
-                            child: Container(
-                              width: 300,
-                              height: 300,
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.5),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Tap to start",
-                                  style: textTheme.displaySmall!.copyWith(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  );
-                }
-              },
-            ),
-            SingleChildScrollView(
-              child: Consumer<AnnotationNotifier>(
-                  builder: (context, notifier, child) {
-                return SizedBox(
-                  width: 300,
+    return Consumer<DetectionNotifier>(
+      builder: (context, notifier, child) {
+        return Scaffold(
+          body: Center(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton.filled(
-                                  disabledColor: Theme.of(context)
-                                      .colorScheme
-                                      .onSurface
-                                      .withAlpha(150),
-                                  onPressed: notifier.canUndo()
-                                      ? () {
-                                          notifier.undo();
-                                        }
-                                      : null,
-                                  icon: const Icon(Icons.undo)),
-                              IconButton.filled(
-                                  disabledColor: Theme.of(context)
-                                      .colorScheme
-                                      .onSurface
-                                      .withAlpha(150),
-                                  onPressed: notifier.canRedo()
-                                      ? () {
-                                          notifier.redo();
-                                        }
-                                      : null,
-                                  icon: const Icon(Icons.redo)),
-                            ],
-                          ),
-                          Text(
-                            notifier.label == null
-                                ? 'No label selected yet'
-                                : 'Selected Label: ${notifier.label}',
-                            style: textTheme.labelLarge,
-                          ),
-                        ],
+                      GestureDetector(
+                        child: Row(
+                          children: [
+                            const Icon(Icons.arrow_back_ios),
+                            Text("Back to detection",
+                                style: textTheme.labelLarge),
+                          ],
+                        ),
+                        onTap: () => GoRouter.of(context).pop(),
                       ),
+                      const Heading(text: "Annotate Your Image"),
                       const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          ElevatedButton(
-                            child: Text(
-                              "Select Label",
-                              style: textTheme.labelLarge!.copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                            ),
-                            // If the labels json loaded in from assets/data is not empty, show the dialog popup, otherwise don't
-                            onPressed: () {
-                              labels.isNotEmpty
-                                  ? showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return MyAlertDialog(
-                                          labels: labels,
-                                          controller: controller,
-                                        );
-                                      },
-                                    )
-                                  : const Padding(padding: EdgeInsets.zero);
-                            },
-                          ),
-                          const SizedBox(width: 8),
-                          ElevatedButton(
-                            style: !notifier.isCompleteAnnotation()
-                                ? Theme.of(context)
-                                    .elevatedButtonTheme
-                                    .style!
-                                    .copyWith(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                        Theme.of(context).colorScheme.surface,
-                                      ),
-                                    )
-                                : null,
-                            onPressed: () {
-                              if (notifier.isCompleteAnnotation()) {
-                                notifier.addToAllAnnotations();
-                                notifier.clearCurrentAnnotation();
-                                notifier.label = null;
-                              } else {
-                                String message;
-                                if (notifier.label == null) {
-                                  message =
-                                      "Please Enter a Label for Current Annotation";
-                                } else {
-                                  message = "Please Draw Your Annotation";
-                                }
-                                debug(message);
-                              }
-                            },
-                            child: Text(
-                              "Save",
-                              style: textTheme.labelLarge!.copyWith(
-                                color: notifier.isCompleteAnnotation()
-                                    ? Theme.of(context).colorScheme.onPrimary
-                                    : Theme.of(context)
-                                        .colorScheme
-                                        .onSurface
-                                        .withAlpha(150),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                     ],
                   ),
-                );
-              }),
-            ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const SizedBox(),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 300,
-                          height: 100,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                ElevatedButton(
-                                  style: Theme.of(context)
-                                      .elevatedButtonTheme
-                                      .style!
-                                      .copyWith(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                          Theme.of(context)
-                                              .colorScheme
-                                              .tertiary,
-                                        ),
+                ),
+                FutureBuilder(
+                  future: widget.imageLink,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else {
+                      return Stack(
+                        children: [
+                          RepaintBoundary(
+                            key: _captureKey,
+                            child: SizedBox(
+                              width: 300,
+                              height: 300,
+                              child: FreeDraw(
+                                imageLink: snapshot.data as String,
+                              ),
+                            ),
+                          ),
+                          if (!drawStarted)
+                            Positioned(
+                              child: GestureDetector(
+                                onTap: () => setState(() {
+                                  drawStarted = true;
+                                }),
+                                child: Container(
+                                  width: 300,
+                                  height: 300,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "Tap to start",
+                                      style: textTheme.displaySmall!.copyWith(
+                                        color: Colors.white,
                                       ),
-                                  onPressed: () {
-                                    notifier.clearCurrentAnnotation();
-                                    Future.delayed(
-                                        const Duration(milliseconds: 100), () {
-                                      notifier.reset();
-                                    });
-                                  },
-                                  child: Text(
-                                    "Done",
-                                    style: textTheme.labelLarge!.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onTertiary,
                                     ),
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
+                        ],
+                      );
+                    }
+                  },
+                ),
+                SingleChildScrollView(
+                  child: Consumer<AnnotationNotifier>(
+                      builder: (context, annotationNotifier, child) {
+                    return SizedBox(
+                      width: 300,
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton.filled(
+                                      disabledColor: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface
+                                          .withAlpha(150),
+                                      onPressed: annotationNotifier.canUndo()
+                                          ? () {
+                                              annotationNotifier.undo();
+                                            }
+                                          : null,
+                                      icon: const Icon(Icons.undo)),
+                                  IconButton.filled(
+                                      disabledColor: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface
+                                          .withAlpha(150),
+                                      onPressed: annotationNotifier.canRedo()
+                                          ? () {
+                                              annotationNotifier.redo();
+                                            }
+                                          : null,
+                                      icon: const Icon(Icons.redo)),
+                                ],
+                              ),
+                              Text(
+                                annotationNotifier.label == null
+                                    ? 'No label selected yet'
+                                    : 'Selected Label: ${annotationNotifier.label}',
+                                style: textTheme.labelLarge,
+                              ),
+                            ],
                           ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              ElevatedButton(
+                                child: Text(
+                                  "Select Label",
+                                  style: textTheme.labelLarge!.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                ),
+                                // If the labels json loaded in from assets/data is not empty, show the dialog popup, otherwise don't
+                                onPressed: () {
+                                  labels.isNotEmpty
+                                      ? showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return MyAlertDialog(
+                                              labels: labels,
+                                              controller: controller,
+                                            );
+                                          },
+                                        )
+                                      : const Padding(padding: EdgeInsets.zero);
+                                },
+                              ),
+                              const SizedBox(width: 8),
+                              ElevatedButton(
+                                style:
+                                    !annotationNotifier.isCompleteAnnotation()
+                                        ? Theme.of(context)
+                                            .elevatedButtonTheme
+                                            .style!
+                                            .copyWith(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                Theme.of(context)
+                                                    .colorScheme
+                                                    .surface,
+                                              ),
+                                            )
+                                        : null,
+                                onPressed: () {
+                                  if (annotationNotifier
+                                      .isCompleteAnnotation()) {
+                                    annotationNotifier.addToAllAnnotations();
+                                    annotationNotifier.clearCurrentAnnotation();
+                                    annotationNotifier.label = null;
+                                    notifier
+                                        .updateDetection(widget.detectionId);
+                                  } else {
+                                    String message;
+                                    if (annotationNotifier.label == null) {
+                                      message =
+                                          "Please Enter a Label for Current Annotation";
+                                    } else {
+                                      message = "Please Draw Your Annotation";
+                                    }
+                                    debug(message);
+                                  }
+                                },
+                                child: Text(
+                                  "Save",
+                                  style: textTheme.labelLarge!.copyWith(
+                                    color: annotationNotifier
+                                            .isCompleteAnnotation()
+                                        ? Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withAlpha(150),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surface,
                         ),
-                      ],
-                    ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 300,
+                              height: 100,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    ElevatedButton(
+                                      style: Theme.of(context)
+                                          .elevatedButtonTheme
+                                          .style!
+                                          .copyWith(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .tertiary,
+                                            ),
+                                          ),
+                                      onPressed: () {
+                                        annotationNotifier
+                                            .clearCurrentAnnotation();
+                                        notifier.updateDetection(
+                                            widget.detectionId);
+
+                                        Future.delayed(
+                                            const Duration(milliseconds: 100),
+                                            () {
+                                          annotationNotifier.reset();
+                                        });
+                                      },
+                                      child: Text(
+                                        "Done",
+                                        style: textTheme.labelLarge!.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onTertiary,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
