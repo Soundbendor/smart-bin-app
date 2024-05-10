@@ -7,7 +7,10 @@
 
 A cross-platform mobile app built with Flutter/Dart for users of [Soundbendor Lab's](https://www.soundbendor.org) Smart Compost Bin. 
 
-![alt text](download.png)
+<p align="center">
+  <img src="./assets/images/real_bin.png" width="80"/>
+  <h1 align="center">The Soundbendor Lab's Smart Compost Bin</h1>
+</p>
 
 The app enables Wi-Fi connectivity for the bin, so participants in a field study will be able to use their bin to track household food waste and follow data trends over time.
 
@@ -33,7 +36,7 @@ In the face of an escalating climate crisis, finding more effective food waste d
 
 Our project supports a countertop Smart Compost Bin equipped with sensors that capture images of food waste and many associated data points. These include bin internal temperature and humidity, IAQ, CO2, the weight of composted food items, thermal imaging depth maps, and VOCs.
 
-Users of the app will be presented with a fun and engaging user interface which will allow them to quickly learn and begin using the SoundBendor Smart Compost Bin. After setting up the bin with Wi-Fi, any items the user composts will be sent to their app, enabling them to begin annotating images and thus contributing to the larger dataset.
+Users of the app will be presented with a fun and engaging user interface which will allow them to quickly learn and begin using the Soundbendor Smart Compost Bin. After setting up the bin with Wi-Fi, any items the user composts will be sent to their app, enabling them to begin annotating images and thus contributing to the larger dataset.
 
 ## Value Proposition (CHANGEME)
 
