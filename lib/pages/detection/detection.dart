@@ -9,7 +9,6 @@ import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/detections.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/widgets/image.dart';
-import 'package:binsight_ai/widgets/statistic_card.dart';
 
 /// Displays information about a single detection.
 class DetectionPage extends StatelessWidget {
