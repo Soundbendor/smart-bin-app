@@ -8,8 +8,11 @@
 A cross-platform mobile app built with Flutter/Dart for users of [Soundbendor Lab's](https://www.soundbendor.org) Smart Compost Bin. The app enables Wi-Fi connectivity for the bin, so participants in a field study will be able to use their bin to track household food waste and follow data trends over time.
 
 ## Table of Contents
-
+- [Repos](#repos)
+- [Purpose](#purpose)
+- [Value Proposition](#value-proposition)
 - [Getting Started](#getting-started)
+- [Usage](#usage)
 - [Features](#features)
 - [Documentation](#documentation)
 - [Contributions](#contributions)
@@ -20,9 +23,19 @@ A cross-platform mobile app built with Flutter/Dart for users of [Soundbendor La
 1. Food Waste: https://github.com/Soundbendor/food-waste
 2. Food Detection embedded: https://github.com/Soundbendor/food-detection-embedded
 
-## Getting Started
+## Purpose
 
-To use the binsight.ai app....
+In the face of an escalating climate crisis, finding more effective food waste disposal methods remains a pressing challenge in the field of sustainability research. To contribute valuable data to efforts in this field, the binsight.ai team pioneers one approach that is aimed at expanding our understanding of food and organic waste at the household and consumer level.
+
+Our project supports a countertop Smart Compost Bin equipped with sensors that capture images of food waste and many associated data points. These include bin internal temperature and humidity, IAQ, CO2, the weight of composted food items, thermal imaging depth maps, and VOCs.
+
+Users of the app will be presented with a fun and engaging user interface which will allow them to quickly learn and begin using the SoundBendor Smart Compost Bin. After setting up the bin with Wi-Fi, any items the user composts will be sent to their app, enabling them to begin annotating images and thus contributing to the larger dataset.
+
+## Value Proposition (CHANGEME)
+
+The binsight.ai team is pioneering their way through the field of Smart Composting and image annotation, and as such, there is no direct competition. All current solutions that are out there are working towards the same goal: Fighting the effects of food waste and climate change.
+
+## Getting Started
 
 1. Clone the repository to your local machine:
 
@@ -37,20 +50,36 @@ git clone https://github.com/Soundbendor/smart-bin-app.git
 flutter run
 ```
 
+## Usage
+
+To use the binsight.ai app:
+
+- Ensure you have a functional Wi-Fi network, as well as Bluetooth capability.
+- Download the app on to the mobile device of your choice.
+- Open the app and complete the set-up process.
+- Use the Smart Compost Bin as you would any other composting solution.
+- After composting an item, check the detections page on your app to access and annotate your detection.
+- Watch your composting breakdown be populated over time.
+- Repeat from step 4, and have fun!
+
 ## Features
 
 The binsight.ai app offers the following features and functionalities:
 
-- Connecting and setting up the Smart Compost Bin via Bluetooth
-- Tracking food waste data
-- Viewing data trends over time
-- Annotating photos of food waste
+- Wi-Fi credential sharing via Bluetooth bridge to successfully connect the bin to its MongoDB Cloud database.
+- Image annotation tools for users to draw object outlines and label food waste to build a novel dataset.
+- A dashboard with data visualizations and analytics to support food waste goals, and increase user engagement.
 
 ## Documentation
 
 The documentation for the binsight.ai app can be found in the [`docs`](./docs) directory.
 
 The documentation can also be found through GitHub Pages [here](https://soundbendor.github.io/smart-bin-app/).
+
+## Contact Us
+Please feel free to reach out to our support email at:
+
+![alt text](image.png)
 
 ## Contributions
 

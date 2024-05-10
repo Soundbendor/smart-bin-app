@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:binsight_ai/util/print.dart';
+import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:binsight_ai/util/providers/annotation_notifier.dart';
 import 'package:binsight_ai/util/providers/device_notifier.dart';
 import 'package:binsight_ai/util/providers/setup_key_notifier.dart';
@@ -21,28 +22,28 @@ import 'package:binsight_ai/database/models/detection.dart';
 const String exampleBoxes = '''
 [
   {
-    "category_name": "Apple",
+    "object_name": "Apple",
     "xy_coord_list": [
       [11.1, 16.4],
       [11.3, 16.5]
     ]
   },
   {
-    "category_name": "Orange",
+    "object_name": "Orange",
     "xy_coord_list": [
       [11.1, 16.4],
       [11.3, 16.5]
     ]
   },
   {
-    "category_name": "Banana",
+    "object_name": "Banana",
     "xy_coord_list": [
       [11.1, 16.4],
       [11.3, 16.5]
     ]
   },
   {
-    "category_name": "Milk",
+    "object_name": "Milk",
     "xy_coord_list": [
       [11.1, 16.4],
       [11.3, 16.5]
@@ -157,6 +158,7 @@ void main() async {
         Provider(create: (_) => SetupKeyNotifier()),
         // Notifies listeners of changes to the current annotation's state.
         ChangeNotifierProvider(create: (_) => AnnotationNotifier()),
+        ChangeNotifierProvider(create: (_) => DetectionNotifier()),
       ],
       // Skip initial set up if user has already set up a device
       child: BinsightAiApp(
