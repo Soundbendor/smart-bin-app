@@ -172,9 +172,14 @@ class DetectionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (detections.isEmpty) {
-      return const SizedBox(
+      return SizedBox(
           width: double.infinity,
-          child: Text("No detections yet", textAlign: TextAlign.left));
+          child: Text(
+              "Ooops! \n"
+              "No images detected yet. \n"
+              "Please swipe down to reload.",
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.center));
     } else {
       if (size == DetectionListType.large) {
         return Expanded(

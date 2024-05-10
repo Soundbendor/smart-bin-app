@@ -64,19 +64,28 @@ class _DetectionCard extends StatelessWidget {
       color: colorScheme.onPrimary,
       child: Padding(
         padding: const EdgeInsets.symmetric(
-            horizontal: 10, vertical: 5
+            horizontal: 12, vertical: 5
             ), 
         child: SingleChildScrollView(
-          child: Column(children: [
+          child: Column(
+            children: [
             SizedBox(
               width: 350,
               height: 350,
               child: Stack(
                 children: [
-                  Center(
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: colorScheme.onSurface,
+                        width: 1,
+                      ),
+                    ),
+                    margin: const EdgeInsets.only(bottom: 10, top: 10),
                     child: DynamicImage(detection.preDetectImgLink,
                         width: 350, height: 350),
                   ),
+                  // Annotate Image Button
                   Positioned(
                     bottom: 16,
                     right: 8,
