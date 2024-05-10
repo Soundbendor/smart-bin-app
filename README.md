@@ -45,7 +45,10 @@ To use the binsight.ai app:
 
 The binsight.ai app offers the following features and functionalities:
 
-- Stuff here
+- Wi-Fi credential sharing via Bluetooth bridge to successfully connect the bin to its MongoDB Cloud database.
+- Image annotation tools for users to draw object outlines and label food waste to build a novel dataset.
+- A dashboard with data visualizations and analytics to support food waste goals, and increase user engagement.
+
 
 ## Usage
 
