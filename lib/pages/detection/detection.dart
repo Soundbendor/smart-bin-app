@@ -81,7 +81,7 @@ class _DetectionCard extends StatelessWidget {
                         width: 350, height: 350),
                   ),
                   Positioned(
-                    bottom: 8,
+                    bottom: 10,
                     right: 8,
                     child: IconButton(
                       onPressed: () {
@@ -95,6 +95,7 @@ class _DetectionCard extends StatelessWidget {
                         shape: MaterialStateProperty.all(const CircleBorder()),
                       ),
                       color: Theme.of(context).colorScheme.onPrimary,
+                      splashColor: Theme.of(context).colorScheme.onSecondary,
                       icon: const Icon(Icons.edit, size: 30),
                     ),
                   ),
