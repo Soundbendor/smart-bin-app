@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Package imports:
+import 'dart:io';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:archive/archive_io.dart';
+import 'package:path_provider/path_provider.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
@@ -204,7 +207,8 @@ class _BinsightAiAppState extends State<BinsightAiApp>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    fetchImageData("REDACTED", '2023-01-01');
+    Future<DateTime> timestamp = getLatestTimestamp();
+    fetchImageData('REDACTED', timestamp);
   }
 
   @override
@@ -250,12 +254,14 @@ class _BinsightAiAppState extends State<BinsightAiApp>
   }
 
   /// Hits the api to retrieve all detections for a certain device after a date
-  Future<void> fetchImageData(String devideID, String afterDate) async {
+  Future<void> fetchImageData(
+      String devideID, Future<DateTime> afterDate) async {
+    DateTime timestamp = await afterDate;
     const String url =
         'http://sb-binsight.dri.oregonstate.edu:30080/api/get_image_info';
     Map<String, String> queryParams = {
       'deviceID': devideID,
-      'after_date': afterDate,
+      'after_date': "2024-5-10",
       'page': '1',
       'size': '10',
     };
@@ -269,6 +275,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     };
     try {
       final http.Response response = await http.get(uri, headers: headers);
+      List<String> imageList = [];
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
@@ -277,16 +284,71 @@ class _BinsightAiAppState extends State<BinsightAiApp>
         for (var item in itemList) {
           Map<String, dynamic> adjustedMap = transformMap(item);
           adjustedMap["boxes"] = exampleBoxes;
-          adjustedMap["postDetectImgLink"] = 'https://placehold.co/513x513.png';
+          imageList.add(adjustedMap["postDetectImgLink"]);
           Detection detection = Detection.fromMap(adjustedMap);
           await detection.save();
+        }
+        Provider.of<DetectionNotifier>(context, listen: false).getAll();
+        try {
+          retrieveImages(devideID, imageList);
+        } catch (e) {
+          debug(e);
         }
       } else {
         debug('Failed with status code: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error: $e');
+      debug('Error: $e');
     }
+  }
+}
+
+Future<void> retrieveImages(String deviceID, List<String> imageList) async {
+  String url =
+      'http://sb-binsight.dri.oregonstate.edu:30080/api/get_images?deviceID=$deviceID';
+  await dotenv.load(fileName: ".env");
+  String apiKey = dotenv.env['API_KEY']!;
+
+  var requestBody = imageList;
+  debug("Image List $imageList");
+  Map<String, String> headers = {
+    'accept': 'application/json',
+    'token': apiKey,
+    'Content-Type': 'application/json',
+  };
+  try {
+    final http.Response response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode(requestBody),
+    );
+
+    if (response.statusCode == 200) {
+      debug('POST request successful');
+      debug(response.statusCode);
+      debug(response.body);
+      final archive = ZipDecoder().decodeBytes(response.bodyBytes);
+      final Directory appDocDir = await getApplicationDocumentsDirectory();
+      final String appDocPath = appDocDir.path;
+
+      for (final file in archive) {
+        final filename = file.name;
+        if (file.isFile) {
+          final data = file.content as List<int>;
+          final File outputFile = File('$appDocPath/$filename');
+          debug("OUTPUT FILE PATH $appDocPath/{$filename}");
+          await outputFile.create(recursive: true);
+          await outputFile.writeAsBytes(data);
+        } else {
+          debug("Not A File");
+        }
+      }
+      debug('Unzipping complete');
+    } else {
+      debug('Failed to make POST request.');
+    }
+  } catch (e) {
+    debug('Error: $e');
   }
 }
 

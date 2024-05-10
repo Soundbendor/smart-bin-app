@@ -1,6 +1,5 @@
 // Flutter imports:
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
 // Project imports:

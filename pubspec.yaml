@@ -31,6 +31,8 @@ dependencies:
   rotating_icon_button: ^1.0.0
   package_info_plus: ^8.0.0
   flutter_dotenv: ^5.1.0
+  archive: ^3.5.1
+  path_provider: ^2.1.3
 
 dev_dependencies:
   flutter_test:

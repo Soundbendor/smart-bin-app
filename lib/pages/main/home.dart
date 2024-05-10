@@ -1,11 +1,12 @@
 // Flutter imports:
 import 'dart:convert';
-import 'package:binsight_ai/util/print.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
@@ -13,6 +14,7 @@ import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:binsight_ai/widgets/circular_chart.dart';
 import 'package:binsight_ai/widgets/line_chart.dart';
+import 'package:binsight_ai/util/print.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,12 +32,13 @@ class _HomePageState extends State<HomePage> {
   Map<String, int> labelCounts = {};
   // Map day to total compost weight
   Map<DateTime, double> weightCounts = {};
-  //Label data
-
+  // Categories of labels
   Map categories = {};
-  // Load all detections from the database
+  //Directory of where detection images are stored
+  Directory? appDir;
   @override
   void initState() {
+    loadAppDir();
     loadDetections();
     super.initState();
   }
@@ -43,6 +46,13 @@ class _HomePageState extends State<HomePage> {
   void loadDetections() {
     Provider.of<DetectionNotifier>(context, listen: false).getAll();
     loadCategories();
+  }
+
+  Future<void> loadAppDir() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    setState(() {
+      appDir = dir;
+    });
   }
 
   Future<void> loadCategories() async {
@@ -65,7 +75,6 @@ class _HomePageState extends State<HomePage> {
     return Consumer<DetectionNotifier>(
       builder: (context, notifier, child) {
         final detections = notifier.detections;
-
         // Populate the counts for the circular chart and bar graph
         populateCounts(detections);
 
@@ -73,6 +82,7 @@ class _HomePageState extends State<HomePage> {
         Detection? latest;
         if (detections.isNotEmpty) {
           latest = detections.first;
+          debug('Directory: ${appDir!.path}/${latest.postDetectImgLink}');
         }
 
         return Padding(
@@ -117,11 +127,14 @@ class _HomePageState extends State<HomePage> {
                             ? GestureDetector(
                                 onTap: () => GoRouter.of(context)
                                     .push("/main/detection/${latest!.imageId}"),
-                                child: Image.asset(
-                                  'assets/images/header_compost.png',
-                                  fit: BoxFit.cover,
-                                  height: 200,
-                                ),
+                                child: appDir != null
+                                  ? Image.file(
+                                      File(
+                                          '${appDir!.path}/${latest.postDetectImgLink}'),
+                                      fit: BoxFit.cover,
+                                      height: 200,
+                                    )
+                                  : Container()
                               )
                             : Container(), // Container to handle the case when latest is null
                         const SizedBox(height: 10),
