@@ -9,6 +9,7 @@ import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/pages/detection/detection.dart';
 import '../shared.dart';
 
+/// Tests for the detection page
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   testInit();

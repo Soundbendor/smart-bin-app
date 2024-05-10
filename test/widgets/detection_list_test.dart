@@ -9,6 +9,7 @@ import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/detections.dart';
 import '../shared.dart';
 
+/// Tests for the detection list
 void main() {
   testInit();
 

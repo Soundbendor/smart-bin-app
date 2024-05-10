@@ -14,6 +14,7 @@ import 'package:binsight_ai/util/routes.dart';
 import 'package:binsight_ai/util/providers/setup_key_notifier.dart';
 import '../shared.dart';
 
+/// Tests for main page
 void main() {
   testInit();
 
