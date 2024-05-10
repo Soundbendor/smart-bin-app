@@ -60,15 +60,13 @@ class _DetectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     return Card(
       color: colorScheme.onPrimary,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-            horizontal: 12, vertical: 5
-            ), 
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+        child: Column(
+          children: [
             SizedBox(
               width: 350,
               height: 350,
@@ -82,8 +80,11 @@ class _DetectionCard extends StatelessWidget {
                       ),
                     ),
                     margin: const EdgeInsets.only(bottom: 10, top: 10),
-                    child: DynamicImage(detection.preDetectImgLink,
-                        width: 350, height: 350),
+                    child: DynamicImage(
+                      detection.preDetectImgLink,
+                      width: 350,
+                      height: 350,
+                    ),
                   ),
                   // Annotate Image Button
                   Positioned(
@@ -99,48 +100,50 @@ class _DetectionCard extends StatelessWidget {
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
-                          Theme.of(context).colorScheme.primary.withAlpha(200),
+                          Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withAlpha(200),
                         ),
                         shape: MaterialStateProperty.all(const CircleBorder()),
                       ),
                       color: Theme.of(context).colorScheme.onPrimary,
-                      splashColor: Theme.of(context).colorScheme.onSecondary,
+                      splashColor:
+                          Theme.of(context).colorScheme.onSecondary,
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: 400,
-              child: Wrap(
-                children: [
-                  StatisticCard(
-                      title: "Temperature",
-                      value: detection.temperature.toString()),
-                  StatisticCard(
-                      title: "Weight", value: detection.weight.toString()),
-                  StatisticCard(
-                      title: "Total Weight",
-                      value: detection.totalWeight.toString()),
-                  StatisticCard(
-                      title: "Humidity", value: detection.humidity.toString()),
-                  StatisticCard(
-                      title: "CO2 Equivalent", value: detection.co2.toString()),
-                  StatisticCard(
-                      title: "Total Volatile Organic Compounds",
-                      value: detection.vo2.toString()),
-                  StatisticCard(
-                      title: "Pressure", value: detection.pressure.toString()),
-                  StatisticCard(
-                      title: "Indoor Air Quality",
-                      value: detection.iaq.toString()),
-                ],
-              ),
-            )
-          ]),
+            const SizedBox(height: 5),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildDataField("Transcription", detection.transcription.toString(), textTheme),
+                _buildDataField("Temperature", detection.temperature.toString(), textTheme),
+                _buildDataField("Weight", detection.weight.toString(), textTheme),
+                _buildDataField("Total Weight", detection.totalWeight.toString(), textTheme),
+                _buildDataField("Humidity", detection.humidity.toString(), textTheme),
+                _buildDataField("CO2 Equivalent", detection.co2.toString(), textTheme),
+                _buildDataField("Pressure", detection.pressure.toString(), textTheme),
+                _buildDataField("Indoor Air Quality", detection.iaq.toString(), textTheme),
+                _buildDataField("Total Volatile Organic Compounds", detection.vo2.toString(), textTheme),
+              ],
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  // Creates a row with a title and a value to build the sensor data fields.
+  Widget _buildDataField(String title, String value, TextTheme textTheme) {
+    return Row(
+      children: [
+        Text(title, style: textTheme.labelLarge),
+        const SizedBox(width: 10),
+        Text(value, style: textTheme.bodyMedium),
+      ],
     );
   }
 }

@@ -10,6 +10,9 @@ import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
 
 // Project imports:
+import 'package:binsight_ai/database/connection.dart';
+import 'package:binsight_ai/database/models/device.dart';
+import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/util/providers/annotation_notifier.dart';
 import 'package:binsight_ai/util/providers/device_notifier.dart';
@@ -18,35 +21,32 @@ import 'package:binsight_ai/util/providers/wifi_result_notifier.dart';
 import 'package:binsight_ai/util/routes.dart';
 import 'package:binsight_ai/util/styles.dart';
 import 'package:binsight_ai/util/subscriber.dart';
-import 'package:binsight_ai/database/connection.dart';
-import 'package:binsight_ai/database/models/device.dart';
-import 'package:binsight_ai/database/models/detection.dart';
 
 const String exampleBoxes = '''
 [
   {
-    "category_name": "Apple",
+    "object_name": "Apple",
     "xy_coord_list": [
       [11.1, 16.4],
       [11.3, 16.5]
     ]
   },
   {
-    "category_name": "Orange",
+    "object_name": "Orange",
     "xy_coord_list": [
       [11.1, 16.4],
       [11.3, 16.5]
     ]
   },
   {
-    "category_name": "Banana",
+    "object_name": "Banana",
     "xy_coord_list": [
       [11.1, 16.4],
       [11.3, 16.5]
     ]
   },
   {
-    "category_name": "Milk",
+    "object_name": "Milk",
     "xy_coord_list": [
       [11.1, 16.4],
       [11.3, 16.5]
@@ -82,7 +82,11 @@ void main() async {
           postDetectImgLink: "https://placehold.co/513x513.png",
           depthMapImgLink: "https://placehold.co/514x514.png",
           irImgLink: "https://placehold.co/515x515.png",
+          transcription: "apples, oranges, bananas",
           weight: 27.0,
+          totalWeight: 27.0,
+          pressure: 0.5,
+          iaq: 0.5,
           humidity: 0.5,
           temperature: 20.0,
           co2: 0.5,
@@ -97,7 +101,11 @@ void main() async {
           postDetectImgLink: "https://placehold.co/513x513.png",
           depthMapImgLink: "https://placehold.co/514x514.png",
           irImgLink: "https://placehold.co/515x515.png",
+          transcription: "broccoli, carrots",
           weight: 10.0,
+          totalWeight: 27.0,
+          pressure: 0.5,
+          iaq: 0.5,
           humidity: 0.5,
           temperature: 20.0,
           co2: 0.5,
@@ -112,7 +120,11 @@ void main() async {
           postDetectImgLink: "https://placehold.co/513x513.png",
           depthMapImgLink: "https://placehold.co/514x514.png",
           irImgLink: "https://placehold.co/515x515.png",
+          transcription: "null",
           weight: 40.0,
+          totalWeight: 27.0,
+          pressure: 0.5,
+          iaq: 0.5,
           humidity: 0.5,
           temperature: 20.0,
           co2: 0.5,
@@ -127,7 +139,11 @@ void main() async {
           postDetectImgLink: "https://placehold.co/513x513.png",
           depthMapImgLink: "https://placehold.co/514x514.png",
           irImgLink: "https://placehold.co/515x515.png",
+          transcription: "orange peels",
           weight: 16.0,
+          totalWeight: 27.0,
+          pressure: 0.5,
+          iaq: 0.5,
           humidity: 0.5,
           temperature: 20.0,
           co2: 0.5,
@@ -142,7 +158,11 @@ void main() async {
           postDetectImgLink: "https://placehold.co/513x513.png",
           depthMapImgLink: "https://placehold.co/514x514.png",
           irImgLink: "https://placehold.co/515x515.png",
+          transcription: "coffee grounds",
           weight: 30.0,
+          totalWeight: 27.0,
+          pressure: 0.5,
+          iaq: 0.5,
           humidity: 0.5,
           temperature: 20.0,
           co2: 0.5,

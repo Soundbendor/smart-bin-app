@@ -180,10 +180,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// Function to populate the weightCounts and labelCounts for the circular chart and bar graph
+/// Function to populate the weightCounts and labelCounts for the circular chart and bar graph
   void populateCounts() {
     // If there are detections
-    if (detections.isNotEmpty) {
+    // if (detections.isNotEmpty) {
+    if (detections.isEmpty) {
       // Turn detections to a list of maps
       List<Map<String, dynamic>> detectionsMaps =
           detections.map((detection) => detection.toMap()).toList();
