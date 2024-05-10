@@ -29,7 +29,7 @@
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">binsight_ai</a></li>
-    <li><a href="../../util_bluetooth/util_bluetooth-library.html">util\bluetooth.dart</a></li>
+    <li><a href="../../util_bluetooth/util_bluetooth-library.html">util&#47;bluetooth.dart</a></li>
     <li><a href="../../util_bluetooth/BleDevice-class.html">BleDevice</a></li>
     <li class="self-crumb">waitForPair method</li>
   </ol>
@@ -91,12 +91,12 @@
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; waitForPair({int? timeout}) async {
   if (isBonded) {
     debug(&quot;BleDevice[waitForPair]: Device already bonded&quot;);
-    return await _updateServices();
+    return await updateServices();
   }
   if (!Platform.isAndroid) {
     debug(
         &quot;BleDevice[waitForPair]: Platform is not Android, skipping wait for pairing&quot;);
-    return await _updateServices();
+    return await updateServices();
   }
   if (!isConnected) {
     debug(
@@ -127,7 +127,7 @@
         &quot;Failed to wait for device to be bonded: $e&quot;);
   }
   removeListener(BleDeviceClientEvents.bonded, callback);
-  await _updateServices();
+  await updateServices();
 }</code></pre>
 </section>
 
