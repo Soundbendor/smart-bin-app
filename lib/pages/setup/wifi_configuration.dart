@@ -214,7 +214,7 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
       status = WifiConfigurationStatus.verifying;
     });
     int tries = 0;
-    while (tries < 10) {
+    while (tries < 15) {
       final now = DateTime.now();
       final statusData = await device.readCharacteristic(
           serviceId: mainServiceId,
@@ -236,7 +236,7 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
               .difference(DateTime.fromMillisecondsSinceEpoch(
                   (timestamp * 1000).floor()))
               .inSeconds <
-          5) {
+          10) {
         if (success) {
           return await verifyConnection();
         } else {
