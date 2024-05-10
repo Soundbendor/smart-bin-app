@@ -53,6 +53,7 @@ The binsight.ai app offers the following features and functionalities:
 
 ## Contact Us
 Please feel free to reach out to our support email at:
+
 ![alt text](image.png)
 
 ## Contributions
