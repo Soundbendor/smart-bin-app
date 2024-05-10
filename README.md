@@ -23,11 +23,23 @@ In the face of an escalating climate crisis, finding more effective food waste d
 
 Our project supports a countertop Smart Compost Bin equipped with sensors that capture images of food waste and many associated data points. These include bin internal temperature and humidity, IAQ, CO2, the weight of composted food items, thermal imaging depth maps, and VOCs.
 
-Users of the app will be presented with a fun and engaging User Interface which will allow them to quickly learn and begin using the SoundBendor Smart Compost Bin. After setting up the bin with Wi-Fi, any items the user composts will be sent to their app, enabling them to begin annotating images and thus contributing to the larger dataset.
+Users of the app will be presented with a fun and engaging user interface which will allow them to quickly learn and begin using the SoundBendor Smart Compost Bin. After setting up the bin with Wi-Fi, any items the user composts will be sent to their app, enabling them to begin annotating images and thus contributing to the larger dataset.
+
+## Value Proposition (CHANGEME)
+
+The binsight.ai team is pioneering their way through the field of Smart Composting and image annotation, and as such, there is no direct competition. All current solutions that are out there are working towards the same goal: Fighting the effects of food waste and climate change.
 
 ## Getting Started
 
-To use the binsight.ai app....
+To use the binsight.ai app:
+
+- Ensure you have a functional Wi-Fi network, as well as Bluetooth capability.
+- Download the app on to the mobile device of your choice.
+- Open the app and complete the set-up process.
+- Use the Smart Compost Bin as you would any other composting solution.
+- After composting an item, check the detections page on your app to access and annotate your detection.
+- Watch your composting breakdown be populated over time.
+- Repeat from step 4, and have fun!
 
 ## Features
 
@@ -38,6 +50,9 @@ The binsight.ai app offers the following features and functionalities:
 ## Usage
 
 - Stuff here
+
+## Contact Us
+Please feel free to reach out to our [support email](binsight.help@gmail.com)
 
 ## Contributions
 
