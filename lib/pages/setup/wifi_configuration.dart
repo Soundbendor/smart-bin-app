@@ -214,8 +214,8 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
       status = WifiConfigurationStatus.verifying;
     });
     int tries = 0;
-    while (tries < 10) {
-      final now = DateTime.now();
+    while (tries < 15) {
+      // final now = DateTime.now();
       final statusData = await device.readCharacteristic(
           serviceId: mainServiceId,
           characteristicId: wifiCredentialCharacteristicId);
@@ -224,19 +224,25 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
       try {
         statusJson = jsonDecode(utf8.decode(statusData));
       } catch (e) {
+        debug(e);
         continue;
       }
       double timestamp = statusJson["timestamp"]; // in seconds
+      debug("TIMESTAMP: $timestamp");
       String message = statusJson["message"];
       String? log = statusJson["log"];
       bool success = statusJson["success"];
       debug("Status: $statusJson");
+      // debug(
+          // "Diff: ${now.difference(DateTime.fromMillisecondsSinceEpoch((timestamp * 1000).floor())).inSeconds}");
       // check if timestamp is within ~5 seconds of now
-      if (now
-              .difference(DateTime.fromMillisecondsSinceEpoch(
-                  (timestamp * 1000).floor()))
-              .inSeconds <
-          5) {
+      // if (now
+      //         .difference(DateTime.fromMillisecondsSinceEpoch(
+      //             (timestamp * 1000).floor()))
+      //         .inSeconds <
+      //     10) {
+        tries++;
+        await Future.delayed(const Duration(seconds: 2));
         if (success) {
           return await verifyConnection();
         } else {
@@ -247,11 +253,9 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
           });
           return;
         }
-      } else {
-        tries++;
-        await Future.delayed(const Duration(seconds: 1));
+      // } else {
       }
-    }
+    // }
     // if we reach here, the operation has timed out
     if (!mounted) return;
     setState(() {
@@ -275,6 +279,7 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
     debug("Status: $statusJson");
     bool success = statusJson["success"];
     bool? internetAccess = statusJson["internet_access"];
+    debug("INTERNET ACCESS: $internetAccess, SUCCESS: $success");
     if (internetAccess != null && internetAccess && success) {
       if (!mounted) return;
       await Future.delayed(const Duration(seconds: 2));
@@ -307,8 +312,8 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
     Provider.of<DeviceNotifier>(context, listen: false).resetDevice();
     sharedPreferences.setString(
         SharedPreferencesKeys.apiKey, credentialJson["apiKey"]);
-    sharedPreferences.setString(
-        SharedPreferencesKeys.deviceApiID, credentialJson["deviceID"].toString());
+    sharedPreferences.setString(SharedPreferencesKeys.deviceApiID,
+        credentialJson["deviceID"].toString());
     sharedPreferences.setString(SharedPreferencesKeys.deviceID, device.id);
     widget.onComplete();
   }
