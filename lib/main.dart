@@ -158,7 +158,7 @@ void main() async {
           postDetectImgLink: "https://placehold.co/513x513.png",
           depthMapImgLink: "https://placehold.co/514x514.png",
           irImgLink: "https://placehold.co/515x515.png",
-          transcription: "coffee grounds",
+          transcription: "coffee grounds, and then a lot of coffee grounds, and maybe some old tea bags and banana peels and rotten apples",
           weight: 30.0,
           totalWeight: 27.0,
           pressure: 0.5,

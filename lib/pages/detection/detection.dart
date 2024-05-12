@@ -99,16 +99,12 @@ class _DetectionCard extends StatelessWidget {
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
-                          Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withAlpha(200),
+                          Theme.of(context).colorScheme.primary.withAlpha(200),
                         ),
                         shape: MaterialStateProperty.all(const CircleBorder()),
                       ),
                       color: Theme.of(context).colorScheme.onPrimary,
-                      splashColor:
-                          Theme.of(context).colorScheme.onSecondary,
+                      splashColor: Theme.of(context).colorScheme.onSecondary,
                     ),
                   ),
                 ],
@@ -118,15 +114,24 @@ class _DetectionCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildDataField("Transcription", detection.transcription.toString(), textTheme),
-                _buildDataField("Temperature", detection.temperature.toString(), textTheme),
-                _buildDataField("Weight", detection.weight.toString(), textTheme),
-                _buildDataField("Total Weight", detection.totalWeight.toString(), textTheme),
-                _buildDataField("Humidity", detection.humidity.toString(), textTheme),
-                _buildDataField("CO2 Equivalent", detection.co2.toString(), textTheme),
-                _buildDataField("Pressure", detection.pressure.toString(), textTheme),
-                _buildDataField("Indoor Air Quality", detection.iaq.toString(), textTheme),
-                _buildDataField("Total Volatile Organic Compounds", detection.vo2.toString(), textTheme),
+                _buildDataField("Transcription",
+                    detection.transcription.toString(), textTheme),
+                _buildDataField(
+                    "Temperature", detection.temperature.toString(), textTheme),
+                _buildDataField(
+                    "Weight", detection.weight.toString(), textTheme),
+                _buildDataField("Total Weight",
+                    detection.totalWeight.toString(), textTheme),
+                _buildDataField(
+                    "Humidity", detection.humidity.toString(), textTheme),
+                _buildDataField(
+                    "CO2 Equivalent", detection.co2.toString(), textTheme),
+                _buildDataField(
+                    "Pressure", detection.pressure.toString(), textTheme),
+                _buildDataField(
+                    "Indoor Air Quality", detection.iaq.toString(), textTheme),
+                _buildDataField("Total Volatile Organic Compounds",
+                    detection.vo2.toString(), textTheme),
               ],
             ),
           ],
@@ -141,7 +146,14 @@ class _DetectionCard extends StatelessWidget {
       children: [
         Text(title, style: textTheme.labelLarge),
         const SizedBox(width: 10),
-        Text(value, style: textTheme.bodyMedium),
+        Flexible(
+          child: Text(
+            value,
+            style: textTheme.bodyMedium,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        ),
       ],
     );
   }

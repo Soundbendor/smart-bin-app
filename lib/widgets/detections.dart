@@ -61,7 +61,7 @@ class DetectionLargeListItem extends StatelessWidget {
           // Background color of the card
           color: colorScheme.onPrimary,
           child: Padding(
-            padding: const EdgeInsets.all(9.0),
+            padding: const EdgeInsets.all(11.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -82,8 +82,9 @@ class DetectionLargeListItem extends StatelessWidget {
                       ),
                     ),
                     margin: const EdgeInsets.only(bottom: 12, top: 12),
+                    alignment: Alignment.center,
                     child: DynamicImage(detection.preDetectImgLink,
-                        width: 300, height: 300)),
+                        width: 325, height: 325)),
                 SizedBox(
                   width: 250,
                   child: Row(
@@ -92,18 +93,16 @@ class DetectionLargeListItem extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Temperature", style: textTheme.labelLarge),
-                            Text("Humidity", style: textTheme.labelLarge),
+                            Text("Transcription:",
+                            style: textTheme.titleMedium),
                           ],
                         ),
                       ),
                       Expanded(
                         child: Column(
                           children: [
-                            Text(detection.temperature.toString(),
-                                style: textTheme.labelLarge),
-                            Text(detection.humidity.toString(),
-                                style: textTheme.labelLarge),
+                            Text(detection.transcription.toString(),
+                                style: textTheme.labelMedium),
                           ],
                         ),
                       ),
