@@ -184,9 +184,13 @@
         Provider(create: (_) =&gt; SetupKeyNotifier()),
         &#47;&#47; Notifies listeners of changes to the current annotation&#39;s state.
         ChangeNotifierProvider(create: (_) =&gt; AnnotationNotifier()),
+        ChangeNotifierProvider(create: (_) =&gt; DetectionNotifier()),
       ],
       &#47;&#47; Skip initial set up if user has already set up a device
-      child: BinsightAiApp(skipSetUp: sharedPreferences.getString(&quot;deviceID&quot;) != null),
+      child: BinsightAiApp(
+          skipSetUp:
+              sharedPreferences.getString(SharedPreferencesKeys.deviceID) !=
+                  null),
     ),
   );
 }</code></pre>
