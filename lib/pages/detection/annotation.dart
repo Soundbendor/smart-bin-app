@@ -211,6 +211,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
 
                 Future.delayed(const Duration(milliseconds: 100), () {
                   annotationNotifier.reset();
+                  GoRouter.of(context).pop();
                 });
               },
               child: Text(
