@@ -163,7 +163,7 @@ void main() async {
       // Skip initial set up if user has already set up a device
       child: BinsightAiApp(
           skipSetUp:
-              sharedPreferences.getString(SharedPreferencesKeys.deviceID) !=
+              true || sharedPreferences.getString(SharedPreferencesKeys.deviceID) !=
                   null),
     ),
   );

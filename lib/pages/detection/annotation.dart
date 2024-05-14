@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 // Package imports:
 import 'package:go_router/go_router.dart';
@@ -68,7 +69,8 @@ class _AnnotationPageState extends State<AnnotationPage> {
   void initPreferences() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      dontShowAgain = preferences.getBool(SharedPreferencesKeys.dontShowAgain) ?? false;
+      dontShowAgain =
+          preferences.getBool(SharedPreferencesKeys.dontShowAgain) ?? false;
     });
     if (dontShowAgain == false) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -130,7 +132,8 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 onPressed: () async {
                   SharedPreferences preferences =
                       await SharedPreferences.getInstance();
-                  preferences.setBool(SharedPreferencesKeys.dontShowAgain, dontShowAgain!);
+                  preferences.setBool(
+                      SharedPreferencesKeys.dontShowAgain, dontShowAgain!);
                   if (!context.mounted) return;
                   Navigator.of(context).pop();
                 },
@@ -155,269 +158,279 @@ class _AnnotationPageState extends State<AnnotationPage> {
       builder: (context, notifier, child) {
         return Scaffold(
           body: Center(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16),
+            child: CustomScrollView(
+              slivers: [
+                SliverFillRemaining(
+                  hasScrollBody: false,
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      GestureDetector(
-                        child: Row(
-                          children: [
-                            const Icon(Icons.arrow_back_ios),
-                            Text("Back to detection",
-                                style: textTheme.labelLarge),
-                          ],
-                        ),
-                        onTap: () => GoRouter.of(context).pop(),
-                      ),
-                      const Heading(text: "Annotate Your Image"),
-                      const SizedBox(height: 16),
+                      heading(textTheme, context),
+                      drawingArea(textTheme),
+                      drawingControlArea(textTheme, notifier),
+                      bottomControlArea(
+                          context, annotationNotifier, notifier, textTheme),
                     ],
                   ),
-                ),
-                FutureBuilder(
-                  future: widget.imageLink,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else {
-                      return Stack(
-                        children: [
-                          RepaintBoundary(
-                            key: _captureKey,
-                            child: SizedBox(
-                              width: 300,
-                              height: 300,
-                              child: FreeDraw(
-                                imageLink: snapshot.data as String,
-                              ),
-                            ),
-                          ),
-                          if (!drawStarted)
-                            Positioned(
-                              child: GestureDetector(
-                                onTap: () => setState(() {
-                                  drawStarted = true;
-                                }),
-                                child: Container(
-                                  width: 300,
-                                  height: 300,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.5),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "Tap to start",
-                                      style: textTheme.displaySmall!.copyWith(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      );
-                    }
-                  },
-                ),
-                SingleChildScrollView(
-                  child: Consumer<AnnotationNotifier>(
-                      builder: (context, annotationNotifier, child) {
-                    return SizedBox(
-                      width: 300,
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton.filled(
-                                      disabledColor: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface
-                                          .withAlpha(150),
-                                      onPressed: annotationNotifier.canUndo()
-                                          ? () {
-                                              annotationNotifier.undo();
-                                            }
-                                          : null,
-                                      icon: const Icon(Icons.undo)),
-                                  IconButton.filled(
-                                      disabledColor: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface
-                                          .withAlpha(150),
-                                      onPressed: annotationNotifier.canRedo()
-                                          ? () {
-                                              annotationNotifier.redo();
-                                            }
-                                          : null,
-                                      icon: const Icon(Icons.redo)),
-                                ],
-                              ),
-                              Text(
-                                annotationNotifier.label == null
-                                    ? 'No label selected yet'
-                                    : 'Selected Label: ${annotationNotifier.label}',
-                                style: textTheme.labelLarge,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            children: [
-                              ElevatedButton(
-                                child: Text(
-                                  "Select Label",
-                                  style: textTheme.labelLarge!.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                  ),
-                                ),
-                                // If the labels json loaded in from assets/data is not empty, show the dialog popup, otherwise don't
-                                onPressed: () {
-                                  labels.isNotEmpty
-                                      ? showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return MyAlertDialog(
-                                              labels: labels,
-                                              controller: controller,
-                                            );
-                                          },
-                                        )
-                                      : const Padding(padding: EdgeInsets.zero);
-                                },
-                              ),
-                              const SizedBox(width: 8),
-                              ElevatedButton(
-                                style:
-                                    !annotationNotifier.isCompleteAnnotation()
-                                        ? Theme.of(context)
-                                            .elevatedButtonTheme
-                                            .style!
-                                            .copyWith(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                Theme.of(context)
-                                                    .colorScheme
-                                                    .surface,
-                                              ),
-                                            )
-                                        : null,
-                                onPressed: () {
-                                  if (annotationNotifier
-                                      .isCompleteAnnotation()) {
-                                    annotationNotifier.addToAllAnnotations();
-                                    annotationNotifier.clearCurrentAnnotation();
-                                    annotationNotifier.label = null;
-                                    notifier
-                                        .updateDetection(widget.detectionId);
-                                  } else {
-                                    String message;
-                                    if (annotationNotifier.label == null) {
-                                      message =
-                                          "Please Enter a Label for Current Annotation";
-                                    } else {
-                                      message = "Please Draw Your Annotation";
-                                    }
-                                    debug(message);
-                                  }
-                                },
-                                child: Text(
-                                  "Save",
-                                  style: textTheme.labelLarge!.copyWith(
-                                    color: annotationNotifier
-                                            .isCompleteAnnotation()
-                                        ? Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onSurface
-                                            .withAlpha(150),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const SizedBox(),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 300,
-                              height: 100,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    ElevatedButton(
-                                      style: Theme.of(context)
-                                          .elevatedButtonTheme
-                                          .style!
-                                          .copyWith(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                              Theme.of(context)
-                                                  .colorScheme
-                                                  .tertiary,
-                                            ),
-                                          ),
-                                      onPressed: () {
-                                        annotationNotifier
-                                            .clearCurrentAnnotation();
-                                        notifier.updateDetection(
-                                            widget.detectionId);
-
-                                        Future.delayed(
-                                            const Duration(milliseconds: 100),
-                                            () {
-                                          annotationNotifier.reset();
-                                        });
-                                      },
-                                      child: Text(
-                                        "Done",
-                                        style: textTheme.labelLarge!.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onTertiary,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                )
               ],
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget bottomControlArea(
+      BuildContext context,
+      AnnotationNotifier annotationNotifier,
+      DetectionNotifier notifier,
+      TextTheme textTheme) {
+    return Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const SizedBox(),
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 300,
+                  height: 100,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          style: Theme.of(context)
+                              .elevatedButtonTheme
+                              .style!
+                              .copyWith(
+                                backgroundColor: MaterialStateProperty.all(
+                                  Theme.of(context).colorScheme.tertiary,
+                                ),
+                              ),
+                          onPressed: () {
+                            annotationNotifier.clearCurrentAnnotation();
+                            notifier.updateDetection(widget.detectionId);
+
+                            Future.delayed(const Duration(milliseconds: 100),
+                                () {
+                              annotationNotifier.reset();
+                            });
+                          },
+                          child: Text(
+                            "Done",
+                            style: textTheme.labelLarge!.copyWith(
+                              color: Theme.of(context).colorScheme.onTertiary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget drawingControlArea(TextTheme textTheme, DetectionNotifier notifier) {
+    return Consumer<AnnotationNotifier>(
+        builder: (context, annotationNotifier, child) {
+      return SizedBox(
+        width: 300,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton.filled(
+                        disabledColor: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withAlpha(150),
+                        onPressed: annotationNotifier.canUndo()
+                            ? () {
+                                annotationNotifier.undo();
+                              }
+                            : null,
+                        icon: const Icon(Icons.undo)),
+                    IconButton.filled(
+                        disabledColor: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withAlpha(150),
+                        onPressed: annotationNotifier.canRedo()
+                            ? () {
+                                annotationNotifier.redo();
+                              }
+                            : null,
+                        icon: const Icon(Icons.redo)),
+                  ],
+                ),
+                Text(
+                  annotationNotifier.label == null
+                      ? 'No label selected yet'
+                      : 'Selected Label: ${annotationNotifier.label}',
+                  style: textTheme.labelLarge,
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                ElevatedButton(
+                  child: Text(
+                    "Select Label",
+                    style: textTheme.labelLarge!.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                  ),
+                  // If the labels json loaded in from assets/data is not empty, show the dialog popup, otherwise don't
+                  onPressed: () {
+                    labels.isNotEmpty
+                        ? showDialog(
+                            context: context,
+                            builder: (context) {
+                              return MyAlertDialog(
+                                labels: labels,
+                                controller: controller,
+                              );
+                            },
+                          )
+                        : const Padding(padding: EdgeInsets.zero);
+                  },
+                ),
+                const SizedBox(width: 8),
+                ElevatedButton(
+                  style: !annotationNotifier.isCompleteAnnotation()
+                      ? Theme.of(context).elevatedButtonTheme.style!.copyWith(
+                            backgroundColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.surface,
+                            ),
+                          )
+                      : null,
+                  onPressed: () {
+                    if (annotationNotifier.isCompleteAnnotation()) {
+                      annotationNotifier.addToAllAnnotations();
+                      annotationNotifier.clearCurrentAnnotation();
+                      annotationNotifier.label = null;
+                      notifier.updateDetection(widget.detectionId);
+                    } else {
+                      String message;
+                      if (annotationNotifier.label == null) {
+                        message = "Please Enter a Label for Current Annotation";
+                      } else {
+                        message = "Please Draw Your Annotation";
+                      }
+                      debug(message);
+                    }
+                  },
+                  child: Text(
+                    "Save",
+                    style: textTheme.labelLarge!.copyWith(
+                      color: annotationNotifier.isCompleteAnnotation()
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withAlpha(150),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget drawingArea(TextTheme textTheme) {
+    return FutureBuilder(
+      future: widget.imageLink,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else {
+          return Stack(
+            children: [
+              RepaintBoundary(
+                key: _captureKey,
+                child: SizedBox(
+                  width: 300,
+                  height: 300,
+                  child: SingleChildScrollView(
+                    physics: NeverScrollableScrollPhysics(),
+                    child: FreeDraw(
+                      imageLink: snapshot.data as String,
+                    ),
+                  ),
+                ),
+              ),
+              if (!drawStarted)
+                Positioned(
+                  child: GestureDetector(
+                    onTap: () => setState(() {
+                      drawStarted = true;
+                    }),
+                    child: Container(
+                      width: 300,
+                      height: 300,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Tap to start",
+                          style: textTheme.displaySmall!.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          );
+        }
+      },
+    );
+  }
+
+  Widget heading(TextTheme textTheme, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GestureDetector(
+            child: Row(
+              children: [
+                const Icon(Icons.arrow_back_ios),
+                Text("Back to detection", style: textTheme.labelLarge),
+              ],
+            ),
+            onTap: () => GoRouter.of(context).pop(),
+          ),
+          const Heading(text: "Annotate Your Image"),
+          const SizedBox(height: 16),
+        ],
+      ),
     );
   }
 }
