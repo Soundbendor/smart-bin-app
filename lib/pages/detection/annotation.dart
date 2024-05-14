@@ -502,45 +502,52 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                child: Wrap(
+                  spacing: 2,
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        // Only pop out of the dialog when pressing submit if you've selected a label
-                        if (widget.controller.getPickedItems().isNotEmpty) {
-                          context.read<AnnotationNotifier>().setLabel(
-                              widget.controller.getPickedItems()[0]["Label"]
-                                  ["name"]);
-                          Navigator.of(context).pop();
-                        }
-                      },
-                      child: const Text("Submit"),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      child: TextButton(
+                        onPressed: () {
+                          // Only pop out of the dialog when pressing submit if you've selected a label
+                          if (widget.controller.getPickedItems().isNotEmpty) {
+                            context.read<AnnotationNotifier>().setLabel(
+                                widget.controller.getPickedItems()[0]["Label"]
+                                    ["name"]);
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        child: const Text("Submit"),
+                      ),
                     ),
-                    selectedLabel != null
-                        ? TextButton(
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.red)),
-                            onPressed: () => setState(
-                              () {
-                                selectedLabel = null;
-                                widget.controller.clearAllPickedItems();
-                              },
-                            ),
-                            child: const Text(
-                              "Clear",
-                            ),
-                          )
-                        : const Text(""),
-                    TextButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.grey)),
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: const Text(
-                        "Cancel",
+                    if (selectedLabel != null)
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        child: TextButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all<Color>(Colors.red)),
+                          onPressed: () => setState(
+                            () {
+                              selectedLabel = null;
+                              widget.controller.clearAllPickedItems();
+                            },
+                          ),
+                          child: const Text(
+                            "Clear",
+                          ),
+                        ),
+                      ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      child: TextButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.grey)),
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text(
+                          "Cancel",
+                        ),
                       ),
                     ),
                   ],
