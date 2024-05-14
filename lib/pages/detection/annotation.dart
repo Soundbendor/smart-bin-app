@@ -266,13 +266,16 @@ class _AnnotationPageState extends State<AnnotationPage> {
                   ],
                 ),
                 Flexible(
-                  child: Text(
-                    annotationNotifier.label == null
-                        ? 'No label selected yet'
-                        : 'Selected Label: ${annotationNotifier.label}',
-                    style: textTheme.labelLarge,
-                    overflow: TextOverflow.fade,
-                    softWrap: false,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      annotationNotifier.label == null
+                          ? 'No label selected yet'
+                          : 'Selected Label: ${annotationNotifier.label}',
+                      style: textTheme.labelLarge,
+                      overflow: TextOverflow.fade,
+                      softWrap: false,
+                    ),
                   ),
                 ),
               ],
