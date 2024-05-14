@@ -265,11 +265,15 @@ class _AnnotationPageState extends State<AnnotationPage> {
                         icon: const Icon(Icons.redo)),
                   ],
                 ),
-                Text(
-                  annotationNotifier.label == null
-                      ? 'No label selected yet'
-                      : 'Selected Label: ${annotationNotifier.label}',
-                  style: textTheme.labelLarge,
+                Flexible(
+                  child: Text(
+                    annotationNotifier.label == null
+                        ? 'No label selected yet'
+                        : 'Selected Label: ${annotationNotifier.label}',
+                    style: textTheme.labelLarge,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                  ),
                 ),
               ],
             ),
