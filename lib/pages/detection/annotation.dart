@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -121,8 +122,12 @@ class _AnnotationPageState extends State<AnnotationPage> {
                         },
                       );
                     }),
-                    Text("Don't show this screen again",
-                        style: Theme.of(context).textTheme.labelLarge),
+                    Expanded(
+                      child: Text(
+                        "Don't show this screen again",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ),
                   ],
                 ),
               ],
