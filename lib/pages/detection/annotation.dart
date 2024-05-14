@@ -1,9 +1,7 @@
 // Flutter imports:
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 // Package imports:
 import 'package:go_router/go_router.dart';
@@ -173,6 +171,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                       heading(textTheme, context),
                       drawingArea(textTheme),
                       drawingControlArea(textTheme, notifier),
+                      const SizedBox(height: 16),
                       bottomControlArea(
                           context, annotationNotifier, notifier, textTheme),
                     ],
@@ -191,60 +190,38 @@ class _AnnotationPageState extends State<AnnotationPage> {
       AnnotationNotifier annotationNotifier,
       DetectionNotifier notifier,
       TextTheme textTheme) {
-    return Expanded(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const SizedBox(),
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 300,
-                  height: 100,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                          style: Theme.of(context)
-                              .elevatedButtonTheme
-                              .style!
-                              .copyWith(
-                                backgroundColor: MaterialStateProperty.all(
-                                  Theme.of(context).colorScheme.tertiary,
-                                ),
-                              ),
-                          onPressed: () {
-                            annotationNotifier.clearCurrentAnnotation();
-                            notifier.updateDetection(widget.detectionId);
-
-                            Future.delayed(const Duration(milliseconds: 100),
-                                () {
-                              annotationNotifier.reset();
-                            });
-                          },
-                          child: Text(
-                            "Done",
-                            style: textTheme.labelLarge!.copyWith(
-                              color: Theme.of(context).colorScheme.onTertiary,
-                            ),
-                          ),
-                        ),
-                      ],
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ElevatedButton(
+              style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
+                    backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.tertiary,
                     ),
                   ),
+              onPressed: () {
+                annotationNotifier.clearCurrentAnnotation();
+                notifier.updateDetection(widget.detectionId);
+
+                Future.delayed(const Duration(milliseconds: 100), () {
+                  annotationNotifier.reset();
+                });
+              },
+              child: Text(
+                "Done",
+                style: textTheme.labelLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onTertiary,
                 ),
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -380,7 +357,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                   width: 300,
                   height: 300,
                   child: SingleChildScrollView(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     child: FreeDraw(
                       imageLink: snapshot.data as String,
                     ),
