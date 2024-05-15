@@ -176,7 +176,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     Future<DateTime> timestamp = getLatestTimestamp();
-    fetchImageData('49269299245226', timestamp);
+    fetchImageData('ae9e01c90bb6af06', timestamp);
   }
 
   @override
@@ -223,13 +223,13 @@ class _BinsightAiAppState extends State<BinsightAiApp>
 
   /// Hits the api to retrieve all detections for a certain device after a date
   Future<void> fetchImageData(
-      String devideID, Future<DateTime> afterDate) async {
+      String deviceID, Future<DateTime> afterDate) async {
     DateTime timestamp = await afterDate;
     const String url =
         'http://sb-binsight.dri.oregonstate.edu:30080/api/get_image_info';
     Map<String, String> queryParams = {
-      'deviceID': devideID,
-      'after_date': "2024-5-10",
+      'deviceID': deviceID,
+      'after_date': "2024-5-15",
       'page': '1',
       'size': '10',
     };
@@ -258,7 +258,8 @@ class _BinsightAiAppState extends State<BinsightAiApp>
         }
         Provider.of<DetectionNotifier>(context, listen: false).getAll();
         try {
-          retrieveImages(devideID, imageList);
+          debug(imageList);
+          retrieveImages(deviceID, imageList);
         } catch (e) {
           debug(e);
         }
@@ -293,25 +294,9 @@ Future<void> retrieveImages(String deviceID, List<String> imageList) async {
 
     if (response.statusCode == 200) {
       debug('POST request successful');
-      debug(response.statusCode);
       debug(response.body);
-      final archive = ZipDecoder().decodeBytes(response.bodyBytes);
-      final Directory appDocDir = await getApplicationDocumentsDirectory();
-      final String appDocPath = appDocDir.path;
-
-      for (final file in archive) {
-        final filename = file.name;
-        if (file.isFile) {
-          final data = file.content as List<int>;
-          final File outputFile = File('$appDocPath/$filename');
-          debug("OUTPUT FILE PATH $appDocPath/{$filename}");
-          await outputFile.create(recursive: true);
-          await outputFile.writeAsBytes(data);
-        } else {
-          debug("Not A File");
-        }
-      }
-      debug('Unzipping complete');
+      debug(response.body.length);
+      saveAndExtract(response.body);
     } else {
       debug('Failed to make POST request.');
     }
@@ -320,8 +305,25 @@ Future<void> retrieveImages(String deviceID, List<String> imageList) async {
   }
 }
 
-/// Adjust new json map recieved from api to match existing schema
+Future<void> saveAndExtract(String zipData) async {
+  Uint8List bytes = Uint8List.fromList(zipData.codeUnits);
+  Directory tempDir = await getTemporaryDirectory();
+  Directory appDocDir = await getApplicationDocumentsDirectory();
+  String tempPath = '${tempDir.path}/temp.zip';
+  await File(tempPath).writeAsBytes(bytes);
+  Archive archive = ZipDecoder().decodeBytes(File(tempPath).readAsBytesSync());
+  for (ArchiveFile file in archive) {
+    String fileName = '${appDocDir.path}/${file.name}';
+    File(fileName)
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(file.content);
+    debug('Extracted file: $fileName');
+  }
+  debug("'Directory: ${appDocDir.path}");
+  File(tempPath).deleteSync();
+}
 
+/// Adjust new json map recieved from api to match existing schema
 Map<String, dynamic> transformMap(Map<String, dynamic> map) {
   return {
     'imageId': map['colorImage'],

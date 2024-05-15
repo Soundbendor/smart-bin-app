@@ -35,12 +35,12 @@ class _HomePageState extends State<HomePage> {
   Map<DateTime, double> weightCounts = {};
   // Categories of labels
   Map categories = {};
-  //Directory of where detection images are stored
-  Directory? appDir;
+  File? _imageFile;
+
   @override
   void initState() {
-    loadAppDir();
     loadDetections();
+    loadLocalImage();
     super.initState();
   }
 
@@ -49,11 +49,24 @@ class _HomePageState extends State<HomePage> {
     loadCategories();
   }
 
-  Future<void> loadAppDir() async {
-    Directory dir = await getApplicationDocumentsDirectory();
-    setState(() {
-      appDir = dir;
-    });
+  Future<void> loadLocalImage() async {
+    debug("Load local image");
+    try {
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String imagePath =
+          '${appDocDir.path}/colorImage_2024-05-15--16-51-46.jpg'; // Update with the actual image file name
+      File imageFile = File(imagePath);
+      if (imageFile.existsSync()) {
+        setState(() {
+          _imageFile = imageFile;
+          debug("Image file set ${_imageFile!.path}");
+        });
+      } else {
+        debug('Image file not found.');
+      }
+    } catch (e) {
+      debug('Error loading image: $e');
+    }
   }
 
   Future<void> loadCategories() async {
@@ -83,7 +96,7 @@ class _HomePageState extends State<HomePage> {
         Detection? latest;
         if (detections.isNotEmpty) {
           latest = detections.first;
-          debug('Directory: ${appDir!.path}/${latest.postDetectImgLink}');
+
         }
 
         return SingleChildScrollView(
@@ -126,13 +139,8 @@ class _HomePageState extends State<HomePage> {
                           ? GestureDetector(
                               onTap: () => GoRouter.of(context)
                                   .push("/main/detection/${latest!.imageId}"),
-                              child: appDir != null
-                                  ? Image.file(
-                                      File(
-                                          '${appDir!.path}/${latest.postDetectImgLink}'),
-                                      fit: BoxFit.cover,
-                                      height: 200,
-                                    )
+                              child: _imageFile != null
+                                  ? Image.file(_imageFile!)
                                   : Container())
                           : Container(), // Container to handle the case when latest is null
                       const SizedBox(height: 10),
