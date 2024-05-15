@@ -94,7 +94,7 @@ class DetectionLargeListItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Transcription:",
-                            style: textTheme.titleMedium),
+                                style: textTheme.titleMedium),
                           ],
                         ),
                       ),
@@ -135,13 +135,20 @@ class DetectionSmallListItem extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.only(left: 5.0, top: 5.0, right: 5.0),
       child: GestureDetector(
         onTap: () => onTileTap(context, detection),
         child: Card(
           color: colorScheme.onPrimary,
           child: ListTile(
-            leading: DynamicImage(detection.preDetectImgLink),
+            leading: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: colorScheme.onSurface,
+                    width: 1,
+                  ),
+                ),
+                child: DynamicImage(detection.preDetectImgLink)),
             title: Text(formatDetectionTitle(detection),
                 style: textTheme.titleMedium),
             subtitle: Text(detection.timestamp.toString(),
