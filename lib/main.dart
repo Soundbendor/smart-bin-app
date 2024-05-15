@@ -8,8 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:binsight_ai/database/connection.dart';
-import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/util/providers/detection_notifier.dart';
@@ -20,7 +18,6 @@ import 'package:binsight_ai/util/providers/wifi_result_notifier.dart';
 import 'package:binsight_ai/util/routes.dart';
 import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/util/styles.dart';
-import 'package:binsight_ai/database/models/detection.dart';
 
 const String exampleBoxes = '''
 [
