@@ -1,4 +1,7 @@
 // Flutter imports:
+import 'dart:io';
+
+import 'package:binsight_ai/util/image.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -10,6 +13,7 @@ import 'package:binsight_ai/widgets/detections.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/widgets/image.dart';
 import 'package:binsight_ai/widgets/statistic_card.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// Displays information about a single detection.
 class DetectionPage extends StatelessWidget {
@@ -53,13 +57,36 @@ class DetectionPage extends StatelessWidget {
 }
 
 /// The card that displays the detection information, including the image and sensor data.
-class _DetectionCard extends StatelessWidget {
+class _DetectionCard extends StatefulWidget {
   final Detection detection;
   const _DetectionCard({required this.detection});
 
   @override
+  State<_DetectionCard> createState() => _DetectionCardState();
+}
+
+class _DetectionCardState extends State<_DetectionCard> {
+  Directory? appDocDir;
+
+  @override
+  void initState() {
+    getDirectory();
+    super.initState();
+  }
+
+  Future<void> getDirectory() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    setState(() {
+      appDocDir = dir;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+
+    File? image = getImage(widget.detection.postDetectImgLink!, appDocDir);
+
     return Card(
       color: colorScheme.onPrimary,
       child: Padding(
@@ -77,8 +104,9 @@ class _DetectionCard extends StatelessWidget {
               child: Stack(
                 children: [
                   Center(
-                    child: DynamicImage(detection.postDetectImgLink!,
-                        width: 350, height: 350),
+                    child: image != null
+                        ? Image.file(image, width: 350, height: 350)
+                        : Container(),
                   ),
                   Positioned(
                     bottom: 8,
@@ -86,7 +114,7 @@ class _DetectionCard extends StatelessWidget {
                     child: IconButton(
                       onPressed: () {
                         GoRouter.of(context).push(
-                            "/main/detection/${detection.imageId}/annotation");
+                            "/main/detection/${widget.detection.imageId}/annotation");
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
@@ -108,21 +136,25 @@ class _DetectionCard extends StatelessWidget {
                 children: [
                   StatisticCard(
                       title: "Temperature",
-                      value: detection.temperature.toString()),
+                      value: widget.detection.temperature.toString()),
                   StatisticCard(
-                      title: "Weight", value: detection.weight.toString()),
+                      title: "Weight",
+                      value: widget.detection.weight.toString()),
                   StatisticCard(
-                      title: "Humidity", value: detection.humidity.toString()),
+                      title: "Humidity",
+                      value: widget.detection.humidity.toString()),
                   StatisticCard(
-                      title: "CO2 Equivalent", value: detection.co2.toString()),
+                      title: "CO2 Equivalent",
+                      value: widget.detection.co2.toString()),
                   StatisticCard(
                       title: "Total Volatile Organic Compounds",
-                      value: detection.vo2.toString()),
+                      value: widget.detection.vo2.toString()),
                   StatisticCard(
-                      title: "Pressure", value: detection.pressure.toString()),
+                      title: "Pressure",
+                      value: widget.detection.pressure.toString()),
                   StatisticCard(
                       title: "Indoor Air Quality",
-                      value: detection.iaq.toString()),
+                      value: widget.detection.iaq.toString()),
                 ],
               ),
             )
