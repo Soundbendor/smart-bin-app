@@ -75,117 +75,120 @@ class _HomePageState extends State<HomePage> {
           latest = detections.first;
         }
 
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        "Review",
-                        style: Theme.of(context).textTheme.displayMedium,
-                      ),
-                    ),
-                    Expanded(
-                      child: Image.asset(
-                        'assets/images/transparent_bee.png',
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
                     children: [
-                      Text(
-                        "Tap to Annotate Latest Image",
-                        style: Theme.of(context).textTheme.titleMedium,
+                      Expanded(
+                        child: Text(
+                          "Review",
+                          style: Theme.of(context).textTheme.displayMedium,
+                        ),
                       ),
-                      const SizedBox(height: 8),
-                      latest != null
-                          ? GestureDetector(
-                              onTap: () => GoRouter.of(context)
-                                  .push("/main/detection/${latest!.imageId}"),
-                              child: Image.asset(
-                                'assets/images/header_compost.png',
-                                fit: BoxFit.cover,
-                                height: 200,
-                              ),
-                            )
-                          : Container(), // Container to handle the case when latest is null
-                      const SizedBox(height: 10),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  "Recap",
-                  style: Theme.of(context).textTheme.displayMedium,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        "Detections by Food Category",
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 10),
-                      CircleChart(
-                        data: labelCounts,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  "Trends",
-                  style: Theme.of(context).textTheme.displayMedium,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        "Compost Over Time",
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 10),
-                      FractionallySizedBox(
-                        widthFactor: 0.9,
-                        child: BarChart(
-                          data: weightCounts,
+                      Expanded(
+                        child: Image.asset(
+                          'assets/images/transparent_bee.png',
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-            ],
+                const SizedBox(height: 10),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          "Tap to Annotate Latest Image",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 8),
+                        latest != null
+                            ? GestureDetector(
+                                onTap: () => GoRouter.of(context)
+                                    .push("/main/detection/${latest!.imageId}"),
+                                child: Image.asset(
+                                  'assets/images/header_compost.png',
+                                  fit: BoxFit.cover,
+                                  height: 200,
+                                ),
+                              )
+                            : Container(), // Container to handle the case when latest is null
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    "Recap",
+                    style: Theme.of(context).textTheme.displayMedium,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          "Detections by Food Category",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 10),
+                        CircleChart(
+                          data: labelCounts,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    "Trends",
+                    style: Theme.of(context).textTheme.displayMedium,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          "Compost Over Time",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 10),
+                        FractionallySizedBox(
+                          widthFactor: 0.9,
+                          child: BarChart(
+                            data: weightCounts,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         );
       },
