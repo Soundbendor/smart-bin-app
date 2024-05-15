@@ -72,10 +72,14 @@ class BleDevice {
     _device = BluetoothDevice(remoteId: DeviceIdentifier(id));
   }
 
+  BleDevice.fromId(String id) {
+    _device = BluetoothDevice(remoteId: DeviceIdentifier(id));
+  }
+
   /// Initial [DiscoveredDevice] used to create the [BleDevice].
   ///
   /// Used to retreive the device's ID, name, and service UUIDs.
-  final DiscoveredDevice _discoveredDevice;
+  DiscoveredDevice? _discoveredDevice;
 
   /// The connected [BluetoothDevice].
   ///
@@ -99,16 +103,13 @@ class BleDevice {
   bool isConnecting = false;
 
   /// The device's ID.
-  String get id => _discoveredDevice.id.toString();
+  String get id => _discoveredDevice?.id.toString() ?? _device.remoteId.str;
 
   /// The device's name.
-  String get name => _discoveredDevice.name;
+  String get name => _discoveredDevice?.name ?? _device.advName;
 
   /// Whether the device is bonded.
   bool isBonded = false;
-
-  /// The device's service UUIDs.
-  List<Uuid> get serviceIds => _discoveredDevice.serviceUuids;
 
   /// Whether the device is connected.
   bool get isConnected => _device.isConnected;
@@ -165,21 +166,28 @@ class BleDevice {
 
   /// Creates a subscription to the device's bond state.
   void _createBondStateSubscription() {
-    final stream = _device.bondState.listen((status) {
-      if (status == BluetoothBondState.bonded) {
-        isBonded = true;
-        emit(BleDeviceClientEvents.bonded, null);
-        debug("BleDevice[_createBondStateSubscription]: Device bonded");
-      } else if (status == BluetoothBondState.none) {
-        isBonded = false;
-        debug("BleDevice[_createBondStateSubscription]: Device not bonded");
-      } else if (status == BluetoothBondState.bonding) {
-        isBonded = false;
-        debug("BleDevice[_createBondStateSubscription]: Device bonding");
-      }
-      emit(BleDeviceClientEvents.bondChange, status);
-    });
-    _device.cancelWhenDisconnected(stream, delayed: true);
+    if (!Platform.isAndroid) {
+      isBonded = true;
+      emit(BleDeviceClientEvents.bonded, null);
+      debug(
+          "BleDevice[_createBondStateSubscription]: Device likely bonded (iOS)");
+    } else {
+      final stream = _device.bondState.listen((status) {
+        if (status == BluetoothBondState.bonded) {
+          isBonded = true;
+          emit(BleDeviceClientEvents.bonded, null);
+          debug("BleDevice[_createBondStateSubscription]: Device bonded");
+        } else if (status == BluetoothBondState.none) {
+          isBonded = false;
+          debug("BleDevice[_createBondStateSubscription]: Device not bonded");
+        } else if (status == BluetoothBondState.bonding) {
+          isBonded = false;
+          debug("BleDevice[_createBondStateSubscription]: Device bonding");
+        }
+        emit(BleDeviceClientEvents.bondChange, status);
+      });
+      _device.cancelWhenDisconnected(stream, delayed: true);
+    }
     _rebuildSubscriptionList.add([_BleSubscriptionType.bond]);
   }
 
@@ -226,6 +234,7 @@ class BleDevice {
       try {
         await _device.connect();
         debug("BleDevice[connect]: Connection initialized successfully");
+        await Future.delayed(const Duration(seconds: 2));
         await _pair();
         break;
       } catch (e) {
@@ -258,15 +267,15 @@ class BleDevice {
     // On iOS, the device should be paired after connecting
     // on Android, we'll have to request pairing first
     // TODO: verify this
-    if (!Platform.isAndroid) {
-      debug("BleDevice[_pair]: Pairing device. Current bond state: $isBonded");
+    // if (!Platform.isAndroid) {
+      debug("BleDevice[pair]: Pairing device. Current bond state: $isBonded");
       await _device.discoverServices();
-      debug("BleDevice[_pair]: Discovered services");
-      debug("BleDevice[_pair]: Pairing complete");
-    } else {
-      debug(
-          "BleDevice[_pair]: Platform is Android, skipping pairing - must be done manually");
-    }
+      debug("BleDevice[pair]: Discovered services");
+      debug("BleDevice[pair]: Pairing complete");
+    // } else {
+    //   debug(
+    //       "BleDevice[pair]: Platform is Android, skipping pairing - must be done manually");
+    // }
     // However, if previously bonded, fetch services
     if (isBonded) {
       await _device.discoverServices();
@@ -286,12 +295,12 @@ class BleDevice {
   Future<void> waitForPair({int? timeout}) async {
     if (isBonded) {
       debug("BleDevice[waitForPair]: Device already bonded");
-      return await _updateServices();
+      return await updateServices();
     }
     if (!Platform.isAndroid) {
       debug(
           "BleDevice[waitForPair]: Platform is not Android, skipping wait for pairing");
-      return await _updateServices();
+      return await updateServices();
     }
     if (!isConnected) {
       debug(
@@ -322,11 +331,12 @@ class BleDevice {
           "Failed to wait for device to be bonded: $e");
     }
     removeListener(BleDeviceClientEvents.bonded, callback);
-    await _updateServices();
+    await updateServices();
   }
 
-  Future<void> _updateServices() async {
-    if (!Platform.isAndroid) {
+  /// Updates the device's services.
+  Future<void> updateServices() async {
+    if (Platform.isAndroid) {
       debug("BleDevice[waitForPair]: Pairing complete, clearing GATT cache");
       await _device.clearGattCache();
     }

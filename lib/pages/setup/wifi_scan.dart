@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'dart:convert';
+import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -68,6 +69,8 @@ class _WifiScanPageState extends State<WifiScanPage> {
       setState(() {
         isScanning = true;
       });
+      // While the current bin doesn't actually support scanning, we can still
+      // subscribe to it in the case it does eventually support it.
       await device!.subscribeToCharacteristic(
           serviceId: mainServiceId,
           characteristicId: wifiListCharacteristicId,
@@ -84,7 +87,11 @@ class _WifiScanPageState extends State<WifiScanPage> {
               // likely empty message
             }
           });
-      fetchWifiList();
+      while (true) {
+        await Future.delayed(const Duration(seconds: 5));
+        if (!isScanning) break;
+        fetchWifiList();
+      }
     } on Exception catch (e) {
       stopScanning();
       setState(() {
@@ -109,14 +116,20 @@ class _WifiScanPageState extends State<WifiScanPage> {
   void fetchWifiList() async {
     try {
       if (wifiResults.isNotEmpty) return;
-      final List<dynamic> parsed = jsonDecode(utf8.decode(await device!
+      final decoded = utf8.decode(await device!
           .readCharacteristic(
               serviceId: mainServiceId,
-              characteristicId: wifiListCharacteristicId)));
-      if (wifiResults.isNotEmpty) {
+              characteristicId: wifiListCharacteristicId));
+              debug(decoded);
+      final Map<String, dynamic> parsed = jsonDecode(decoded);
+      if (parsed.isNotEmpty) {
+        final tempList = <WifiScanResult>[];
+        for (final key in parsed.keys) {
+          tempList.add(WifiScanResult(
+              key, parsed[key]["security"], parsed[key]["strength"]));
+        }
         setState(() {
-          wifiResults =
-              parsed.map((e) => WifiScanResult(e[0], e[1], e[2])).toList();
+          wifiResults = tempList;
         });
       }
     } catch (e) {
@@ -231,23 +244,25 @@ The error was: ${(error as BleOperationFailureException).message}.
                 title: "Select Your Network!",
                 inProgress: isScanning,
               ),
-              ElevatedButton(
-                onPressed: () {
-                  stopScanning();
-                  Provider.of<DeviceNotifier>(context, listen: false)
-                      .resetDevice();
-                  Provider.of<SetupKeyNotifier>(context, listen: false)
-                      .setupKey
-                      .currentState
-                      ?.previous();
-                },
-                child: Text(
-                  "Back",
-                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
+              // Only display back button for introduction sequence
+              if (sharedPreferences.getString(SharedPreferencesKeys.deviceID) == null)
+                ElevatedButton(
+                  onPressed: () {
+                    stopScanning();
+                    Provider.of<DeviceNotifier>(context, listen: false)
+                        .resetDevice();
+                    Provider.of<SetupKeyNotifier>(context, listen: false)
+                        .setupKey
+                        .currentState
+                        ?.previous();
+                  },
+                  child: Text(
+                    "Back",
+                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                  ),
                 ),
-              ),
             ],
           ),
         ),

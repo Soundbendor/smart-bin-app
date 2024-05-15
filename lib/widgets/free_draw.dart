@@ -38,6 +38,34 @@ class _FreeDrawState extends State<FreeDraw> {
     super.initState();
   }
 
+  void onDrawStart(DragStartDetails details, AnnotationNotifier notifier) {
+    setState(() {
+      if (_isPointOnImage(details.localPosition)) {
+        currentDrawingSegment = DrawingSegment(
+          id: DateTime.now().microsecondsSinceEpoch,
+          offsets: [details.localPosition],
+        );
+        notifier.startCurrentAnnotation(currentDrawingSegment!);
+        notifier.updateCurrentAnnotationHistory();
+      }
+    });
+  }
+
+  void onDrawUpdate(DragUpdateDetails details, AnnotationNotifier notifier) {
+    setState(() {
+      if (currentDrawingSegment != null &&
+          _isPointOnImage(details.localPosition)) {
+        Offset localPosition = details.localPosition;
+
+        currentDrawingSegment = currentDrawingSegment?.copyWith(
+          offsets: currentDrawingSegment!.offsets..add(localPosition),
+        );
+        notifier.updateCurrentAnnotation(currentDrawingSegment!);
+        notifier.updateCurrentAnnotationHistory();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AnnotationNotifier>(
@@ -47,33 +75,15 @@ class _FreeDrawState extends State<FreeDraw> {
           height: 300,
           child: GestureDetector(
             // When first touching within the image, create a single Offset
-            onPanStart: (details) {
-              setState(() {
-                if (_isPointOnImage(details.localPosition)) {
-                  currentDrawingSegment = DrawingSegment(
-                    id: DateTime.now().microsecondsSinceEpoch,
-                    offsets: [details.localPosition],
-                  );
-                  notifier.startCurrentAnnotation(currentDrawingSegment!);
-                  notifier.updateCurrentAnnotationHistory();
-                }
-              });
-            },
+            onVerticalDragStart: (details) => onDrawStart(details, notifier),
+            onPanStart: (details) => onDrawStart(details, notifier),
             // When dragging your finger, update the current drawing's offsets to include the new point
             // Update the most recent segment in the annotation's list of Segments
-            onPanUpdate: (details) {
-              setState(() {
-                if (currentDrawingSegment != null &&
-                    _isPointOnImage(details.localPosition)) {
-                  Offset localPosition = details.localPosition;
-
-                  currentDrawingSegment = currentDrawingSegment?.copyWith(
-                    offsets: currentDrawingSegment!.offsets..add(localPosition),
-                  );
-                  notifier.updateCurrentAnnotation(currentDrawingSegment!);
-                  notifier.updateCurrentAnnotationHistory();
-                }
-              });
+            onVerticalDragUpdate: (details) => onDrawUpdate(details, notifier),
+            onPanUpdate: (details) => onDrawUpdate(details, notifier),
+            // When the user lifts their finger, stop updating the current drawing segment
+            onVerticalDragEnd: (_) {
+              currentDrawingSegment = null;
             },
             onPanEnd: (_) {
               currentDrawingSegment = null;
