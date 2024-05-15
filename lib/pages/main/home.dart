@@ -196,8 +196,7 @@ class _HomePageState extends State<HomePage> {
   void populateCounts(List<Detection> detections) {
     labelCounts = {};
     // If there are detections
-    // if (detections.isNotEmpty) {
-    if (detections.isEmpty) {
+    if (detections.isNotEmpty) {
       // Turn detections to a list of maps
       List<Map<String, dynamic>> detectionsMaps =
           detections.map((detection) => detection.toMap()).toList();
