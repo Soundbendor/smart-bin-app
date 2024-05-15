@@ -277,7 +277,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     try {
       final http.Response response = await http.get(uri, headers: headers);
       List<String> imageList = [];
-
+      debug(response);
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
         debug(data);
@@ -289,7 +289,9 @@ class _BinsightAiAppState extends State<BinsightAiApp>
           Detection detection = Detection.fromMap(adjustedMap);
           await detection.save();
         }
-        Provider.of<DetectionNotifier>(context, listen: false).getAll();
+        if (mounted) {
+          Provider.of<DetectionNotifier>(context, listen: false).getAll();
+        }
         try {
           debug(imageList);
           retrieveImages(deviceID, imageList);

@@ -34,12 +34,12 @@ class _HomePageState extends State<HomePage> {
   Map<DateTime, double> weightCounts = {};
   // Categories of labels
   Map categories = {};
-  File? _imageFile;
+  Directory? appDocDir;
 
   @override
   void initState() {
     loadDetections();
-    loadLocalImage();
+    getDirectory();
     super.initState();
   }
 
@@ -48,23 +48,24 @@ class _HomePageState extends State<HomePage> {
     loadCategories();
   }
 
-  Future<void> loadLocalImage() async {
-    debug("Load local image");
-    try {
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String imagePath =
-          '${appDocDir.path}/colorImage_2024-05-15--16-51-46.jpg'; // Update with the actual image file name
+  Future<void> getDirectory() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    setState(() {
+      appDocDir = dir;
+    });
+  }
+
+  File? getImage(String image, Directory? appDocDir) {
+    if (appDocDir != null) {
+      String imagePath = '${appDocDir.path}/$image';
       File imageFile = File(imagePath);
       if (imageFile.existsSync()) {
-        setState(() {
-          _imageFile = imageFile;
-          debug("Image file set ${_imageFile!.path}");
-        });
+        return imageFile;
       } else {
-        debug('Image file not found.');
+        return null;
       }
-    } catch (e) {
-      debug('Error loading image: $e');
+    } else {
+      return null;
     }
   }
 
@@ -93,8 +94,10 @@ class _HomePageState extends State<HomePage> {
 
         // Get the latest image detection from the compost bin
         Detection? latest;
+        File? latestImage;
         if (detections.isNotEmpty) {
           latest = detections.first;
+          latestImage = getImage(latest.postDetectImgLink!, appDocDir);
         }
 
         return Padding(
@@ -136,13 +139,13 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(height: 8),
                         latest != null
-                            ? GestureDetector(
-                                onTap: () => GoRouter.of(context)
-                                    .push("/main/detection/${latest!.imageId}"),
-                                child: _imageFile != null
-                                    ? Image.file(_imageFile!)
-                                    : Container())
-                            : Container(), // Container to handle the case when latest is null
+                          ? GestureDetector(
+                              onTap: () => GoRouter.of(context)
+                                  .push("/main/detection/${latest!.imageId}"),
+                              child: latestImage != null
+                                  ? Image.file(latestImage)
+                                  : Container())
+                          : Container(), // Container to handle the case when latest is null
                         const SizedBox(height: 10),
                       ],
                     ),
