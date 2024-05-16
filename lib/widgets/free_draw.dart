@@ -71,8 +71,8 @@ class _FreeDrawState extends State<FreeDraw> {
     return Consumer<AnnotationNotifier>(
       builder: (context, notifier, child) {
         return SizedBox(
-          width: 300,
-          height: 300,
+          width: 340,
+          height: 340,
           child: GestureDetector(
             // When first touching within the image, create a single Offset
             onVerticalDragStart: (details) => onDrawStart(details, notifier),

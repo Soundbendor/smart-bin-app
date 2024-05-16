@@ -94,7 +94,7 @@ class DetectionLargeListItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Transcription:",
-                                style: textTheme.titleMedium),
+                            style: textTheme.titleMedium),
                           ],
                         ),
                       ),
@@ -142,13 +142,13 @@ class DetectionSmallListItem extends StatelessWidget {
           color: colorScheme.onPrimary,
           child: ListTile(
             leading: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: colorScheme.onSurface,
-                    width: 1,
-                  ),
-                ),
-                child: DynamicImage(detection.preDetectImgLink)),
+                    decoration: BoxDecoration(
+        border: Border.all(
+          color: colorScheme.onSurface,
+          width: 1,
+        ),
+      ),
+              child: DynamicImage(detection.preDetectImgLink)),
             title: Text(formatDetectionTitle(detection),
                 style: textTheme.titleMedium),
             subtitle: Text(detection.timestamp.toString(),

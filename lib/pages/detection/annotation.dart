@@ -87,7 +87,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            surfaceTintColor: Colors.transparent,
+            surfaceTintColor: const Color.fromARGB(0, 147, 147, 147),
             title: Center(
                 child: Text('How to Annotate', style: textTheme.headlineLarge)),
             content: Column(
@@ -98,13 +98,13 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 2.0)),
+                      border: Border.all(color: Colors.black, width: 1.0)),
                   child: Image.asset('assets/images/annotation.gif'),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                      "Trace the composted item with your finger as accurately as possible.",
+                      "Outline composted item with your finger as accurately as possible.",
                       style: Theme.of(context).textTheme.labelLarge),
                 ),
                 Row(
@@ -161,22 +161,35 @@ class _AnnotationPageState extends State<AnnotationPage> {
       builder: (context, notifier, child) {
         return Scaffold(
           body: Center(
-            child: CustomScrollView(
-              slivers: [
-                SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      heading(textTheme, context),
-                      drawingArea(textTheme),
-                      drawingControlArea(textTheme, notifier),
-                      const SizedBox(height: 16),
-                      bottomControlArea(
-                          context, annotationNotifier, notifier, textTheme),
-                    ],
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                heading(textTheme, context),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Card(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      child: CustomScrollView(
+                        slivers: [
+                          SliverFillRemaining(
+                            hasScrollBody: false,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                drawingArea(textTheme),
+                                drawingControlArea(textTheme, notifier),
+                                const SizedBox(height: 16),
+                                bottomControlArea(context, annotationNotifier,
+                                    notifier, textTheme),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -192,10 +205,10 @@ class _AnnotationPageState extends State<AnnotationPage> {
       TextTheme textTheme) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: Theme.of(context).colorScheme.onPrimary,
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(10.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -208,14 +221,14 @@ class _AnnotationPageState extends State<AnnotationPage> {
               onPressed: () {
                 annotationNotifier.clearCurrentAnnotation();
                 notifier.updateDetection(widget.detectionId);
-
                 Future.delayed(const Duration(milliseconds: 100), () {
                   annotationNotifier.reset();
+                  // GoRouter.of(context).push("/main/detection/${detection.imageId}");
                   GoRouter.of(context).pop();
                 });
               },
               child: Text(
-                "Done",
+                "Save & Exit",
                 style: textTheme.labelLarge!.copyWith(
                   color: Theme.of(context).colorScheme.onTertiary,
                 ),
@@ -231,39 +244,42 @@ class _AnnotationPageState extends State<AnnotationPage> {
     return Consumer<AnnotationNotifier>(
         builder: (context, annotationNotifier, child) {
       return SizedBox(
-        width: 300,
+        width: 340,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton.filled(
-                        disabledColor: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withAlpha(150),
-                        onPressed: annotationNotifier.canUndo()
-                            ? () {
-                                annotationNotifier.undo();
-                              }
-                            : null,
-                        icon: const Icon(Icons.undo)),
-                    IconButton.filled(
-                        disabledColor: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withAlpha(150),
-                        onPressed: annotationNotifier.canRedo()
-                            ? () {
-                                annotationNotifier.redo();
-                              }
-                            : null,
-                        icon: const Icon(Icons.redo)),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton.filled(
+                          disabledColor: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withAlpha(150),
+                          onPressed: annotationNotifier.canUndo()
+                              ? () {
+                                  annotationNotifier.undo();
+                                }
+                              : null,
+                          icon: const Icon(Icons.undo)),
+                      IconButton.filled(
+                          disabledColor: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withAlpha(150),
+                          onPressed: annotationNotifier.canRedo()
+                              ? () {
+                                  annotationNotifier.redo();
+                                }
+                              : null,
+                          icon: const Icon(Icons.redo)),
+                    ],
+                  ),
                 ),
                 Flexible(
                   child: Container(
@@ -359,15 +375,18 @@ class _AnnotationPageState extends State<AnnotationPage> {
         } else {
           return Stack(
             children: [
-              RepaintBoundary(
-                key: _captureKey,
-                child: SizedBox(
-                  width: 300,
-                  height: 300,
-                  child: SingleChildScrollView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    child: FreeDraw(
-                      imageLink: snapshot.data as String,
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: RepaintBoundary(
+                  key: _captureKey,
+                  child: SizedBox(
+                    width: 340,
+                    height: 340,
+                    child: SingleChildScrollView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      child: FreeDraw(
+                        imageLink: snapshot.data as String,
+                      ),
                     ),
                   ),
                 ),
@@ -378,17 +397,20 @@ class _AnnotationPageState extends State<AnnotationPage> {
                     onTap: () => setState(() {
                       drawStarted = true;
                     }),
-                    child: Container(
-                      width: 300,
-                      height: 300,
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.5),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Tap to start",
-                          style: textTheme.displaySmall!.copyWith(
-                            color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Container(
+                        width: 340,
+                        height: 340,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.45),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Tap to start",
+                            style: textTheme.displaySmall!.copyWith(
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -404,7 +426,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
 
   Widget heading(TextTheme textTheme, BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(left: 10, top: 10, right: 10),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -418,7 +440,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
             onTap: () => GoRouter.of(context).pop(),
           ),
           const Heading(text: "Annotate Your Image"),
-          const SizedBox(height: 16),
         ],
       ),
     );
