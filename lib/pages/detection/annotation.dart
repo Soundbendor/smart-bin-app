@@ -71,7 +71,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            surfaceTintColor: Colors.transparent,
+            surfaceTintColor: const Color.fromARGB(0, 147, 147, 147),
             title: Center(
                 child: Text('How to Annotate', style: textTheme.headlineLarge)),
             content: Column(
@@ -82,13 +82,13 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 2.0)),
+                      border: Border.all(color: Colors.black, width: 1.0)),
                   child: Image.asset('assets/images/annotation.gif'),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                      "Trace the composted item with your finger as accurately as possible.",
+                      "Outline the composted item with your finger as accurately as possible.",
                       style: Theme.of(context).textTheme.labelLarge),
                 ),
                 Row(
@@ -183,7 +183,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                       _BottomControlArea(detectionId: widget.detectionId),
                     ],
                   ),
-                )
+                ),
               ],
             );
           }),
@@ -245,32 +245,35 @@ class _DrawingControlAreaState extends State<_DrawingControlArea> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton.filled(
-                        disabledColor: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withAlpha(150),
-                        onPressed: annotationNotifier.canUndo()
-                            ? () {
-                                annotationNotifier.undo();
-                              }
-                            : null,
-                        icon: const Icon(Icons.undo)),
-                    IconButton.filled(
-                        disabledColor: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withAlpha(150),
-                        onPressed: annotationNotifier.canRedo()
-                            ? () {
-                                annotationNotifier.redo();
-                              }
-                            : null,
-                        icon: const Icon(Icons.redo)),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton.filled(
+                          disabledColor: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withAlpha(150),
+                          onPressed: annotationNotifier.canUndo()
+                              ? () {
+                                  annotationNotifier.undo();
+                                }
+                              : null,
+                          icon: const Icon(Icons.undo)),
+                      IconButton.filled(
+                          disabledColor: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withAlpha(150),
+                          onPressed: annotationNotifier.canRedo()
+                              ? () {
+                                  annotationNotifier.redo();
+                                }
+                              : null,
+                          icon: const Icon(Icons.redo)),
+                    ],
+                  ),
                 ),
                 Flexible(
                   child: Container(
@@ -471,16 +474,19 @@ class _DrawingAreaState extends State<_DrawingArea> {
         } else {
           return Stack(
             children: [
-              RepaintBoundary(
-                key: widget.captureKey,
-                child: SizedBox(
-                  width: size,
-                  height: size,
-                  child: SingleChildScrollView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    child: FreeDraw(
-                      imageLink: snapshot.data as String,
-                      size: size,
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: RepaintBoundary(
+                  key: widget.captureKey,
+                  child: SizedBox(
+                    width: size,
+                    height: size,
+                    child: SingleChildScrollView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      child: FreeDraw(
+                        imageLink: snapshot.data as String,
+                        size: size,
+                      ),
                     ),
                   ),
                 ),
@@ -491,20 +497,21 @@ class _DrawingAreaState extends State<_DrawingArea> {
                     onTap: () => setState(() {
                       drawStarted = true;
                     }),
-                    child: Container(
-                      width: size,
-                      height: size,
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.5),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Tap to start",
-                          style: textTheme.displaySmall!.copyWith(
-                            color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Container(
+                          width: size,
+                          height: size,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.45),
                           ),
-                        ),
-                      ),
+                          child: Center(
+                              child: Text(
+                            "Tap to start",
+                            style: textTheme.displaySmall!.copyWith(
+                              color: Colors.white,
+                            ),
+                          ))),
                     ),
                   ),
                 ),

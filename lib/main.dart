@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
+import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:binsight_ai/util/providers/annotation_notifier.dart';
@@ -17,7 +18,6 @@ import 'package:binsight_ai/util/providers/wifi_result_notifier.dart';
 import 'package:binsight_ai/util/routes.dart';
 import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/util/styles.dart';
-import 'package:binsight_ai/database/models/detection.dart';
 
 const String exampleBoxes = '''
 [
@@ -73,7 +73,11 @@ void main() async {
           postDetectImgLink: "https://placehold.co/513x513.png",
           depthMapImgLink: "https://placehold.co/514x514.png",
           irImgLink: "https://placehold.co/515x515.png",
+          transcription: "apples, oranges, bananas",
           weight: 27.0,
+          totalWeight: 27.0,
+          pressure: 0.5,
+          iaq: 0.5,
           humidity: 0.5,
           temperature: 20.0,
           co2: 0.5,
@@ -88,7 +92,11 @@ void main() async {
           postDetectImgLink: "https://placehold.co/513x513.png",
           depthMapImgLink: "https://placehold.co/514x514.png",
           irImgLink: "https://placehold.co/515x515.png",
+          transcription: "broccoli, carrots",
           weight: 10.0,
+          totalWeight: 27.0,
+          pressure: 0.5,
+          iaq: 0.5,
           humidity: 0.5,
           temperature: 20.0,
           co2: 0.5,
@@ -103,7 +111,11 @@ void main() async {
           postDetectImgLink: "https://placehold.co/513x513.png",
           depthMapImgLink: "https://placehold.co/514x514.png",
           irImgLink: "https://placehold.co/515x515.png",
+          transcription: "null",
           weight: 40.0,
+          totalWeight: 27.0,
+          pressure: 0.5,
+          iaq: 0.5,
           humidity: 0.5,
           temperature: 20.0,
           co2: 0.5,
@@ -118,7 +130,11 @@ void main() async {
           postDetectImgLink: "https://placehold.co/513x513.png",
           depthMapImgLink: "https://placehold.co/514x514.png",
           irImgLink: "https://placehold.co/515x515.png",
+          transcription: "orange peels",
           weight: 16.0,
+          totalWeight: 27.0,
+          pressure: 0.5,
+          iaq: 0.5,
           humidity: 0.5,
           temperature: 20.0,
           co2: 0.5,
@@ -133,7 +149,12 @@ void main() async {
           postDetectImgLink: "https://placehold.co/513x513.png",
           depthMapImgLink: "https://placehold.co/514x514.png",
           irImgLink: "https://placehold.co/515x515.png",
+          transcription:
+              "coffee grounds, and then a lot of coffee grounds, and maybe some old tea bags and banana peels and rotten apples",
           weight: 30.0,
+          totalWeight: 27.0,
+          pressure: 0.5,
+          iaq: 0.5,
           humidity: 0.5,
           temperature: 20.0,
           co2: 0.5,

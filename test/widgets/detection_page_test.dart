@@ -9,6 +9,7 @@ import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/pages/detection/detection.dart';
 import '../shared.dart';
 
+/// Tests for the detection page
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   testInit();
@@ -24,7 +25,10 @@ void main() {
       "deviceId": "bar",
       "depthMapImgLink": "assets/images/placeholder.png",
       "irImgLink": "assets/images/placeholder.png",
+      "transcription": "pineapple, chicken",
       "weight": 1.0,
+      "pressure": 0.5,
+      "iaq": 0.5,
       "humidity": 0.5,
       "temperature": 20.0,
       "co2": 0.5,
@@ -51,7 +55,10 @@ void main() {
       "postDetectImgLink": "assets/images/placeholder.png",
       "depthMapImgLink": "assets/images/placeholder.png",
       "irImgLink": "assets/images/placeholder.png",
+      "transcription": "pineapple, chicken",
       "weight": 10.0,
+      "pressure": 0.5,
+      "iaq": 0.5,
       "humidity": 1.5,
       "temperature": 20.0,
       "co2": 0.5,

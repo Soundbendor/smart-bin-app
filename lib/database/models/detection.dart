@@ -24,6 +24,9 @@ class Detection extends Model {
   /// The link to the IR image.
   String? irImgLink;
 
+  /// The audio transcription.
+  String? transcription;
+
   /// The total weight value.
   double? totalWeight;
 
@@ -65,6 +68,7 @@ class Detection extends Model {
     this.postDetectImgLink,
     this.depthMapImgLink,
     this.irImgLink,
+    this.transcription,
     this.weight,
     this.humidity,
     this.temperature,
@@ -98,6 +102,7 @@ class Detection extends Model {
       "postDetectImgLink": postDetectImgLink,
       "depthMapImgLink": depthMapImgLink,
       "irImgLink": irImgLink,
+      "transcription": transcription,
       "weight": weight,
       "humidity": humidity,
       "temperature": temperature,
@@ -132,6 +137,7 @@ class Detection extends Model {
       postDetectImgLink: map['postDetectImgLink'],
       depthMapImgLink: map['depthMapImgLink'],
       irImgLink: map['irImgLink'],
+      transcription: map['transcription'],
       weight: map['weight']?.toDouble(),
       humidity: map['humidity']?.toDouble(),
       temperature: map['temperature']?.toDouble(),
@@ -155,6 +161,7 @@ class Detection extends Model {
       postDetectImgLink TEXT,
       depthMapImgLink TEXT,
       irImgLink TEXT,
+      transcription TEXT,
       weight DOUBLE,
       humidity DOUBLE,
       temperature DOUBLE,
