@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'dart:convert';
+import 'package:binsight_ai/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -23,7 +24,10 @@ import 'package:binsight_ai/widgets/heading.dart';
 class AnnotationPage extends StatefulWidget {
   /// The link for the image to be annotated
   late final Future<String> imageLink;
+
+  /// The detection id of the image being annotated
   final String detectionId;
+
   AnnotationPage({super.key, required this.detectionId}) {
     imageLink = Future(() async {
       return Detection.find(detectionId)
@@ -195,8 +199,13 @@ class _DrawingControlArea extends StatefulWidget {
     required this.constraints,
   });
 
+  /// Controller for the MultipleSearchSelection widget
   final MultipleSearchController controller = MultipleSearchController();
+
+  /// The constraints for the drawing control area
   final BoxConstraints constraints;
+
+  /// The detection id of the image being annotated
   final String detectionId;
 
   @override
@@ -356,6 +365,7 @@ class _DrawingControlAreaState extends State<_DrawingControlArea> {
 class _BottomControlArea extends StatelessWidget {
   const _BottomControlArea({required this.detectionId});
 
+  /// The detection id of the image being annotated
   final String detectionId;
 
   @override
@@ -370,6 +380,28 @@ class _BottomControlArea extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            Builder(builder: (context) {
+              final AnnotationNotifier annotationNotifier =
+                  context.read<AnnotationNotifier>();
+              return ElevatedButton(
+                onPressed: () {
+                  annotationNotifier.clearCurrentAnnotation();
+                  annotationNotifier.reset();
+                  // TODO: also delete the data in the database?
+                  // alternatively, clear the data only after pressing "done"
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: mainColorScheme.error,
+                ),
+                child: Text(
+                  "Clear",
+                  style: textTheme.labelLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onError,
+                  ),
+                ),
+              );
+            }),
+            const SizedBox(width: 8),
             Consumer<DetectionNotifier>(
               builder: (context, notifier, child) {
                 AnnotationNotifier annotationNotifier =
@@ -409,8 +441,13 @@ class _BottomControlArea extends StatelessWidget {
 class _DrawingArea extends StatefulWidget {
   _DrawingArea({required this.imageLink, required this.constraints});
 
+  /// The link for the image to be annotated
   final Future<String> imageLink;
+
+  /// The constraints for the drawing area
   final BoxConstraints constraints;
+
+  /// Key for the RepaintBoundary that captures the drawing area
   final GlobalKey<State<StatefulWidget>> captureKey = GlobalKey();
 
   @override
@@ -495,6 +532,7 @@ class MyAlertDialog extends StatefulWidget {
 }
 
 class _MyAlertDialogState extends State<MyAlertDialog> {
+  /// The label the user has selected
   String? selectedLabel;
 
   @override
