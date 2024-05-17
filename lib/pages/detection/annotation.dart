@@ -138,42 +138,51 @@ class _AnnotationPageState extends State<AnnotationPage> {
 
     return Scaffold(
       body: Center(
-        child: CustomScrollView(
-          slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        GestureDetector(
-                          child: Row(
-                            children: [
-                              const Icon(Icons.arrow_back_ios),
-                              Text("Back to detection",
-                                  style: textTheme.labelLarge),
-                            ],
-                          ),
-                          onTap: () => GoRouter.of(context).pop(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: LayoutBuilder(builder: (context, constraints) {
+            return CustomScrollView(
+              slivers: [
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            GestureDetector(
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.arrow_back_ios),
+                                  Text("Back to detection",
+                                      style: textTheme.labelLarge),
+                                ],
+                              ),
+                              onTap: () => GoRouter.of(context).pop(),
+                            ),
+                            const Heading(text: "Annotate Your Image"),
+                            const SizedBox(height: 16),
+                          ],
                         ),
-                        const Heading(text: "Annotate Your Image"),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
+                      ),
+                      _DrawingArea(
+                          imageLink: widget.imageLink,
+                          constraints: constraints),
+                      _DrawingControlArea(
+                          detectionId: widget.detectionId,
+                          constraints: constraints),
+                      const SizedBox(height: 16),
+                      const Expanded(child: Column()),
+                      _BottomControlArea(detectionId: widget.detectionId),
+                    ],
                   ),
-                  _DrawingArea(imageLink: widget.imageLink),
-                  _DrawingControlArea(detectionId: widget.detectionId),
-                  const SizedBox(height: 16),
-                  const Expanded(child: Column()),
-                  _BottomControlArea(detectionId: widget.detectionId),
-                ],
-              ),
-            )
-          ],
+                )
+              ],
+            );
+          }),
         ),
       ),
     );
@@ -183,9 +192,11 @@ class _AnnotationPageState extends State<AnnotationPage> {
 class _DrawingControlArea extends StatefulWidget {
   _DrawingControlArea({
     required this.detectionId,
+    required this.constraints,
   });
 
   final MultipleSearchController controller = MultipleSearchController();
+  final BoxConstraints constraints;
   final String detectionId;
 
   @override
@@ -218,7 +229,7 @@ class _DrawingControlAreaState extends State<_DrawingControlArea> {
     return Consumer<AnnotationNotifier>(
         builder: (context, annotationNotifier, child) {
       return SizedBox(
-        width: 300,
+        width: widget.constraints.maxWidth,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -396,9 +407,10 @@ class _BottomControlArea extends StatelessWidget {
 }
 
 class _DrawingArea extends StatefulWidget {
-  _DrawingArea({required this.imageLink});
+  _DrawingArea({required this.imageLink, required this.constraints});
 
   final Future<String> imageLink;
+  final BoxConstraints constraints;
   final GlobalKey<State<StatefulWidget>> captureKey = GlobalKey();
 
   @override
@@ -412,6 +424,7 @@ class _DrawingAreaState extends State<_DrawingArea> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final size = widget.constraints.maxWidth;
 
     return FutureBuilder(
       future: widget.imageLink,
@@ -424,12 +437,13 @@ class _DrawingAreaState extends State<_DrawingArea> {
               RepaintBoundary(
                 key: widget.captureKey,
                 child: SizedBox(
-                  width: 300,
-                  height: 300,
+                  width: size,
+                  height: size,
                   child: SingleChildScrollView(
                     physics: const NeverScrollableScrollPhysics(),
                     child: FreeDraw(
                       imageLink: snapshot.data as String,
+                      size: size,
                     ),
                   ),
                 ),
@@ -441,8 +455,8 @@ class _DrawingAreaState extends State<_DrawingArea> {
                       drawStarted = true;
                     }),
                     child: Container(
-                      width: 300,
-                      height: 300,
+                      width: size,
+                      height: size,
                       decoration: BoxDecoration(
                         color: Colors.black.withOpacity(0.5),
                       ),
