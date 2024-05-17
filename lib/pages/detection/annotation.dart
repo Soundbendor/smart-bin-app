@@ -35,33 +35,13 @@ class AnnotationPage extends StatefulWidget {
 }
 
 class _AnnotationPageState extends State<AnnotationPage> {
-  /// List of labels user can choose from
-  List labels = [];
-
-  /// Whether the user has started drawing on the image
-  bool drawStarted = false;
-
-  /// Key for the RepaintBoundary widget that's used to capture the annotated image
-  final GlobalKey _captureKey = GlobalKey();
-
   /// User's decision to show annotation tutorial upon opening annotation screen
   bool? dontShowAgain = false;
 
   @override
   void initState() {
     super.initState();
-    loadLabels();
     initPreferences();
-  }
-
-  /// Reads json file containing the possible labels
-  Future<void> loadLabels() async {
-    final String response =
-        await rootBundle.loadString('assets/data/labels.json');
-    final data = await json.decode(response);
-    setState(() {
-      labels = data;
-    });
   }
 
   /// Recalls user's decision of whether to show the annotation guide or not
@@ -147,8 +127,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
         });
   }
 
-  final MultipleSearchController controller = MultipleSearchController();
-
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -157,80 +135,86 @@ class _AnnotationPageState extends State<AnnotationPage> {
       annotationNotifier.reset();
       annotationNotifier.setDetection(widget.detectionId);
     }
-    return Consumer<DetectionNotifier>(
-      builder: (context, notifier, child) {
-        return Scaffold(
-          body: Center(
-            child: CustomScrollView(
-              slivers: [
-                SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      heading(textTheme, context),
-                      drawingArea(textTheme),
-                      drawingControlArea(textTheme, notifier),
-                      const SizedBox(height: 16),
-                      const Expanded(
-                        child: Column()
-                      ),
-                      bottomControlArea(
-                          context, annotationNotifier, notifier, textTheme),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
 
-  Widget bottomControlArea(
-      BuildContext context,
-      AnnotationNotifier annotationNotifier,
-      DetectionNotifier notifier,
-      TextTheme textTheme) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            ElevatedButton(
-              style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
-                    backgroundColor: WidgetStateProperty.all(
-                      Theme.of(context).colorScheme.tertiary,
+    return Scaffold(
+      body: Center(
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GestureDetector(
+                          child: Row(
+                            children: [
+                              const Icon(Icons.arrow_back_ios),
+                              Text("Back to detection",
+                                  style: textTheme.labelLarge),
+                            ],
+                          ),
+                          onTap: () => GoRouter.of(context).pop(),
+                        ),
+                        const Heading(text: "Annotate Your Image"),
+                        const SizedBox(height: 16),
+                      ],
                     ),
                   ),
-              onPressed: () {
-                annotationNotifier.clearCurrentAnnotation();
-                notifier.updateDetection(widget.detectionId);
-
-                Future.delayed(const Duration(milliseconds: 100), () {
-                  annotationNotifier.reset();
-                  GoRouter.of(context).pop();
-                });
-              },
-              child: Text(
-                "Done",
-                style: textTheme.labelLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.onTertiary,
-                ),
+                  _DrawingArea(imageLink: widget.imageLink),
+                  _DrawingControlArea(detectionId: widget.detectionId),
+                  const SizedBox(height: 16),
+                  const Expanded(child: Column()),
+                  _BottomControlArea(detectionId: widget.detectionId),
+                ],
               ),
-            ),
+            )
           ],
         ),
       ),
     );
   }
+}
 
-  Widget drawingControlArea(TextTheme textTheme, DetectionNotifier notifier) {
+class _DrawingControlArea extends StatefulWidget {
+  _DrawingControlArea({
+    required this.detectionId,
+  });
+
+  final MultipleSearchController controller = MultipleSearchController();
+  final String detectionId;
+
+  @override
+  State<_DrawingControlArea> createState() => _DrawingControlAreaState();
+}
+
+class _DrawingControlAreaState extends State<_DrawingControlArea> {
+  /// List of labels user can choose from
+  List labels = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadLabels();
+  }
+
+  /// Reads json file containing the possible labels
+  Future<void> loadLabels() async {
+    final String response =
+        await rootBundle.loadString('assets/data/labels.json');
+    final data = await json.decode(response);
+    setState(() {
+      labels = data;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Consumer<AnnotationNotifier>(
         builder: (context, annotationNotifier, child) {
       return SizedBox(
@@ -301,7 +285,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                             builder: (context) {
                               return MyAlertDialog(
                                 labels: labels,
-                                controller: controller,
+                                controller: widget.controller,
                               );
                             },
                           )
@@ -309,42 +293,46 @@ class _AnnotationPageState extends State<AnnotationPage> {
                   },
                 ),
                 const SizedBox(width: 8),
-                ElevatedButton(
-                  style: !annotationNotifier.isCompleteAnnotation()
-                      ? Theme.of(context).elevatedButtonTheme.style!.copyWith(
-                            backgroundColor: WidgetStateProperty.all(
-                              Theme.of(context).colorScheme.surface,
-                            ),
-                          )
-                      : null,
-                  onPressed: () {
-                    if (annotationNotifier.isCompleteAnnotation()) {
-                      annotationNotifier.addToAllAnnotations();
-                      annotationNotifier.clearCurrentAnnotation();
-                      annotationNotifier.label = null;
-                      notifier.updateDetection(widget.detectionId);
-                    } else {
-                      String message;
-                      if (annotationNotifier.label == null) {
-                        message = "Please Enter a Label for Current Annotation";
+                Consumer<DetectionNotifier>(
+                    builder: (context, notifier, child) {
+                  return ElevatedButton(
+                    style: !annotationNotifier.isCompleteAnnotation()
+                        ? Theme.of(context).elevatedButtonTheme.style!.copyWith(
+                              backgroundColor: WidgetStateProperty.all(
+                                Theme.of(context).colorScheme.surface,
+                              ),
+                            )
+                        : null,
+                    onPressed: () {
+                      if (annotationNotifier.isCompleteAnnotation()) {
+                        annotationNotifier.addToAllAnnotations();
+                        annotationNotifier.clearCurrentAnnotation();
+                        annotationNotifier.label = null;
+                        notifier.updateDetection(widget.detectionId);
                       } else {
-                        message = "Please Draw Your Annotation";
+                        String message;
+                        if (annotationNotifier.label == null) {
+                          message =
+                              "Please Enter a Label for Current Annotation";
+                        } else {
+                          message = "Please Draw Your Annotation";
+                        }
+                        debug(message);
                       }
-                      debug(message);
-                    }
-                  },
-                  child: Text(
-                    "Save",
-                    style: textTheme.labelLarge!.copyWith(
-                      color: annotationNotifier.isCompleteAnnotation()
-                          ? Theme.of(context).colorScheme.onPrimary
-                          : Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withAlpha(150),
+                    },
+                    child: Text(
+                      "Save",
+                      style: textTheme.labelLarge!.copyWith(
+                        color: annotationNotifier.isCompleteAnnotation()
+                            ? Theme.of(context).colorScheme.onPrimary
+                            : Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withAlpha(150),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                }),
               ],
             ),
           ],
@@ -352,8 +340,79 @@ class _AnnotationPageState extends State<AnnotationPage> {
       );
     });
   }
+}
 
-  Widget drawingArea(TextTheme textTheme) {
+class _BottomControlArea extends StatelessWidget {
+  const _BottomControlArea({required this.detectionId});
+
+  final String detectionId;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Consumer<DetectionNotifier>(
+              builder: (context, notifier, child) {
+                AnnotationNotifier annotationNotifier =
+                    context.read<AnnotationNotifier>();
+                return ElevatedButton(
+                  style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
+                        backgroundColor: WidgetStateProperty.all(
+                          Theme.of(context).colorScheme.tertiary,
+                        ),
+                      ),
+                  onPressed: () {
+                    annotationNotifier.clearCurrentAnnotation();
+                    notifier.updateDetection(detectionId);
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      annotationNotifier.reset();
+                      GoRouter.of(context).pop();
+                    });
+                  },
+                  child: child,
+                );
+              },
+              child: Text(
+                "Done",
+                style: textTheme.labelLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onTertiary,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DrawingArea extends StatefulWidget {
+  _DrawingArea({required this.imageLink});
+
+  final Future<String> imageLink;
+  final GlobalKey<State<StatefulWidget>> captureKey = GlobalKey();
+
+  @override
+  State<_DrawingArea> createState() => _DrawingAreaState();
+}
+
+class _DrawingAreaState extends State<_DrawingArea> {
+  /// Whether the user has started drawing on the image
+  bool drawStarted = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return FutureBuilder(
       future: widget.imageLink,
       builder: (context, snapshot) {
@@ -363,7 +422,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
           return Stack(
             children: [
               RepaintBoundary(
-                key: _captureKey,
+                key: widget.captureKey,
                 child: SizedBox(
                   width: 300,
                   height: 300,
@@ -402,28 +461,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
           );
         }
       },
-    );
-  }
-
-  Widget heading(TextTheme textTheme, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GestureDetector(
-            child: Row(
-              children: [
-                const Icon(Icons.arrow_back_ios),
-                Text("Back to detection", style: textTheme.labelLarge),
-              ],
-            ),
-            onTap: () => GoRouter.of(context).pop(),
-          ),
-          const Heading(text: "Annotate Your Image"),
-          const SizedBox(height: 16),
-        ],
-      ),
     );
   }
 }
