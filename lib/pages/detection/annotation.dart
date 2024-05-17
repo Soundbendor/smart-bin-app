@@ -312,7 +312,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 ElevatedButton(
                   style: !annotationNotifier.isCompleteAnnotation()
                       ? Theme.of(context).elevatedButtonTheme.style!.copyWith(
-                            backgroundColor: MaterialStateProperty.all(
+                            backgroundColor: WidgetStateProperty.all(
                               Theme.of(context).colorScheme.surface,
                             ),
                           )
