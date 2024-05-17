@@ -12,7 +12,7 @@ A cross-platform mobile app built with Flutter/Dart for users of [Soundbendor La
   <h4 align="center">The Soundbendor Lab's Smart Compost Bin</h4>
 </p>
 
-The app enables Wi-Fi connectivity for the bin, so participants in a field study will be able to use their bin to track household food waste and follow data trends over time.
+The app enables Wi-Fi connectivity for the bin, so that participants in a field study will be able to use their bin to track household food waste and follow their compost data trends over time.
 
 ## Table of Contents
 - [Repos](#repos)
@@ -22,6 +22,7 @@ The app enables Wi-Fi connectivity for the bin, so participants in a field study
 - [Usage](#usage)
 - [Features](#features)
 - [Documentation](#documentation)
+- [Contact Us](#contact-us)
 - [Contributions](#contributions)
 - [License](#license)
 
@@ -36,9 +37,9 @@ In the face of an escalating climate crisis, finding more effective food waste d
 
 Our project supports a countertop Smart Compost Bin equipped with sensors that capture images of food waste and many associated data points. These include bin internal temperature and humidity, IAQ, CO2, the weight of composted food items, thermal imaging depth maps, and VOCs.
 
-Users of the app will be presented with a fun and engaging user interface which will allow them to quickly learn and begin using the Soundbendor Smart Compost Bin. After setting up the bin with Wi-Fi, any items the user composts will be sent to their app, enabling them to begin annotating images and thus contributing to the larger dataset.
+Users of the app will be presented with a fun and engaging user interface which will allow them to quickly set-up and begin using the Soundbendor Smart Compost Bin. After setting up the bin with Wi-Fi, any items the user composts will be sent to their app, enabling them to start annotating images and thus contributing to the larger dataset.
 
-## Value Proposition (CHANGEME)
+## Value Proposition
 
 The binsight.ai team is pioneering their way through the field of Smart Composting and image annotation, and as such, there is no direct competition. All current solutions that are out there are working towards the same goal: Fighting the effects of food waste and climate change.
 
@@ -61,13 +62,13 @@ flutter run
 
 To use the binsight.ai app:
 
-- Ensure you have a functional Wi-Fi network, as well as Bluetooth capability.
-- Download the app on to the mobile device of your choice.
-- Open the app and complete the set-up process.
-- Use the Smart Compost Bin as you would any other composting solution.
-- After composting an item, check the detections page on your app to access and annotate your detection.
-- Watch your composting breakdown be populated over time.
-- Repeat from step 4, and have fun!
+1. Ensure you have a functional Wi-Fi network, as well as Bluetooth capability on your desired mobile device.
+2. Install the app on the mobile device of your choice.
+3. Open the app and complete the bin set-up process.
+4. Use the Smart Compost Bin as you would any other composting solution.
+5. After composting an item, check the detections page on your app to access and annotate your detection.
+6. Watch your composting breakdown be populated over time.
+7. Repeat from step 4, and have fun!
 
 ## Features
 
