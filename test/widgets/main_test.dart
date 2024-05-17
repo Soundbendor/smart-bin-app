@@ -15,6 +15,7 @@ import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:binsight_ai/util/providers/setup_key_notifier.dart';
 import '../shared.dart';
 
+/// Tests for main page
 void main() {
   testInit();
 

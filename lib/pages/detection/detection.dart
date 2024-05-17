@@ -9,7 +9,6 @@ import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/detections.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/widgets/image.dart';
-import 'package:binsight_ai/widgets/statistic_card.dart';
 
 /// Displays information about a single detection.
 class DetectionPage extends StatelessWidget {
@@ -60,30 +59,40 @@ class _DetectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     return Card(
       color: colorScheme.onPrimary,
       child: Padding(
-        padding: const EdgeInsets.only(
-          top: 20,
-          left: 5,
-          right: 5,
-          bottom: 5,
-        ),
-        child: SingleChildScrollView(
-          child: Column(children: [
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+        child: Column(
+          children: [
             SizedBox(
               width: 350,
               height: 350,
               child: Stack(
                 children: [
-                  Center(
-                    child: DynamicImage(detection.preDetectImgLink,
-                        width: 350, height: 350),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: colorScheme.onSurface,
+                        width: 1,
+                      ),
+                    ),
+                    margin: const EdgeInsets.only(bottom: 10, top: 10),
+                    child: DynamicImage(
+                      detection.preDetectImgLink,
+                      width: 350,
+                      height: 350,
+                    ),
                   ),
+                  // Annotate Image Button
                   Positioned(
-                    bottom: 8,
+                    bottom: 16,
                     right: 8,
                     child: IconButton(
+                      icon: const Icon(Icons.edit),
+                      iconSize: 30,
+                      tooltip: "Annotate Image",
                       onPressed: () {
                         GoRouter.of(context).push(
                             "/main/detection/${detection.imageId}/annotation");
@@ -95,43 +104,57 @@ class _DetectionCard extends StatelessWidget {
                         shape: WidgetStateProperty.all(const CircleBorder()),
                       ),
                       color: Theme.of(context).colorScheme.onPrimary,
-                      icon: const Icon(Icons.edit, size: 30),
+                      splashColor: Theme.of(context).colorScheme.onSecondary,
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: 400,
-              child: Wrap(
-                children: [
-                  StatisticCard(
-                      title: "Temperature",
-                      value: detection.temperature.toString()),
-                  StatisticCard(
-                      title: "Weight", value: detection.weight.toString()),
-                  StatisticCard(
-                      title: "Total Weight",
-                      value: detection.totalWeight.toString()),
-                  StatisticCard(
-                      title: "Humidity", value: detection.humidity.toString()),
-                  StatisticCard(
-                      title: "CO2 Equivalent", value: detection.co2.toString()),
-                  StatisticCard(
-                      title: "Total Volatile Organic Compounds",
-                      value: detection.vo2.toString()),
-                  StatisticCard(
-                      title: "Pressure", value: detection.pressure.toString()),
-                  StatisticCard(
-                      title: "Indoor Air Quality",
-                      value: detection.iaq.toString()),
-                ],
-              ),
-            )
-          ]),
+            const SizedBox(height: 5),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildDataField("Transcription",
+                    detection.transcription.toString(), textTheme),
+                _buildDataField(
+                    "Temperature", detection.temperature.toString(), textTheme),
+                _buildDataField(
+                    "Weight", detection.weight.toString(), textTheme),
+                _buildDataField("Total Weight",
+                    detection.totalWeight.toString(), textTheme),
+                _buildDataField(
+                    "Humidity", detection.humidity.toString(), textTheme),
+                _buildDataField(
+                    "CO2 Equivalent", detection.co2.toString(), textTheme),
+                _buildDataField(
+                    "Pressure", detection.pressure.toString(), textTheme),
+                _buildDataField(
+                    "Indoor Air Quality", detection.iaq.toString(), textTheme),
+                _buildDataField("Total Volatile Organic Compounds",
+                    detection.vo2.toString(), textTheme),
+              ],
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  // Creates a row with a title and a value to build the sensor data fields.
+  Widget _buildDataField(String title, String value, TextTheme textTheme) {
+    return Row(
+      children: [
+        Text(title, style: textTheme.labelLarge),
+        const SizedBox(width: 10),
+        Flexible(
+          child: Text(
+            value,
+            style: textTheme.bodyMedium,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        ),
+      ],
     );
   }
 }

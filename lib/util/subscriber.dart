@@ -13,13 +13,14 @@ Future<void> updatePreDetection(Map<String, dynamic> data) async {
     timestamp: DateTime.now(),
     deviceId: "device_id",
     depthMapImgLink: data['depth_map_link'],
-    irImgLink: data['ir_link'], //Update name to name in pydantic model
+    irImgLink: data['ir_link'], // TODO Update name to name in pydantic model
+    transcription: data['transcription'],
     weight: data['weight'],
     humidity: data['humidity'],
     temperature: data['temperature'],
-    co2: data['co2'], //Update name to name in pydantic model
-    vo2: data['vo2'], //Update name to name in pydantic model
-    // boxes: data['boxes'] //Update name to name in pydantic model
+    co2: data['co2'], // TODO Update name to name in pydantic model
+    vo2: data['vo2'], // TODO Update name to name in pydantic model
+    // boxes: data['boxes'] // TODO Update name to name in pydantic model
   );
 
   await detection.save();
