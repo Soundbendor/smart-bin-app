@@ -88,6 +88,7 @@ The documentation can also be found through GitHub Pages [here](https://soundben
 Please feel free to reach out to our support email at:
 
 ![alt text](image.png)
+binsight.help@gmail.com
 
 ## Contributions
 
