@@ -96,7 +96,7 @@ class _WifiCheckDialogState extends State<WifiCheckDialog> {
           actions: <Widget>[
             TextButton(
               style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
-                    backgroundColor: MaterialStateProperty.all(
+                    backgroundColor: WidgetStateProperty.all(
                       Theme.of(context).colorScheme.surface,
                     ),
                   ),

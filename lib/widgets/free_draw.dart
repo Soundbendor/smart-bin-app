@@ -7,15 +7,17 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:binsight_ai/widgets/image.dart';
-import '../util/providers/annotation_notifier.dart';
+import 'package:binsight_ai/util/providers/annotation_notifier.dart';
 
 /// Widget with logic to annotate and render detection images
 class FreeDraw extends StatefulWidget {
   /// The link for the image to be annotated
   final String imageLink;
+  final double size;
 
   const FreeDraw({
     required this.imageLink,
+    required this.size,
     super.key,
   });
 
@@ -71,8 +73,8 @@ class _FreeDrawState extends State<FreeDraw> {
     return Consumer<AnnotationNotifier>(
       builder: (context, notifier, child) {
         return SizedBox(
-          width: 340,
-          height: 340,
+          width: widget.size,
+          height: widget.size,
           child: GestureDetector(
             // When first touching within the image, create a single Offset
             onVerticalDragStart: (details) => onDrawStart(details, notifier),

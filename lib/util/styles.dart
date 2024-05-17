@@ -9,7 +9,7 @@ final mainColorScheme = ColorScheme(
   tertiary: const Color.fromARGB(255, 116, 193, 164),
   onTertiary: Colors.white,
   error: Colors.red,
-  onError: Colors.red.shade700,
+  onError: Colors.white,
   background: const Color(0xFFeef8f4),
   onBackground: const Color(0xFF333333),
   brightness: Brightness.light,
