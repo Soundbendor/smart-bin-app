@@ -8,7 +8,7 @@
 A cross-platform mobile app built with Flutter/Dart for users of [Soundbendor Lab's](https://www.soundbendor.org) Smart Compost Bin. 
 
 <p align="center">
-  <img src="./assets/images/app_chart.png" width="160"/>
+  <img src="./assets/images/app_chart.png" width="400"/>
   <h4 align="center">The Soundbendor Lab's Smart Compost Bin, App Data Flow</h4>
 </p>
 
