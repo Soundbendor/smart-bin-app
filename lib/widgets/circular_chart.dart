@@ -31,7 +31,7 @@ class _CircleChartState extends State<CircleChart> {
     return Center(
       child: SfCircularChart(
         key: graphKey,
-        legend: const Legend(isVisible: true),
+        legend: const Legend(isVisible: true, position: LegendPosition.left),
         palette: const [
           Color(0xFF9FDEE7),
           Color(0xFFFF9E9E),
@@ -39,8 +39,8 @@ class _CircleChartState extends State<CircleChart> {
           Color(0xFFF0C27C),
           Color(0xFFD0B4CF),
         ],
-        series: <DoughnutSeries<_ChartData, String>>[
-          DoughnutSeries<_ChartData, String>(
+        series: <PieSeries<_ChartData, String>>[
+          PieSeries<_ChartData, String>(
             radius: '65%',
             explode: true,
             explodeIndex: 0,
@@ -50,10 +50,8 @@ class _CircleChartState extends State<CircleChart> {
             dataLabelMapper: (_ChartData data, _) => data.text!,
             dataLabelSettings: const DataLabelSettings(
               isVisible: true,
-              labelPosition: ChartDataLabelPosition.outside,
-              overflowMode: OverflowMode.shift,
-              connectorLineSettings: ConnectorLineSettings(
-                  type: ConnectorType.line, length: "50%"),
+              labelPosition: ChartDataLabelPosition.inside,
+              overflowMode: OverflowMode.hide,
             ),
           ),
         ],

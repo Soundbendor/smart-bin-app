@@ -29,11 +29,13 @@ class ScanList extends StatelessWidget {
         SizedBox(
           height: (MediaQuery.of(context).size.height / 2) - (200 + textSize),
         ),
-        Text(
-          title,
-          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                fontSize: textSize,
-              ),
+        Center(
+          child: Text(
+            title,
+            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                  fontSize: textSize,
+                ),
+          ),
         ),
         Container(
           color: const Color.fromRGBO(0, 0, 0, 0),

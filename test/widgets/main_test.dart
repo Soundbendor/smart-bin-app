@@ -9,9 +9,10 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:binsight_ai/util/providers.dart';
 import 'package:binsight_ai/main.dart';
 import 'package:binsight_ai/util/routes.dart';
+import 'package:binsight_ai/util/providers/detection_notifier.dart';
+import 'package:binsight_ai/util/providers/setup_key_notifier.dart';
 import '../shared.dart';
 
 void main() {
@@ -40,7 +41,9 @@ void main() {
     ]);
 
     await widgetTester.pumpWidget(makeTestableWidget(
-        child: MultiProvider(providers: [Provider(create: (_) => SetupKeyNotifier())], child: const BinsightAiApp(skipSetUp: false)),
+        child: MultiProvider(
+            providers: [Provider(create: (_) => SetupKeyNotifier())],
+            child: const BinsightAiApp(skipSetUp: false)),
         size: const Size(800, 600)));
     await widgetTester.pumpAndSettle(const Duration(seconds: 10));
     expect(router!.routerDelegate.currentConfiguration.last.matchedLocation,
@@ -71,7 +74,9 @@ void main() {
     ]);
 
     await widgetTester.pumpWidget(makeTestableWidget(
-        child: const BinsightAiApp(skipSetUp: true),
+        child: MultiProvider(providers: [
+          ChangeNotifierProvider(create: (_) => DetectionNotifier()),
+        ], child: const BinsightAiApp(skipSetUp: true)),
         size: const Size(800, 600)));
     await widgetTester.pumpAndSettle();
     expect(router!.routerDelegate.currentConfiguration.last.matchedLocation,

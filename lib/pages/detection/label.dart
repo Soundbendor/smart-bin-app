@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:binsight_ai/util/providers.dart';
+import 'package:binsight_ai/util/providers/annotation_notifier.dart';
 
 class LabelAnnotation extends StatelessWidget {
   const LabelAnnotation({super.key});

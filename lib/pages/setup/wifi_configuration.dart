@@ -1,22 +1,22 @@
 // Flutter imports:
 import 'dart:convert';
+import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:binsight_ai/database/models/device.dart';
 import 'package:binsight_ai/util/bluetooth_bin_data.dart';
 import 'package:binsight_ai/util/print.dart';
-import 'package:binsight_ai/util/providers.dart';
+import 'package:binsight_ai/util/shared_preferences.dart';
+import 'package:binsight_ai/util/providers/device_notifier.dart';
+import 'package:binsight_ai/util/providers/setup_key_notifier.dart';
+import 'package:binsight_ai/util/providers/wifi_result_notifier.dart';
 import 'package:binsight_ai/util/wifi_scan.dart';
 import 'package:binsight_ai/widgets/background.dart';
 import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:binsight_ai/widgets/error_dialog.dart';
-
-// TODO: handle potential case where incoming JSON is invalid
 
 /// Widget for configuring the wifi credentials of the compost bin
 class WifiConfigurationPage extends StatefulWidget {
@@ -55,7 +55,8 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
               ssid: ssidController.text,
               password: passwordController.text,
               onErrorClosed: () {},
-              onComplete: () {
+              onComplete: () async {
+                // Take the user to main
                 GoRouter.of(context).go("/main");
               });
         });
@@ -74,7 +75,11 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Connect Bin to WiFi', style: textTheme.headlineMedium),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child:
+                  Text('Connect Bin to WiFi', style: textTheme.headlineSmall),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: TextField(
@@ -92,6 +97,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
             ),
             ElevatedButton(
               onPressed: () {
+                // Send the values entered in ssid/password field to the bin
                 sendCredentials(context);
               },
               child: Text('Connect',
@@ -101,7 +107,8 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                Provider.of<SetupKeyNotifier>(context)
+                // Allows users to navigate back a page to modify their selected network
+                Provider.of<SetupKeyNotifier>(context, listen: false)
                     .setupKey
                     .currentState
                     ?.previous();
@@ -111,7 +118,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
                     color: Theme.of(context).colorScheme.onPrimary,
                   )),
             ),
-          ], // Column children
+          ],
         ),
       ),
     );
@@ -187,6 +194,7 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
             "ssid": ssid,
             "password": password,
           }));
+      await Future.delayed(const Duration(seconds: 2));
       await verifyStatus();
     } on Exception catch (e) {
       debug(e);
@@ -206,7 +214,7 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
       status = WifiConfigurationStatus.verifying;
     });
     int tries = 0;
-    while (tries < 5) {
+    while (tries < 10) {
       final now = DateTime.now();
       final statusData = await device.readCharacteristic(
           serviceId: mainServiceId,
@@ -269,9 +277,8 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
     bool? internetAccess = statusJson["internet_access"];
     if (internetAccess != null && internetAccess && success) {
       if (!mounted) return;
-      saveBinData();
-      Provider.of<DeviceNotifier>(context, listen: false).resetDevice();
-      widget.onComplete();
+      await Future.delayed(const Duration(seconds: 2));
+      fetchCredentials();
     } else {
       if (!mounted) return;
       setState(() {
@@ -281,12 +288,29 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
     }
   }
 
-  /// Saves the bin data to the database
-  void saveBinData() {
+  /// Fetches the compost bin credentials
+  Future<void> fetchCredentials() async {
+    if (!mounted) return;
+    setState(() {
+      status = WifiConfigurationStatus.fetchingCredentials;
+    });
     final device = Provider.of<DeviceNotifier>(context, listen: false).device!;
-    final databaseDevice = Device(
-        id: device.id); // TODO: Add more fields, confirm what id is stored
-    databaseDevice.save();
+    final credentialData = await device.readCharacteristic(
+        serviceId: apiServiceId, characteristicId: apiKeyCharacteristicId);
+    debug("API Data: $credentialData");
+    final Map<dynamic, dynamic> credentialJson =
+        jsonDecode(utf8.decode(credentialData));
+    debug("Status: $credentialJson");
+    await Future.delayed(const Duration(seconds: 1));
+    if (!mounted) return;
+    // Once the user has finalized their Bluetooth device choice, add it to preferences
+    Provider.of<DeviceNotifier>(context, listen: false).resetDevice();
+    sharedPreferences.setString(
+        SharedPreferencesKeys.apiKey, credentialJson["apiKey"]);
+    sharedPreferences.setString(
+        SharedPreferencesKeys.deviceApiID, credentialJson["deviceID"].toString());
+    sharedPreferences.setString(SharedPreferencesKeys.deviceID, device.id);
+    widget.onComplete();
   }
 
   @override
@@ -298,6 +322,8 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
           text: "Verifying WiFi credentials...");
     } else if (status == WifiConfigurationStatus.verifyingConnection) {
       return const WifiConfigurationAlert(text: "Verifying internet access...");
+    } else if (status == WifiConfigurationStatus.fetchingCredentials) {
+      return const WifiConfigurationAlert(text: "Fetching credentials...");
     } else if (status == WifiConfigurationStatus.error) {
       return ErrorDialog(
         text: "Error",
@@ -341,6 +367,9 @@ enum WifiConfigurationStatus {
 
   /// The compost bin is verifying internet connectivity
   verifyingConnection,
+
+  /// Fetching bin credentials
+  fetchingCredentials,
 
   /// An error occurred during the wifi configuration
   error,

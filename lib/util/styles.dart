@@ -25,19 +25,24 @@ final mainTheme = ThemeData(
       fontWeight: FontWeight.bold,
       fontFamily: 'Georama', // Specify the font family
     ),
-      displayMedium: TextStyle(
+    displayMedium: TextStyle(
       fontSize: 30,
       fontWeight: FontWeight.bold,
       fontFamily: 'Georama', // Specify the font family
     ),
-      headlineLarge: TextStyle(
+    headlineLarge: TextStyle(
       fontSize: 30,
       fontWeight: FontWeight.normal,
       fontFamily: 'GolosText', // Specify the font family
     ),
-      headlineMedium: TextStyle(
+    headlineMedium: TextStyle(
       fontSize: 20,
       fontWeight: FontWeight.bold,
+      fontFamily: 'GolosText', // Specify the font family
+    ),
+      headlineSmall: TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.normal,
       fontFamily: 'GolosText', // Specify the font family
     ),
       labelLarge: TextStyle(
@@ -45,12 +50,12 @@ final mainTheme = ThemeData(
       fontWeight: FontWeight.normal,
       fontFamily: 'GolosText', // Specify the font family
     ),
-      titleMedium: TextStyle(
+    titleMedium: TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.bold,
       fontFamily: 'GolosText', // Specify the font family
     ),
-      bodyMedium: TextStyle(
+    bodyMedium: TextStyle(
       fontSize: 10,
       fontWeight: FontWeight.normal,
       fontFamily: 'GolosText', // Specify the font family

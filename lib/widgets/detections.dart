@@ -9,8 +9,8 @@ import 'package:go_router/go_router.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/image.dart';
 
-/// Build a title string for each detection. 
-/// 
+/// Build a title string for each detection.
+///
 /// If the detection has been analyzed,
 /// the title will include the labels of the detected objects. If the detection
 /// has not been analyzed, the title will indicate that the detection is pending.
@@ -63,9 +63,17 @@ class DetectionLargeListItem extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(9.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(formatDetectionTitle(detection),
-                    style: textTheme.headlineMedium),
+                Text(
+                  formatDetectionTitle(detection),
+                  style: textTheme.headlineMedium,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "Timestamp: ${detection.timestamp}",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
                 Container(
                     decoration: BoxDecoration(
                       border: Border.all(
@@ -135,10 +143,10 @@ class DetectionSmallListItem extends StatelessWidget {
           color: colorScheme.onPrimary,
           child: ListTile(
             leading: DynamicImage(detection.preDetectImgLink),
-            title:
-                Text(formatDetectionTitle(detection), style: textTheme.titleMedium),
-            subtitle:
-                Text(detection.timestamp.toString(), style: textTheme.bodyMedium),
+            title: Text(formatDetectionTitle(detection),
+                style: textTheme.titleMedium),
+            subtitle: Text(detection.timestamp.toString(),
+                style: textTheme.bodyMedium),
             trailing: const Icon(Icons.arrow_forward_ios),
           ),
         ),
@@ -154,11 +162,13 @@ enum DetectionListType { large, small }
 class DetectionList extends StatelessWidget {
   final List<Detection> detections;
   final DetectionListType size;
+  final Function loadDetections;
 
   const DetectionList({
     super.key,
     required this.detections,
     this.size = DetectionListType.small,
+    required this.loadDetections,
   });
 
   @override
@@ -170,22 +180,28 @@ class DetectionList extends StatelessWidget {
     } else {
       if (size == DetectionListType.large) {
         return Expanded(
-          child: ListView.builder(
-            itemCount: detections.length,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (context, index) {
-              return DetectionLargeListItem(detection: detections[index]);
-            },
+          child: RefreshIndicator(
+            onRefresh: () => loadDetections(context),
+            child: ListView.builder(
+              itemCount: detections.length,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context, index) {
+                return DetectionLargeListItem(detection: detections[index]);
+              },
+            ),
           ),
         );
       } else {
         return Expanded(
-          child: ListView.builder(
-            itemCount: detections.length,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (context, index) {
-              return DetectionSmallListItem(detection: detections[index]);
-            },
+          child: RefreshIndicator(
+            onRefresh: () => loadDetections(context),
+            child: ListView.builder(
+              itemCount: detections.length,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context, index) {
+                return DetectionSmallListItem(detection: detections[index]);
+              },
+            ),
           ),
         );
       }
