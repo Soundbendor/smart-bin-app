@@ -92,7 +92,7 @@ class DetectionsPageState extends State<DetectionsPage> {
               TextButton(
                 // Style the button to match the "sad path" color scheme
                 style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
-                      backgroundColor: MaterialStateProperty.all(
+                      backgroundColor: WidgetStateProperty.all(
                         Theme.of(context).colorScheme.surface,
                       ),
                     ),
@@ -194,17 +194,17 @@ class DetectionsPageState extends State<DetectionsPage> {
                 Switch(
                     value: sizeToggle,
                     onChanged: onToggleSwitch,
-                    thumbColor: MaterialStateProperty.resolveWith((states) {
-                      if (states.contains(MaterialState.selected)) {
+                    thumbColor: WidgetStateProperty.resolveWith((states) {
+                      if (states.contains(WidgetState.selected)) {
                         return Theme.of(context).colorScheme.onPrimary;
                       }
                       return Theme.of(context).colorScheme.onSurface;
                     }),
-                    trackOutlineColor: MaterialStatePropertyAll(
-                      Theme.of(context).colorScheme.onBackground,
+                    trackOutlineColor: WidgetStatePropertyAll(
+                      Theme.of(context).colorScheme.onSurface,
                     ),
-                    trackColor: MaterialStateProperty.resolveWith((states) {
-                      if (states.contains(MaterialState.selected)) {
+                    trackColor: WidgetStateProperty.resolveWith((states) {
+                      if (states.contains(WidgetState.selected)) {
                         return Theme.of(context).colorScheme.primary;
                       }
                       return Theme.of(context).colorScheme.surface;

@@ -89,10 +89,10 @@ class _DetectionCard extends StatelessWidget {
                             "/main/detection/${detection.imageId}/annotation");
                       },
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
+                        backgroundColor: WidgetStateProperty.all(
                           Theme.of(context).colorScheme.primary.withAlpha(200),
                         ),
-                        shape: MaterialStateProperty.all(const CircleBorder()),
+                        shape: WidgetStateProperty.all(const CircleBorder()),
                       ),
                       color: Theme.of(context).colorScheme.onPrimary,
                       icon: const Icon(Icons.edit, size: 30),
