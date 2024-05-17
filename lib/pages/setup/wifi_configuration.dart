@@ -233,29 +233,19 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
       String? log = statusJson["log"];
       bool success = statusJson["success"];
       debug("Status: $statusJson");
-      // debug(
-          // "Diff: ${now.difference(DateTime.fromMillisecondsSinceEpoch((timestamp * 1000).floor())).inSeconds}");
-      // check if timestamp is within ~5 seconds of now
-      // if (now
-      //         .difference(DateTime.fromMillisecondsSinceEpoch(
-      //             (timestamp * 1000).floor()))
-      //         .inSeconds <
-      //     10) {
-        tries++;
-        await Future.delayed(const Duration(seconds: 2));
-        if (success) {
-          return await verifyConnection();
-        } else {
-          if (!mounted) return;
-          setState(() {
-            status = WifiConfigurationStatus.error;
-            error = WifiConfigurationException('$message, $log');
-          });
-          return;
-        }
-      // } else {
+      tries++;
+      await Future.delayed(const Duration(seconds: 2));
+      if (success) {
+        return await verifyConnection();
+      } else {
+        if (!mounted) return;
+        setState(() {
+          status = WifiConfigurationStatus.error;
+          error = WifiConfigurationException('$message, $log');
+        });
+        return;
       }
-    // }
+    }
     // if we reach here, the operation has timed out
     if (!mounted) return;
     setState(() {
