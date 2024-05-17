@@ -172,6 +172,9 @@ class _AnnotationPageState extends State<AnnotationPage> {
                       drawingArea(textTheme),
                       drawingControlArea(textTheme, notifier),
                       const SizedBox(height: 16),
+                      const Expanded(
+                        child: Column()
+                      ),
                       bottomControlArea(
                           context, annotationNotifier, notifier, textTheme),
                     ],
@@ -201,7 +204,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
           children: [
             ElevatedButton(
               style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
-                    backgroundColor: MaterialStateProperty.all(
+                    backgroundColor: WidgetStateProperty.all(
                       Theme.of(context).colorScheme.tertiary,
                     ),
                   ),
@@ -534,7 +537,7 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                         child: TextButton(
                           style: ButtonStyle(
                               backgroundColor:
-                                  MaterialStateProperty.all<Color>(Colors.red)),
+                                  WidgetStateProperty.all<Color>(Colors.red)),
                           onPressed: () => setState(
                             () {
                               selectedLabel = null;
@@ -551,7 +554,7 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                       child: TextButton(
                         style: ButtonStyle(
                             backgroundColor:
-                                MaterialStateProperty.all<Color>(Colors.grey)),
+                                WidgetStateProperty.all<Color>(Colors.grey)),
                         onPressed: () => Navigator.of(context).pop(),
                         child: const Text(
                           "Cancel",
