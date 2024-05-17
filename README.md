@@ -87,8 +87,7 @@ The documentation can also be found through GitHub Pages [here](https://soundben
 ## Contact Us
 Please feel free to reach out to our support email at:
 
-![alt text](image.png)
-binsight.help@gmail.com
+![alt text](assets/images/email.PNG)
 
 ## Contributions
 
@@ -101,9 +100,9 @@ Advising Professor:
 Development Team:
 
 - [Blake Pugh](https://github.com/bpugh5), OSU student
-- [Daniel Lau](), OSU student
+- [Daniel Lau](https://github.com/theusaf), OSU student
 - [Kimberly Markley](https://github.com/kimberlymarkley), OSU student
-- [Micah Stahlberg](), OSU student
+- [Micah Stahlberg](https://github.com/stalberm), OSU student
 
 ## License
 
