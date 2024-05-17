@@ -9,11 +9,10 @@ import 'package:sqflite/sqflite.dart';
 // Project imports:
 import 'package:binsight_ai/database/model.dart';
 import 'package:binsight_ai/database/models/detection.dart';
-import 'package:binsight_ai/database/models/device.dart';
 
 // Modify this when making changes to models
 // The entire app should be restarted when changing the schema
-const int databaseVersion = 4;
+const int databaseVersion = 5;
 
 Database? _database;
 
@@ -51,7 +50,6 @@ Future<void> createTables(
 Future<Database> getDatabaseConnection(
     {String dbName = "application.db"}) async {
   List<Model> models = [
-    Device.createDefault(),
     Detection.createDefault(),
   ];
 
