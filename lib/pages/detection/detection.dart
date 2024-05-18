@@ -60,6 +60,7 @@ class _DetectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+
     return Card(
       color: colorScheme.onPrimary,
       child: Padding(
@@ -99,12 +100,12 @@ class _DetectionCard extends StatelessWidget {
                       },
                       style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.all(
-                          Theme.of(context).colorScheme.primary.withAlpha(200),
+                          colorScheme.primary.withAlpha(200),
                         ),
                         shape: WidgetStateProperty.all(const CircleBorder()),
                       ),
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      splashColor: Theme.of(context).colorScheme.onSecondary,
+                      color: colorScheme.onPrimary,
+                      splashColor: colorScheme.onSecondary,
                     ),
                   ),
                 ],
@@ -114,23 +115,23 @@ class _DetectionCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildDataField("Transcription",
+                _buildDataField("Transcription:",
                     detection.transcription.toString(), textTheme),
+                _buildDataField("Temperature:",
+                    detection.temperature.toString(), textTheme),
                 _buildDataField(
-                    "Temperature", detection.temperature.toString(), textTheme),
-                _buildDataField(
-                    "Weight", detection.weight.toString(), textTheme),
-                _buildDataField("Total Weight",
+                    "Weight:", detection.weight.toString(), textTheme),
+                _buildDataField("Total Weight:",
                     detection.totalWeight.toString(), textTheme),
                 _buildDataField(
-                    "Humidity", detection.humidity.toString(), textTheme),
+                    "Humidity:", detection.humidity.toString(), textTheme),
                 _buildDataField(
-                    "CO2 Equivalent", detection.co2.toString(), textTheme),
+                    "CO2 Equivalent:", detection.co2.toString(), textTheme),
                 _buildDataField(
-                    "Pressure", detection.pressure.toString(), textTheme),
+                    "Pressure:", detection.pressure.toString(), textTheme),
                 _buildDataField(
-                    "Indoor Air Quality", detection.iaq.toString(), textTheme),
-                _buildDataField("Total Volatile Organic Compounds",
+                    "Indoor Air Quality:", detection.iaq.toString(), textTheme),
+                _buildDataField("Total Volatile Organic Compounds;",
                     detection.vo2.toString(), textTheme),
               ],
             ),
@@ -141,15 +142,15 @@ class _DetectionCard extends StatelessWidget {
   }
 
   // Creates a row with a title and a value to build the sensor data fields.
-  Widget _buildDataField(String title, String value, TextTheme textTheme) {
+  Widget _buildDataField(String title, String value, TextTheme textStyle) {
     return Row(
       children: [
-        Text(title, style: textTheme.labelLarge),
+        Text(title, style: textStyle.titleMedium),
         const SizedBox(width: 10),
         Flexible(
           child: Text(
             value,
-            style: textTheme.bodyMedium,
+            style: textStyle.labelMedium,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
           ),

@@ -84,7 +84,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: TextField(
                 controller: ssidController,
-                decoration: const InputDecoration(labelText: 'SSID'),
+                decoration: const InputDecoration(labelText: 'Network Name'),
               ),
             ),
             Padding(
