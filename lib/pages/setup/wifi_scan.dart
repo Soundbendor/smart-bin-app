@@ -116,11 +116,10 @@ class _WifiScanPageState extends State<WifiScanPage> {
   void fetchWifiList() async {
     try {
       if (wifiResults.isNotEmpty) return;
-      final decoded = utf8.decode(await device!
-          .readCharacteristic(
-              serviceId: mainServiceId,
-              characteristicId: wifiListCharacteristicId));
-              debug(decoded);
+      final decoded = utf8.decode(await device!.readCharacteristic(
+          serviceId: mainServiceId,
+          characteristicId: wifiListCharacteristicId));
+      debug(decoded);
       final Map<String, dynamic> parsed = jsonDecode(decoded);
       if (parsed.isNotEmpty) {
         final tempList = <WifiScanResult>[];
@@ -233,6 +232,20 @@ The error was: ${(error as BleOperationFailureException).message}.
           imageURL: "assets/images/wifi_scan_screen.png",
           child: Column(
             children: [
+              // Only display back button for introduction sequence
+              if (sharedPreferences.getString(SharedPreferencesKeys.deviceID) == null)
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back_ios),
+                    onPressed: () {
+                      Provider.of<SetupKeyNotifier>(context, listen: false)
+                          .setupKey
+                          .currentState
+                          ?.previous();
+                    },
+                  ),
+                ),
               ScanList(
                 itemCount: wifiResults.length,
                 listBuilder: buildWifiItem,
@@ -244,25 +257,6 @@ The error was: ${(error as BleOperationFailureException).message}.
                 title: "Select Your Network!",
                 inProgress: isScanning,
               ),
-              // Only display back button for introduction sequence
-              if (sharedPreferences.getString(SharedPreferencesKeys.deviceID) == null)
-                ElevatedButton(
-                  onPressed: () {
-                    stopScanning();
-                    Provider.of<DeviceNotifier>(context, listen: false)
-                        .resetDevice();
-                    Provider.of<SetupKeyNotifier>(context, listen: false)
-                        .setupKey
-                        .currentState
-                        ?.previous();
-                  },
-                  child: Text(
-                    "Back",
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        ),
-                  ),
-                ),
             ],
           ),
         ),

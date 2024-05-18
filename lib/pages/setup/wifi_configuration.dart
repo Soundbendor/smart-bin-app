@@ -36,6 +36,9 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
   /// Controller for the password text field
   final TextEditingController passwordController = TextEditingController();
 
+  // Boolean for whether to reveal password in field or not
+  bool showPassword = false;
+
   @override
   void initState() {
     super.initState();
@@ -75,6 +78,18 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                onPressed: () {
+                  Provider.of<SetupKeyNotifier>(context, listen: false)
+                      .setupKey
+                      .currentState
+                      ?.previous();
+                },
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child:
@@ -91,8 +106,20 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: TextField(
                 controller: passwordController,
-                decoration: const InputDecoration(labelText: 'Password'),
-                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  suffixIcon: IconButton(
+                    icon: showPassword
+                        ? const Icon(Icons.visibility_off)
+                        : const Icon(Icons.visibility),
+                    onPressed: () {
+                      setState(() {
+                        showPassword = !showPassword;
+                      });
+                    },
+                  ),
+                ),
+                obscureText: showPassword,
               ),
             ),
             ElevatedButton(
@@ -101,19 +128,6 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
                 sendCredentials(context);
               },
               child: Text('Connect',
-                  style: textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  )),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Allows users to navigate back a page to modify their selected network
-                Provider.of<SetupKeyNotifier>(context, listen: false)
-                    .setupKey
-                    .currentState
-                    ?.previous();
-              },
-              child: Text("Back",
                   style: textTheme.labelLarge!.copyWith(
                     color: Theme.of(context).colorScheme.onPrimary,
                   )),
@@ -214,8 +228,8 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
       status = WifiConfigurationStatus.verifying;
     });
     int tries = 0;
-    while (tries < 15) {
-      // final now = DateTime.now();
+    while (tries < 10) {
+      final now = DateTime.now();
       final statusData = await device.readCharacteristic(
           serviceId: mainServiceId,
           characteristicId: wifiCredentialCharacteristicId);
@@ -224,26 +238,32 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
       try {
         statusJson = jsonDecode(utf8.decode(statusData));
       } catch (e) {
-        debug(e);
         continue;
       }
       double timestamp = statusJson["timestamp"]; // in seconds
-      debug("TIMESTAMP: $timestamp");
       String message = statusJson["message"];
       String? log = statusJson["log"];
       bool success = statusJson["success"];
       debug("Status: $statusJson");
-      tries++;
-      await Future.delayed(const Duration(seconds: 2));
-      if (success) {
-        return await verifyConnection();
+      // check if timestamp is within ~5 seconds of now
+      if (now
+              .difference(DateTime.fromMillisecondsSinceEpoch(
+                  (timestamp * 1000).floor()))
+              .inSeconds <
+          5) {
+        if (success) {
+          return await verifyConnection();
+        } else {
+          if (!mounted) return;
+          setState(() {
+            status = WifiConfigurationStatus.error;
+            error = WifiConfigurationException('$message, $log');
+          });
+          return;
+        }
       } else {
-        if (!mounted) return;
-        setState(() {
-          status = WifiConfigurationStatus.error;
-          error = WifiConfigurationException('$message, $log');
-        });
-        return;
+        tries++;
+        await Future.delayed(const Duration(seconds: 1));
       }
     }
     // if we reach here, the operation has timed out
@@ -269,7 +289,6 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
     debug("Status: $statusJson");
     bool success = statusJson["success"];
     bool? internetAccess = statusJson["internet_access"];
-    debug("INTERNET ACCESS: $internetAccess, SUCCESS: $success");
     if (internetAccess != null && internetAccess && success) {
       if (!mounted) return;
       await Future.delayed(const Duration(seconds: 2));
