@@ -1,4 +1,6 @@
 // Flutter imports:
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 // Project imports:
@@ -17,18 +19,11 @@ class DetectionNotifier with ChangeNotifier {
 
   // test function
   // TODO: change with actual data and correct schema
-  void updateDetection(String detectionId) async {
+  void updateDetection(String detectionId, List<dynamic> annotations) async {
     try {
       final detection = await Detection.find(detectionId);
       if (detection != null) {
-        detection.boxes = '''
-        [{
-          "object_name": "Milk",
-          "xy_coord_list": [
-            [11.1, 16.4],
-            [11.3, 16.5]
-          ]
-        }]''';
+        detection.boxes = jsonEncode(annotations);
         await detection.update();
         await getAll();
         debug("Updated annotation in DB");
@@ -36,6 +31,5 @@ class DetectionNotifier with ChangeNotifier {
     } catch (error) {
       debug('Error updating annotations: $error');
     }
-    // notifyListeners();
   }
 }
