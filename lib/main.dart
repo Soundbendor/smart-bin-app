@@ -178,7 +178,6 @@ class _BinsightAiAppState extends State<BinsightAiApp>
         List<dynamic> itemList = data['items'];
         for (var item in itemList) {
           Map<String, dynamic> adjustedMap = transformMap(item);
-          adjustedMap["boxes"] = exampleBoxes;
           imageList.add(adjustedMap["postDetectImgLink"]);
           Detection detection = Detection.fromMap(adjustedMap);
           await detection.save();
