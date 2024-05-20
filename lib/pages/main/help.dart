@@ -14,7 +14,7 @@ class HelpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme.bodyMedium;
+    final textTheme = Theme.of(context).textTheme.bodyLarge;
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(10),
