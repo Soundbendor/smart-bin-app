@@ -331,7 +331,6 @@ class _DrawingControlAreaState extends State<_DrawingControlArea> {
                         annotationNotifier.addToAllAnnotations();
                         annotationNotifier.clearCurrentAnnotation();
                         annotationNotifier.label = null;
-                        notifier.updateDetection(widget.detectionId);
                       } else {
                         String message;
                         if (annotationNotifier.label == null) {
@@ -417,7 +416,7 @@ class _BottomControlArea extends StatelessWidget {
                       ),
                   onPressed: () {
                     annotationNotifier.clearCurrentAnnotation();
-                    notifier.updateDetection(detectionId);
+                    notifier.updateDetection(detectionId, annotationNotifier.allAnnotations);
 
                     Future.delayed(const Duration(milliseconds: 100), () {
                       annotationNotifier.reset();
