@@ -81,28 +81,29 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Align(
-                    alignment: Alignment.topLeft,
-                    child: SafeArea(
-                      child: GestureDetector(
-                          child: Row(
-                            children: [
-                              const Icon(Icons.arrow_back_ios),
-                              Text("Back",
-                                  style: Theme.of(context).textTheme.labelLarge)
-                            ],
-                          ),
-                          onTap: () {
-                            Provider.of<SetupKeyNotifier>(context, listen: false)
-                                .setupKey
-                                .currentState
-                                ?.previous();
-                          }),
+                alignment: Alignment.topLeft,
+                child: SafeArea(
+                  child: GestureDetector(
+                    child: Row(
+                      children: [
+                        const Icon(Icons.arrow_back_ios),
+                        Text("Back",
+                            style: Theme.of(context).textTheme.labelLarge)
+                      ],
                     ),
+                    onTap: () {
+                      Provider.of<SetupKeyNotifier>(context, listen: false)
+                          .setupKey
+                          .currentState
+                          ?.previous();
+                    },
                   ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child:
-                    Text('Connect Bin to WiFi', style: textTheme.headlineSmall),
+                    Text('Connect Bin to WiFi', style: textTheme.headlineSmall!.copyWith(fontSize: 36)),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),

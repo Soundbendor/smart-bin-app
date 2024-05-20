@@ -236,25 +236,29 @@ The error was: ${(error as BleOperationFailureException).message}.
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 // Only display back button for introduction sequence
-                if (sharedPreferences.getString(SharedPreferencesKeys.deviceID) ==
+                if (sharedPreferences
+                        .getString(SharedPreferencesKeys.deviceID) ==
                     null)
                   Align(
                     alignment: Alignment.topLeft,
                     child: SafeArea(
                       child: GestureDetector(
-                          child: Row(
-                            children: [
-                              const Icon(Icons.arrow_back_ios),
-                              Text("Back",
-                                  style: Theme.of(context).textTheme.labelLarge)
-                            ],
-                          ),
-                          onTap: () {
-                            Provider.of<SetupKeyNotifier>(context, listen: false)
-                                .setupKey
-                                .currentState
-                                ?.previous();
-                          }),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.arrow_back_ios),
+                            Text("Back",
+                                style: Theme.of(context).textTheme.labelLarge)
+                          ],
+                        ),
+                        onTap: () {
+                          Provider.of<DeviceNotifier>(context, listen: false)
+                              .resetDevice();
+                          Provider.of<SetupKeyNotifier>(context, listen: false)
+                              .setupKey
+                              .currentState
+                              ?.previous();
+                        },
+                      ),
                     ),
                   ),
                 ScanList(
