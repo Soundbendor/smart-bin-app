@@ -268,10 +268,10 @@ class BleDevice {
     // on Android, we'll have to request pairing first
     // TODO: verify this
     // if (!Platform.isAndroid) {
-      debug("BleDevice[pair]: Pairing device. Current bond state: $isBonded");
-      await _device.discoverServices();
-      debug("BleDevice[pair]: Discovered services");
-      debug("BleDevice[pair]: Pairing complete");
+    debug("BleDevice[pair]: Pairing device. Current bond state: $isBonded");
+    await _device.discoverServices();
+    debug("BleDevice[pair]: Discovered services");
+    debug("BleDevice[pair]: Pairing complete");
     // } else {
     //   debug(
     //       "BleDevice[pair]: Platform is Android, skipping pairing - must be done manually");
@@ -366,9 +366,10 @@ class BleDevice {
   Future<List<int>> readCharacteristic(
       {required Uuid serviceId, required Uuid characteristicId}) async {
     final characteristic = BluetoothCharacteristic(
-        remoteId: DeviceIdentifier(id),
-        serviceUuid: Guid.fromBytes(serviceId.data),
-        characteristicUuid: Guid.fromBytes(characteristicId.data));
+      remoteId: DeviceIdentifier(id),
+      serviceUuid: Guid.fromBytes(serviceId.data),
+      characteristicUuid: Guid.fromBytes(characteristicId.data),
+    );
     if (!isConnected) {
       debug(
           "BleDevice[readCharacteristic]: Device not connected, attempting to connect");

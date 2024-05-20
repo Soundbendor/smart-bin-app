@@ -78,7 +78,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Align(
                 alignment: Alignment.topLeft,
@@ -87,8 +87,10 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
                     child: Row(
                       children: [
                         const Icon(Icons.arrow_back_ios),
-                        Text("Back",
-                            style: Theme.of(context).textTheme.labelLarge)
+                        Text(
+                          "Back",
+                          style: Theme.of(context).textTheme.labelLarge,
+                        )
                       ],
                     ),
                     onTap: () {
@@ -100,10 +102,15 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
                   ),
                 ),
               ),
+              SizedBox(
+                height:
+                    // Match dimensions up to wifi_scan screen
+                    (MediaQuery.of(context).size.height / 2) - (336),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child:
-                    Text('Connect Bin to WiFi', style: textTheme.headlineSmall!.copyWith(fontSize: 36)),
+                child: Text('Connect Bin to WiFi',
+                    style: textTheme.headlineSmall!.copyWith(fontSize: 36)),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
