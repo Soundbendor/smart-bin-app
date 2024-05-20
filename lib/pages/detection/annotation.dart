@@ -1,6 +1,5 @@
 // Flutter imports:
 import 'dart:convert';
-import 'package:binsight_ai/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -19,21 +18,15 @@ import 'package:binsight_ai/util/providers/annotation_notifier.dart';
 import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/widgets/free_draw.dart';
 import 'package:binsight_ai/widgets/heading.dart';
+import 'package:binsight_ai/util/styles.dart';
 
 /// Page used for annotating an individual detection image
 class AnnotationPage extends StatefulWidget {
-  /// The link for the image to be annotated
-  late final Future<String> imageLink;
-
   /// The detection id of the image being annotated
   final String detectionId;
 
-  AnnotationPage({super.key, required this.detectionId}) {
-    imageLink = Future(() async {
-      return Detection.find(detectionId)
-          .then((detection) => detection!.preDetectImgLink);
-    });
-  }
+  const AnnotationPage({super.key, required this.detectionId});
+
   @override
   State<AnnotationPage> createState() => _AnnotationPageState();
 }
@@ -42,10 +35,35 @@ class _AnnotationPageState extends State<AnnotationPage> {
   /// User's decision to show annotation tutorial upon opening annotation screen
   bool? dontShowAgain = false;
 
+  late final Detection detection;
+
+  /// The link for the image to be annotated
+  late final Future<String> imageLink;
+
   @override
   void initState() {
     super.initState();
     initPreferences();
+    imageLink = Future(() async {
+      final Detection d = (await Detection.find(widget.detectionId))!;
+      detection = d;
+      if (mounted) {
+        final notifier =
+            Provider.of<AnnotationNotifier>(context, listen: false);
+        List<dynamic> annotations = jsonDecode(detection.boxes!);
+        for (var annotation in annotations) {
+          notifier.label = annotation['object_name'];
+          notifier.currentAnnotation.add(DrawingSegment(
+              offsets: (annotation['xy_coord_list'] as List<dynamic>)
+                  .map((e) => Offset(e[0], e[1]))
+                  .toList()));
+          notifier.addToAllAnnotations();
+        }
+        notifier.clearCurrentAnnotation();
+        notifier.label = null;
+      }
+      return d.preDetectImgLink;
+    });
   }
 
   /// Recalls user's decision of whether to show the annotation guide or not
@@ -173,8 +191,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                         ),
                       ),
                       _DrawingArea(
-                          imageLink: widget.imageLink,
-                          constraints: constraints),
+                          imageLink: imageLink, constraints: constraints),
                       _DrawingControlArea(
                           detectionId: widget.detectionId,
                           constraints: constraints),
@@ -416,7 +433,8 @@ class _BottomControlArea extends StatelessWidget {
                       ),
                   onPressed: () {
                     annotationNotifier.clearCurrentAnnotation();
-                    notifier.updateDetection(detectionId, annotationNotifier.allAnnotations);
+                    notifier.updateDetection(
+                        detectionId, annotationNotifier.allAnnotations);
 
                     Future.delayed(const Duration(milliseconds: 100), () {
                       annotationNotifier.reset();
