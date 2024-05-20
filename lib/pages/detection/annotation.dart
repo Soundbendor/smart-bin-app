@@ -131,6 +131,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
         });
   }
 
+  /// The main build method for the AnnotationPage
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -153,7 +154,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: const EdgeInsets.only(left: 10, top: 10, right: 10),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -168,17 +169,26 @@ class _AnnotationPageState extends State<AnnotationPage> {
                               onTap: () => GoRouter.of(context).pop(),
                             ),
                             const Heading(text: "Annotate Your Image"),
-                            const SizedBox(height: 16),
                           ],
                         ),
                       ),
-                      _DrawingArea(
-                          imageLink: widget.imageLink,
-                          constraints: constraints),
-                      _DrawingControlArea(
-                          detectionId: widget.detectionId,
-                          constraints: constraints),
-                      const SizedBox(height: 16),
+                      Card(
+                        
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Column(
+                            children: [
+                              _DrawingArea(
+                                  imageLink: widget.imageLink,
+                                  constraints: constraints),
+                              _DrawingControlArea(
+                                  detectionId: widget.detectionId,
+                                  constraints: constraints),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // const SizedBox(height: 16),
                       const Expanded(child: Column()),
                       _BottomControlArea(detectionId: widget.detectionId),
                     ],
@@ -397,7 +407,7 @@ class _BottomControlArea extends StatelessWidget {
                   backgroundColor: mainColorScheme.error,
                 ),
                 child: Text(
-                  "Clear",
+                  "Clear Image",
                   style: textTheme.labelLarge!.copyWith(
                     color: Theme.of(context).colorScheme.onError,
                   ),
@@ -428,7 +438,7 @@ class _BottomControlArea extends StatelessWidget {
                 );
               },
               child: Text(
-                "Done",
+                "Save & Exit",
                 style: textTheme.labelLarge!.copyWith(
                   color: Theme.of(context).colorScheme.onTertiary,
                 ),

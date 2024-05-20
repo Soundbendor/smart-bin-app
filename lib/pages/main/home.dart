@@ -148,7 +148,6 @@ class _HomePageState extends State<HomePage> {
                           "Detections by Food Category",
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
-                        const SizedBox(height: 10),
                         CircleChart(
                           data: labelCounts,
                         ),
@@ -218,7 +217,7 @@ class _HomePageState extends State<HomePage> {
           for (var label in boxesList) {
             String name = label['object_name'];
             name = name.toLowerCase();
-            //Check singular and plural version of item
+            // Check singular and plural version of item
             String? category = categories[name];
             category ??= categories['${name}s'];
             category ??= "Undefined";
