@@ -17,7 +17,6 @@ class DetectionNotifier with ChangeNotifier {
   }
 
   // test function
-  // TODO: change with actual data and correct schema
   void updateDetection(String detectionId, List<dynamic> annotations) async {
     try {
       final detection = await Detection.find(detectionId);

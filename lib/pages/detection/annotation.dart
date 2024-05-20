@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -7,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multiple_search_selection/createable/create_options.dart';
 import 'package:multiple_search_selection/multiple_search_selection.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,13 +46,15 @@ class _AnnotationPageState extends State<AnnotationPage> {
   void initState() {
     super.initState();
     initPreferences();
+    getDirectory();
     imageLink = Future(() async {
+      debug("AnnotationPage: Getting image link for detection ${widget.detectionId}");
       final Detection d = (await Detection.find(widget.detectionId))!;
       detection = d;
       if (mounted) {
         final notifier =
             Provider.of<AnnotationNotifier>(context, listen: false);
-        List<dynamic> annotations = jsonDecode(detection.boxes!);
+        List<dynamic> annotations = jsonDecode(detection.boxes ?? "[]");
         for (var annotation in annotations) {
           notifier.label = annotation['object_name'];
           notifier.currentAnnotation.add(DrawingSegment(
@@ -62,8 +66,14 @@ class _AnnotationPageState extends State<AnnotationPage> {
         notifier.clearCurrentAnnotation();
         notifier.label = null;
       }
+      debug("AnnotationPage: Image link for detection ${widget.detectionId} is ${d.postDetectImgLink}");
       return d.postDetectImgLink!;
     });
+    initPreferences();
+  }
+
+  Future<void> getDirectory() async {
+    Directory dir = await getApplicationDocumentsDirectory();
   }
 
   /// Recalls user's decision of whether to show the annotation guide or not
@@ -395,65 +405,70 @@ class _BottomControlArea extends StatelessWidget {
         color: Theme.of(context).colorScheme.surface,
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Builder(builder: (context) {
-              final AnnotationNotifier annotationNotifier =
-                  context.read<AnnotationNotifier>();
-              return ElevatedButton(
-                onPressed: () {
-                  annotationNotifier.clearCurrentAnnotation();
-                  annotationNotifier.reset();
-                  // TODO: also delete the data in the database?
-                  // alternatively, clear the data only after pressing "done"
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: mainColorScheme.error,
-                ),
-                child: Text(
-                  "Clear",
-                  style: textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onError,
-                  ),
-                ),
-              );
-            }),
-            const SizedBox(width: 8),
-            Consumer<DetectionNotifier>(
-              builder: (context, notifier, child) {
-                AnnotationNotifier annotationNotifier =
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Builder(builder: (context) {
+                final AnnotationNotifier annotationNotifier =
                     context.read<AnnotationNotifier>();
                 return ElevatedButton(
-                  style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
-                        backgroundColor: WidgetStateProperty.all(
-                          Theme.of(context).colorScheme.tertiary,
-                        ),
-                      ),
                   onPressed: () {
                     annotationNotifier.clearCurrentAnnotation();
-                    notifier.updateDetection(
-                        detectionId, annotationNotifier.allAnnotations);
+                    annotationNotifier.reset();
+                    // TODO: also delete the data in the database?
+                    // alternatively, clear the data only after pressing "done"
 
                     Future.delayed(const Duration(milliseconds: 100), () {
                       annotationNotifier.reset();
                       GoRouter.of(context).pop();
                     });
                   },
-                  child: child,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: mainColorScheme.error,
+                  ),
+                  child: Text(
+                    "Clear",
+                    style: textTheme.labelLarge!.copyWith(
+                      color: Theme.of(context).colorScheme.onError,
+                    ),
+                  ),
                 );
-              },
-              child: Text(
-                "Done",
-                style: textTheme.labelLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.onTertiary,
+              }),
+              const SizedBox(width: 8),
+              Consumer<DetectionNotifier>(
+                builder: (context, notifier, child) {
+                  AnnotationNotifier annotationNotifier =
+                      context.read<AnnotationNotifier>();
+                  return ElevatedButton(
+                    style:
+                        Theme.of(context).elevatedButtonTheme.style!.copyWith(
+                              backgroundColor: WidgetStateProperty.all(
+                                Theme.of(context).colorScheme.tertiary,
+                              ),
+                            ),
+                    onPressed: () {
+                      annotationNotifier.clearCurrentAnnotation();
+                      notifier.updateDetection(detectionId,
+                          annotationNotifier.allAnnotations);
+
+                      Future.delayed(const Duration(milliseconds: 100), () {
+                        annotationNotifier.reset();
+                        GoRouter.of(context).pop();
+                      });
+                    },
+                    child: child,
+                  );
+                },
+                child: Text(
+                  "Done",
+                  style: textTheme.labelLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onTertiary,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),),
     );
   }
 }
