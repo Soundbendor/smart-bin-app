@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:go_router/go_router.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
 import 'package:binsight_ai/util/styles.dart';
@@ -46,7 +47,7 @@ class _TopNavBarState extends State<TopNavBar> {
                 color: Color(0xFFeef8f4),
               ),
               child: Text(
-                'Binsight.ai',
+                'binsight.ai',
                 style: mainTheme.textTheme.displayLarge?.copyWith(
                   color: const Color(0xFF333333),
                   fontSize: 24,
@@ -96,16 +97,32 @@ class _TopNavBarState extends State<TopNavBar> {
               },
             ),
             // Current version number
-            // TODO: create a version number that is updated automatically
-            const ListTile(
-              title: Text(
-                'Version 1.0.0',
-                style: TextStyle(fontSize: 10, color: Colors.grey),
-              ),
+            ListTile(
+              title: VersionText(),
             ),
           ],
         ),
       ),
     );
+  }
+}
+
+class VersionText extends StatelessWidget {
+  VersionText({
+    super.key,
+  });
+
+  final Future<PackageInfo> packageInfo = PackageInfo.fromPlatform();
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: packageInfo,
+        builder: (context, snapshot) {
+          return Text(
+            "Version ${snapshot.connectionState == ConnectionState.done ? snapshot.data!.version : '1.0.0'}",
+            style: const TextStyle(fontSize: 10, color: Colors.grey),
+          );
+        });
   }
 }

@@ -9,7 +9,7 @@ final mainColorScheme = ColorScheme(
   tertiary: const Color.fromARGB(255, 116, 193, 164),
   onTertiary: Colors.white,
   error: Colors.red,
-  onError: Colors.red.shade700,
+  onError: Colors.white,
   background: const Color(0xFFeef8f4),
   onBackground: const Color(0xFF333333),
   brightness: Brightness.light,
@@ -40,12 +40,12 @@ final mainTheme = ThemeData(
       fontWeight: FontWeight.bold,
       fontFamily: 'GolosText', // Specify the font family
     ),
-      headlineSmall: TextStyle(
+    headlineSmall: TextStyle(
       fontSize: 20,
       fontWeight: FontWeight.normal,
       fontFamily: 'GolosText', // Specify the font family
     ),
-      labelLarge: TextStyle(
+    labelLarge: TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.normal,
       fontFamily: 'GolosText', // Specify the font family

@@ -62,14 +62,14 @@ class DetectionsPageState extends State<DetectionsPage> {
   /// Handles reconnecting to the user's device in order to read wifi status characteristic.
   void connectToDevice(BuildContext context) async {
     // Rebuild the user's device from its id to pair and connect
-    BleDevice bledevice =
-        BleDevice.fromId(sharedPreferences.getString("deviceID")!);
+    BleDevice bledevice = BleDevice.fromId(
+        sharedPreferences.getString(SharedPreferencesKeys.deviceID)!);
     DeviceNotifier notifierProvider =
         Provider.of<DeviceNotifier>(context, listen: false);
     notifierProvider.setDevice(bledevice);
     await notifierProvider.connect();
     notifierProvider.listenForConnectionEvents();
-    await notifierProvider.pair();
+    // await notifierProvider.pair();
   }
 
   /// Displays a dialog that asks the user if they would like to check their
@@ -92,7 +92,7 @@ class DetectionsPageState extends State<DetectionsPage> {
               TextButton(
                 // Style the button to match the "sad path" color scheme
                 style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
-                      backgroundColor: MaterialStateProperty.all(
+                      backgroundColor: WidgetStateProperty.all(
                         Theme.of(context).colorScheme.surface,
                       ),
                     ),
@@ -194,17 +194,17 @@ class DetectionsPageState extends State<DetectionsPage> {
                 Switch(
                     value: sizeToggle,
                     onChanged: onToggleSwitch,
-                    thumbColor: MaterialStateProperty.resolveWith((states) {
-                      if (states.contains(MaterialState.selected)) {
+                    thumbColor: WidgetStateProperty.resolveWith((states) {
+                      if (states.contains(WidgetState.selected)) {
                         return Theme.of(context).colorScheme.onPrimary;
                       }
                       return Theme.of(context).colorScheme.onSurface;
                     }),
-                    trackOutlineColor: MaterialStatePropertyAll(
-                      Theme.of(context).colorScheme.onBackground,
+                    trackOutlineColor: WidgetStatePropertyAll(
+                      Theme.of(context).colorScheme.onSurface,
                     ),
-                    trackColor: MaterialStateProperty.resolveWith((states) {
-                      if (states.contains(MaterialState.selected)) {
+                    trackColor: WidgetStateProperty.resolveWith((states) {
+                      if (states.contains(WidgetState.selected)) {
                         return Theme.of(context).colorScheme.primary;
                       }
                       return Theme.of(context).colorScheme.surface;

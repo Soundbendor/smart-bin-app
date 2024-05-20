@@ -1,7 +1,6 @@
 // Flutter imports:
 import 'dart:convert';
 import 'dart:io';
-import 'package:binsight_ai/util/print.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,6 +11,7 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
+import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:binsight_ai/widgets/circular_chart.dart';
 import 'package:binsight_ai/widgets/line_chart.dart';
@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
   Map<String, int> labelCounts = {};
   // Map day to total compost weight
   Map<DateTime, double> weightCounts = {};
+
   // Categories of labels
   Map categories = {};
   Directory? appDocDir;
@@ -89,6 +90,7 @@ class _HomePageState extends State<HomePage> {
     return Consumer<DetectionNotifier>(
       builder: (context, notifier, child) {
         final detections = notifier.detections;
+
         // Populate the counts for the circular chart and bar graph
         populateCounts(detections);
 
@@ -100,111 +102,151 @@ class _HomePageState extends State<HomePage> {
           latestImage = getImage(latest.postDetectImgLink!, appDocDir);
         }
 
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        "Review",
-                        style: Theme.of(context).textTheme.displayMedium,
-                      ),
-                    ),
-                    Expanded(
-                      child: Image.asset(
-                        'assets/images/transparent_bee.png',
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
                     children: [
-                      Text(
-                        "Tap to Annotate Latest Image",
-                        style: Theme.of(context).textTheme.titleMedium,
+                      Expanded(
+                        child: Text(
+                          "Review",
+                          style: Theme.of(context).textTheme.displayMedium,
+                        ),
                       ),
-                      const SizedBox(height: 8),
-                      latest != null
-                          ? GestureDetector(
-                              onTap: () => GoRouter.of(context)
-                                  .push("/main/detection/${latest!.imageId}"),
-                              child: latestImage != null
-                                  ? Image.file(latestImage)
-                                  : Container())
-                          : Container(), // Container to handle the case when latest is null
-                      const SizedBox(height: 10),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  "Recap",
-                  style: Theme.of(context).textTheme.displayMedium,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      "Detections by Food Category",
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 10),
-                    CircleChart(
-                      data: labelCounts,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  "Trends",
-                  style: Theme.of(context).textTheme.displayMedium,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        "Compost Over Time",
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 10),
-                      FractionallySizedBox(
-                        widthFactor: 0.9,
-                        child: BarChart(
-                          data: weightCounts,
+                      Expanded(
+                        child: Image.asset(
+                          'assets/images/transparent_bee.png',
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-            ],
+                const SizedBox(height: 10),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          "Tap to Annotate Latest Image",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 8),
+                        latest != null
+                            ? GestureDetector(
+                                onTap: () => GoRouter.of(context)
+                                    .push("/main/detection/${latest!.imageId}"),
+                                child: latestImage != null
+                                    ? Image.file(latestImage)
+                                    : Container())
+                            : Container(), // Container to handle the case when latest is null
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    "Recap",
+                    style: Theme.of(context).textTheme.displayMedium,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          "Detections by Food Category",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 10),
+                        CircleChart(
+                          data: labelCounts,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    "Trends",
+                    style: Theme.of(context).textTheme.displayMedium,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          "Compost Over Time",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 10),
+                        FractionallySizedBox(
+                          widthFactor: 0.9,
+                          child: BarChart(
+                            data: weightCounts,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                CircleChart(
+                  data: labelCounts,
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    "Trends",
+                    style: Theme.of(context).textTheme.displayMedium,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          "Compost Over Time",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 10),
+                        FractionallySizedBox(
+                          widthFactor: 0.9,
+                          child: BarChart(
+                            data: weightCounts,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         );
       },
@@ -219,6 +261,7 @@ class _HomePageState extends State<HomePage> {
       // Turn detections to a list of maps
       List<Map<String, dynamic>> detectionsMaps =
           detections.map((detection) => detection.toMap()).toList();
+      debug('NUMBER OF DETECTIONS: ${detectionsMaps.length}');
       // Loop over all detections and increment the counts accordingly
       for (Map<String, dynamic> detection in detectionsMaps) {
         DateTime timestamp = DateTime.parse(detection["timestamp"]);

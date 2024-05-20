@@ -15,6 +15,18 @@ class Detection extends Model {
   /// The link to the post-detection image.
   String? postDetectImgLink;
 
+  /// The link to the depth map image.
+  String? depthMapImgLink;
+
+  /// The link to the IR image.
+  String? irImgLink;
+
+  /// The audio transcription.
+  String? transcription;
+
+  /// The total weight value.
+  double? totalWeight;
+
   // The weight value (delta).
   double? weight;
 
@@ -45,23 +57,24 @@ class Detection extends Model {
   /// The device ID.
   String deviceId;
 
-  /// Description of the item
-  String? transcription;
-
-  Detection(
-      {required this.imageId,
-      required this.timestamp,
-      required this.deviceId,
-      this.postDetectImgLink,
-      this.weight,
-      this.temperature,
-      this.pressure,
-      this.humidity,
-      this.iaq,
-      this.co2,
-      this.vo2,
-      this.boxes,
-      this.transcription});
+  Detection({
+    required this.imageId,
+    required this.timestamp,
+    required this.deviceId,
+    this.postDetectImgLink,
+    this.depthMapImgLink,
+    this.irImgLink,
+    this.transcription,
+    this.weight,
+    this.humidity,
+    this.temperature,
+    this.co2,
+    this.vo2,
+    this.boxes,
+    this.totalWeight,
+    this.pressure,
+    this.iaq,
+  });
 
   /// Creates a blank device for testing or retrieving properties of the model.
   Detection.createDefault()
@@ -82,6 +95,9 @@ class Detection extends Model {
     return {
       "imageId": imageId,
       "postDetectImgLink": postDetectImgLink,
+      "depthMapImgLink": depthMapImgLink,
+      "irImgLink": irImgLink,
+      "transcription": transcription,
       "weight": weight,
       "humidity": humidity,
       "temperature": temperature,
@@ -113,6 +129,9 @@ class Detection extends Model {
       timestamp: DateTime.parse(map['timestamp']),
       deviceId: map['deviceId'],
       postDetectImgLink: map['postDetectImgLink'],
+      depthMapImgLink: map['depthMapImgLink'],
+      irImgLink: map['irImgLink'],
+      transcription: map['transcription'],
       weight: map['weight']?.toDouble(),
       humidity: map['humidity']?.toDouble(),
       temperature: map['temperature']?.toDouble(),
@@ -132,6 +151,9 @@ class Detection extends Model {
     (
       imageId TEXT PRIMARY KEY,
       postDetectImgLink TEXT,
+      depthMapImgLink TEXT,
+      irImgLink TEXT,
+      transcription TEXT,
       weight DOUBLE,
       humidity DOUBLE,
       temperature DOUBLE,

@@ -9,6 +9,7 @@ import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/detections.dart';
 import '../shared.dart';
 
+/// Tests for the detection list
 void main() {
   testInit();
 
@@ -22,6 +23,7 @@ void main() {
       // "postDetectImgLink": "http://example.com/bar-post.jpg",
       "depthMapImgLink": "example.com/bar-depth.jpg",
       "irImgLink": "example.com/bar-ir.jpg",
+      "transcription": "pineapple, chicken",
       "weight": 1.0,
       "humidity": 0.5,
       "temperature": 20.0,
@@ -53,6 +55,7 @@ void main() {
       "postDetectImgLink": "example.com/foo-post.jpg",
       "depthMapImgLink": "example.com/foo-depth.jpg",
       "irImgLink": "example.com/foo-ir.jpg",
+      "transcription": "pineapple, chicken",
       "weight": 10.0,
       "humidity": 1.5,
       "temperature": 20.0,

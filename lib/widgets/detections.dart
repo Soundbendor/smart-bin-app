@@ -61,7 +61,7 @@ class DetectionLargeListItem extends StatelessWidget {
           // Background color of the card
           color: colorScheme.onPrimary,
           child: Padding(
-            padding: const EdgeInsets.all(9.0),
+            padding: const EdgeInsets.all(11.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -82,8 +82,9 @@ class DetectionLargeListItem extends StatelessWidget {
                       ),
                     ),
                     margin: const EdgeInsets.only(bottom: 12, top: 12),
+                    alignment: Alignment.center,
                     child: DynamicImage(detection.postDetectImgLink!,
-                        width: 300, height: 300)),
+                        width: 325, height: 325)),
                 SizedBox(
                   width: 250,
                   child: Row(
@@ -92,18 +93,16 @@ class DetectionLargeListItem extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Temperature", style: textTheme.labelLarge),
-                            Text("Humidity", style: textTheme.labelLarge),
+                            Text("Transcription:",
+                                style: textTheme.titleMedium),
                           ],
                         ),
                       ),
                       Expanded(
                         child: Column(
                           children: [
-                            Text(detection.temperature.toString(),
-                                style: textTheme.labelLarge),
-                            Text(detection.humidity.toString(),
-                                style: textTheme.labelLarge),
+                            Text(detection.transcription.toString(),
+                                style: textTheme.labelMedium),
                           ],
                         ),
                       ),
@@ -136,13 +135,20 @@ class DetectionSmallListItem extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.only(left: 5.0, top: 5.0, right: 5.0),
       child: GestureDetector(
         onTap: () => onTileTap(context, detection),
         child: Card(
           color: colorScheme.onPrimary,
           child: ListTile(
-            leading: DynamicImage(detection.postDetectImgLink!),
+            leading: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: colorScheme.onSurface,
+                    width: 1,
+                  ),
+                ),
+                child: DynamicImage(detection.postDetectImgLink!)),
             title: Text(formatDetectionTitle(detection),
                 style: textTheme.titleMedium),
             subtitle: Text(detection.timestamp.toString(),
@@ -174,9 +180,14 @@ class DetectionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (detections.isEmpty) {
-      return const SizedBox(
+      return SizedBox(
           width: double.infinity,
-          child: Text("No detections yet", textAlign: TextAlign.left));
+          child: Text(
+              "Ooops! \n"
+              "No images detected yet. \n"
+              "Please swipe down to reload.",
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.center));
     } else {
       if (size == DetectionListType.large) {
         return Expanded(

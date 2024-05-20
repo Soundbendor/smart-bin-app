@@ -1,41 +1,9 @@
-// Flutter imports:
-import 'dart:convert';
-
 // Package imports:
-import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:sqflite/sqflite.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/connection.dart';
 import 'package:binsight_ai/database/models/detection.dart';
-import 'package:binsight_ai/util/print.dart';
-
-/// Handles messages from the WebSocket channel.
-void handleMessages(WebSocketChannel channel) {
-  channel.stream.listen(
-    (data) async {
-      try {
-        final jsonData = await jsonDecode(data);
-        final messageType = jsonData['type'];
-        if (messageType == 'pre_detection') {
-          debug('Emitted predetection was received');
-          await updatePreDetection(await jsonDecode(jsonData["pre_detection"]));
-        } else if (messageType == 'post_detection') {
-          debug('Emitted postdetection was received');
-          await addPostDetectionLink(jsonDecode(jsonData["post_detection"]));
-        }
-      } catch (e) {
-        debug('Error decoding JSON: $e');
-      }
-    },
-    onDone: () {
-      debug('Socket Closed');
-    },
-    onError: (error) {
-      debug("Socket Error: $error");
-    },
-  );
-}
 
 /// Creates a detection with updated data and saves it to the database.
 Future<void> updatePreDetection(Map<String, dynamic> data) async {
@@ -43,12 +11,15 @@ Future<void> updatePreDetection(Map<String, dynamic> data) async {
     imageId: data['img_id'],
     timestamp: DateTime.now(),
     deviceId: "device_id",
+    depthMapImgLink: data['depth_map_link'],
+    irImgLink: data['ir_link'], // TODO Update name to name in pydantic model
+    transcription: data['transcription'],
     weight: data['weight'],
     humidity: data['humidity'],
     temperature: data['temperature'],
-    co2: data['co2'], //Update name to name in pydantic model
-    vo2: data['vo2'], //Update name to name in pydantic model
-    // boxes: data['boxes'] //Update name to name in pydantic model
+    co2: data['co2'], // TODO Update name to name in pydantic model
+    vo2: data['vo2'], // TODO Update name to name in pydantic model
+    // boxes: data['boxes'] // TODO Update name to name in pydantic model
   );
 
   await detection.save();

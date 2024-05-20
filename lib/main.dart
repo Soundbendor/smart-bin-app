@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,18 +15,16 @@ import 'package:archive/archive_io.dart';
 import 'package:path_provider/path_provider.dart';
 
 // Project imports:
+import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/print.dart';
+import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:binsight_ai/util/providers/annotation_notifier.dart';
 import 'package:binsight_ai/util/providers/device_notifier.dart';
-import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:binsight_ai/util/providers/setup_key_notifier.dart';
 import 'package:binsight_ai/util/providers/wifi_result_notifier.dart';
-
 import 'package:binsight_ai/util/routes.dart';
 import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/util/styles.dart';
-
-import 'package:binsight_ai/database/models/detection.dart';
 
 const String exampleBoxes = '''
 [
@@ -77,7 +76,13 @@ void main() async {
           timestamp: DateTime.now().subtract(const Duration(days: 6)),
           deviceId: "test",
           postDetectImgLink: "https://placehold.co/513x513.png",
+          depthMapImgLink: "https://placehold.co/514x514.png",
+          irImgLink: "https://placehold.co/515x515.png",
+          transcription: "apples, oranges, bananas",
           weight: 27.0,
+          totalWeight: 27.0,
+          pressure: 0.5,
+          iaq: 0.5,
           humidity: 0.5,
           temperature: 20.0,
           co2: 0.5,
@@ -89,7 +94,13 @@ void main() async {
           timestamp: DateTime.now().subtract(const Duration(days: 5)),
           deviceId: "test",
           postDetectImgLink: "https://placehold.co/513x513.png",
+          depthMapImgLink: "https://placehold.co/514x514.png",
+          irImgLink: "https://placehold.co/515x515.png",
+          transcription: "broccoli, carrots",
           weight: 10.0,
+          totalWeight: 27.0,
+          pressure: 0.5,
+          iaq: 0.5,
           humidity: 0.5,
           temperature: 20.0,
           co2: 0.5,
@@ -101,7 +112,13 @@ void main() async {
           timestamp: DateTime.now().subtract(const Duration(days: 4)),
           deviceId: "test",
           postDetectImgLink: "https://placehold.co/513x513.png",
+          depthMapImgLink: "https://placehold.co/514x514.png",
+          irImgLink: "https://placehold.co/515x515.png",
+          transcription: "null",
           weight: 40.0,
+          totalWeight: 27.0,
+          pressure: 0.5,
+          iaq: 0.5,
           humidity: 0.5,
           temperature: 20.0,
           co2: 0.5,
@@ -113,7 +130,13 @@ void main() async {
           timestamp: DateTime.now().subtract(const Duration(days: 3)),
           deviceId: "test",
           postDetectImgLink: "https://placehold.co/513x513.png",
+          depthMapImgLink: "https://placehold.co/514x514.png",
+          irImgLink: "https://placehold.co/515x515.png",
+          transcription: "orange peels",
           weight: 16.0,
+          totalWeight: 27.0,
+          pressure: 0.5,
+          iaq: 0.5,
           humidity: 0.5,
           temperature: 20.0,
           co2: 0.5,
@@ -125,7 +148,14 @@ void main() async {
           timestamp: DateTime.now().subtract(const Duration(days: 2)),
           deviceId: "test",
           postDetectImgLink: "https://placehold.co/513x513.png",
+          depthMapImgLink: "https://placehold.co/514x514.png",
+          irImgLink: "https://placehold.co/515x515.png",
+          transcription:
+              "coffee grounds, and then a lot of coffee grounds, and maybe some old tea bags and banana peels and rotten apples",
           weight: 30.0,
+          totalWeight: 27.0,
+          pressure: 0.5,
+          iaq: 0.5,
           humidity: 0.5,
           temperature: 20.0,
           co2: 0.5,
@@ -154,7 +184,9 @@ void main() async {
       ],
       // Skip initial set up if user has already set up a device
       child: BinsightAiApp(
-          skipSetUp: sharedPreferences.getString("deviceID") == null),
+          skipSetUp:
+              sharedPreferences.getString(SharedPreferencesKeys.deviceID) !=
+                  null),
     ),
   );
 }
@@ -202,7 +234,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     //Defines the router to be used for the app, with set-up as the initial route
     setRoutes(getRoutes());
     router ??= GoRouter(
-        initialLocation: widget.skipSetUp ? '/main' : '/set-up',
+        initialLocation: !widget.skipSetUp ? '/main' : '/set-up',
         routes: routes);
 
     return ChangeNotifierProvider(
@@ -246,7 +278,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
       List<String> imageList = [];
       debug(response);
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(response.body);
+        final Map<String, dynamic> data = jsonDecode(response.body);
         debug(data);
         List<dynamic> itemList = data['items'];
         for (var item in itemList) {

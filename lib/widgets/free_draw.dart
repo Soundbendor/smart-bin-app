@@ -1,5 +1,7 @@
 // Flutter imports:
+import 'dart:io';
 import 'dart:ui' as ui;
+import 'package:binsight_ai/util/image.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -7,15 +9,19 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:binsight_ai/widgets/image.dart';
-import '../util/providers/annotation_notifier.dart';
+import 'package:binsight_ai/util/providers/annotation_notifier.dart';
 
 /// Widget with logic to annotate and render detection images
 class FreeDraw extends StatefulWidget {
   /// The link for the image to be annotated
   final String imageLink;
+  final double size;
+  final Directory baseDir;
 
   const FreeDraw({
     required this.imageLink,
+    required this.baseDir,
+    required this.size,
     super.key,
   });
 
@@ -38,42 +44,53 @@ class _FreeDrawState extends State<FreeDraw> {
     super.initState();
   }
 
+  void onDrawStart(DragStartDetails details, AnnotationNotifier notifier) {
+    setState(() {
+      if (_isPointOnImage(details.localPosition)) {
+        currentDrawingSegment = DrawingSegment(
+          id: DateTime.now().microsecondsSinceEpoch,
+          offsets: [details.localPosition],
+        );
+        notifier.startCurrentAnnotation(currentDrawingSegment!);
+        notifier.updateCurrentAnnotationHistory();
+      }
+    });
+  }
+
+  void onDrawUpdate(DragUpdateDetails details, AnnotationNotifier notifier) {
+    setState(() {
+      if (currentDrawingSegment != null &&
+          _isPointOnImage(details.localPosition)) {
+        Offset localPosition = details.localPosition;
+
+        currentDrawingSegment = currentDrawingSegment?.copyWith(
+          offsets: currentDrawingSegment!.offsets..add(localPosition),
+        );
+        notifier.updateCurrentAnnotation(currentDrawingSegment!);
+        notifier.updateCurrentAnnotationHistory();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    File? image = getImage(widget.imageLink, widget.baseDir);
     return Consumer<AnnotationNotifier>(
       builder: (context, notifier, crhild) {
         return SizedBox(
-          width: 300,
-          height: 300,
+          width: widget.size,
+          height: widget.size,
           child: GestureDetector(
             // When first touching within the image, create a single Offset
-            onPanStart: (details) {
-              setState(() {
-                if (_isPointOnImage(details.localPosition)) {
-                  currentDrawingSegment = DrawingSegment(
-                    id: DateTime.now().microsecondsSinceEpoch,
-                    offsets: [details.localPosition],
-                  );
-                  notifier.startCurrentAnnotation(currentDrawingSegment!);
-                  notifier.updateCurrentAnnotationHistory();
-                }
-              });
-            },
+            onVerticalDragStart: (details) => onDrawStart(details, notifier),
+            onPanStart: (details) => onDrawStart(details, notifier),
             // When dragging your finger, update the current drawing's offsets to include the new point
             // Update the most recent segment in the annotation's list of Segments
-            onPanUpdate: (details) {
-              setState(() {
-                if (currentDrawingSegment != null &&
-                    _isPointOnImage(details.localPosition)) {
-                  Offset localPosition = details.localPosition;
-
-                  currentDrawingSegment = currentDrawingSegment?.copyWith(
-                    offsets: currentDrawingSegment!.offsets..add(localPosition),
-                  );
-                  notifier.updateCurrentAnnotation(currentDrawingSegment!);
-                  notifier.updateCurrentAnnotationHistory();
-                }
-              });
+            onVerticalDragUpdate: (details) => onDrawUpdate(details, notifier),
+            onPanUpdate: (details) => onDrawUpdate(details, notifier),
+            // When the user lifts their finger, stop updating the current drawing segment
+            onVerticalDragEnd: (_) {
+              currentDrawingSegment = null;
             },
             onPanEnd: (_) {
               currentDrawingSegment = null;
@@ -81,8 +98,9 @@ class _FreeDrawState extends State<FreeDraw> {
             // Render the drawing on top of the image
             child: Stack(
               children: [
-                DynamicImage(widget.imageLink,
-                    key: imageKey, fit: BoxFit.cover),
+                image != null
+                    ? Image.file(image, key: imageKey, fit: BoxFit.cover)
+                    : Container(),
                 CustomPaint(
                   painter: DrawingPainter(
                     activeSegments: notifier.currentAnnotation,

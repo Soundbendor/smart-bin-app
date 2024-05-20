@@ -267,15 +267,15 @@ class BleDevice {
     // On iOS, the device should be paired after connecting
     // on Android, we'll have to request pairing first
     // TODO: verify this
-    if (!Platform.isAndroid) {
-      debug("BleDevice[_pair]: Pairing device. Current bond state: $isBonded");
-      await _device.discoverServices();
-      debug("BleDevice[_pair]: Discovered services");
-      debug("BleDevice[_pair]: Pairing complete");
-    } else {
-      debug(
-          "BleDevice[_pair]: Platform is Android, skipping pairing - must be done manually");
-    }
+    // if (!Platform.isAndroid) {
+    debug("BleDevice[pair]: Pairing device. Current bond state: $isBonded");
+    await _device.discoverServices();
+    debug("BleDevice[pair]: Discovered services");
+    debug("BleDevice[pair]: Pairing complete");
+    // } else {
+    //   debug(
+    //       "BleDevice[pair]: Platform is Android, skipping pairing - must be done manually");
+    // }
     // However, if previously bonded, fetch services
     if (isBonded) {
       await _device.discoverServices();
@@ -295,12 +295,12 @@ class BleDevice {
   Future<void> waitForPair({int? timeout}) async {
     if (isBonded) {
       debug("BleDevice[waitForPair]: Device already bonded");
-      return await _updateServices();
+      return await updateServices();
     }
     if (!Platform.isAndroid) {
       debug(
           "BleDevice[waitForPair]: Platform is not Android, skipping wait for pairing");
-      return await _updateServices();
+      return await updateServices();
     }
     if (!isConnected) {
       debug(
@@ -331,10 +331,11 @@ class BleDevice {
           "Failed to wait for device to be bonded: $e");
     }
     removeListener(BleDeviceClientEvents.bonded, callback);
-    await _updateServices();
+    await updateServices();
   }
 
-  Future<void> _updateServices() async {
+  /// Updates the device's services.
+  Future<void> updateServices() async {
     if (Platform.isAndroid) {
       debug("BleDevice[waitForPair]: Pairing complete, clearing GATT cache");
       await _device.clearGattCache();

@@ -7,10 +7,9 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:binsight_ai/util/bluetooth.dart';
-import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/util/bluetooth_bin_data.dart';
 import 'package:binsight_ai/util/print.dart';
+import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/util/providers/device_notifier.dart';
 import 'package:binsight_ai/util/providers/setup_key_notifier.dart';
 import 'package:binsight_ai/util/providers/wifi_result_notifier.dart';
@@ -56,9 +55,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
               ssid: ssidController.text,
               password: passwordController.text,
               onErrorClosed: () {},
-              onComplete: (bleDevice) async {
-                // Once the user has finalized their Bluetooth device choice, add it to preferences
-                sharedPreferences.setString("deviceID", bleDevice.id);
+              onComplete: () async {
                 // Take the user to main
                 GoRouter.of(context).go("/main");
               });
@@ -161,7 +158,7 @@ class WifiConfigurationDialog extends StatefulWidget {
       required this.password});
 
   final Function() onErrorClosed;
-  final Function(BleDevice bleDevice) onComplete;
+  final Function() onComplete;
 
   final String ssid;
   final String password;
@@ -217,8 +214,8 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
       status = WifiConfigurationStatus.verifying;
     });
     int tries = 0;
-    while (tries < 10) {
-      final now = DateTime.now();
+    while (tries < 15) {
+      // final now = DateTime.now();
       final statusData = await device.readCharacteristic(
           serviceId: mainServiceId,
           characteristicId: wifiCredentialCharacteristicId);
@@ -227,32 +224,26 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
       try {
         statusJson = jsonDecode(utf8.decode(statusData));
       } catch (e) {
+        debug(e);
         continue;
       }
       double timestamp = statusJson["timestamp"]; // in seconds
+      debug("TIMESTAMP: $timestamp");
       String message = statusJson["message"];
       String? log = statusJson["log"];
       bool success = statusJson["success"];
       debug("Status: $statusJson");
-      // check if timestamp is within ~5 seconds of now
-      if (now
-              .difference(DateTime.fromMillisecondsSinceEpoch(
-                  (timestamp * 1000).floor()))
-              .inSeconds <
-          5) {
-        if (success) {
-          return await verifyConnection();
-        } else {
-          if (!mounted) return;
-          setState(() {
-            status = WifiConfigurationStatus.error;
-            error = WifiConfigurationException('$message, $log');
-          });
-          return;
-        }
+      tries++;
+      await Future.delayed(const Duration(seconds: 2));
+      if (success) {
+        return await verifyConnection();
       } else {
-        tries++;
-        await Future.delayed(const Duration(seconds: 1));
+        if (!mounted) return;
+        setState(() {
+          status = WifiConfigurationStatus.error;
+          error = WifiConfigurationException('$message, $log');
+        });
+        return;
       }
     }
     // if we reach here, the operation has timed out
@@ -278,10 +269,11 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
     debug("Status: $statusJson");
     bool success = statusJson["success"];
     bool? internetAccess = statusJson["internet_access"];
+    debug("INTERNET ACCESS: $internetAccess, SUCCESS: $success");
     if (internetAccess != null && internetAccess && success) {
       if (!mounted) return;
-      Provider.of<DeviceNotifier>(context, listen: false).resetDevice();
-      widget.onComplete(device);
+      await Future.delayed(const Duration(seconds: 2));
+      fetchCredentials();
     } else {
       if (!mounted) return;
       setState(() {
@@ -289,6 +281,31 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
         error = WifiConfigurationException("No internet access");
       });
     }
+  }
+
+  /// Fetches the compost bin credentials
+  Future<void> fetchCredentials() async {
+    if (!mounted) return;
+    setState(() {
+      status = WifiConfigurationStatus.fetchingCredentials;
+    });
+    final device = Provider.of<DeviceNotifier>(context, listen: false).device!;
+    final credentialData = await device.readCharacteristic(
+        serviceId: apiServiceId, characteristicId: apiKeyCharacteristicId);
+    debug("API Data: $credentialData");
+    final Map<dynamic, dynamic> credentialJson =
+        jsonDecode(utf8.decode(credentialData));
+    debug("Status: $credentialJson");
+    await Future.delayed(const Duration(seconds: 1));
+    if (!mounted) return;
+    // Once the user has finalized their Bluetooth device choice, add it to preferences
+    Provider.of<DeviceNotifier>(context, listen: false).resetDevice();
+    sharedPreferences.setString(
+        SharedPreferencesKeys.apiKey, credentialJson["apiKey"]);
+    sharedPreferences.setString(SharedPreferencesKeys.deviceApiID,
+        credentialJson["deviceID"].toString());
+    sharedPreferences.setString(SharedPreferencesKeys.deviceID, device.id);
+    widget.onComplete();
   }
 
   @override
@@ -300,6 +317,8 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
           text: "Verifying WiFi credentials...");
     } else if (status == WifiConfigurationStatus.verifyingConnection) {
       return const WifiConfigurationAlert(text: "Verifying internet access...");
+    } else if (status == WifiConfigurationStatus.fetchingCredentials) {
+      return const WifiConfigurationAlert(text: "Fetching credentials...");
     } else if (status == WifiConfigurationStatus.error) {
       return ErrorDialog(
         text: "Error",
@@ -343,6 +362,9 @@ enum WifiConfigurationStatus {
 
   /// The compost bin is verifying internet connectivity
   verifyingConnection,
+
+  /// Fetching bin credentials
+  fetchingCredentials,
 
   /// An error occurred during the wifi configuration
   error,
