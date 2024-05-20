@@ -8,8 +8,8 @@
 A cross-platform mobile app built with Flutter/Dart for users of [Soundbendor Lab's](https://www.soundbendor.org) Smart Compost Bin. 
 
 <p align="center">
-  <img src="./assets/images/real_bin.png" width="160"/>
-  <h4 align="center">The Soundbendor Lab's Smart Compost Bin</h4>
+  <img src="./assets/images/full_app_chart.png" width="750"/>
+  <h4 align="center">The Soundbendor Lab's Smart Compost Bin, App Data Flow</h4>
 </p>
 
 The app enables Wi-Fi connectivity for the bin so that participants in a field study will be able to use their bin to track household food waste and follow their compost data trends over time.
