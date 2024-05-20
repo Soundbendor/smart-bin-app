@@ -139,13 +139,13 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(height: 8),
                         latest != null
-                          ? GestureDetector(
-                              onTap: () => GoRouter.of(context)
-                                  .push("/main/detection/${latest!.imageId}"),
-                              child: latestImage != null
-                                  ? Image.file(latestImage)
-                                  : Container())
-                          : Container(), // Container to handle the case when latest is null
+                            ? GestureDetector(
+                                onTap: () => GoRouter.of(context)
+                                    .push("/main/detection/${latest!.imageId}"),
+                                child: latestImage != null
+                                    ? Image.file(latestImage)
+                                    : Container())
+                            : Container(), // Container to handle the case when latest is null
                         const SizedBox(height: 10),
                       ],
                     ),

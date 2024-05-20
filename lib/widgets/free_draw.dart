@@ -1,12 +1,13 @@
 // Flutter imports:
+import 'dart:io';
 import 'dart:ui' as ui;
+import 'package:binsight_ai/util/image.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:binsight_ai/widgets/image.dart';
 import 'package:binsight_ai/util/providers/annotation_notifier.dart';
 
 /// Widget with logic to annotate and render detection images
@@ -14,9 +15,11 @@ class FreeDraw extends StatefulWidget {
   /// The link for the image to be annotated
   final String imageLink;
   final double size;
+  final Directory baseDir;
 
   const FreeDraw({
     required this.imageLink,
+    required this.baseDir,
     required this.size,
     super.key,
   });
@@ -70,6 +73,7 @@ class _FreeDrawState extends State<FreeDraw> {
 
   @override
   Widget build(BuildContext context) {
+    File? image = getImage(widget.imageLink, widget.baseDir);
     return Consumer<AnnotationNotifier>(
       builder: (context, notifier, crhild) {
         return SizedBox(
@@ -93,8 +97,9 @@ class _FreeDrawState extends State<FreeDraw> {
             // Render the drawing on top of the image
             child: Stack(
               children: [
-                DynamicImage(widget.imageLink,
-                    key: imageKey, fit: BoxFit.cover),
+                image != null
+                    ? Image.file(image, key: imageKey, fit: BoxFit.cover)
+                    : Container(),
                 CustomPaint(
                   painter: DrawingPainter(
                     activeSegments: notifier.currentAnnotation,

@@ -116,11 +116,10 @@ class _WifiScanPageState extends State<WifiScanPage> {
   void fetchWifiList() async {
     try {
       if (wifiResults.isNotEmpty) return;
-      final decoded = utf8.decode(await device!
-          .readCharacteristic(
-              serviceId: mainServiceId,
-              characteristicId: wifiListCharacteristicId));
-              debug(decoded);
+      final decoded = utf8.decode(await device!.readCharacteristic(
+          serviceId: mainServiceId,
+          characteristicId: wifiListCharacteristicId));
+      debug(decoded);
       final Map<String, dynamic> parsed = jsonDecode(decoded);
       if (parsed.isNotEmpty) {
         final tempList = <WifiScanResult>[];
@@ -245,7 +244,8 @@ The error was: ${(error as BleOperationFailureException).message}.
                 inProgress: isScanning,
               ),
               // Only display back button for introduction sequence
-              if (sharedPreferences.getString(SharedPreferencesKeys.deviceID) == null)
+              if (sharedPreferences.getString(SharedPreferencesKeys.deviceID) ==
+                  null)
                 ElevatedButton(
                   onPressed: () {
                     stopScanning();

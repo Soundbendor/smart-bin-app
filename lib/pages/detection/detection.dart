@@ -82,9 +82,8 @@ class _DetectionCardState extends State<_DetectionCard> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
     File? image = getImage(widget.detection.postDetectImgLink!, appDocDir);
-
+    final textTheme = Theme.of(context).textTheme;
     return Card(
       color: colorScheme.onPrimary,
       child: Padding(
@@ -97,17 +96,18 @@ class _DetectionCardState extends State<_DetectionCard> {
               child: Stack(
                 children: [
                   Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: colorScheme.onSurface,
-                        width: 1,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: colorScheme.onSurface,
+                          width: 1,
+                        ),
                       ),
-                    ),
-                    margin: const EdgeInsets.only(bottom: 10, top: 10),
-                    child: image != null
-                        ? Image.file(image, width: 350, height: 350)
-                        : Container(),
-                  ),
+                      margin: const EdgeInsets.only(bottom: 10, top: 10),
+                      child: Center(
+                        child: image != null
+                            ? Image.file(image, width: 350, height: 350)
+                            : Container(),
+                      )),
                   // Annotate Image Button
                   Positioned(
                     bottom: 16,

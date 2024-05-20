@@ -37,6 +37,8 @@ class _AnnotationPageState extends State<AnnotationPage> {
   /// User's decision to show annotation tutorial upon opening annotation screen
   bool? dontShowAgain = false;
 
+  Directory? appDocDir;
+
   late final Detection detection;
 
   /// The link for the image to be annotated
@@ -45,10 +47,10 @@ class _AnnotationPageState extends State<AnnotationPage> {
   @override
   void initState() {
     super.initState();
-    initPreferences();
     getDirectory();
     imageLink = Future(() async {
-      debug("AnnotationPage: Getting image link for detection ${widget.detectionId}");
+      debug(
+          "AnnotationPage: Getting image link for detection ${widget.detectionId}");
       final Detection d = (await Detection.find(widget.detectionId))!;
       detection = d;
       if (mounted) {
@@ -66,7 +68,8 @@ class _AnnotationPageState extends State<AnnotationPage> {
         notifier.clearCurrentAnnotation();
         notifier.label = null;
       }
-      debug("AnnotationPage: Image link for detection ${widget.detectionId} is ${d.postDetectImgLink}");
+      debug(
+          "AnnotationPage: Image link for detection ${widget.detectionId} is ${d.postDetectImgLink}");
       return d.postDetectImgLink!;
     });
     initPreferences();
@@ -74,6 +77,9 @@ class _AnnotationPageState extends State<AnnotationPage> {
 
   Future<void> getDirectory() async {
     Directory dir = await getApplicationDocumentsDirectory();
+    setState(() {
+      appDocDir = dir;
+    });
   }
 
   /// Recalls user's decision of whether to show the annotation guide or not
@@ -167,7 +173,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
       annotationNotifier.reset();
       annotationNotifier.setDetection(widget.detectionId);
     }
-
     return Scaffold(
       body: Center(
         child: Padding(
@@ -200,8 +205,12 @@ class _AnnotationPageState extends State<AnnotationPage> {
                           ],
                         ),
                       ),
-                      _DrawingArea(
-                          imageLink: imageLink, constraints: constraints),
+                      appDocDir != null
+                          ? _DrawingArea(
+                              baseDir: appDocDir!,
+                              imageLink: imageLink,
+                              constraints: constraints)
+                          : Container(),
                       _DrawingControlArea(
                           detectionId: widget.detectionId,
                           constraints: constraints),
@@ -405,79 +414,84 @@ class _BottomControlArea extends StatelessWidget {
         color: Theme.of(context).colorScheme.surface,
       ),
       child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Builder(builder: (context) {
-                final AnnotationNotifier annotationNotifier =
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Builder(builder: (context) {
+              final AnnotationNotifier annotationNotifier =
+                  context.read<AnnotationNotifier>();
+              return ElevatedButton(
+                onPressed: () {
+                  annotationNotifier.clearCurrentAnnotation();
+                  annotationNotifier.reset();
+                  // TODO: also delete the data in the database?
+                  // alternatively, clear the data only after pressing "done"
+
+                  Future.delayed(const Duration(milliseconds: 100), () {
+                    annotationNotifier.reset();
+                    GoRouter.of(context).pop();
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: mainColorScheme.error,
+                ),
+                child: Text(
+                  "Clear",
+                  style: textTheme.labelLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onError,
+                  ),
+                ),
+              );
+            }),
+            const SizedBox(width: 8),
+            Consumer<DetectionNotifier>(
+              builder: (context, notifier, child) {
+                AnnotationNotifier annotationNotifier =
                     context.read<AnnotationNotifier>();
                 return ElevatedButton(
+                  style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
+                        backgroundColor: WidgetStateProperty.all(
+                          Theme.of(context).colorScheme.tertiary,
+                        ),
+                      ),
                   onPressed: () {
                     annotationNotifier.clearCurrentAnnotation();
-                    annotationNotifier.reset();
-                    // TODO: also delete the data in the database?
-                    // alternatively, clear the data only after pressing "done"
+                    notifier.updateDetection(
+                        detectionId, annotationNotifier.allAnnotations);
 
                     Future.delayed(const Duration(milliseconds: 100), () {
                       annotationNotifier.reset();
                       GoRouter.of(context).pop();
                     });
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: mainColorScheme.error,
-                  ),
-                  child: Text(
-                    "Clear",
-                    style: textTheme.labelLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onError,
-                    ),
-                  ),
+                  child: child,
                 );
-              }),
-              const SizedBox(width: 8),
-              Consumer<DetectionNotifier>(
-                builder: (context, notifier, child) {
-                  AnnotationNotifier annotationNotifier =
-                      context.read<AnnotationNotifier>();
-                  return ElevatedButton(
-                    style:
-                        Theme.of(context).elevatedButtonTheme.style!.copyWith(
-                              backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).colorScheme.tertiary,
-                              ),
-                            ),
-                    onPressed: () {
-                      annotationNotifier.clearCurrentAnnotation();
-                      notifier.updateDetection(detectionId,
-                          annotationNotifier.allAnnotations);
-
-                      Future.delayed(const Duration(milliseconds: 100), () {
-                        annotationNotifier.reset();
-                        GoRouter.of(context).pop();
-                      });
-                    },
-                    child: child,
-                  );
-                },
-                child: Text(
-                  "Done",
-                  style: textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onTertiary,
-                  ),
+              },
+              child: Text(
+                "Done",
+                style: textTheme.labelLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onTertiary,
                 ),
               ),
-            ],
-          ),),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
 class _DrawingArea extends StatefulWidget {
-  _DrawingArea({required this.imageLink, required this.constraints});
+  _DrawingArea(
+      {required this.imageLink,
+      required this.baseDir,
+      required this.constraints});
 
   /// The link for the image to be annotated
   final Future<String> imageLink;
+
+  final Directory baseDir;
 
   /// The constraints for the drawing area
   final BoxConstraints constraints;
@@ -517,6 +531,7 @@ class _DrawingAreaState extends State<_DrawingArea> {
                       physics: const NeverScrollableScrollPhysics(),
                       child: FreeDraw(
                         imageLink: snapshot.data as String,
+                        baseDir: widget.baseDir,
                         size: size,
                       ),
                     ),
