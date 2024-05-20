@@ -230,34 +230,46 @@ The error was: ${(error as BleOperationFailureException).message}.
       child: Scaffold(
         body: CustomBackground(
           imageURL: "assets/images/wifi_scan_screen.png",
-          child: Column(
-            children: [
-              // Only display back button for introduction sequence
-              if (sharedPreferences.getString(SharedPreferencesKeys.deviceID) == null)
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                      Provider.of<SetupKeyNotifier>(context, listen: false)
-                          .setupKey
-                          .currentState
-                          ?.previous();
-                    },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                // Only display back button for introduction sequence
+                if (sharedPreferences.getString(SharedPreferencesKeys.deviceID) ==
+                    null)
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: SafeArea(
+                      child: GestureDetector(
+                          child: Row(
+                            children: [
+                              const Icon(Icons.arrow_back_ios),
+                              Text("Back",
+                                  style: Theme.of(context).textTheme.labelLarge)
+                            ],
+                          ),
+                          onTap: () {
+                            Provider.of<SetupKeyNotifier>(context, listen: false)
+                                .setupKey
+                                .currentState
+                                ?.previous();
+                          }),
+                    ),
                   ),
+                ScanList(
+                  itemCount: wifiResults.length,
+                  listBuilder: buildWifiItem,
+                  onResume: () {
+                    setState(() {
+                      startScanning();
+                    });
+                  },
+                  title: "Select Your Network!",
+                  inProgress: isScanning,
                 ),
-              ScanList(
-                itemCount: wifiResults.length,
-                listBuilder: buildWifiItem,
-                onResume: () {
-                  setState(() {
-                    startScanning();
-                  });
-                },
-                title: "Select Your Network!",
-                inProgress: isScanning,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
