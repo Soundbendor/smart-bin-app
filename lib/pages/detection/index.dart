@@ -62,8 +62,8 @@ class DetectionsPageState extends State<DetectionsPage> {
   /// Handles reconnecting to the user's device in order to read wifi status characteristic.
   void connectToDevice(BuildContext context) async {
     // Rebuild the user's device from its id to pair and connect
-    BleDevice bledevice =
-        BleDevice.fromId(sharedPreferences.getString(SharedPreferencesKeys.deviceID)!);
+    BleDevice bledevice = BleDevice.fromId(
+        sharedPreferences.getString(SharedPreferencesKeys.deviceID)!);
     DeviceNotifier notifierProvider =
         Provider.of<DeviceNotifier>(context, listen: false);
     notifierProvider.setDevice(bledevice);

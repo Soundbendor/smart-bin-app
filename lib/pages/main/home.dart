@@ -1,18 +1,20 @@
 // Flutter imports:
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
-import 'package:binsight_ai/util/print.dart';
 import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:binsight_ai/widgets/circular_chart.dart';
 import 'package:binsight_ai/widgets/line_chart.dart';
+import 'package:binsight_ai/util/print.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,21 +32,47 @@ class _HomePageState extends State<HomePage> {
   Map<String, int> labelCounts = {};
   // Map day to total compost weight
   Map<DateTime, double> weightCounts = {};
-  //Label data
-
+  // Categories of labels
   Map categories = {};
-  // Load all detections from the database
+  Directory? appDocDir;
+
   @override
   void initState() {
     loadDetections();
+    getDirectory();
     super.initState();
   }
 
+  /// Load all detections from the database
   void loadDetections() {
     Provider.of<DetectionNotifier>(context, listen: false).getAll();
     loadCategories();
   }
 
+  /// Gets the application directory to store images and app data
+  Future<void> getDirectory() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    setState(() {
+      appDocDir = dir;
+    });
+  }
+
+  /// Reads an image from the app directory
+  File? getImage(String image, Directory? appDocDir) {
+    if (appDocDir != null) {
+      String imagePath = '${appDocDir.path}/$image';
+      File imageFile = File(imagePath);
+      if (imageFile.existsSync()) {
+        return imageFile;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  /// Load the categories from the JSON data file
   Future<void> loadCategories() async {
     final String response =
         await rootBundle.loadString('assets/data/categories.json');
@@ -54,6 +82,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  /// Update the detection notifier
   void updateDetection(DetectionNotifier notifier) async {
     await notifier.getAll();
   }
@@ -65,14 +94,15 @@ class _HomePageState extends State<HomePage> {
     return Consumer<DetectionNotifier>(
       builder: (context, notifier, child) {
         final detections = notifier.detections;
-
         // Populate the counts for the circular chart and bar graph
         populateCounts(detections);
 
         // Get the latest image detection from the compost bin
         Detection? latest;
+        File? latestImage;
         if (detections.isNotEmpty) {
           latest = detections.first;
+          latestImage = getImage(latest.postDetectImgLink!, appDocDir);
         }
 
         return Padding(
@@ -117,12 +147,9 @@ class _HomePageState extends State<HomePage> {
                             ? GestureDetector(
                                 onTap: () => GoRouter.of(context)
                                     .push("/main/detection/${latest!.imageId}"),
-                                child: Image.asset(
-                                  'assets/images/header_compost.png',
-                                  fit: BoxFit.cover,
-                                  height: 200,
-                                ),
-                              )
+                                child: latestImage != null
+                                    ? Image.file(latestImage)
+                                    : Container())
                             : Container(), // Container to handle the case when latest is null
                         const SizedBox(height: 10),
                       ],
@@ -223,6 +250,7 @@ class _HomePageState extends State<HomePage> {
             category ??= "Undefined";
             labelCounts[category] = (labelCounts[category] ?? 0) + 1;
           }
+          debug(labelCounts);
         }
       }
     }

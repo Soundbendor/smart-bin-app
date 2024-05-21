@@ -26,14 +26,12 @@ class DetectionDatabase extends FakeDatabase {
     final values = [
       {
         "imageId": "foo-1",
-        "preDetectImgLink": "https://placehold.co/512x512",
         "timestamp":
             DateTime.now().subtract(const Duration(days: 2)).toIso8601String(),
         "deviceId": "foo",
       },
       {
         "imageId": "foo-2",
-        "preDetectImgLink": "https://placehold.co/512x512",
         "timestamp":
             DateTime.now().subtract(const Duration(days: 1)).toIso8601String(),
         "deviceId": "bar",
@@ -46,22 +44,28 @@ class DetectionDatabase extends FakeDatabase {
         "temperature": 20.0,
         "co2": 0.5,
         "vo2": 0.5,
-        "boxes": "[]",
+        "pressure": 10.0,
+        "iaq": 10.0,
+        "boxes": "[]"
       },
       {
         "imageId": "foo-3",
-        "preDetectImgLink": "https://placehold.co/512x512",
-        "timestamp": DateTime.now().toIso8601String(),
+        "timestamp":
+            DateTime.now().subtract(const Duration(days: 1)).toIso8601String(),
         "deviceId": "bar",
+        "postDetectImgLink": "https://placehold.co/512x512",
         "depthMapImgLink": "https://placehold.co/512x512",
         "irImgLink": "https://placehold.co/512x512",
-        "transcription": "null",
-        "weight": 20.0,
-        "humidity": 2.5,
-        "temperature": 30.0,
-        "co2": 2.5,
-        "vo2": 4.5,
-      }
+        "transcription": "orange peels",
+        "weight": 10.0,
+        "humidity": 1.5,
+        "temperature": 20.0,
+        "co2": 0.5,
+        "vo2": 0.5,
+        "pressure": 10.0,
+        "iaq": 10.0,
+        "boxes": "[]"
+      },
     ];
     switch (datatype) {
       case 0:
@@ -82,15 +86,24 @@ class DetectionDatabase extends FakeDatabase {
 
 void main() async {
   testInit();
-  test("Finding all devices", () async {
+  test("Finding all detections", () async {
     Database db = DetectionDatabase(datatype: 4);
     setDatabase(db);
 
     final detections = await Detection.all();
     expect(detections.length, equals(3));
-    expect(detections[0].imageId, equals("foo-1"));
-    expect(detections[1].imageId, equals("foo-2"));
-    expect(detections[2].imageId, equals("foo-3"));
+    expect(
+        detections[0].imageId,
+        equals(
+            "${detections[0].deviceId}-${detections[0].timestamp.toIso8601String()}"));
+    expect(
+        detections[1].imageId,
+        equals(
+            "${detections[1].deviceId}-${detections[1].timestamp.toIso8601String()}"));
+    expect(
+        detections[2].imageId,
+        equals(
+            "${detections[2].deviceId}-${detections[2].timestamp.toIso8601String()}"));
   });
 
   test("Finding latest detection", () async {
@@ -103,15 +116,20 @@ void main() async {
 
     final Detection detection_2 = Detection.createDefault();
     detection_2.timestamp = DateTime.now().subtract(const Duration(days: 1));
-    detection_2.imageId = "2";
+    detection_2.imageId =
+        "${detection_2.deviceId}-${detection_2.timestamp.toIso8601String()}";
     detection_2.save();
 
     final Detection detection_3 = Detection.createDefault();
     detection_3.timestamp = DateTime.now();
-    detection_3.imageId = "3";
+    detection_3.imageId =
+        "${detection_3.deviceId}-${detection_3.timestamp.toIso8601String()}";
     detection_3.save();
 
     final detection = await Detection.latest();
-    expect(detection.imageId, equals("3"));
+    expect(
+        detection.imageId,
+        equals(
+            "${detection_3.deviceId}-${detection_3.timestamp.toIso8601String()}"));
   });
 }

@@ -12,9 +12,6 @@ class Detection extends Model {
   /// The image ID.
   String imageId;
 
-  /// The link to the pre-detection image.
-  String preDetectImgLink;
-
   /// The link to the post-detection image.
   String? postDetectImgLink;
 
@@ -62,7 +59,6 @@ class Detection extends Model {
 
   Detection({
     required this.imageId,
-    required this.preDetectImgLink,
     required this.timestamp,
     required this.deviceId,
     this.postDetectImgLink,
@@ -83,14 +79,14 @@ class Detection extends Model {
   /// Creates a blank device for testing or retrieving properties of the model.
   Detection.createDefault()
       : imageId = "1",
-        preDetectImgLink = "assets/images/placeholder.png",
+        postDetectImgLink = "assets/images/placeholder.png",
         timestamp = DateTime.now(),
         deviceId = "1";
 
   /// Creates a null object pattern equivalent for a Detection that is not found.
   Detection.notFound()
       : imageId = "-1",
-        preDetectImgLink = "assets/images/placeholder.png",
+        postDetectImgLink = "assets/images/placeholder.png",
         timestamp = DateTime.now(),
         deviceId = "-1";
 
@@ -98,7 +94,6 @@ class Detection extends Model {
   Map<String, dynamic> toMap() {
     return {
       "imageId": imageId,
-      "preDetectImgLink": preDetectImgLink,
       "postDetectImgLink": postDetectImgLink,
       "depthMapImgLink": depthMapImgLink,
       "irImgLink": irImgLink,
@@ -108,7 +103,6 @@ class Detection extends Model {
       "temperature": temperature,
       "co2": co2,
       "vo2": vo2,
-      "totalWeight": totalWeight,
       "pressure": pressure,
       "iaq": iaq,
       "boxes": boxes,
@@ -128,10 +122,10 @@ class Detection extends Model {
   }
 
   static Detection fromMap(Map<String, dynamic> map) {
-    // Note: As of this commit, the actual server schema is not known. This is just a placeholder.
     return Detection(
-      imageId: map['imageId'],
-      preDetectImgLink: map['preDetectImgLink'],
+      //TODO: Create new imageID instead of reusing timestamp
+      imageId:
+          "${map['deviceId']}-${DateTime.parse(map['timestamp']).toIso8601String()}",
       timestamp: DateTime.parse(map['timestamp']),
       deviceId: map['deviceId'],
       postDetectImgLink: map['postDetectImgLink'],
@@ -143,7 +137,6 @@ class Detection extends Model {
       temperature: map['temperature']?.toDouble(),
       co2: map['co2']?.toDouble(),
       vo2: map['vo2']?.toDouble(),
-      totalWeight: map['totalWeight']?.toDouble(),
       pressure: map['pressure']?.toDouble(),
       iaq: map['iaq']?.toDouble(),
       boxes: map['boxes'],
@@ -157,7 +150,6 @@ class Detection extends Model {
   String get schema => """
     (
       imageId TEXT PRIMARY KEY,
-      preDetectImgLink TEXT,
       postDetectImgLink TEXT,
       depthMapImgLink TEXT,
       irImgLink TEXT,
@@ -167,7 +159,6 @@ class Detection extends Model {
       temperature DOUBLE,
       co2 DOUBLE,
       vo2 DOUBLE,
-      totalWeight DOUBLE,
       pressure DOUBLE,
       iaq DOUBLE,
       boxes TEXT,

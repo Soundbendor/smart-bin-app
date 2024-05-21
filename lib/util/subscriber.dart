@@ -9,7 +9,6 @@ import 'package:binsight_ai/database/models/detection.dart';
 Future<void> updatePreDetection(Map<String, dynamic> data) async {
   Detection detection = Detection(
     imageId: data['img_id'],
-    preDetectImgLink: data['img_link'],
     timestamp: DateTime.now(),
     deviceId: "device_id",
     depthMapImgLink: data['depth_map_link'],

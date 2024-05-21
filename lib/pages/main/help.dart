@@ -98,8 +98,7 @@ class HelpPage extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              const Text(
-                  "Need to check or change your Wi-Fi connection?"),
+              const Text("Need to check or change your Wi-Fi connection?"),
               const SizedBox(height: 10.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),

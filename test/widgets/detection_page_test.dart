@@ -18,28 +18,32 @@ void main() {
       (widgetTester) async {
     final originalErrorHandler = FlutterError.onError;
     FlutterError.onError = ignoreOverflowErrors(originalErrorHandler);
-    final detection = Detection.fromMap({
-      "imageId": "bar",
-      "preDetectImgLink": "assets/images/placeholder.png",
-      "timestamp": DateTime.now().toIso8601String(),
-      "deviceId": "bar",
-      "depthMapImgLink": "assets/images/placeholder.png",
-      "irImgLink": "assets/images/placeholder.png",
-      "transcription": "pineapple, chicken",
-      "weight": 1.0,
-      "pressure": 0.5,
-      "iaq": 0.5,
-      "humidity": 0.5,
-      "temperature": 20.0,
-      "co2": 0.5,
-      "vo2": 0.5,
-    });
+    final detection = Detection.fromMap(
+      {
+        "imageId": "foo",
+        "timestamp":
+            DateTime.now().subtract(const Duration(days: 1)).toIso8601String(),
+        "deviceId": "bar",
+        "postDetectImgLink": "https://placehold.co/512x512",
+        "depthMapImgLink": "https://placehold.co/512x512",
+        "irImgLink": "https://placehold.co/512x512",
+        "transcription": "orange peels",
+        "weight": 10.0,
+        "humidity": 1.5,
+        "temperature": 20.0,
+        "co2": 0.5,
+        "vo2": 0.5,
+        "pressure": 10.0,
+        "iaq": 10.0,
+        "boxes": "[]"
+      },
+    );
 
     await widgetTester.pumpWidget(makeTestableWidget(
         size: const Size(800, 600),
         child: DetectionPage(detection: detection)));
     await widgetTester.pumpAndSettle();
-    expect(find.text("Detection bar: pending analysis..."), findsOneWidget);
+    expect(find.text("Detection ${detection.imageId}"), findsOneWidget);
     FlutterError.onError = originalErrorHandler;
   });
 
@@ -63,14 +67,30 @@ void main() {
       "temperature": 20.0,
       "co2": 0.5,
       "vo2": 0.5,
-      "boxes": '[["pineapple", [11.4, 16.5]],["chicken", [10.0, 292.8]]]',
+      "boxes": '''
+        [
+          {
+            "object_name": "Pineapple",
+            "xy_coord_list": [
+              [11.1, 16.4],
+              [11.3, 16.5]
+            ]
+          },
+          {
+            "object_name": "Chicken",
+            "xy_coord_list": [
+              [11.1, 16.4],
+              [11.3, 16.5]
+            ]
+          }
+        ]''',
     });
 
     await widgetTester.pumpWidget(makeTestableWidget(
         size: const Size(800, 600),
         child: DetectionPage(detection: detection)));
     await widgetTester.pumpAndSettle();
-    expect(find.text("Detection foo: pineapple, chicken"), findsOneWidget);
+    expect(find.text("Detection ${detection.imageId}"), findsOneWidget);
     FlutterError.onError = originalErrorHandler;
   });
 }

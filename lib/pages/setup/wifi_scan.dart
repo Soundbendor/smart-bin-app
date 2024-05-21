@@ -116,11 +116,10 @@ class _WifiScanPageState extends State<WifiScanPage> {
   void fetchWifiList() async {
     try {
       if (wifiResults.isNotEmpty) return;
-      final decoded = utf8.decode(await device!
-          .readCharacteristic(
-              serviceId: mainServiceId,
-              characteristicId: wifiListCharacteristicId));
-              debug(decoded);
+      final decoded = utf8.decode(await device!.readCharacteristic(
+          serviceId: mainServiceId,
+          characteristicId: wifiListCharacteristicId));
+      debug(decoded);
       final Map<String, dynamic> parsed = jsonDecode(decoded);
       if (parsed.isNotEmpty) {
         final tempList = <WifiScanResult>[];
@@ -231,39 +230,50 @@ The error was: ${(error as BleOperationFailureException).message}.
       child: Scaffold(
         body: CustomBackground(
           imageURL: "assets/images/wifi_scan_screen.png",
-          child: Column(
-            children: [
-              ScanList(
-                itemCount: wifiResults.length,
-                listBuilder: buildWifiItem,
-                onResume: () {
-                  setState(() {
-                    startScanning();
-                  });
-                },
-                title: "Select Your Network!",
-                inProgress: isScanning,
-              ),
-              // Only display back button for introduction sequence
-              if (sharedPreferences.getString(SharedPreferencesKeys.deviceID) == null)
-                ElevatedButton(
-                  onPressed: () {
-                    stopScanning();
-                    Provider.of<DeviceNotifier>(context, listen: false)
-                        .resetDevice();
-                    Provider.of<SetupKeyNotifier>(context, listen: false)
-                        .setupKey
-                        .currentState
-                        ?.previous();
-                  },
-                  child: Text(
-                    "Back",
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                // Only display back button for introduction sequence
+                if (sharedPreferences
+                        .getString(SharedPreferencesKeys.deviceID) ==
+                    null)
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: SafeArea(
+                      child: GestureDetector(
+                        child: Row(
+                          children: [
+                            const Icon(Icons.arrow_back_ios),
+                            Text("Back",
+                                style: Theme.of(context).textTheme.labelLarge)
+                          ],
                         ),
+                        onTap: () {
+                          Provider.of<DeviceNotifier>(context, listen: false)
+                              .resetDevice();
+                          Provider.of<SetupKeyNotifier>(context, listen: false)
+                              .setupKey
+                              .currentState
+                              ?.previous();
+                        },
+                      ),
+                    ),
                   ),
+                ScanList(
+                  itemCount: wifiResults.length,
+                  listBuilder: buildWifiItem,
+                  onResume: () {
+                    setState(() {
+                      startScanning();
+                    });
+                  },
+                  title: "Select Your Network!",
+                  inProgress: isScanning,
                 ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -273,12 +283,6 @@ The error was: ${(error as BleOperationFailureException).message}.
   /// Builds a WiFi network list item.
   Widget buildWifiItem(BuildContext context, int index) {
     final wifiResult = wifiResults[index];
-    IconData icon;
-    if (wifiResult.security.startsWith("WPA")) {
-      icon = Icons.lock_outline;
-    } else {
-      icon = Icons.lock_open;
-    }
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       shape: bluetoothBorderRadius,
@@ -287,7 +291,8 @@ The error was: ${(error as BleOperationFailureException).message}.
           title:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text(wifiResult.ssid, softWrap: true),
-            Icon(icon),
+            if (wifiResult.security.startsWith("WPA"))
+              const Icon(Icons.lock_outline),
           ]),
           trailing: const Icon(Icons.keyboard_arrow_right),
           onTap: () {

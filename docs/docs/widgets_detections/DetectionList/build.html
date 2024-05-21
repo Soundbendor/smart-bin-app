@@ -119,9 +119,14 @@ and</li>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
   if (detections.isEmpty) {
-    return const SizedBox(
+    return SizedBox(
         width: double.infinity,
-        child: Text(&quot;No detections yet&quot;, textAlign: TextAlign.left));
+        child: Text(
+            &quot;Ooops! \n&quot;
+            &quot;No images detected yet. \n&quot;
+            &quot;Please swipe down to reload.&quot;,
+            style: Theme.of(context).textTheme.titleMedium,
+            textAlign: TextAlign.center));
   } else {
     if (size == DetectionListType.large) {
       return Expanded(

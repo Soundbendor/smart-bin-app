@@ -128,7 +128,7 @@ Widget build(BuildContext context) {
         &#47;&#47; Background color of the card
         color: colorScheme.onPrimary,
         child: Padding(
-          padding: const EdgeInsets.all(9.0),
+          padding: const EdgeInsets.all(11.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -149,8 +149,9 @@ Widget build(BuildContext context) {
                     ),
                   ),
                   margin: const EdgeInsets.only(bottom: 12, top: 12),
+                  alignment: Alignment.center,
                   child: DynamicImage(detection.preDetectImgLink,
-                      width: 300, height: 300)),
+                      width: 325, height: 325)),
               SizedBox(
                 width: 250,
                 child: Row(
@@ -159,18 +160,16 @@ Widget build(BuildContext context) {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(&quot;Temperature&quot;, style: textTheme.labelLarge),
-                          Text(&quot;Humidity&quot;, style: textTheme.labelLarge),
+                          Text(&quot;Transcription:&quot;,
+                          style: textTheme.titleMedium),
                         ],
                       ),
                     ),
                     Expanded(
                       child: Column(
                         children: [
-                          Text(detection.temperature.toString(),
-                              style: textTheme.labelLarge),
-                          Text(detection.humidity.toString(),
-                              style: textTheme.labelLarge),
+                          Text(detection.transcription.toString(),
+                              style: textTheme.labelMedium),
                         ],
                       ),
                     ),

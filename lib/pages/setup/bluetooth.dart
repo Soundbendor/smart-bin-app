@@ -213,6 +213,9 @@ class _BluetoothListState extends State<BluetoothList> {
         imageURL: 'assets/images/bluetooth_screen.png',
         child: Column(
           children: [
+            SizedBox(
+              height: (MediaQuery.of(context).size.height / 2) - (336),
+            ),
             ScanList(
               itemCount: devices.length,
               listBuilder: buildDeviceItem,

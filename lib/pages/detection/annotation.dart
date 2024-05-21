@@ -1,6 +1,6 @@
 // Flutter imports:
 import 'dart:convert';
-import 'package:binsight_ai/util/styles.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multiple_search_selection/createable/create_options.dart';
 import 'package:multiple_search_selection/multiple_search_selection.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,21 +20,15 @@ import 'package:binsight_ai/util/providers/annotation_notifier.dart';
 import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/widgets/free_draw.dart';
 import 'package:binsight_ai/widgets/heading.dart';
+import 'package:binsight_ai/util/styles.dart';
 
 /// Page used for annotating an individual detection image
 class AnnotationPage extends StatefulWidget {
-  /// The link for the image to be annotated
-  late final Future<String> imageLink;
-
   /// The detection id of the image being annotated
   final String detectionId;
 
-  AnnotationPage({super.key, required this.detectionId}) {
-    imageLink = Future(() async {
-      return Detection.find(detectionId)
-          .then((detection) => detection!.preDetectImgLink);
-    });
-  }
+  const AnnotationPage({super.key, required this.detectionId});
+
   @override
   State<AnnotationPage> createState() => _AnnotationPageState();
 }
@@ -42,10 +37,50 @@ class _AnnotationPageState extends State<AnnotationPage> {
   /// User's decision to show annotation tutorial upon opening annotation screen
   bool? dontShowAgain = false;
 
+  Directory? appDocDir;
+
+  late final Detection detection;
+
+  /// The link for the image to be annotated
+  late final Future<String> imageLink;
+
   @override
   void initState() {
     super.initState();
+    getDirectory();
+    imageLink = Future(() async {
+      debug(
+          "AnnotationPage: Getting image link for detection ${widget.detectionId}");
+      final Detection d = (await Detection.find(widget.detectionId))!;
+      detection = d;
+      if (mounted) {
+        final notifier =
+            Provider.of<AnnotationNotifier>(context, listen: false);
+        List<dynamic> annotations = jsonDecode(detection.boxes ?? "[]");
+        for (var annotation in annotations) {
+          notifier.label = annotation['object_name'];
+          notifier.currentAnnotation.add(DrawingSegment(
+              offsets: (annotation['xy_coord_list'] as List<dynamic>)
+                  .map((e) => Offset(e[0], e[1]))
+                  .toList()));
+          notifier.addToAllAnnotations();
+        }
+        notifier.clearCurrentAnnotation();
+        notifier.label = null;
+      }
+      debug(
+          "AnnotationPage: Image link for detection ${widget.detectionId} is ${d.postDetectImgLink}");
+      return d.postDetectImgLink!;
+    });
     initPreferences();
+  }
+
+  /// Gets the application directory to store images and app data
+  Future<void> getDirectory() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    setState(() {
+      appDocDir = dir;
+    });
   }
 
   /// Recalls user's decision of whether to show the annotation guide or not
@@ -140,7 +175,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
       annotationNotifier.reset();
       annotationNotifier.setDetection(widget.detectionId);
     }
-
     return Scaffold(
       body: Center(
         child: Padding(
@@ -154,7 +188,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 10, top: 10, right: 10),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -168,28 +202,30 @@ class _AnnotationPageState extends State<AnnotationPage> {
                               ),
                               onTap: () => GoRouter.of(context).pop(),
                             ),
-                            const SizedBox(height: 10),
                             const Heading(text: "Annotate Your Image"),
+                            // const SizedBox(height: 16),   // ?? this one
                           ],
                         ),
                       ),
                       Card(
-                        
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Column(
                             children: [
-                              _DrawingArea(
-                                  imageLink: widget.imageLink,
-                                  constraints: constraints),
+                              appDocDir != null
+                                  ? _DrawingArea(
+                                      baseDir: appDocDir!,
+                                      imageLink: imageLink,
+                                      constraints: constraints)
+                                  : Container(),
                               _DrawingControlArea(
                                   detectionId: widget.detectionId,
                                   constraints: constraints),
+                              // const SizedBox(height: 16),  // ??
                             ],
                           ),
                         ),
                       ),
-                      // const SizedBox(height: 16),
                       const Expanded(child: Column()),
                       _BottomControlArea(detectionId: widget.detectionId),
                     ],
@@ -342,7 +378,6 @@ class _DrawingControlAreaState extends State<_DrawingControlArea> {
                         annotationNotifier.addToAllAnnotations();
                         annotationNotifier.clearCurrentAnnotation();
                         annotationNotifier.label = null;
-                        notifier.updateDetection(widget.detectionId);
                       } else {
                         String message;
                         if (annotationNotifier.label == null) {
@@ -402,8 +437,11 @@ class _BottomControlArea extends StatelessWidget {
                 onPressed: () {
                   annotationNotifier.clearCurrentAnnotation();
                   annotationNotifier.reset();
-                  // TODO: also delete the data in the database?
-                  // alternatively, clear the data only after pressing "done"
+
+                  Future.delayed(const Duration(milliseconds: 100), () {
+                    annotationNotifier.reset();
+                    GoRouter.of(context).pop();
+                  });
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: mainColorScheme.error,
@@ -429,7 +467,8 @@ class _BottomControlArea extends StatelessWidget {
                       ),
                   onPressed: () {
                     annotationNotifier.clearCurrentAnnotation();
-                    notifier.updateDetection(detectionId);
+                    notifier.updateDetection(
+                        detectionId, annotationNotifier.allAnnotations);
 
                     Future.delayed(const Duration(milliseconds: 100), () {
                       annotationNotifier.reset();
@@ -454,10 +493,15 @@ class _BottomControlArea extends StatelessWidget {
 }
 
 class _DrawingArea extends StatefulWidget {
-  _DrawingArea({required this.imageLink, required this.constraints});
+  _DrawingArea(
+      {required this.imageLink,
+      required this.baseDir,
+      required this.constraints});
 
   /// The link for the image to be annotated
   final Future<String> imageLink;
+
+  final Directory baseDir;
 
   /// The constraints for the drawing area
   final BoxConstraints constraints;
@@ -497,6 +541,7 @@ class _DrawingAreaState extends State<_DrawingArea> {
                       physics: const NeverScrollableScrollPhysics(),
                       child: FreeDraw(
                         imageLink: snapshot.data as String,
+                        baseDir: widget.baseDir,
                         size: size,
                       ),
                     ),

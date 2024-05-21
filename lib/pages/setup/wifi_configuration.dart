@@ -9,16 +9,16 @@ import 'package:provider/provider.dart';
 // Project imports:
 import 'package:binsight_ai/util/bluetooth_bin_data.dart';
 import 'package:binsight_ai/util/print.dart';
-import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/util/providers/device_notifier.dart';
 import 'package:binsight_ai/util/providers/setup_key_notifier.dart';
 import 'package:binsight_ai/util/providers/wifi_result_notifier.dart';
+import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/util/wifi_scan.dart';
 import 'package:binsight_ai/widgets/background.dart';
 import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:binsight_ai/widgets/error_dialog.dart';
 
-/// Widget for configuring the wifi credentials of the compost bin
+/// Widget for configuring the Wi-Fi credentials of the compost bin
 class WifiConfigurationPage extends StatefulWidget {
   const WifiConfigurationPage({super.key});
 
@@ -30,11 +30,14 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
   /// The wifi scan result
   WifiScanResult? wifiResult;
 
-  /// Controller for the SSID text field
+  /// Controller for the SSID / Wi-Fi Network name text field
   final TextEditingController ssidController = TextEditingController();
 
   /// Controller for the password text field
   final TextEditingController passwordController = TextEditingController();
+
+  // Boolean for whether to reveal password in field or not
+  bool hidePassword = true;
 
   @override
   void initState() {
@@ -45,7 +48,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
     });
   }
 
-  /// Sends the wifi credentials to the compost bin
+  /// Sends the Wi-Fi credentials to the compost bin
   void sendCredentials(BuildContext context) {
     showDialog(
         context: context,
@@ -72,53 +75,83 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
     return Scaffold(
       body: CustomBackground(
         imageURL: "assets/images/wifi_config_screen.png",
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child:
-                  Text('Connect Bin to WiFi', style: textTheme.headlineSmall),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: TextField(
-                controller: ssidController,
-                decoration: const InputDecoration(labelText: 'Network Name'),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: SafeArea(
+                  child: GestureDetector(
+                    child: Row(
+                      children: [
+                        const Icon(Icons.arrow_back_ios),
+                        Text(
+                          "Back",
+                          style: Theme.of(context).textTheme.labelLarge,
+                        )
+                      ],
+                    ),
+                    onTap: () {
+                      Provider.of<SetupKeyNotifier>(context, listen: false)
+                          .setupKey
+                          .currentState
+                          ?.previous();
+                    },
+                  ),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: TextField(
-                controller: passwordController,
-                decoration: const InputDecoration(labelText: 'Password'),
-                obscureText: true,
+              SizedBox(
+                height:
+                    // Match dimensions up to wifi_scan screen
+                    (MediaQuery.of(context).size.height / 2) - (336),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Send the values entered in ssid/password field to the bin
-                sendCredentials(context);
-              },
-              child: Text('Connect',
-                  style: textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  )),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Allows users to navigate back a page to modify their selected network
-                Provider.of<SetupKeyNotifier>(context, listen: false)
-                    .setupKey
-                    .currentState
-                    ?.previous();
-              },
-              child: Text("Back",
-                  style: textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  )),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Connect Bin to WiFi',
+                    style: textTheme.headlineSmall!.copyWith(fontSize: 36)),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: TextField(
+                  controller: ssidController,
+                  decoration: const InputDecoration(labelText: 'Network Name'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: TextField(
+                  controller: passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    suffixIcon: IconButton(
+                      icon: hidePassword
+                          ? const Icon(Icons.visibility)
+                          : const Icon(Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          hidePassword = !hidePassword;
+                        });
+                      },
+                    ),
+                  ),
+                  obscureText: hidePassword,
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Send the values entered in ssid/password field to the bin
+                  sendCredentials(context);
+                },
+                child: Text('Connect',
+                    style: textTheme.labelLarge!.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    )),
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
         ),
       ),
     );
@@ -214,8 +247,7 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
       status = WifiConfigurationStatus.verifying;
     });
     int tries = 0;
-    while (tries < 15) {
-      // final now = DateTime.now();
+    while (tries < 10) {
       final statusData = await device.readCharacteristic(
           serviceId: mainServiceId,
           characteristicId: wifiCredentialCharacteristicId);
@@ -224,17 +256,15 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
       try {
         statusJson = jsonDecode(utf8.decode(statusData));
       } catch (e) {
-        debug(e);
+        tries++;
+        await Future.delayed(const Duration(seconds: 1));
         continue;
       }
-      double timestamp = statusJson["timestamp"]; // in seconds
-      debug("TIMESTAMP: $timestamp");
       String message = statusJson["message"];
       String? log = statusJson["log"];
       bool success = statusJson["success"];
       debug("Status: $statusJson");
-      tries++;
-      await Future.delayed(const Duration(seconds: 2));
+      // check if timestamp is within ~5 seconds of now
       if (success) {
         return await verifyConnection();
       } else {
@@ -269,7 +299,6 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
     debug("Status: $statusJson");
     bool success = statusJson["success"];
     bool? internetAccess = statusJson["internet_access"];
-    debug("INTERNET ACCESS: $internetAccess, SUCCESS: $success");
     if (internetAccess != null && internetAccess && success) {
       if (!mounted) return;
       await Future.delayed(const Duration(seconds: 2));
