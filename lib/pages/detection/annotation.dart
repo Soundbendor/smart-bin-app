@@ -88,7 +88,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                      "Outline the composted item with your finger as accurately as possible.",
+                      "Outline the newly composted item with your finger as accurately as possible.",
                       style: Theme.of(context).textTheme.labelLarge),
                 ),
                 Row(
@@ -107,7 +107,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                     Expanded(
                       child: Text(
                         "Don't show this screen again",
-                        style: Theme.of(context).textTheme.labelLarge,
+                        style: Theme.of(context).textTheme.labelSmall,
                       ),
                     ),
                   ],
@@ -131,7 +131,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
         });
   }
 
-  /// The main build method for the AnnotationPage
+  //// The main build method for the AnnotationPage
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -168,6 +168,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                               ),
                               onTap: () => GoRouter.of(context).pop(),
                             ),
+                            const SizedBox(height: 10),
                             const Heading(text: "Annotate Your Image"),
                           ],
                         ),
@@ -290,7 +291,7 @@ class _DrawingControlAreaState extends State<_DrawingControlArea> {
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
                       annotationNotifier.label == null
-                          ? 'No label selected yet'
+                          ? 'Please Select a Label'
                           : 'Selected Label: ${annotationNotifier.label}',
                       style: textTheme.labelLarge,
                       overflow: TextOverflow.fade,
@@ -300,7 +301,7 @@ class _DrawingControlAreaState extends State<_DrawingControlArea> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 5),
             Row(
               children: [
                 ElevatedButton(
@@ -368,6 +369,7 @@ class _DrawingControlAreaState extends State<_DrawingControlArea> {
                 }),
               ],
             ),
+            const SizedBox(height: 5),
           ],
         ),
       );
@@ -386,7 +388,7 @@ class _BottomControlArea extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: Theme.of(context).colorScheme.secondary,
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
