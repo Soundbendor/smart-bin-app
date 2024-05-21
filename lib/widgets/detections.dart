@@ -15,21 +15,7 @@ import 'package:binsight_ai/widgets/image.dart';
 /// the title will include the labels of the detected objects. If the detection
 /// has not been analyzed, the title will indicate that the detection is pending.
 String formatDetectionTitle(Detection detection) {
-  if (detection.boxes != null) {
-    final boxData = jsonDecode(detection.boxes!);
-    final List<String> names = [];
-    if (boxData.isNotEmpty) {
-      for (var label in boxData) {
-        if (label[0] != null) {
-          String name = label[0];
-          names.add(name);
-        }
-      }
-    }
-    return "Detection ${detection.imageId}: ${names.join(", ")}";
-  } else {
-    return "Detection ${detection.imageId}: pending analysis...";
-  }
+  return "Detection ${detection.imageId}";
 }
 
 /// Navigate to the detection detail page when a detection tile is tapped.
