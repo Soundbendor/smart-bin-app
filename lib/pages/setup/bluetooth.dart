@@ -213,8 +213,7 @@ class _BluetoothListState extends State<BluetoothList> {
         child: Column(
           children: [
             SizedBox(
-              height:
-                  (MediaQuery.of(context).size.height / 2) - (336),
+              height: (MediaQuery.of(context).size.height / 2) - (336),
             ),
             ScanList(
               itemCount: devices.length,

@@ -1,4 +1,7 @@
 // Flutter imports:
+import 'dart:io';
+
+import 'package:binsight_ai/util/image.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -8,7 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/detections.dart';
 import 'package:binsight_ai/widgets/heading.dart';
-import 'package:binsight_ai/widgets/image.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// Displays information about a single detection.
 class DetectionPage extends StatelessWidget {
@@ -52,13 +55,34 @@ class DetectionPage extends StatelessWidget {
 }
 
 /// The card that displays the detection information, including the image and sensor data.
-class _DetectionCard extends StatelessWidget {
+class _DetectionCard extends StatefulWidget {
   final Detection detection;
   const _DetectionCard({required this.detection});
 
   @override
+  State<_DetectionCard> createState() => _DetectionCardState();
+}
+
+class _DetectionCardState extends State<_DetectionCard> {
+  Directory? appDocDir;
+
+  @override
+  void initState() {
+    getDirectory();
+    super.initState();
+  }
+
+  Future<void> getDirectory() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    setState(() {
+      appDocDir = dir;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    File? image = getImage(widget.detection.postDetectImgLink!, appDocDir);
     final textTheme = Theme.of(context).textTheme;
     return Card(
       color: colorScheme.onPrimary,
@@ -72,19 +96,18 @@ class _DetectionCard extends StatelessWidget {
               child: Stack(
                 children: [
                   Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: colorScheme.onSurface,
-                        width: 1,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: colorScheme.onSurface,
+                          width: 1,
+                        ),
                       ),
-                    ),
-                    margin: const EdgeInsets.only(bottom: 10, top: 10),
-                    child: DynamicImage(
-                      detection.preDetectImgLink,
-                      width: 350,
-                      height: 350,
-                    ),
-                  ),
+                      margin: const EdgeInsets.only(bottom: 10, top: 10),
+                      child: Center(
+                        child: image != null
+                            ? Image.file(image, width: 350, height: 350)
+                            : Container(),
+                      )),
                   // Annotate Image Button
                   Positioned(
                     bottom: 16,
@@ -95,7 +118,7 @@ class _DetectionCard extends StatelessWidget {
                       tooltip: "Annotate Image",
                       onPressed: () {
                         GoRouter.of(context).push(
-                            "/main/detection/${detection.imageId}/annotation");
+                            "/main/detection/${widget.detection.imageId}/annotation");
                       },
                       style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.all(
@@ -115,23 +138,23 @@ class _DetectionCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildDataField("Transcription",
-                    detection.transcription.toString(), textTheme),
+                    widget.detection.transcription.toString(), textTheme),
+                _buildDataField("Temperature",
+                    widget.detection.temperature.toString(), textTheme),
                 _buildDataField(
-                    "Temperature", detection.temperature.toString(), textTheme),
-                _buildDataField(
-                    "Weight", detection.weight.toString(), textTheme),
+                    "Weight", widget.detection.weight.toString(), textTheme),
                 _buildDataField("Total Weight",
-                    detection.totalWeight.toString(), textTheme),
-                _buildDataField(
-                    "Humidity", detection.humidity.toString(), textTheme),
-                _buildDataField(
-                    "CO2 Equivalent", detection.co2.toString(), textTheme),
-                _buildDataField(
-                    "Pressure", detection.pressure.toString(), textTheme),
-                _buildDataField(
-                    "Indoor Air Quality", detection.iaq.toString(), textTheme),
+                    widget.detection.totalWeight.toString(), textTheme),
+                _buildDataField("Humidity",
+                    widget.detection.humidity.toString(), textTheme),
+                _buildDataField("CO2 Equivalent",
+                    widget.detection.co2.toString(), textTheme),
+                _buildDataField("Pressure",
+                    widget.detection.pressure.toString(), textTheme),
+                _buildDataField("Indoor Air Quality",
+                    widget.detection.iaq.toString(), textTheme),
                 _buildDataField("Total Volatile Organic Compounds",
-                    detection.vo2.toString(), textTheme),
+                    widget.detection.vo2.toString(), textTheme),
               ],
             ),
           ],

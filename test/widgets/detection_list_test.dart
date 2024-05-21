@@ -15,64 +15,78 @@ void main() {
 
   testWidgets("Detection list (incomplete) displays correct title",
       (widgetTester) async {
-    final detection = Detection.fromMap({
-      "imageId": "bar",
-      "preDetectImgLink": "example.com/bar.jpg",
-      "timestamp": DateTime.now().toIso8601String(),
-      "deviceId": "bar",
-      // "postDetectImgLink": "http://example.com/bar-post.jpg",
-      "depthMapImgLink": "example.com/bar-depth.jpg",
-      "irImgLink": "example.com/bar-ir.jpg",
-      "transcription": "pineapple, chicken",
-      "weight": 1.0,
-      "humidity": 0.5,
-      "temperature": 20.0,
-      "co2": 0.5,
-      "vo2": 0.5,
-      // "boxes": "[]",
-    });
+    final detection = Detection.fromMap(
+      {
+        "imageId": "foo-2",
+        "timestamp":
+            DateTime.now().subtract(const Duration(days: 1)).toIso8601String(),
+        "deviceId": "bar",
+        "postDetectImgLink": "https://placehold.co/512x512",
+        "depthMapImgLink": "https://placehold.co/512x512",
+        "irImgLink": "https://placehold.co/512x512",
+        "transcription": "orange peels",
+        "weight": 10.0,
+        "humidity": 1.5,
+        "temperature": 20.0,
+        "co2": 0.5,
+        "vo2": 0.5,
+        "pressure": 10.0,
+        "iaq": 10.0,
+        "boxes": "[]"
+      },
+    );
 
     await widgetTester.pumpWidget(makeTestableWidget(
       size: const Size(800, 600),
       child: DetectionSmallListItem(detection: detection),
     ));
-    expect(find.text("Detection bar: pending analysis..."), findsOneWidget);
+    expect(
+        find.text(
+            "Detection ${detection.deviceId}-${detection.timestamp.toIso8601String()}"),
+        findsOneWidget);
 
     await widgetTester.pumpWidget(makeTestableWidget(
       size: const Size(800, 600),
       child: DetectionLargeListItem(detection: detection),
     ));
-    expect(find.text("Detection bar: pending analysis..."), findsOneWidget);
+    expect(
+        find.text(
+            "Detection ${detection.deviceId}-${detection.timestamp.toIso8601String()}"),
+        findsOneWidget);
   });
 
   testWidgets("Detection list (complete) displays correct title",
       (widgetTester) async {
-    final detection = Detection.fromMap({
-      "imageId": "foo",
-      "preDetectImgLink": "example.com/foo.jpg",
-      "timestamp": DateTime.now().toIso8601String(),
-      "deviceId": "foo",
-      "postDetectImgLink": "example.com/foo-post.jpg",
-      "depthMapImgLink": "example.com/foo-depth.jpg",
-      "irImgLink": "example.com/foo-ir.jpg",
-      "transcription": "pineapple, chicken",
-      "weight": 10.0,
-      "humidity": 1.5,
-      "temperature": 20.0,
-      "co2": 0.5,
-      "vo2": 0.5,
-      "boxes": '[["pineapple", [11.4, 16.5]],["chicken", [10.0, 292.8]]]',
-    });
+    final detection = Detection.fromMap(
+      {
+        "imageId": "foo",
+        "timestamp":
+            DateTime.now().subtract(const Duration(days: 1)).toIso8601String(),
+        "deviceId": "bar",
+        "postDetectImgLink": "https://placehold.co/512x512",
+        "depthMapImgLink": "https://placehold.co/512x512",
+        "irImgLink": "https://placehold.co/512x512",
+        "transcription": "orange peels",
+        "weight": 10.0,
+        "humidity": 1.5,
+        "temperature": 20.0,
+        "co2": 0.5,
+        "vo2": 0.5,
+        "pressure": 10.0,
+        "iaq": 10.0,
+        "boxes": "[]"
+      },
+    );
     await widgetTester.pumpWidget(makeTestableWidget(
       size: const Size(800, 600),
       child: DetectionSmallListItem(detection: detection),
     ));
-    expect(find.text("Detection foo: pineapple, chicken"), findsOneWidget);
+    expect(find.text("Detection ${detection.imageId}"), findsOneWidget);
 
     await widgetTester.pumpWidget(makeTestableWidget(
       size: const Size(800, 600),
       child: DetectionLargeListItem(detection: detection),
     ));
-    expect(find.text("Detection foo: pineapple, chicken"), findsOneWidget);
+    expect(find.text("Detection ${detection.imageId}"), findsOneWidget);
   });
 }

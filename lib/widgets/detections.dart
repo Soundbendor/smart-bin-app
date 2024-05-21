@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'dart:convert';
 import 'package:go_router/go_router.dart';
 
 // Project imports:
@@ -15,21 +14,7 @@ import 'package:binsight_ai/widgets/image.dart';
 /// the title will include the labels of the detected objects. If the detection
 /// has not been analyzed, the title will indicate that the detection is pending.
 String formatDetectionTitle(Detection detection) {
-  if (detection.boxes != null) {
-    final boxData = jsonDecode(detection.boxes!);
-    final List<String> names = [];
-    if (boxData.isNotEmpty) {
-      for (var label in boxData) {
-        if (label[0] != null) {
-          String name = label[0];
-          names.add(name);
-        }
-      }
-    }
-    return "Detection ${detection.imageId}: ${names.join(", ")}";
-  } else {
-    return "Detection ${detection.imageId}: pending analysis...";
-  }
+  return "Detection ${detection.imageId}";
 }
 
 /// Navigate to the detection detail page when a detection tile is tapped.
@@ -83,7 +68,7 @@ class DetectionLargeListItem extends StatelessWidget {
                     ),
                     margin: const EdgeInsets.only(bottom: 12, top: 12),
                     alignment: Alignment.center,
-                    child: DynamicImage(detection.preDetectImgLink,
+                    child: DynamicImage(detection.postDetectImgLink!,
                         width: 325, height: 325)),
                 SizedBox(
                   width: 250,
@@ -94,7 +79,7 @@ class DetectionLargeListItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Transcription:",
-                            style: textTheme.titleMedium),
+                                style: textTheme.titleMedium),
                           ],
                         ),
                       ),
@@ -142,13 +127,13 @@ class DetectionSmallListItem extends StatelessWidget {
           color: colorScheme.onPrimary,
           child: ListTile(
             leading: Container(
-                    decoration: BoxDecoration(
-        border: Border.all(
-          color: colorScheme.onSurface,
-          width: 1,
-        ),
-      ),
-              child: DynamicImage(detection.preDetectImgLink)),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: colorScheme.onSurface,
+                    width: 1,
+                  ),
+                ),
+                child: DynamicImage(detection.postDetectImgLink!)),
             title: Text(formatDetectionTitle(detection),
                 style: textTheme.titleMedium),
             subtitle: Text(detection.timestamp.toString(),

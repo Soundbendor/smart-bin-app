@@ -1,15 +1,18 @@
 // Flutter imports:
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/print.dart';
+import 'package:binsight_ai/util/providers/image_provider.dart';
 import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:binsight_ai/util/providers/annotation_notifier.dart';
 import 'package:binsight_ai/util/providers/device_notifier.dart';
@@ -58,116 +61,6 @@ void main() async {
   await initPreferences();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  if (kDebugMode) {
-    // final db = await getDatabaseConnection();
-    // development code to add fake data
-
-    final detections = await Detection.all();
-    if (detections.isEmpty) {
-      var fakeDetections = [
-        Detection(
-          imageId: "test-10",
-          preDetectImgLink: "https://placehold.co/512x512.png",
-          timestamp: DateTime.now().subtract(const Duration(days: 6)),
-          deviceId: "test",
-          postDetectImgLink: "https://placehold.co/513x513.png",
-          depthMapImgLink: "https://placehold.co/514x514.png",
-          irImgLink: "https://placehold.co/515x515.png",
-          transcription: "apples, oranges, bananas",
-          weight: 27.0,
-          totalWeight: 27.0,
-          pressure: 0.5,
-          iaq: 0.5,
-          humidity: 0.5,
-          temperature: 20.0,
-          co2: 0.5,
-          vo2: 0.5,
-          boxes: exampleBoxes,
-        ),
-        Detection(
-          imageId: "test-9",
-          preDetectImgLink: "https://placehold.co/512x512.png",
-          timestamp: DateTime.now().subtract(const Duration(days: 5)),
-          deviceId: "test",
-          postDetectImgLink: "https://placehold.co/513x513.png",
-          depthMapImgLink: "https://placehold.co/514x514.png",
-          irImgLink: "https://placehold.co/515x515.png",
-          transcription: "broccoli, carrots",
-          weight: 10.0,
-          totalWeight: 27.0,
-          pressure: 0.5,
-          iaq: 0.5,
-          humidity: 0.5,
-          temperature: 20.0,
-          co2: 0.5,
-          vo2: 0.5,
-          boxes: exampleBoxes,
-        ),
-        Detection(
-          imageId: "test-8",
-          preDetectImgLink: "https://placehold.co/512x512.png",
-          timestamp: DateTime.now().subtract(const Duration(days: 4)),
-          deviceId: "test",
-          postDetectImgLink: "https://placehold.co/513x513.png",
-          depthMapImgLink: "https://placehold.co/514x514.png",
-          irImgLink: "https://placehold.co/515x515.png",
-          transcription: "null",
-          weight: 40.0,
-          totalWeight: 27.0,
-          pressure: 0.5,
-          iaq: 0.5,
-          humidity: 0.5,
-          temperature: 20.0,
-          co2: 0.5,
-          vo2: 0.5,
-          boxes: exampleBoxes,
-        ),
-        Detection(
-          imageId: "test-7",
-          preDetectImgLink: "https://placehold.co/512x512.png",
-          timestamp: DateTime.now().subtract(const Duration(days: 3)),
-          deviceId: "test",
-          postDetectImgLink: "https://placehold.co/513x513.png",
-          depthMapImgLink: "https://placehold.co/514x514.png",
-          irImgLink: "https://placehold.co/515x515.png",
-          transcription: "orange peels",
-          weight: 16.0,
-          totalWeight: 27.0,
-          pressure: 0.5,
-          iaq: 0.5,
-          humidity: 0.5,
-          temperature: 20.0,
-          co2: 0.5,
-          vo2: 0.5,
-          boxes: exampleBoxes,
-        ),
-        Detection(
-          imageId: "test-6",
-          preDetectImgLink: "https://placehold.co/512x512.png",
-          timestamp: DateTime.now().subtract(const Duration(days: 2)),
-          deviceId: "test",
-          postDetectImgLink: "https://placehold.co/513x513.png",
-          depthMapImgLink: "https://placehold.co/514x514.png",
-          irImgLink: "https://placehold.co/515x515.png",
-          transcription:
-              "coffee grounds, and then a lot of coffee grounds, and maybe some old tea bags and banana peels and rotten apples",
-          weight: 30.0,
-          totalWeight: 27.0,
-          pressure: 0.5,
-          iaq: 0.5,
-          humidity: 0.5,
-          temperature: 20.0,
-          co2: 0.5,
-          vo2: 0.5,
-          boxes: exampleBoxes,
-        ),
-      ];
-      for (final detection in fakeDetections) {
-        await detection.save();
-      }
-    }
-  }
-
   runApp(
     MultiProvider(
       providers: [
@@ -179,7 +72,9 @@ void main() async {
         Provider(create: (_) => SetupKeyNotifier()),
         // Notifies listeners of changes to the current annotation's state.
         ChangeNotifierProvider(create: (_) => AnnotationNotifier()),
+        // Notifies listeners of changes to the current detection's state.
         ChangeNotifierProvider(create: (_) => DetectionNotifier()),
+        ChangeNotifierProvider(create: (_) => ImageNotifier())
       ],
       // Skip initial set up if user has already set up a device
       child: BinsightAiApp(
@@ -206,6 +101,8 @@ class _BinsightAiAppState extends State<BinsightAiApp>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    Future<DateTime> timestamp = getLatestTimestamp();
+    fetchImageData('ae9e01c90bb6af06', timestamp);
   }
 
   @override
@@ -248,5 +145,110 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     final latestDetection = await Detection.latest();
     final timeStamp = latestDetection.timestamp;
     return timeStamp;
+  }
+
+  /// Hits the api to retrieve all detections for a certain device after a date
+  Future<void> fetchImageData(
+      String deviceID, Future<DateTime> afterDate) async {
+    DateTime timestamp =
+        await afterDate; // TODO: Implement when supported by upstream API
+    const String url =
+        'http://sb-binsight.dri.oregonstate.edu:30080/api/get_image_info';
+    Map<String, String> queryParams = {
+      'deviceID': deviceID,
+      'after_date': "2024-5-15",
+      'page': '1',
+      'size': '10',
+    };
+
+    final Uri uri = Uri.parse(url).replace(queryParameters: queryParams);
+    await dotenv.load(fileName: "assets/data/.env");
+    String apiKey = dotenv.env['API_KEY']!;
+    Map<String, String> headers = {
+      'accept': 'application/json',
+      'token': apiKey,
+    };
+    try {
+      final http.Response response = await http.get(uri, headers: headers);
+      List<String> imageList = [];
+      debug(response);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        debug(data);
+        List<dynamic> itemList = data['items'];
+        for (var item in itemList) {
+          Map<String, dynamic> adjustedMap = transformMap(item);
+          imageList.add(adjustedMap["postDetectImgLink"]);
+          Detection detection = Detection.fromMap(adjustedMap);
+          await detection.save();
+        }
+        if (mounted) {
+          Provider.of<DetectionNotifier>(context, listen: false).getAll();
+        }
+        try {
+          debug(imageList);
+          retrieveImages(deviceID, imageList);
+        } catch (e) {
+          debug(e);
+        }
+      } else {
+        debug('Failed with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      debug('Error: $e');
+    }
+  }
+
+  Future<void> retrieveImages(String deviceID, List<String> imageList) async {
+    String url =
+        'http://sb-binsight.dri.oregonstate.edu:30080/api/get_images?deviceID=$deviceID';
+    await dotenv.load(fileName: ".env");
+    String apiKey = dotenv.env['API_KEY']!;
+
+    var requestBody = imageList;
+    debug("Image List $imageList");
+    Map<String, String> headers = {
+      'accept': 'application/json',
+      'token': apiKey,
+      'Content-Type': 'application/json',
+    };
+    try {
+      final http.Response response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: jsonEncode(requestBody),
+      );
+
+      if (response.statusCode == 200) {
+        debug('POST request successful');
+        debug(response.body);
+        debug(response.body.length);
+        if (!mounted) return;
+        Provider.of<ImageNotifier>(context, listen: false)
+            .saveAndExtract(response.body);
+      } else {
+        debug('Failed to make POST request.');
+      }
+    } catch (e) {
+      debug('Error: $e');
+    }
+  }
+
+  /// Adjust new json map recieved from api to match existing schema
+  Map<String, dynamic> transformMap(Map<String, dynamic> map) {
+    return {
+      'imageId': map['colorImage'],
+      'timestamp': DateTime.now().toIso8601String(),
+      'deviceId': map['deviceID'].toString(),
+      'postDetectImgLink': map['colorImage'],
+      'weight': map['weight_delta']?.toDouble(),
+      'humidity': map['humidity']?.toDouble(),
+      'temperature': map['temperature']?.toDouble(),
+      'co2': map['co2_eq']?.toDouble(),
+      'iaq': map['iaq']?.toDouble(),
+      'pressure': map['pressure']?.toDouble(),
+      'tvoc': map['tvoc']?.toDouble(),
+      'transcription': map['transcription'],
+    };
   }
 }

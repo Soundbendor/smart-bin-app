@@ -184,7 +184,6 @@ class FakeDatabase implements Database {
 
   @override
   Future<T> readTransaction<T>(Future<T> Function(Transaction txn) action) {
-    // TODO: implement readTransaction
     throw UnimplementedError();
   }
 }
