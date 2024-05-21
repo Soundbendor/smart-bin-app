@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'dart:convert';
 import 'package:go_router/go_router.dart';
 
 // Project imports:

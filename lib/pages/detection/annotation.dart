@@ -75,6 +75,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
     initPreferences();
   }
 
+  /// Gets the application directory to store images and app data
   Future<void> getDirectory() async {
     Directory dir = await getApplicationDocumentsDirectory();
     setState(() {
@@ -425,8 +426,6 @@ class _BottomControlArea extends StatelessWidget {
                 onPressed: () {
                   annotationNotifier.clearCurrentAnnotation();
                   annotationNotifier.reset();
-                  // TODO: also delete the data in the database?
-                  // alternatively, clear the data only after pressing "done"
 
                   Future.delayed(const Duration(milliseconds: 100), () {
                     annotationNotifier.reset();

@@ -265,8 +265,7 @@ class BleDevice {
   /// However, if not bonded, the user has to manually pair the device.
   Future<void> _pair() async {
     // On iOS, the device should be paired after connecting
-    // on Android, we'll have to request pairing first
-    // TODO: verify this
+    // on Android, we'll have to request pairing first (may need verification)
     // if (!Platform.isAndroid) {
     debug("BleDevice[pair]: Pairing device. Current bond state: $isBonded");
     await _device.discoverServices();

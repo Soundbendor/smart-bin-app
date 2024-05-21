@@ -43,11 +43,13 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  /// Load all detections from the database
   void loadDetections() {
     Provider.of<DetectionNotifier>(context, listen: false).getAll();
     loadCategories();
   }
 
+  /// Gets the application directory to store images and app data
   Future<void> getDirectory() async {
     Directory dir = await getApplicationDocumentsDirectory();
     setState(() {
@@ -55,6 +57,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  /// Reads an image from the app directory
   File? getImage(String image, Directory? appDocDir) {
     if (appDocDir != null) {
       String imagePath = '${appDocDir.path}/$image';
@@ -69,6 +72,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  /// Load the categories from the JSON data file
   Future<void> loadCategories() async {
     final String response =
         await rootBundle.loadString('assets/data/categories.json');
@@ -78,6 +82,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  /// Update the detection notifier
   void updateDetection(DetectionNotifier notifier) async {
     await notifier.getAll();
   }
