@@ -125,7 +125,8 @@ class Detection extends Model {
     // Note: As of this commit, the actual server schema is not known. This is just a placeholder.
     return Detection(
       //TODO: Create new imageID instead of reusing timestamp
-      imageId: "${map['deviceId']}-${DateTime.parse(map['timestamp']).toIso8601String()}",
+      imageId:
+          "${map['deviceId']}-${DateTime.parse(map['timestamp']).toIso8601String()}",
       timestamp: DateTime.parse(map['timestamp']),
       deviceId: map['deviceId'],
       postDetectImgLink: map['postDetectImgLink'],

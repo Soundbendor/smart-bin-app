@@ -222,8 +222,8 @@ class _BackToListButton extends StatelessWidget {
     return GestureDetector(
       child: Row(
         children: [
-          const Icon(Icons.arrow_back_ios),
-          Text("Back to list", style: textTheme.labelLarge),
+          const Icon(Icons.arrow_back_ios, size: 30),
+          Text("Back to list", style: textTheme.headlineSmall),
         ],
       ),
       onTap: () => GoRouter.of(context).pop(),

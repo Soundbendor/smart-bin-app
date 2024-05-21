@@ -366,9 +366,10 @@ class BleDevice {
   Future<List<int>> readCharacteristic(
       {required Uuid serviceId, required Uuid characteristicId}) async {
     final characteristic = BluetoothCharacteristic(
-        remoteId: DeviceIdentifier(id),
-        serviceUuid: Guid.fromBytes(serviceId.data),
-        characteristicUuid: Guid.fromBytes(characteristicId.data));
+      remoteId: DeviceIdentifier(id),
+      serviceUuid: Guid.fromBytes(serviceId.data),
+      characteristicUuid: Guid.fromBytes(characteristicId.data),
+    );
     if (!isConnected) {
       debug(
           "BleDevice[readCharacteristic]: Device not connected, attempting to connect");
