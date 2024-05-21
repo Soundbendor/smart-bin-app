@@ -162,7 +162,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     };
 
     final Uri uri = Uri.parse(url).replace(queryParameters: queryParams);
-    await dotenv.load(fileName: ".env");
+    await dotenv.load(fileName: "assets/data/.env");
     String apiKey = dotenv.env['API_KEY']!;
     Map<String, String> headers = {
       'accept': 'application/json',
