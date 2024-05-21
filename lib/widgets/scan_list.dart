@@ -23,11 +23,11 @@ class ScanList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const textSize = 40.0;
+    const textSize = 36.0;
     return Column(
       children: [
         SizedBox(
-          height: (MediaQuery.of(context).size.height / 2) - (200 + textSize),
+          height: (MediaQuery.of(context).size.height / 2) - (300 + textSize),
         ),
         Center(
           child: Text(
