@@ -90,9 +90,10 @@
   <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;int&gt;&gt; readCharacteristic(
     {required Uuid serviceId, required Uuid characteristicId}) async {
   final characteristic = BluetoothCharacteristic(
-      remoteId: DeviceIdentifier(id),
-      serviceUuid: Guid.fromBytes(serviceId.data),
-      characteristicUuid: Guid.fromBytes(characteristicId.data));
+    remoteId: DeviceIdentifier(id),
+    serviceUuid: Guid.fromBytes(serviceId.data),
+    characteristicUuid: Guid.fromBytes(characteristicId.data),
+  );
   if (!isConnected) {
     debug(
         &quot;BleDevice[readCharacteristic]: Device not connected, attempting to connect&quot;);
