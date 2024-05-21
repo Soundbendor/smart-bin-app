@@ -80,7 +80,7 @@ class Detection extends Model {
   Detection.createDefault()
       : imageId = "1",
         postDetectImgLink = "assets/images/placeholder.png",
-        timestamp = DateTime.now(),
+        timestamp = DateTime.now().subtract(const Duration(days: 30)),
         deviceId = "1";
 
   /// Creates a null object pattern equivalent for a Detection that is not found.

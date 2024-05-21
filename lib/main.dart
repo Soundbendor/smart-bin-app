@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/intl.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
@@ -128,7 +129,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     //Defines the router to be used for the app, with set-up as the initial route
     setRoutes(getRoutes());
     router ??= GoRouter(
-        initialLocation: widget.skipSetUp ? '/main' : '/set-up',
+        initialLocation: !widget.skipSetUp ? '/main' : '/set-up',
         routes: routes);
 
     return ChangeNotifierProvider(
@@ -150,13 +151,15 @@ class _BinsightAiAppState extends State<BinsightAiApp>
   /// Hits the api to retrieve all detections for a certain device after a date
   Future<void> fetchImageData(
       String deviceID, Future<DateTime> afterDate) async {
-    DateTime timestamp =
-        await afterDate; // TODO: Implement when supported by upstream API
+    DateTime timestamp = await afterDate;
+    String formattedDate = DateFormat('yyyy-MM-dd').format(timestamp);
+    String formattedTime = DateFormat('HH:mm:ss').format(timestamp);
     const String url =
         'http://sb-binsight.dri.oregonstate.edu:30080/api/get_image_info';
     Map<String, String> queryParams = {
       'deviceID': deviceID,
-      'after_date': "2024-5-15",
+      'after_date': formattedDate,
+      'after_time': formattedTime,
       'page': '1',
       'size': '10',
     };
@@ -202,7 +205,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
   Future<void> retrieveImages(String deviceID, List<String> imageList) async {
     String url =
         'http://sb-binsight.dri.oregonstate.edu:30080/api/get_images?deviceID=$deviceID';
-    await dotenv.load(fileName: ".env");
+    await dotenv.load(fileName: "assets/data/.env");
     String apiKey = dotenv.env['API_KEY']!;
 
     var requestBody = imageList;
