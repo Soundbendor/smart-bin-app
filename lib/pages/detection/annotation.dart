@@ -660,12 +660,11 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                 searchField: TextField(
                   style: Theme.of(context).textTheme.bodyLarge,
                   decoration: InputDecoration(
-                    hintText: selectedLabel == null
-                        ? "Search"
-                        : selectedLabel!,
+                    hintText: selectedLabel == null ? "Search" : selectedLabel!,
                     hintStyle: selectedLabel == null
                         ? const TextStyle(
-                          color: Colors.grey,)
+                            color: Colors.grey,
+                          )
                         : const TextStyle(color: Colors.black),
                   ),
                 ),
@@ -686,7 +685,8 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                 itemBuilder: (label, index) {
                   return Text(
                     label["Label"]["name"],
-                    style: Theme.of(context).textTheme.bodyLarge,);
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  );
                 },
                 pickedItemsContainerBuilder: (pickedItems) {
                   return pickedItems.isNotEmpty
@@ -694,7 +694,7 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                       : const Padding(padding: EdgeInsets.zero);
                 },
                 // Options associated with creating a new item when searched item isn't found
-                // This is not currently turned on. To enable, set isCreatable to true in 
+                // This is not currently turned on. To enable, set isCreatable to true in
                 // the MultipleSearchSelection.creatable widget
                 createOptions: CreateOptions(
                   pickCreated: true,
@@ -715,16 +715,13 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 4),
                       child: TextButton(
-                        onPressed: () {
-                          // Only pop out of the dialog when pressing submit if you've selected a label
-                          if (widget.controller.getPickedItems().isNotEmpty) {
-                            context.read<AnnotationNotifier>().setLabel(
-                                widget.controller.getPickedItems()[0]["Label"]
-                                    ["name"]);
-                            Navigator.of(context).pop();
-                          }
-                        },
-                        child: const Text("Submit"),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                WidgetStateProperty.all<Color>(Colors.grey)),
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text(
+                          "Cancel",
+                        ),
                       ),
                     ),
                     if (selectedLabel != null)
@@ -732,8 +729,8 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                         margin: const EdgeInsets.symmetric(horizontal: 4),
                         child: TextButton(
                           style: ButtonStyle(
-                              backgroundColor:
-                                  WidgetStateProperty.all<Color>(const Color.fromRGBO(236, 106, 44, 1))),
+                              backgroundColor: WidgetStateProperty.all<Color>(
+                                  const Color.fromRGBO(236, 106, 44, 1))),
                           onPressed: () => setState(
                             () {
                               selectedLabel = null;
@@ -748,13 +745,16 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 4),
                       child: TextButton(
-                        style: ButtonStyle(
-                            backgroundColor:
-                                WidgetStateProperty.all<Color>(Colors.grey)),
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: const Text(
-                          "Cancel",
-                        ),
+                        onPressed: () {
+                          // Only pop out of the dialog when pressing submit if you've selected a label
+                          if (widget.controller.getPickedItems().isNotEmpty) {
+                            context.read<AnnotationNotifier>().setLabel(
+                                widget.controller.getPickedItems()[0]["Label"]
+                                    ["name"]);
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        child: const Text("Submit"),
                       ),
                     ),
                   ],
