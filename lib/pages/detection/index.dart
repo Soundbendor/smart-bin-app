@@ -1,13 +1,13 @@
 // Flutter imports:
 import 'dart:io';
 import 'package:flutter/material.dart';
+
 // Package imports:
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:rotating_icon_button/rotating_icon_button.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
-
 
 // Project imports:
 import 'package:binsight_ai/util/api.dart';
@@ -21,8 +21,6 @@ import 'package:binsight_ai/util/providers/image_provider.dart';
 import 'package:binsight_ai/widgets/detections.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/widgets/wifi_check_dialog.dart';
-import 'package:binsight_ai/util/providers/detection_notifier.dart';
-import 'package:binsight_ai/util/providers/image_provider.dart';
 
 /// Displays the detections with padding and a size toggle button.
 class DetectionsPage extends StatefulWidget {
