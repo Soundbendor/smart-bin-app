@@ -38,7 +38,7 @@ void main() {
 
     await widgetTester.pumpWidget(makeTestableWidget(
       size: const Size(800, 600),
-      child: DetectionSmallListItem(detection: detection),
+      child: DetectionSmallListItem(detection: detection, baseDir: null),
     ));
     expect(
         find.text(
@@ -47,7 +47,10 @@ void main() {
 
     await widgetTester.pumpWidget(makeTestableWidget(
       size: const Size(800, 600),
-      child: DetectionLargeListItem(detection: detection),
+      child: DetectionLargeListItem(
+        detection: detection,
+        baseDir: null,
+      ),
     ));
     expect(
         find.text(
@@ -79,13 +82,13 @@ void main() {
     );
     await widgetTester.pumpWidget(makeTestableWidget(
       size: const Size(800, 600),
-      child: DetectionSmallListItem(detection: detection),
+      child: DetectionSmallListItem(detection: detection, baseDir: null),
     ));
     expect(find.text("Detection ${detection.imageId}"), findsOneWidget);
 
     await widgetTester.pumpWidget(makeTestableWidget(
       size: const Size(800, 600),
-      child: DetectionLargeListItem(detection: detection),
+      child: DetectionLargeListItem(detection: detection, baseDir: null),
     ));
     expect(find.text("Detection ${detection.imageId}"), findsOneWidget);
   });

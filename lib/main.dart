@@ -161,7 +161,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
       'after_date': formattedDate,
       'after_time': formattedTime,
       'page': '1',
-      'size': '10',
+      'size': '50',
     };
 
     final Uri uri = Uri.parse(url).replace(queryParameters: queryParams);
@@ -178,7 +178,11 @@ class _BinsightAiAppState extends State<BinsightAiApp>
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
         debug(data);
-        List<dynamic> itemList = data['items'];
+
+        // API RETURNS ITEMS SORTED BY DATE IN ASCENDING ORDER, REVERSE FOR NEWEST FIRST
+        debug("FIRST ITEM ${data["items"][0]}");
+        List<dynamic> itemList = data['items'].reversed.toList();
+        debug("FIRST ITEM PART TWO ${itemList[0]}");
         for (var item in itemList) {
           Map<String, dynamic> adjustedMap = transformMap(item);
           imageList.add(adjustedMap["postDetectImgLink"]);
@@ -225,7 +229,6 @@ class _BinsightAiAppState extends State<BinsightAiApp>
       if (response.statusCode == 200) {
         debug('POST request successful');
         debug(response.body);
-        debug(response.body.length);
         if (!mounted) return;
         Provider.of<ImageNotifier>(context, listen: false)
             .saveAndExtract(response.body);
@@ -239,9 +242,13 @@ class _BinsightAiAppState extends State<BinsightAiApp>
 
   /// Adjust new json map recieved from api to match existing schema
   Map<String, dynamic> transformMap(Map<String, dynamic> map) {
+    String dateString = map["colorImage"].substring(11, 21);
+    String timeString = map["colorImage"].substring(23, 31);
+    String combinedDateTimeString = "${dateString}T$timeString";
+    String formattedDateTimeString = combinedDateTimeString.replaceAll('-', '');
     return {
       'imageId': map['colorImage'],
-      'timestamp': DateTime.now().toIso8601String(),
+      'timestamp': DateTime.parse(formattedDateTimeString).toIso8601String(),
       'deviceId': map['deviceID'].toString(),
       'postDetectImgLink': map['colorImage'],
       'weight': map['weight_delta']?.toDouble(),
