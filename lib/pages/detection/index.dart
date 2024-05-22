@@ -170,14 +170,16 @@ class DetectionsPageState extends State<DetectionsPage> {
               content: Text(
                 areNewDetections
                     ? "New detections found./n" "Happy annotating!"
-                    : "No new detections found./n" "Tap here if you were expecting new images.",
+                    : "No new detections found.",
                 style: Theme.of(context)
                     .textTheme
                     .labelLarge
                     ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
               ),
-              backgroundColor: areNewDetections ? Colors.green : Colors.blue,
-              action: SnackBarAction(label: "Check", onPressed: checkWifi),
+              backgroundColor: areNewDetections 
+              ? Theme.of(context).colorScheme.tertiary 
+              : Theme.of(context).colorScheme.primary,
+              action: SnackBarAction(label: "Troubleshoot", onPressed: checkWifi),
               showCloseIcon: true,
             ),
           );
