@@ -175,8 +175,10 @@ class _HomePageState extends State<HomePage> {
                           "Detections by Food Category",
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
-                        CircleChart(
-                          data: labelCounts,
+                        IgnorePointer(
+                          child: CircleChart(
+                            data: labelCounts,
+                          ),
                         ),
                       ],
                     ),

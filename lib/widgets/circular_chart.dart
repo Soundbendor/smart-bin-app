@@ -47,7 +47,7 @@ class _CircleChartState extends State<CircleChart> {
           PieSeries<_ChartData, String>(
             radius: '65%',
             explode: true,
-            explodeIndex: 0,
+            explodeIndex: null,
             dataSource: doughnutData,
             xValueMapper: (_ChartData data, _) => data.text!,
             yValueMapper: (_ChartData data, _) => data.xData,
