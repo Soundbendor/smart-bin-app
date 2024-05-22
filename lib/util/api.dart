@@ -24,8 +24,11 @@ Future<void> fetchImageData(
     String deviceID, Future<DateTime> afterDate, BuildContext context) async {
   DateTime timestamp = await afterDate;
   debug("LATEST TIME STAMP $timestamp");
+  const size = 50;
   String formattedDate = DateFormat('yyyy-MM-dd').format(timestamp);
   String formattedTime = DateFormat('HH:mm:ss').format(timestamp);
+  debug("FORMATTED DATE $formattedDate");
+  debug("FORMATTED TIME $formattedTime");
   const String url =
       'http://sb-binsight.dri.oregonstate.edu:30080/api/get_image_info';
   Map<String, String> queryParams = {
@@ -33,7 +36,7 @@ Future<void> fetchImageData(
     'after_date': formattedDate,
     'after_time': formattedTime,
     'page': '1',
-    'size': '50',
+    'size': size.toString(),
   };
 
   final Uri uri = Uri.parse(url).replace(queryParameters: queryParams);
@@ -53,8 +56,14 @@ Future<void> fetchImageData(
 
       // API RETURNS ITEMS SORTED BY DATE IN ASCENDING ORDER, REVERSE FOR NEWEST FIRST
       List<dynamic> itemList = data['items'].reversed.toList();
-      if (itemList.isNotEmpty && timestamp != DateTime(2022, 1, 1)) {
-        itemList.removeAt(0);
+      debug(
+          "IMAGES QUERIED FOR AND RECIEVED BEFORE: $itemList and length ${itemList.length}");
+      if (itemList.isNotEmpty) {
+        final currentLatest = await Detection.latest();
+        final removeIndex = itemList.indexWhere((element) {
+          return element['colorImage'] == currentLatest.postDetectImgLink;
+        });
+        if (removeIndex != -1) itemList.removeAt(removeIndex);
       }
       debug(
           "IMAGES QUERIED FOR AND RECIEVED: $itemList and length ${itemList.length}");
@@ -71,6 +80,9 @@ Future<void> fetchImageData(
         } catch (e) {
           debug(e);
         }
+      }
+      if (itemList.length >= size && context.mounted) {
+        await fetchImageData(deviceID, afterDate, context);
       }
     } else {
       debug('Failed with status code: ${response.statusCode}');
