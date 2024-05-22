@@ -150,7 +150,7 @@ Widget build(BuildContext context) {
                   ),
                   margin: const EdgeInsets.only(bottom: 12, top: 12),
                   alignment: Alignment.center,
-                  child: DynamicImage(detection.preDetectImgLink,
+                  child: DynamicImage(detection.postDetectImgLink!,
                       width: 325, height: 325)),
               SizedBox(
                 width: 250,
@@ -161,7 +161,7 @@ Widget build(BuildContext context) {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(&quot;Transcription:&quot;,
-                          style: textTheme.titleMedium),
+                              style: textTheme.titleMedium),
                         ],
                       ),
                     ),

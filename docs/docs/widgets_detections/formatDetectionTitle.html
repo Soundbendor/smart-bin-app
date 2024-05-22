@@ -83,21 +83,7 @@ has not been analyzed, the title will indicate that the detection is pending.</p
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">String formatDetectionTitle(Detection detection) {
-  if (detection.boxes != null) {
-    final boxData = jsonDecode(detection.boxes!);
-    final List&lt;String&gt; names = [];
-    if (boxData.isNotEmpty) {
-      for (var label in boxData) {
-        if (label[0] != null) {
-          String name = label[0];
-          names.add(name);
-        }
-      }
-    }
-    return &quot;Detection ${detection.imageId}: ${names.join(&quot;, &quot;)}&quot;;
-  } else {
-    return &quot;Detection ${detection.imageId}: pending analysis...&quot;;
-  }
+  return &quot;Detection ${detection.imageId}&quot;;
 }</code></pre>
 </section>
 

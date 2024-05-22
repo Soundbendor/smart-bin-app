@@ -81,8 +81,8 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">void connectToDevice(BuildContext context) async {
   &#47;&#47; Rebuild the user&#39;s device from its id to pair and connect
-  BleDevice bledevice =
-      BleDevice.fromId(sharedPreferences.getString(SharedPreferencesKeys.deviceID)!);
+  BleDevice bledevice = BleDevice.fromId(
+      sharedPreferences.getString(SharedPreferencesKeys.deviceID)!);
   DeviceNotifier notifierProvider =
       Provider.of&lt;DeviceNotifier&gt;(context, listen: false);
   notifierProvider.setDevice(bledevice);
