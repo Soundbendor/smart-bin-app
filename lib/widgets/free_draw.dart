@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:binsight_ai/util/image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
@@ -15,7 +14,14 @@ import 'package:binsight_ai/util/providers/annotation_notifier.dart';
 class FreeDraw extends StatefulWidget {
   /// The link for the image to be annotated
   final String imageLink;
+
+  /// The size of the widget/viewport
   final double size;
+
+  /// The scale of the image. Used to scale the values of the drawing segments between 0 and 100
+  final double scale;
+
+  /// The base directory for the image
   final Directory baseDir;
 
   const FreeDraw({
@@ -23,7 +29,7 @@ class FreeDraw extends StatefulWidget {
     required this.baseDir,
     required this.size,
     super.key,
-  });
+  }) : scale = size / 100;
 
   @override
   State<FreeDraw> createState() => _FreeDrawState();
@@ -47,9 +53,13 @@ class _FreeDrawState extends State<FreeDraw> {
   void onDrawStart(DragStartDetails details, AnnotationNotifier notifier) {
     setState(() {
       if (_isPointOnImage(details.localPosition)) {
+        final scaledPosition = Offset(
+          details.localPosition.dx / widget.scale,
+          details.localPosition.dy / widget.scale,
+        );
         currentDrawingSegment = DrawingSegment(
           id: DateTime.now().microsecondsSinceEpoch,
-          offsets: [details.localPosition],
+          offsets: [scaledPosition],
         );
         notifier.startCurrentAnnotation(currentDrawingSegment!);
         notifier.updateCurrentAnnotationHistory();
@@ -62,9 +72,13 @@ class _FreeDrawState extends State<FreeDraw> {
       if (currentDrawingSegment != null &&
           _isPointOnImage(details.localPosition)) {
         Offset localPosition = details.localPosition;
+        final scaledPosition = Offset(
+          localPosition.dx / widget.scale,
+          localPosition.dy / widget.scale,
+        );
 
         currentDrawingSegment = currentDrawingSegment?.copyWith(
-          offsets: currentDrawingSegment!.offsets..add(localPosition),
+          offsets: currentDrawingSegment!.offsets..add(scaledPosition),
         );
         notifier.updateCurrentAnnotation(currentDrawingSegment!);
         notifier.updateCurrentAnnotationHistory();
@@ -109,17 +123,31 @@ class _FreeDrawState extends State<FreeDraw> {
                     : Container(),
                 CustomPaint(
                   painter: DrawingPainter(
-                    activeSegments: notifier.currentAnnotation,
-                    allSegments: notifier.oldAnnotations,
+                    activeSegments: scaleSegments(notifier.currentAnnotation),
+                    allSegments: scaleSegments(notifier.oldAnnotations),
                   ),
                 ),
-                if (!isDrawing()) const FreeDrawText()
+                if (!isDrawing()) FreeDrawText(scale: widget.scale)
               ],
             ),
           ),
         );
       },
     );
+  }
+
+  List<DrawingSegment> scaleSegments(List<DrawingSegment> segments) {
+    return segments.map((segment) {
+      return DrawingSegment(
+        id: segment.id,
+        offsets: segment.offsets
+            .map((offset) => Offset(
+                  offset.dx * widget.scale,
+                  offset.dy * widget.scale,
+                ))
+            .toList(),
+      );
+    }).toList();
   }
 
   /// Checks whether an Offset is within the bounds of the image
@@ -134,7 +162,10 @@ class _FreeDrawState extends State<FreeDraw> {
 class FreeDrawText extends StatelessWidget {
   const FreeDrawText({
     super.key,
+    required this.scale,
   });
+
+  final double scale;
 
   @override
   Widget build(BuildContext context) {
@@ -143,8 +174,8 @@ class FreeDrawText extends StatelessWidget {
       return Stack(
         children: notifier.allAnnotations.map((annotation) {
           return Positioned(
-            left: annotation["xy_coord_list"][0][0],
-            top: annotation["xy_coord_list"][0][1],
+            left: annotation["xy_coord_list"][0][0] * scale,
+            top: annotation["xy_coord_list"][0][1] * scale,
             child: Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
