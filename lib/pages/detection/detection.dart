@@ -148,7 +148,7 @@ class _DetectionCardState extends State<_DetectionCard> {
                     widget.detection.pressure.toString(), textTheme),
                 _buildDataField("Indoor Air Quality: ",
                     widget.detection.iaq.toString(), textTheme),
-                _buildDataField("Total Volatile Organic Compounds: ",
+                _buildDataField("Total VOCs: ",
                     widget.detection.vo2.toString(), textTheme),
               ],
             ),
