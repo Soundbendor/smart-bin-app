@@ -129,7 +129,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     //Defines the router to be used for the app, with set-up as the initial route
     setRoutes(getRoutes());
     router ??= GoRouter(
-        initialLocation: !widget.skipSetUp ? '/main' : '/set-up',
+        initialLocation: widget.skipSetUp ? '/main' : '/set-up',
         routes: routes);
 
     return ChangeNotifierProvider(
