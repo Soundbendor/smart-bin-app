@@ -191,7 +191,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
 
         // API RETURNS ITEMS SORTED BY DATE IN ASCENDING ORDER, REVERSE FOR NEWEST FIRST
         List<dynamic> itemList = data['items'].reversed.toList();
-        if (itemList.isNotEmpty) {
+        if (itemList.isNotEmpty && timestamp != DateTime(2022, 1, 1)) {
           itemList.removeAt(0);
         }
         debug(
