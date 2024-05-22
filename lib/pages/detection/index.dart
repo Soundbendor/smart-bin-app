@@ -1,14 +1,15 @@
 // Flutter imports:
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rotating_icon_button/rotating_icon_button.dart';
 
 // Project imports:
+import 'package:binsight_ai/util/api.dart';
 import 'package:binsight_ai/util/providers/device_notifier.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/async_ops.dart';
@@ -55,7 +56,8 @@ class DetectionsPageState extends State<DetectionsPage> {
 
   @override
   void initState() {
-    loadDetectionFuture = loadDetections(context, showSnackBar: false);
+    loadDetectionFuture =
+        loadDetections(context, showSnackBar: false, forceRefresh: false);
     getDirectory();
     super.initState();
   }
@@ -146,15 +148,28 @@ class DetectionsPageState extends State<DetectionsPage> {
         });
   }
 
-  /// Function that returns all detections from the database after a simulated delay.
+  /// Function that retrieves all detections from the database.
   ///
   /// If [showSnackBar] is true, the snackBar will be rendered after the refresh.
   /// If [showSnackBar] is false, the snackBar will not be rendered after the refresh.
+  /// If [forceRefresh] is true, the detections will be re-fetched from the API.
   ///
   /// Tapping the snackBar will trigger a call to [checkWifi].
-  Future<void> loadDetections(BuildContext context,
-      {bool showSnackBar = true}) {
-    // TODO: Actually fetch new content from the server
+  Future<void> loadDetections(
+    BuildContext context, {
+    bool showSnackBar = true,
+    bool forceRefresh = true,
+  }) async {
+    if (forceRefresh) {
+      Future<DateTime> timestamp = getLatestTimestamp();
+      await fetchImageData(
+        sharedPreferences.getString(SharedPreferencesKeys.deviceApiID) ??
+            dotenv.env['DEVICE_ID'] ??
+            "",
+        timestamp,
+        context,
+      );
+    }
     return Detection.all().then((value) async {
       // Access the detections before the refresh to compare afterwards
       List<Detection> previousDetections = detections;
