@@ -93,7 +93,6 @@ class _DetectionCardState extends State<_DetectionCard> {
           children: [
             SizedBox(
               width: 350,
-              height: 350,
               child: Stack(
                 children: [
                   Container(

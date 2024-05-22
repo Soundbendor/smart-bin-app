@@ -1,7 +1,9 @@
 // Flutter imports:
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:binsight_ai/util/image.dart';
+import 'package:binsight_ai/util/styles.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -68,16 +70,31 @@ class DetectionLargeListItem extends StatelessWidget {
                   "Timestamp: ${detection.timestamp}",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 12, top: 12),
-                  alignment: Alignment.center,
-                  child: image != null
-                      ? Image.file(
-                          image,
-                          width: 325,
-                          height: 325,
-                        )
-                      : Container(),
+                Center(
+                  child: Container(
+                    width: 325,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: colorScheme.onSurface,
+                        width: 1,
+                      ),
+                    ),
+                    margin: const EdgeInsets.only(bottom: 12, top: 12),
+                    alignment: Alignment.center,
+                    child: Stack(
+                      children: [
+                        image != null
+                            ? Image.file(
+                                image,
+                                width: 325,
+                              )
+                            : Container(),
+                        if (jsonDecode(detection.boxes ?? "[]").isNotEmpty)
+                          Icon(Icons.bookmark_added,
+                              color: mainColorScheme.tertiary),
+                      ],
+                    ),
+                  ),
                 ),
                 SizedBox(
                   width: 250,
@@ -143,9 +160,22 @@ class DetectionSmallListItem extends StatelessWidget {
           color: colorScheme.onPrimary,
           child: ListTile(
             leading: Container(
-                width: 50,
-                height: 50,
-                child: image != null ? Image.file(image) : Container()),
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: colorScheme.onSurface,
+                  width: 1,
+                ),
+              ),
+              child: Stack(
+                children: [
+                  image != null ? Image.file(image) : Container(),
+                  if ((jsonDecode(detection.boxes ?? "[]") as List).isNotEmpty)
+                    Icon(Icons.bookmark_added, color: mainColorScheme.tertiary),
+                ],
+              ),
+            ),
             title: Text(formatDetectionTitle(detection),
                 style: textTheme.titleMedium),
             subtitle: Text(detection.timestamp.toString(),
