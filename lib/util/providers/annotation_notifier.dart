@@ -133,8 +133,7 @@ class AnnotationNotifier extends ChangeNotifier {
 
   /// Check if the current annotation can be marked done
   bool isDone() {
-    return label == null &&
-        currentAnnotation.isEmpty &&
+    return currentAnnotation.isEmpty &&
         allAnnotations.isNotEmpty;
   }
 }
