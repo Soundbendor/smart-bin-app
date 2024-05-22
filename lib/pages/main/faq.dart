@@ -57,7 +57,8 @@ class FAQ extends StatelessWidget {
                   ],
                 },
                 {
-                  "subheading": "How do I know if my bin is connected to the internet?",
+                  "subheading":
+                      "How do I know if my bin is connected to the internet?",
                   "content": [
                     "You can check the Wi-Fi status of your bin in the app by pulling down to refresh the Detections page.",
                     "If you see new detections, your bin is connected to the internet.",
@@ -88,8 +89,8 @@ Widget _buildFaqSections(
               ),
               children: section["content"]
                   .map<Widget>((content) => Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 4, horizontal: 16),
+                        padding: 
+                          const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                         child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(content, style: textTheme)),
