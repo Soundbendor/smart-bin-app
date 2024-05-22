@@ -90,7 +90,7 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   try {
-    await dotenv.load(fileName: ".env");
+    await dotenv.load(fileName: "assets/data/.env");
   } catch (e) {
     debug("Error loading .env file");
   }
@@ -162,7 +162,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
 
   @override
   Widget build(BuildContext context) {
-    //Defines the router to be used for the app, with set-up as the initial route
+    // Defines the router to be used for the app, with set-up as the initial route
     setRoutes(getRoutes());
     router ??= GoRouter(
         initialLocation: widget.skipSetUp ? '/main' : '/main',
