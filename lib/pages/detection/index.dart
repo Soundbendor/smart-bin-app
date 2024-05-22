@@ -21,6 +21,8 @@ import 'package:binsight_ai/util/providers/image_provider.dart';
 import 'package:binsight_ai/widgets/detections.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/widgets/wifi_check_dialog.dart';
+import 'package:binsight_ai/util/providers/detection_notifier.dart';
+import 'package:binsight_ai/util/providers/image_provider.dart';
 
 /// Displays the detections with padding and a size toggle button.
 class DetectionsPage extends StatefulWidget {
