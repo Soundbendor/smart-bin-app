@@ -9,7 +9,6 @@ import 'package:flutter_test/flutter_test.dart';
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/detections.dart';
-import 'package:path_provider/path_provider.dart';
 import '../shared.dart';
 
 /// Tests for the detection list
@@ -18,7 +17,6 @@ void main() {
 
   testWidgets("Detection list (incomplete) displays correct title",
       (widgetTester) async {
-    Directory dir = await getApplicationDocumentsDirectory();
     final detection = Detection.fromMap(
       {
         "imageId": "foo-2",
@@ -53,7 +51,7 @@ void main() {
       size: const Size(800, 600),
       child: DetectionLargeListItem(
         detection: detection,
-        baseDir: dir,
+        baseDir: Directory("/test"),
       ),
     ));
     expect(
@@ -64,7 +62,7 @@ void main() {
 
   testWidgets("Detection list (complete) displays correct title",
       (widgetTester) async {
-    Directory dir = await getApplicationDocumentsDirectory();
+    Directory dir = Directory("/test");
     final detection = Detection.fromMap(
       {
         "imageId": "foo",

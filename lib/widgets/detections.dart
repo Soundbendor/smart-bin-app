@@ -9,7 +9,6 @@ import 'package:go_router/go_router.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
-import 'package:binsight_ai/widgets/image.dart';
 
 /// Build a title string for each detection.
 ///
@@ -150,6 +149,8 @@ class DetectionSmallListItem extends StatelessWidget {
           color: colorScheme.onPrimary,
           child: ListTile(
             leading: Container(
+                width: 50,
+                height: 50,
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: colorScheme.onSurface,

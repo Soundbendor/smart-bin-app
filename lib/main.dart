@@ -66,6 +66,8 @@ void main() async {
     await dotenv.load(fileName: "assets/data/.env");
   } catch (e) {
     debug("Error loading .env file");
+    // Ensure that `dotenv` is initialized and prevents crashes
+    dotenv.testLoad();
   }
 
   runApp(
@@ -81,6 +83,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AnnotationNotifier()),
         // Notifies listeners of changes to the current detection's state.
         ChangeNotifierProvider(create: (_) => DetectionNotifier()),
+        // Notifies listeners of changes to the current image's state. Used on the home page.
         ChangeNotifierProvider(create: (_) => ImageNotifier())
       ],
       // Skip initial set up if user has already set up a device
@@ -111,7 +114,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     Future<DateTime> timestamp = getLatestTimestamp();
     fetchImageData(
         sharedPreferences.getString(SharedPreferencesKeys.deviceApiID) ??
-            dotenv.env['DEVICE_ID']!,
+            dotenv.env['DEVICE_ID'] ?? "",
         timestamp);
   }
 
@@ -138,7 +141,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     //Defines the router to be used for the app, with set-up as the initial route
     setRoutes(getRoutes());
     router ??= GoRouter(
-        initialLocation: !widget.skipSetUp ? '/main' : '/set-up',
+        initialLocation: widget.skipSetUp ? '/main' : '/set-up',
         routes: routes);
 
     return ChangeNotifierProvider(

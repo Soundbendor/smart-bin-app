@@ -154,35 +154,34 @@ class DetectionsPageState extends State<DetectionsPage> {
   /// Tapping the snackBar will trigger a call to [checkWifi].
   Future<void> loadDetections(BuildContext context,
       {bool showSnackBar = true}) {
-    return Future.delayed(const Duration(seconds: 2), () {
-      return Detection.all().then((value) async {
-        // Access the detections before the refresh to compare afterwards
-        List<Detection> previousDetections = detections;
-        setState(() {
-          detections = value;
-        });
-        // If the new detections list is larger than the old one, there are new detections
-        bool areNewDetections = previousDetections.length != detections.length;
-        if (showSnackBar) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              duration: const Duration(seconds: 15),
-              content: Text(
-                areNewDetections
-                    ? "New detections found. Happy annotating!"
-                    : "No new detections found. Tap here if you were expecting some.",
-                style: Theme.of(context)
-                    .textTheme
-                    .labelLarge
-                    ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
-              ),
-              backgroundColor: areNewDetections ? Colors.green : Colors.blue,
-              action: SnackBarAction(label: "Check", onPressed: checkWifi),
-              showCloseIcon: true,
-            ),
-          );
-        }
+    // TODO: Actually fetch new content from the server
+    return Detection.all().then((value) async {
+      // Access the detections before the refresh to compare afterwards
+      List<Detection> previousDetections = detections;
+      setState(() {
+        detections = value;
       });
+      // If the new detections list is larger than the old one, there are new detections
+      bool areNewDetections = previousDetections.length != detections.length;
+      if (showSnackBar) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: const Duration(seconds: 15),
+            content: Text(
+              areNewDetections
+                  ? "New detections found. Happy annotating!"
+                  : "No new detections found. Tap here if you were expecting some.",
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge
+                  ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+            ),
+            backgroundColor: areNewDetections ? Colors.green : Colors.blue,
+            action: SnackBarAction(label: "Check", onPressed: checkWifi),
+            showCloseIcon: true,
+          ),
+        );
+      }
     });
   }
 
