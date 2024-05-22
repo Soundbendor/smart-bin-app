@@ -418,7 +418,7 @@ class _DrawingControlAreaState extends State<_DrawingControlArea> {
                 }),
               ],
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 10),
           ],
         ),
       );
@@ -568,51 +568,59 @@ class _DrawingAreaState extends State<_DrawingArea> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         } else {
-          return Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: RepaintBoundary(
-                  key: widget.captureKey,
-                  child: SizedBox(
-                    width: size,
-                    height: size,
-                    child: SingleChildScrollView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      child: FreeDraw(
-                        imageLink: snapshot.data as String,
-                        baseDir: widget.baseDir,
-                        size: size,
+          return Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+              ),
+              child: Stack(
+                children: [
+                  RepaintBoundary(
+                    key: widget.captureKey,
+                    child: SizedBox(
+                      width: size,
+                      height: size,
+                      child: SingleChildScrollView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        child: FreeDraw(
+                          imageLink: snapshot.data as String,
+                          baseDir: widget.baseDir,
+                          size: size,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-              if (!drawStarted)
-                Positioned(
-                  child: GestureDetector(
-                    onTap: () => setState(() {
-                      drawStarted = true;
-                    }),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Container(
+                  if (!drawStarted)
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      height: size,
+                      width: size,
+                      child: GestureDetector(
+                        onTap: () => setState(() {
+                          drawStarted = true;
+                        }),
+                        child: Container(
                           width: size,
                           height: size,
                           decoration: BoxDecoration(
                             color: Colors.black.withOpacity(0.45),
                           ),
                           child: Center(
-                              child: Text(
-                            "Tap to start",
-                            style: textTheme.displaySmall!.copyWith(
-                              color: Colors.white,
+                            child: Text(
+                              "Tap to start",
+                              style: textTheme.displaySmall!.copyWith(
+                                color: Colors.white,
+                              ),
                             ),
-                          ))),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-            ],
+                ],
+              ),
+            ),
           );
         }
       },

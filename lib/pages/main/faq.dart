@@ -89,8 +89,8 @@ Widget _buildFaqSections(
               ),
               children: section["content"]
                   .map<Widget>((content) => Padding(
-                        padding: 
-                          const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 4, horizontal: 16),
                         child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(content, style: textTheme)),

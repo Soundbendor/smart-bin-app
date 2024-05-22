@@ -110,7 +110,8 @@ class _WifiCheckDialogState extends State<WifiCheckDialog> {
                       color: Theme.of(context)
                           .colorScheme
                           .onSurface
-                          .withAlpha(250),),
+                          .withAlpha(250),
+                    ),
               ),
             ),
             TextButton(
@@ -119,7 +120,8 @@ class _WifiCheckDialogState extends State<WifiCheckDialog> {
                 Navigator.of(context).pop();
                 GoRouter.of(context).pushReplacementNamed("wifi-scan");
               },
-              style: TextButton.styleFrom(backgroundColor: const Color.fromARGB(255, 116, 193, 164)),
+              style: TextButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 116, 193, 164)),
               child: const Text("Yes"),
             ),
           ],
