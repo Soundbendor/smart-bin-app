@@ -13,16 +13,57 @@ class FAQ extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme.bodyLarge;
     return Scaffold(
       body: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(10),
         child: ListView(
           children: [
-            _buildFaqSection(
-              "FAQ",
+            // FAQ Heading
+            const Padding(
+              padding: EdgeInsets.only(left: 10, top: 10, bottom: 5),
+              child: Heading(text: "FAQ"),
+            ),
+            // FAQ Content
+            _buildFaqSections(
               [
-                {"subheading": "Introduction", "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."},
-                {"subheading": "Overview", "content": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem."},
-                {"subheading": "Details", "content": "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"},
-                // Add more subheadings and paragraphs as needed
+                {
+                  "subheading": "What can I put in my Smart Compost Bin?",
+                  "content": [
+                    "As a general rule of thumb, if it comes from your cutting board or plate, you can compost it!",
+                    "Here are some examples:",
+                    "- Fruit and vegetable scraps",
+                    "- Rinds, peels, pits",
+                    "- Meat, dairy, eggs",
+                    "- Leftover prepared foods",
+                    "- Grass clippings",
+                    "- Coffee grounds and filters",
+                    "- Tea bags",
+                    "- Nut shells",
+                  ],
+                },
+                {
+                  "subheading": "What things don't belong in the bin?",
+                  "content": [
+                    "- Large bones (like beef, lamb, or pork)",
+                    "- Large amounts of grease or oil",
+                    "- Drugs or medications",
+                    "- Compostable plastics, packaging",
+                    "- Take-out containers, paper plates",
+                  ],
+                },
+                {
+                  "subheading": "How will the saved annotations be used?",
+                  "content": [
+                    "The annotations saved from the images will be used to train the AI model to recognize objects in the images.",
+                    "The more annotations we have, the better the model will be at recognizing objects in the images.",
+                  ],
+                },
+                {
+                  "subheading": "How do I know if my bin is connected to the internet?",
+                  "content": [
+                    "You can check the Wi-Fi status of your bin in the app by pulling down to refresh the Detections page.",
+                    "If you see new detections, your bin is connected to the internet.",
+                    "If you don't see any new detections, your bin may be offline and you can click the pop-up to check your Wi-Fi connection.",
+                  ],
+                },
               ],
               textTheme!,
             ),
@@ -31,31 +72,30 @@ class FAQ extends StatelessWidget {
       ),
     );
   }
+}
 
-  // Widget to build FAQ section with subheadings
-  Widget _buildFaqSection(String title, List<Map<String, String>> sections, TextStyle textTheme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Heading(text: title),
-        ...sections.map((section) => Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    section["subheading"]!,
-                    style: textTheme.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    section["content"]!,
-                    style: textTheme,
-                  ),
-                ],
+// Widget to build FAQ sections
+Widget _buildFaqSections(
+    List<Map<String, dynamic>> sections, TextStyle textTheme) {
+  return Column(
+    children: sections
+        .map((section) => ExpansionTile(
+              shape: Border.all(color: Colors.transparent),
+              title: Text(
+                section["subheading"],
+                style: textTheme.copyWith(
+                    fontSize: 20, fontWeight: FontWeight.bold),
               ),
-            )),
-      ],
-    );
-  }
+              children: section["content"]
+                  .map<Widget>((content) => Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 4, horizontal: 16),
+                        child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(content, style: textTheme)),
+                      ))
+                  .toList(),
+            ))
+        .toList(),
+  );
 }

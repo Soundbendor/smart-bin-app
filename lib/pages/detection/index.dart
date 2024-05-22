@@ -169,8 +169,8 @@ class DetectionsPageState extends State<DetectionsPage> {
             duration: const Duration(seconds: 15),
             content: Text(
               areNewDetections
-                    ? "New detections found./n" "Happy annotating!"
-                    : "No new detections found./n" "If you're having trouble, check your Wi-Fi connection.",
+                    ? "New detections found. Happy annotating!"
+                    : "No new detections found. If you're having trouble, check your Wi-Fi connection.",
                 style: Theme.of(context)
                     .textTheme
                     .labelLarge

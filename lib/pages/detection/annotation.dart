@@ -694,7 +694,7 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                       : const Padding(padding: EdgeInsets.zero);
                 },
                 // Options associated with creating a new item when searched item isn't found
-                // This is not currently turned on. To enable, set isCreatable to true in
+                // This is currently turned off. To enable, set isCreatable to true in
                 // the MultipleSearchSelection.creatable widget
                 createOptions: CreateOptions(
                   pickCreated: true,
