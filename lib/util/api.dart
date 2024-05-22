@@ -123,8 +123,10 @@ Future<void> retrieveImages(
       debug('POST request successful');
       debug(response.body);
       if (!context.mounted) return;
-      Provider.of<ImageNotifier>(context, listen: false)
+      await Provider.of<ImageNotifier>(context, listen: false)
           .saveAndExtract(response.body);
+      if (!context.mounted) return;
+      Provider.of<DetectionNotifier>(context, listen: false).getAll();
     } else {
       debug('Failed to make POST request.');
     }
