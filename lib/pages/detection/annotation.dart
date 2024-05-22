@@ -1,6 +1,7 @@
 // Flutter imports:
 import 'dart:convert';
 import 'dart:io';
+import 'package:binsight_ai/util/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -483,6 +484,7 @@ class _BottomControlArea extends StatelessWidget {
                       annotationNotifier.clearCurrentAnnotation();
                       notifier.updateDetection(
                           detectionId, annotationNotifier.allAnnotations);
+                      uploadAnnotation(detectionId, annotationNotifier.allAnnotations);
 
                       Future.delayed(const Duration(milliseconds: 100), () {
                         annotationNotifier.reset();
