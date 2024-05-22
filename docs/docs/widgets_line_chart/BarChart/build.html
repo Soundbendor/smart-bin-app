@@ -138,9 +138,18 @@ Widget build(BuildContext context) {
 
   &#47;&#47; Use the cartesian chart with the _ChartData, specifying the main axis as date time
   return SfCartesianChart(
+    margin: const EdgeInsets.all(0.0),
     primaryXAxis: DateTimeAxis(
       isVisible: true,
+      interval: 2,
       dateFormat: DateFormat(&#39;M&#47;d&#39;),
+      labelRotation: 45, &#47;&#47; Rotate labels for better readability
+      edgeLabelPlacement: EdgeLabelPlacement.shift,
+      labelIntersectAction: AxisLabelIntersectAction.rotate45,
+    ),
+    primaryYAxis: const NumericAxis(
+      isVisible: true,
+      title: AxisTitle(text: &#39;Weight&#39;), &#47;&#47; Label for Y axis
     ),
     series: &lt;ColumnSeries&lt;_ChartData, DateTime&gt;&gt;[
       ColumnSeries&lt;_ChartData, DateTime&gt;(
@@ -184,7 +193,7 @@ Widget build(BuildContext context) {
 <footer>
   <span class="no-break">
     binsight_ai
-      1.0.0
+      2.0.0
   </span>
 
   
