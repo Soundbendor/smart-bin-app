@@ -34,7 +34,7 @@ class _TopNavBarState extends State<TopNavBar> {
     // When user opens the drawer, it is added to the navigation stack.
     return Drawer(
       child: Container(
-        color: mainTheme.colorScheme.background,
+        color: mainTheme.colorScheme.onPrimary,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [

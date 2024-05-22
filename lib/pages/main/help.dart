@@ -8,126 +8,126 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/pages/detection/index.dart';
 
-/// Displays the Help page with dropdown sections for Help, and Contact Us email connection
+/// Displays the Help page with sections for Help, Contact Us, and Wi-Fi Status
 class HelpPage extends StatelessWidget {
   const HelpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme.bodyMedium;
+    final textTheme = Theme.of(context).textTheme.bodyLarge;
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(10),
         child: ListView(
           children: [
-            _buildExpansionTile("Help", "Help Content", textTheme!),
-            _buildContactUsExpansionTile(textTheme),
-            _buildWifiStatusExpansionTile(textTheme),
+            // Help Heading
+            const Padding(
+              padding: EdgeInsets.only(left: 10, top: 10, bottom: 5),
+              child: Heading(text: "Help"),
+            ),
+            // Help Content
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                "Have questions or need help with your bin? Please contact us for help using the email below.",
+                style: textTheme!.copyWith(fontSize: 18),
+              ),
+            ),
+            // Contact Us Section
+            Padding(
+              padding: const EdgeInsets.only(left: 10, top: 10, bottom: 5),
+              child: Text(
+                "Contact Us",
+                style: textTheme.copyWith(
+                    fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Provide a detailed description of your issue so our team can assist you.",
+                    style: textTheme.copyWith(fontSize: 18),
+                  ),
+                  const SizedBox(height: 10.0),
+                  Center(
+                    child: TextButton(
+                      onPressed: _launchEmail,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.email,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            size: 30,
+                          ),
+                          const SizedBox(width: 18.0),
+                          Text(
+                            'Email',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Wi-Fi Status Section
+            Padding(
+              padding: const EdgeInsets.only(left: 10, top: 10, bottom: 5),
+              child: Text(
+                "Wi-Fi Status",
+                style: textTheme.copyWith(
+                    fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Need to check or change your Wi-Fi connection?",
+                    style: textTheme.copyWith(fontSize: 18),
+                  ),
+                  const SizedBox(height: 10.0),
+                  Center(
+                    child: TextButton(
+                      onPressed: DetectionsPageState().checkWifi,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.wifi,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            size: 30,
+                          ),
+                          const SizedBox(width: 18.0),
+                          Text(
+                            'Check Wi-Fi',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
-    );
-  }
-
-  // ExpansionTile widget for each section (aside from Contact Us section)
-  ExpansionTile _buildExpansionTile(
-      String title, String content, TextStyle textTheme) {
-    return ExpansionTile(
-      shape: Border.all(color: Colors.transparent),
-      title: Heading(text: title),
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(content, style: textTheme),
-        ),
-      ],
-    );
-  }
-
-  // ExpansionTile widget for Contact Us section
-  ExpansionTile _buildContactUsExpansionTile(TextStyle textTheme) {
-    return ExpansionTile(
-      shape: Border.all(color: Colors.transparent),
-      title: const Heading(text: "Contact Us"),
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              const Text(
-                  "Have questions or need help with your bin?\nContact us for help!"),
-              const SizedBox(height: 10.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: TextButton(
-                  onPressed: _launchEmail,
-                  child: Builder(builder: (context) {
-                    return Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.email,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          size: 30,
-                        ),
-                        const SizedBox(width: 18.0),
-                        Text('Email',
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w500)),
-                      ],
-                    );
-                  }),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  // ExpansionTile widget for Contact Us section
-  ExpansionTile _buildWifiStatusExpansionTile(TextStyle textTheme) {
-    return ExpansionTile(
-      shape: Border.all(color: Colors.transparent),
-      title: const Heading(text: "Wi-Fi Status"),
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              const Text("Need to check or change your Wi-Fi connection?"),
-              const SizedBox(height: 10.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: TextButton(
-                  onPressed: DetectionsPageState().checkWifi,
-                  child: Builder(builder: (context) {
-                    return Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.wifi,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          size: 30,
-                        ),
-                        const SizedBox(width: 18.0),
-                        Text('Check Wi-Fi',
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w500)),
-                      ],
-                    );
-                  }),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 

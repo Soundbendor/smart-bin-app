@@ -44,7 +44,35 @@ const String exampleBoxes = '''
     ]
   },
   {
+    "object_name": "Beef",
+    "xy_coord_list": [
+      [11.1, 16.4],
+      [11.3, 16.5]
+    ]
+  },
+  {
     "object_name": "Milk",
+    "xy_coord_list": [
+      [11.1, 16.4],
+      [11.3, 16.5]
+    ]
+  },
+  {
+    "object_name": "Pea",
+    "xy_coord_list": [
+      [11.1, 16.4],
+      [11.3, 16.5]
+    ]
+  },
+  {
+    "object_name": "Lettuce",
+    "xy_coord_list": [
+      [11.1, 16.4],
+      [11.3, 16.5]
+    ]
+  },
+  {
+    "object_name": "Tomato",
     "xy_coord_list": [
       [11.1, 16.4],
       [11.3, 16.5]
@@ -138,10 +166,12 @@ class _BinsightAiAppState extends State<BinsightAiApp>
 
   @override
   Widget build(BuildContext context) {
-    //Defines the router to be used for the app, with set-up as the initial route
+    // Defines the router to be used for the app, with set-up as the initial route
     setRoutes(getRoutes());
     router ??= GoRouter(
+        // initialLocation: widget.skipSetUp ? '/main' : '/main',
         initialLocation: widget.skipSetUp ? '/main' : '/set-up',
+
         routes: routes);
 
     return ChangeNotifierProvider(

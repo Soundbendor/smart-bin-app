@@ -69,12 +69,6 @@ class DetectionLargeListItem extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: colorScheme.onSurface,
-                      width: 1,
-                    ),
-                  ),
                   margin: const EdgeInsets.only(bottom: 12, top: 12),
                   alignment: Alignment.center,
                   child: image != null
@@ -93,7 +87,7 @@ class DetectionLargeListItem extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Transcription:",
+                            Text("Transcription: ",
                                 style: textTheme.titleMedium),
                           ],
                         ),
@@ -151,12 +145,6 @@ class DetectionSmallListItem extends StatelessWidget {
             leading: Container(
                 width: 50,
                 height: 50,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: colorScheme.onSurface,
-                    width: 1,
-                  ),
-                ),
                 child: image != null ? Image.file(image) : Container()),
             title: Text(formatDetectionTitle(detection),
                 style: textTheme.titleMedium),

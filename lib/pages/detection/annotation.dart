@@ -115,16 +115,14 @@ class _AnnotationPageState extends State<AnnotationPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 // Display annotation gif with border
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 1.0)),
                   child: Image.asset('assets/images/annotation.gif'),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                      "Outline the composted item with your finger as accurately as possible.",
+                      "Outline the newly composted item with your finger as accurately as possible.",
                       style: Theme.of(context).textTheme.labelLarge),
                 ),
                 Row(
@@ -143,7 +141,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                     Expanded(
                       child: Text(
                         "Don't show this screen again",
-                        style: Theme.of(context).textTheme.labelLarge,
+                        style: Theme.of(context).textTheme.labelSmall,
                       ),
                     ),
                   ],
@@ -167,6 +165,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
         });
   }
 
+  //// The main build method for the AnnotationPage
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -188,36 +187,43 @@ class _AnnotationPageState extends State<AnnotationPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: const EdgeInsets.only(top: 16),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             GestureDetector(
                               child: Row(
                                 children: [
-                                  const Icon(Icons.arrow_back_ios),
+                                  const Icon(Icons.arrow_back_ios, size: 30),
                                   Text("Back to Detection",
-                                      style: textTheme.labelLarge),
+                                      style: textTheme.headlineSmall),
                                 ],
                               ),
                               onTap: () => GoRouter.of(context).pop(),
                             ),
-                            const Heading(text: "Annotate Your Image"),
                             const SizedBox(height: 16),
+                            const Heading(text: "Annotate Your Image"),
                           ],
                         ),
                       ),
-                      appDocDir != null
-                          ? _DrawingArea(
-                              baseDir: appDocDir!,
-                              imageLink: imageLink,
-                              constraints: constraints)
-                          : Container(),
-                      _DrawingControlArea(
-                          detectionId: widget.detectionId,
-                          constraints: constraints),
-                      const SizedBox(height: 16),
-                      const Expanded(child: Column()),
+                      Card(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            children: [
+                              appDocDir != null
+                                  ? _DrawingArea(
+                                      baseDir: appDocDir!,
+                                      imageLink: imageLink,
+                                      constraints: constraints)
+                                  : Container(),
+                              _DrawingControlArea(
+                                  detectionId: widget.detectionId,
+                                  constraints: constraints),
+                            ],
+                          ),
+                        ),
+                      ),
                       _BottomControlArea(detectionId: widget.detectionId),
                     ],
                   ),
@@ -318,7 +324,7 @@ class _DrawingControlAreaState extends State<_DrawingControlArea> {
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
                       annotationNotifier.label == null
-                          ? 'No label selected yet'
+                          ? 'Please Select a Label'
                           : 'Selected Label: ${annotationNotifier.label}',
                       style: textTheme.labelLarge,
                       overflow: TextOverflow.fade,
@@ -328,7 +334,7 @@ class _DrawingControlAreaState extends State<_DrawingControlArea> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 5),
             Row(
               children: [
                 ElevatedButton(
@@ -411,6 +417,7 @@ class _DrawingControlAreaState extends State<_DrawingControlArea> {
                 }),
               ],
             ),
+            const SizedBox(height: 5),
           ],
         ),
       );
@@ -429,7 +436,7 @@ class _BottomControlArea extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: Theme.of(context).colorScheme.secondary,
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -452,7 +459,7 @@ class _BottomControlArea extends StatelessWidget {
                   backgroundColor: mainColorScheme.error,
                 ),
                 child: Text(
-                  "Clear",
+                  "Clear Image",
                   style: textTheme.labelLarge!.copyWith(
                     color: Theme.of(context).colorScheme.onError,
                   ),
@@ -511,7 +518,7 @@ class _BottomControlArea extends StatelessWidget {
                 );
               },
               child: Text(
-                "Done",
+                "Save & Exit",
                 style: textTheme.labelLarge!
                     .copyWith(color: Theme.of(context).colorScheme.onPrimary),
               ),
@@ -634,7 +641,7 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text(
-        "Select A Label",
+        "Select a Label",
         textAlign: TextAlign.center,
       ),
       content: SizedBox(
@@ -652,12 +659,13 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                 },
                 maxSelectedItems: 1,
                 searchField: TextField(
+                  style: Theme.of(context).textTheme.bodyLarge,
                   decoration: InputDecoration(
-                    hintText: selectedLabel == null
-                        ? "Select A Label"
-                        : selectedLabel!,
+                    hintText: selectedLabel == null ? "Search" : selectedLabel!,
                     hintStyle: selectedLabel == null
-                        ? const TextStyle(color: Colors.grey)
+                        ? const TextStyle(
+                            color: Colors.grey,
+                          )
                         : const TextStyle(color: Colors.black),
                   ),
                 ),
@@ -671,12 +679,15 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                 pickedItemBuilder: (label) {
                   return const Text("");
                 },
-                //Each label has a category, we want to search the Labels
+                // Each label has a category, we want to search the Labels
                 fieldToCheck: (label) {
                   return label["Label"]["name"];
                 },
                 itemBuilder: (label, index) {
-                  return Text(label["Label"]["name"]);
+                  return Text(
+                    label["Label"]["name"],
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  );
                 },
                 pickedItemsContainerBuilder: (pickedItems) {
                   return pickedItems.isNotEmpty
@@ -684,10 +695,12 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                       : const Padding(padding: EdgeInsets.zero);
                 },
                 // Options associated with creating a new item when searched item isn't found
+                // This is currently turned off. To enable, set isCreatable to true in
+                // the MultipleSearchSelection.creatable widget
                 createOptions: CreateOptions(
                   pickCreated: true,
                   create: (text) => {
-                    "Label": {"name": text, "category": "Undefined"}
+                    "Label": {"name": text, "category": "undefined"}
                   },
                   createBuilder: (text) => Align(
                     alignment: Alignment.centerLeft,
@@ -703,16 +716,13 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 4),
                       child: TextButton(
-                        onPressed: () {
-                          // Only pop out of the dialog when pressing submit if you've selected a label
-                          if (widget.controller.getPickedItems().isNotEmpty) {
-                            context.read<AnnotationNotifier>().setLabel(
-                                widget.controller.getPickedItems()[0]["Label"]
-                                    ["name"]);
-                            Navigator.of(context).pop();
-                          }
-                        },
-                        child: const Text("Submit"),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                WidgetStateProperty.all<Color>(Colors.grey)),
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text(
+                          "Cancel",
+                        ),
                       ),
                     ),
                     if (selectedLabel != null)
@@ -720,8 +730,8 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                         margin: const EdgeInsets.symmetric(horizontal: 4),
                         child: TextButton(
                           style: ButtonStyle(
-                              backgroundColor:
-                                  WidgetStateProperty.all<Color>(Colors.red)),
+                              backgroundColor: WidgetStateProperty.all<Color>(
+                                  const Color.fromRGBO(236, 106, 44, 1))),
                           onPressed: () => setState(
                             () {
                               selectedLabel = null;
@@ -736,13 +746,16 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 4),
                       child: TextButton(
-                        style: ButtonStyle(
-                            backgroundColor:
-                                WidgetStateProperty.all<Color>(Colors.grey)),
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: const Text(
-                          "Cancel",
-                        ),
+                        onPressed: () {
+                          // Only pop out of the dialog when pressing submit if you've selected a label
+                          if (widget.controller.getPickedItems().isNotEmpty) {
+                            context.read<AnnotationNotifier>().setLabel(
+                                widget.controller.getPickedItems()[0]["Label"]
+                                    ["name"]);
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        child: const Text("Submit"),
                       ),
                     ),
                   ],

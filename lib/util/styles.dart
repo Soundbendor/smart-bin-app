@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 final mainColorScheme = ColorScheme(
   primary: const Color.fromARGB(255, 22, 151, 201),
   onPrimary: Colors.white,
-  secondary: Colors.blueAccent.shade700,
+  secondary: const Color(0xFFeef8f4),
   onSecondary: Colors.white,
   tertiary: const Color.fromARGB(255, 116, 193, 164),
   onTertiary: Colors.white,
@@ -53,6 +53,11 @@ final mainTheme = ThemeData(
     titleMedium: TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.bold,
+      fontFamily: 'GolosText', // Specify the font family
+    ),
+    bodyLarge: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.normal,
       fontFamily: 'GolosText', // Specify the font family
     ),
     bodyMedium: TextStyle(
