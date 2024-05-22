@@ -73,12 +73,6 @@ class DetectionLargeListItem extends StatelessWidget {
                 Center(
                   child: Container(
                     width: 325,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: colorScheme.onSurface,
-                        width: 1,
-                      ),
-                    ),
                     margin: const EdgeInsets.only(bottom: 12, top: 12),
                     alignment: Alignment.center,
                     child: Stack(

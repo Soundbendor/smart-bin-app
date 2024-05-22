@@ -106,23 +106,47 @@ class _DetectionCardState extends State<_DetectionCard> {
                   Positioned(
                     bottom: 16,
                     right: 8,
-                    child: IconButton(
-                      icon: const Icon(Icons.edit),
-                      iconSize: 30,
-                      tooltip: "Annotate Image",
-                      onPressed: () {
+                    child: Builder(builder: (context) {
+                      void onTap() {
                         GoRouter.of(context).push(
                             "/main/detection/${widget.detection.imageId}/annotation");
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all(
-                          colorScheme.primary.withAlpha(200),
+                      }
+
+                      return GestureDetector(
+                        onTap: onTap,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: colorScheme.primary.withAlpha(200),
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black,
+                                blurRadius: 5,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Row(
+                            children: [
+                              Text(
+                                "Annotate",
+                                style: textTheme.labelMedium!
+                                    .copyWith(color: Colors.white),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                iconSize: 30,
+                                tooltip: "Annotate Image",
+                                onPressed: onTap,
+                                color: colorScheme.onPrimary,
+                                splashColor: colorScheme.onSecondary,
+                              ),
+                            ],
+                          ),
                         ),
-                        shape: WidgetStateProperty.all(const CircleBorder()),
-                      ),
-                      color: colorScheme.onPrimary,
-                      splashColor: colorScheme.onSecondary,
-                    ),
+                      );
+                    }),
                   ),
                 ],
               ),
@@ -135,8 +159,8 @@ class _DetectionCardState extends State<_DetectionCard> {
                     widget.detection.transcription.toString(), textTheme),
                 _buildDataField("Temperature: ",
                     widget.detection.temperature.toString(), textTheme),
-                _buildDataField("Weight: ", 
-                    widget.detection.weight.toString(), textTheme),
+                _buildDataField(
+                    "Weight: ", widget.detection.weight.toString(), textTheme),
                 _buildDataField("Total Weight: ",
                     widget.detection.totalWeight.toString(), textTheme),
                 _buildDataField("Humidity: ",
@@ -147,8 +171,8 @@ class _DetectionCardState extends State<_DetectionCard> {
                     widget.detection.pressure.toString(), textTheme),
                 _buildDataField("Indoor Air Quality: ",
                     widget.detection.iaq.toString(), textTheme),
-                _buildDataField("Total VOCs: ",
-                    widget.detection.vo2.toString(), textTheme),
+                _buildDataField(
+                    "Total VOCs: ", widget.detection.vo2.toString(), textTheme),
               ],
             ),
           ],
@@ -217,8 +241,7 @@ class _BackToListButton extends StatelessWidget {
       child: Row(
         children: [
           const Icon(Icons.arrow_back_ios, size: 30),
-          Text("Back to list", 
-          style: textTheme.headlineSmall),
+          Text("Back to list", style: textTheme.headlineSmall),
         ],
       ),
       onTap: () => GoRouter.of(context).pop(),
