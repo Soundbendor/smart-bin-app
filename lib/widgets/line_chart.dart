@@ -34,9 +34,18 @@ class BarChart extends StatelessWidget {
 
     // Use the cartesian chart with the _ChartData, specifying the main axis as date time
     return SfCartesianChart(
+      margin: const EdgeInsets.all(0.0),
       primaryXAxis: DateTimeAxis(
         isVisible: true,
+        interval: 2,
         dateFormat: DateFormat('M/d'),
+        labelRotation: 45, // Rotate labels for better readability
+        edgeLabelPlacement: EdgeLabelPlacement.shift,
+        labelIntersectAction: AxisLabelIntersectAction.rotate45,
+      ),
+      primaryYAxis: const NumericAxis(
+        isVisible: true,
+        title: AxisTitle(text: 'Weight'), // Label for Y axis
       ),
       series: <ColumnSeries<_ChartData, DateTime>>[
         ColumnSeries<_ChartData, DateTime>(
