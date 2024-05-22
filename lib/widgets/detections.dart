@@ -87,7 +87,7 @@ class DetectionLargeListItem extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Transcription:",
+                            Text("Transcription: ",
                                 style: textTheme.titleMedium),
                           ],
                         ),
@@ -145,12 +145,6 @@ class DetectionSmallListItem extends StatelessWidget {
             leading: Container(
                 width: 50,
                 height: 50,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: colorScheme.onSurface,
-                    width: 1,
-                  ),
-                ),
                 child: image != null ? Image.file(image) : Container()),
             title: Text(formatDetectionTitle(detection),
                 style: textTheme.titleMedium),

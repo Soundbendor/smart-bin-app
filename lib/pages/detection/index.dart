@@ -170,7 +170,7 @@ class DetectionsPageState extends State<DetectionsPage> {
             content: Text(
               areNewDetections
                     ? "New detections found./n" "Happy annotating!"
-                    : "No new detections found.",
+                    : "No new detections found./n" "If you're having trouble, check your Wi-Fi connection.",
                 style: Theme.of(context)
                     .textTheme
                     .labelLarge
@@ -179,7 +179,7 @@ class DetectionsPageState extends State<DetectionsPage> {
               backgroundColor: areNewDetections 
               ? Theme.of(context).colorScheme.tertiary 
               : Theme.of(context).colorScheme.primary,
-              action: SnackBarAction(label: "Troubleshoot", onPressed: checkWifi),
+              action: SnackBarAction(label: "Check Wi-Fi", onPressed: checkWifi),
               showCloseIcon: true,
           ),
         );
