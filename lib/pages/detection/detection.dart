@@ -136,8 +136,8 @@ class _DetectionCardState extends State<_DetectionCard> {
                     widget.detection.transcription.toString(), textTheme),
                 _buildDataField("Temperature: ",
                     widget.detection.temperature.toString(), textTheme),
-                _buildDataField(
-                    "Weight: ", widget.detection.weight.toString(), textTheme),
+                _buildDataField("Weight: ", 
+                    widget.detection.weight.toString(), textTheme),
                 _buildDataField("Total Weight: ",
                     widget.detection.totalWeight.toString(), textTheme),
                 _buildDataField("Humidity: ",
@@ -162,7 +162,7 @@ class _DetectionCardState extends State<_DetectionCard> {
   Widget _buildDataField(String title, String value, TextTheme textStyle) {
     return Row(
       children: [
-        Text(title, style: textStyle.labelMedium),
+        Text(title, style: textStyle.titleMedium),
         const SizedBox(width: 10),
         Flexible(
           child: Text(
