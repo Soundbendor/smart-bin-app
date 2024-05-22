@@ -61,6 +61,12 @@ void main() async {
   await initPreferences();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e) {
+    debug("Error loading .env file");
+  }
+
   runApp(
     MultiProvider(
       providers: [
@@ -102,7 +108,10 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     Future<DateTime> timestamp = getLatestTimestamp();
-    fetchImageData('ae9e01c90bb6af06', timestamp);
+    fetchImageData(
+        sharedPreferences.getString(SharedPreferencesKeys.deviceApiID) ??
+            dotenv.env['DEVICE_ID']!,
+        timestamp);
   }
 
   @override
@@ -162,8 +171,9 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     };
 
     final Uri uri = Uri.parse(url).replace(queryParameters: queryParams);
-    await dotenv.load(fileName: "assets/data/.env");
-    String apiKey = dotenv.env['API_KEY']!;
+    String apiKey = dotenv.env['API_KEY'] ??
+        sharedPreferences.getString(SharedPreferencesKeys.apiKey) ??
+        "";
     Map<String, String> headers = {
       'accept': 'application/json',
       'token': apiKey,
@@ -202,8 +212,14 @@ class _BinsightAiAppState extends State<BinsightAiApp>
   Future<void> retrieveImages(String deviceID, List<String> imageList) async {
     String url =
         'http://sb-binsight.dri.oregonstate.edu:30080/api/get_images?deviceID=$deviceID';
+<<<<<<< HEAD
     await dotenv.load(fileName: "assets/data/.env");
     String apiKey = dotenv.env['API_KEY']!;
+=======
+    String apiKey = dotenv.env['API_KEY'] ??
+        sharedPreferences.getString(SharedPreferencesKeys.apiKey) ??
+        "";
+>>>>>>> 3749c46b2683e60f88d68699a502252556a79a71
 
     var requestBody = imageList;
     debug("Image List $imageList");

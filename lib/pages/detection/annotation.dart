@@ -378,7 +378,8 @@ class _DrawingControlAreaState extends State<_DrawingControlArea> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             padding: const EdgeInsets.all(20),
-                            backgroundColor: Colors.red[400],
+                            backgroundColor:
+                                Theme.of(context).colorScheme.error,
                             content: Text(
                               message,
                               style: Theme.of(context)
@@ -490,16 +491,16 @@ class _BottomControlArea extends StatelessWidget {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           padding: const EdgeInsets.all(20),
-                          backgroundColor: Colors.red[400],
+                          backgroundColor: Theme.of(context).colorScheme.error,
                           content: Text(
                             message,
                             style: Theme.of(context)
-                                  .textTheme
-                                  .labelLarge
-                                  ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary),
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary),
                           ),
                         ),
                       );
@@ -510,9 +511,8 @@ class _BottomControlArea extends StatelessWidget {
               },
               child: Text(
                 "Done",
-                style: textTheme.labelLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.onPrimary
-                ),
+                style: textTheme.labelLarge!
+                    .copyWith(color: Theme.of(context).colorScheme.onPrimary),
               ),
             ),
           ],
