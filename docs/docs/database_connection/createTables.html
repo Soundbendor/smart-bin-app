@@ -99,6 +99,7 @@
       await txn.execute(
           &quot;CREATE TABLE IF NOT EXISTS ${model.tableName} ${model.schema}&quot;);
       if (isMigration) {
+        &#47;&#47; TODO: Some breaking changes may prevent this step from working. A proper migration system should be added in the future.
         debugPrint(&quot;Migrating ${model.tableName} - Copying data&quot;);
         await txn.execute(&quot;&quot;&quot;
           INSERT INTO ${model.tableName} (${oldTableAttributes.map((e) =&gt; e[&quot;name&quot;]).join(&quot;, &quot;)})

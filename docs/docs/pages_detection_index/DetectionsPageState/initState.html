@@ -109,6 +109,7 @@ method, as in <code>super.initState()</code>.</p>
   <pre class="language-dart"><code class="language-dart">@override
 void initState() {
   loadDetectionFuture = loadDetections(context, showSnackBar: false);
+  getDirectory();
   super.initState();
 }</code></pre>
 </section>

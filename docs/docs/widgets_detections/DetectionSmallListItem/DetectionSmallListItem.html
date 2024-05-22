@@ -63,7 +63,8 @@
     <section class="multi-line-signature">
       const
       <span class="name ">DetectionSmallListItem</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="-param-key">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
-<li><span class="parameter" id="-param-detection"><span>required</span> <span class="type-annotation"><a href="../../database_models_detection/Detection-class.html">Detection</a></span> <span class="parameter-name">detection</span>}</span></li>
+<li><span class="parameter" id="-param-detection"><span>required</span> <span class="type-annotation"><a href="../../database_models_detection/Detection-class.html">Detection</a></span> <span class="parameter-name">detection</span>, </span></li>
+<li><span class="parameter" id="-param-baseDir"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-io/Directory-class.html">Directory</a>?</span> <span class="parameter-name">baseDir</span>}</span></li>
 </ol>)
     </section>
 
@@ -76,6 +77,7 @@
   <pre class="language-dart"><code class="language-dart">const DetectionSmallListItem({
   super.key,
   required this.detection,
+  required this.baseDir,
 });</code></pre>
 </section>
 

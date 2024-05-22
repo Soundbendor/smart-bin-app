@@ -120,6 +120,11 @@ and</li>
 Widget build(BuildContext context) {
   final textTheme = Theme.of(context).textTheme;
   final colorScheme = Theme.of(context).colorScheme;
+
+  File? image = baseDir != null
+      ? getImage(detection.postDetectImgLink!, baseDir)
+      : null;
+
   return Padding(
     padding: const EdgeInsets.only(left: 5.0, top: 5.0, right: 5.0),
     child: GestureDetector(
@@ -128,13 +133,15 @@ Widget build(BuildContext context) {
         color: colorScheme.onPrimary,
         child: ListTile(
           leading: Container(
-                  decoration: BoxDecoration(
-      border: Border.all(
-        color: colorScheme.onSurface,
-        width: 1,
-      ),
-    ),
-            child: DynamicImage(detection.preDetectImgLink)),
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: colorScheme.onSurface,
+                  width: 1,
+                ),
+              ),
+              child: image != null ? Image.file(image) : Container()),
           title: Text(formatDetectionTitle(detection),
               style: textTheme.titleMedium),
           subtitle: Text(detection.timestamp.toString(),
