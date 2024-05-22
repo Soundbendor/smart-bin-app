@@ -49,6 +49,7 @@ class DetectionsPageState extends State<DetectionsPage> {
   /// When [sizeToggle] is false, the detections are displayed in a small list format.
   bool sizeToggle = false;
 
+  /// A future that loads the initial list of detections.
   late Future loadDetectionFuture;
 
   Directory? appDocDir;
