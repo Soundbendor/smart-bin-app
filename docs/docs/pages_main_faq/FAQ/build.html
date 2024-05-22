@@ -118,13 +118,64 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  final textTheme = Theme.of(context).textTheme.bodyMedium;
+  final textTheme = Theme.of(context).textTheme.bodyLarge;
   return Scaffold(
     body: Container(
       padding: const EdgeInsets.all(10),
       child: ListView(
         children: [
-          _buildExpansionTile(&quot;FAQ&quot;, &quot;FAQ Content&quot;, textTheme!),
+          &#47;&#47; FAQ Heading
+          const Padding(
+            padding: EdgeInsets.only(left: 10, top: 10, bottom: 5),
+            child: Heading(text: &quot;FAQ&quot;),
+          ),
+          &#47;&#47; FAQ Content
+          _buildFaqSections(
+            [
+              {
+                &quot;subheading&quot;: &quot;What can I put in my Smart Compost Bin?&quot;,
+                &quot;content&quot;: [
+                  &quot;As a general rule of thumb, if it comes from your cutting board or plate, you can compost it!&quot;,
+                  &quot;Here are some examples:&quot;,
+                  &quot;- Fruit and vegetable scraps&quot;,
+                  &quot;- Rinds, peels, pits&quot;,
+                  &quot;- Meat, dairy, eggs&quot;,
+                  &quot;- Leftover prepared foods&quot;,
+                  &quot;- Grass clippings&quot;,
+                  &quot;- Coffee grounds and filters&quot;,
+                  &quot;- Tea bags&quot;,
+                  &quot;- Nut shells&quot;,
+                ],
+              },
+              {
+                &quot;subheading&quot;: &quot;What things don&#39;t belong in the bin?&quot;,
+                &quot;content&quot;: [
+                  &quot;- Large bones (like beef, lamb, or pork)&quot;,
+                  &quot;- Large amounts of grease or oil&quot;,
+                  &quot;- Drugs or medications&quot;,
+                  &quot;- Compostable plastics, packaging&quot;,
+                  &quot;- Take-out containers, paper plates&quot;,
+                ],
+              },
+              {
+                &quot;subheading&quot;: &quot;How will the saved annotations be used?&quot;,
+                &quot;content&quot;: [
+                  &quot;The annotations saved from the images will be used to train the AI model to recognize objects in the images.&quot;,
+                  &quot;The more annotations we have, the better the model will be at recognizing objects in the images.&quot;,
+                ],
+              },
+              {
+                &quot;subheading&quot;:
+                    &quot;How do I know if my bin is connected to the internet?&quot;,
+                &quot;content&quot;: [
+                  &quot;You can check the Wi-Fi status of your bin in the app by pulling down to refresh the Detections page.&quot;,
+                  &quot;If you see new detections, your bin is connected to the internet.&quot;,
+                  &quot;If you don&#39;t see any new detections, your bin may be offline and you can click the pop-up to check your Wi-Fi connection.&quot;,
+                ],
+              },
+            ],
+            textTheme!,
+          ),
         ],
       ),
     ),
@@ -163,7 +214,7 @@ Widget build(BuildContext context) {
 <footer>
   <span class="no-break">
     binsight_ai
-      1.0.0
+      2.0.0
   </span>
 
   
