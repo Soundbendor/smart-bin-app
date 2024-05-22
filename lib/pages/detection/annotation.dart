@@ -662,6 +662,7 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
               // Create MultipleSearchSelection widget with the ability to create new items
               MultipleSearchSelection.creatable(
                 controller: widget.controller,
+                fuzzySearch: FuzzySearch.levenshtein,
                 onTapClearAll: () {
                   setState(() {
                     selectedLabel = null;

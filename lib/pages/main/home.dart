@@ -194,24 +194,24 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 10),
                 Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
                           "Compost Over Time",
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
-                        const SizedBox(height: 10),
-                        FractionallySizedBox(
-                          widthFactor: 0.9,
-                          child: BarChart(
-                            data: weightCounts,
-                          ),
+                      ),
+                      const SizedBox(height: 10),
+                      FractionallySizedBox(
+                        widthFactor: 0.9,
+                        child: BarChart(
+                          data: weightCounts,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 20),
