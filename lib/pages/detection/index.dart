@@ -1,16 +1,13 @@
 // Flutter imports:
 import 'dart:io';
-
-import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:path_provider/path_provider.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:rotating_icon_button/rotating_icon_button.dart';
+import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
 
 // Project imports:
 import 'package:binsight_ai/util/api.dart';
@@ -19,6 +16,8 @@ import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/async_ops.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/shared_preferences.dart';
+import 'package:binsight_ai/util/providers/detection_notifier.dart';
+import 'package:binsight_ai/util/providers/image_provider.dart';
 import 'package:binsight_ai/widgets/detections.dart';
 import 'package:binsight_ai/widgets/heading.dart';
 import 'package:binsight_ai/widgets/wifi_check_dialog.dart';
@@ -49,9 +48,6 @@ class DetectionsPageState extends State<DetectionsPage> {
   /// When [sizeToggle] is true, the detections are displayed in a large card format.
   /// When [sizeToggle] is false, the detections are displayed in a small list format.
   bool sizeToggle = false;
-
-  /// The list of detections to display.
-  List<Detection> detections = [];
 
   /// A future that loads the initial list of detections.
   late Future loadDetectionFuture;
@@ -168,6 +164,9 @@ class DetectionsPageState extends State<DetectionsPage> {
     bool showSnackBar = true,
     bool forceRefresh = true,
   }) async {
+    // Access the detections before the refresh to compare afterwards
+    final previousDetections =
+        Provider.of<DetectionNotifier>(context, listen: false).detections;
     if (forceRefresh) {
       Future<DateTime> timestamp = getLatestTimestamp();
       await fetchImageData(
@@ -178,12 +177,7 @@ class DetectionsPageState extends State<DetectionsPage> {
         context,
       );
     }
-    return Detection.all().then((value) async {
-      // Access the detections before the refresh to compare afterwards
-      List<Detection> previousDetections = detections;
-      setState(() {
-        detections = value;
-      });
+    return Detection.all().then((detections) async {
       // If the new detections list is larger than the old one, there are new detections
       bool areNewDetections = previousDetections.length != detections.length;
       if (showSnackBar) {
@@ -192,17 +186,17 @@ class DetectionsPageState extends State<DetectionsPage> {
             duration: const Duration(seconds: 15),
             content: Text(
               areNewDetections
-                    ? "New detections found!"
-                    : "No new detections found. If you're having trouble, check your Wi-Fi connection.",
-                style: Theme.of(context)
-                    .textTheme
-                    .labelLarge
-                    ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
-              ),
-              backgroundColor: areNewDetections 
-              ? Theme.of(context).colorScheme.tertiary 
-              : Theme.of(context).colorScheme.primary,
-              action: areNewDetections
+                  ? "New detections found!"
+                  : "No new detections found. If you're having trouble, check your Wi-Fi connection.",
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge
+                  ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+            ),
+            backgroundColor: areNewDetections
+                ? Theme.of(context).colorScheme.tertiary
+                : Theme.of(context).colorScheme.primary,
+            action: areNewDetections
                 ? SnackBarAction(
                     label: "Annotate",
                     onPressed: () => GoRouter.of(context).push(
@@ -267,13 +261,21 @@ class DetectionsPageState extends State<DetectionsPage> {
               builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
                 return snapshot.connectionState == ConnectionState.waiting
                     ? const CircularProgressIndicator()
-                    : DetectionList(
-                        size: sizeToggle
-                            ? DetectionListType.large
-                            : DetectionListType.small,
-                        detections: detections,
-                        baseDir: appDocDir!,
-                        loadDetections: loadDetections);
+                    : Consumer<DetectionNotifier>(
+                        builder: (context, detectionNotifier, child) {
+                          return Consumer<ImageNotifier>(
+                            builder: (context, imageNotifier, child) {
+                              return DetectionList(
+                                  size: sizeToggle
+                                      ? DetectionListType.large
+                                      : DetectionListType.small,
+                                  detections: detectionNotifier.detections,
+                                  baseDir: appDocDir!,
+                                  loadDetections: loadDetections);
+                            },
+                          );
+                        },
+                      );
               },
             ),
           ],
