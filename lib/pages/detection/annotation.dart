@@ -224,7 +224,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
                           ),
                         ),
                       ),
-                      const Expanded(child: Column()),
                       _BottomControlArea(detectionId: widget.detectionId),
                     ],
                   ),
