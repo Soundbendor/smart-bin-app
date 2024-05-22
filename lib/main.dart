@@ -63,7 +63,7 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   try {
-    await dotenv.load(fileName: ".env");
+    await dotenv.load(fileName: "assets/data/.env");
   } catch (e) {
     debug("Error loading .env file");
   }
@@ -161,6 +161,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
   Future<void> fetchImageData(
       String deviceID, Future<DateTime> afterDate) async {
     DateTime timestamp = await afterDate;
+    debug("LATEST TIME STAMP $timestamp");
     String formattedDate = DateFormat('yyyy-MM-dd').format(timestamp);
     String formattedTime = DateFormat('HH:mm:ss').format(timestamp);
     const String url =
@@ -187,12 +188,14 @@ class _BinsightAiAppState extends State<BinsightAiApp>
       debug(response);
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
-        debug(data);
 
         // API RETURNS ITEMS SORTED BY DATE IN ASCENDING ORDER, REVERSE FOR NEWEST FIRST
-        debug("FIRST ITEM ${data["items"][0]}");
         List<dynamic> itemList = data['items'].reversed.toList();
-        debug("FIRST ITEM PART TWO ${itemList[0]}");
+        if (itemList.isNotEmpty) {
+          itemList.removeAt(0);
+        }
+        debug(
+            "IMAGES QUERIED FOR AND RECIEVED: $itemList and length ${itemList.length}");
         for (var item in itemList) {
           Map<String, dynamic> adjustedMap = transformMap(item);
           imageList.add(adjustedMap["postDetectImgLink"]);
@@ -203,7 +206,6 @@ class _BinsightAiAppState extends State<BinsightAiApp>
           Provider.of<DetectionNotifier>(context, listen: false).getAll();
         }
         try {
-          debug(imageList);
           retrieveImages(deviceID, imageList);
         } catch (e) {
           debug(e);

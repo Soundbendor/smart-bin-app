@@ -87,7 +87,7 @@ class Detection extends Model {
   Detection.notFound()
       : imageId = "-1",
         postDetectImgLink = "assets/images/placeholder.png",
-        timestamp = DateTime.now().subtract(const Duration(days: 30)),
+        timestamp = DateTime.now().subtract(const Duration(days: 600)),
         deviceId = "-1";
 
   @override
