@@ -35,6 +35,7 @@ Future<void> createTables(
       await txn.execute(
           "CREATE TABLE IF NOT EXISTS ${model.tableName} ${model.schema}");
       if (isMigration) {
+        // TODO: Some breaking changes may prevent this step from working. A proper migration system should be added in the future.
         debugPrint("Migrating ${model.tableName} - Copying data");
         await txn.execute("""
           INSERT INTO ${model.tableName} (${oldTableAttributes.map((e) => e["name"]).join(", ")})

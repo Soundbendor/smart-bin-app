@@ -1,4 +1,6 @@
 // Flutter imports:
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -38,7 +40,7 @@ void main() {
 
     await widgetTester.pumpWidget(makeTestableWidget(
       size: const Size(800, 600),
-      child: DetectionSmallListItem(detection: detection),
+      child: DetectionSmallListItem(detection: detection, baseDir: null),
     ));
     expect(
         find.text(
@@ -47,7 +49,10 @@ void main() {
 
     await widgetTester.pumpWidget(makeTestableWidget(
       size: const Size(800, 600),
-      child: DetectionLargeListItem(detection: detection),
+      child: DetectionLargeListItem(
+        detection: detection,
+        baseDir: Directory("/test"),
+      ),
     ));
     expect(
         find.text(
@@ -57,6 +62,7 @@ void main() {
 
   testWidgets("Detection list (complete) displays correct title",
       (widgetTester) async {
+    Directory dir = Directory("/test");
     final detection = Detection.fromMap(
       {
         "imageId": "foo",
@@ -77,15 +83,16 @@ void main() {
         "boxes": "[]"
       },
     );
+
     await widgetTester.pumpWidget(makeTestableWidget(
       size: const Size(800, 600),
-      child: DetectionSmallListItem(detection: detection),
+      child: DetectionSmallListItem(detection: detection, baseDir: dir),
     ));
     expect(find.text("Detection ${detection.imageId}"), findsOneWidget);
 
     await widgetTester.pumpWidget(makeTestableWidget(
       size: const Size(800, 600),
-      child: DetectionLargeListItem(detection: detection),
+      child: DetectionLargeListItem(detection: detection, baseDir: dir),
     ));
     expect(find.text("Detection ${detection.imageId}"), findsOneWidget);
   });

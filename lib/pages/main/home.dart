@@ -244,7 +244,6 @@ class _HomePageState extends State<HomePage> {
           List<dynamic> boxesList = jsonDecode(detection["boxes"]);
           for (var label in boxesList) {
             String name = label['object_name'];
-            name = name.toLowerCase();
             //Check singular and plural version of item
             String? category = categories[name];
             category ??= categories['${name}s'];

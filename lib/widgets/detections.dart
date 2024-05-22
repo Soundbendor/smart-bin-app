@@ -1,4 +1,7 @@
 // Flutter imports:
+import 'dart:io';
+
+import 'package:binsight_ai/util/image.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -6,7 +9,6 @@ import 'package:go_router/go_router.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
-import 'package:binsight_ai/widgets/image.dart';
 
 /// Build a title string for each detection.
 ///
@@ -25,19 +27,26 @@ void onTileTap(BuildContext context, Detection detection) {
 /// Displays a detection item in a large card format.
 class DetectionLargeListItem extends StatelessWidget {
   final Detection detection;
+  final Directory? baseDir;
 
   const DetectionLargeListItem({
     super.key,
     required this.detection,
+    required this.baseDir,
   });
 
-  DetectionLargeListItem.stub({super.key})
+  DetectionLargeListItem.stub({super.key, this.baseDir})
       : detection = Detection.createDefault();
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
+
+    File? image = baseDir != null
+        ? getImage(detection.postDetectImgLink!, baseDir)
+        : null;
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
@@ -60,16 +69,22 @@ class DetectionLargeListItem extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: colorScheme.onSurface,
-                        width: 1,
-                      ),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: colorScheme.onSurface,
+                      width: 1,
                     ),
-                    margin: const EdgeInsets.only(bottom: 12, top: 12),
-                    alignment: Alignment.center,
-                    child: DynamicImage(detection.postDetectImgLink!,
-                        width: 325, height: 325)),
+                  ),
+                  margin: const EdgeInsets.only(bottom: 12, top: 12),
+                  alignment: Alignment.center,
+                  child: image != null
+                      ? Image.file(
+                          image,
+                          width: 325,
+                          height: 325,
+                        )
+                      : Container(),
+                ),
                 SizedBox(
                   width: 250,
                   child: Row(
@@ -106,19 +121,26 @@ class DetectionLargeListItem extends StatelessWidget {
 /// Displays a detection item in a small list format.
 class DetectionSmallListItem extends StatelessWidget {
   final Detection detection;
+  final Directory? baseDir;
 
   const DetectionSmallListItem({
     super.key,
     required this.detection,
+    required this.baseDir,
   });
 
-  DetectionSmallListItem.stub({super.key})
+  DetectionSmallListItem.stub({super.key, this.baseDir})
       : detection = Detection.createDefault();
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
+
+    File? image = baseDir != null
+        ? getImage(detection.postDetectImgLink!, baseDir)
+        : null;
+
     return Padding(
       padding: const EdgeInsets.only(left: 5.0, top: 5.0, right: 5.0),
       child: GestureDetector(
@@ -127,13 +149,15 @@ class DetectionSmallListItem extends StatelessWidget {
           color: colorScheme.onPrimary,
           child: ListTile(
             leading: Container(
+                width: 50,
+                height: 50,
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: colorScheme.onSurface,
                     width: 1,
                   ),
                 ),
-                child: DynamicImage(detection.postDetectImgLink!)),
+                child: image != null ? Image.file(image) : Container()),
             title: Text(formatDetectionTitle(detection),
                 style: textTheme.titleMedium),
             subtitle: Text(detection.timestamp.toString(),
@@ -154,13 +178,14 @@ class DetectionList extends StatelessWidget {
   final List<Detection> detections;
   final DetectionListType size;
   final Function loadDetections;
+  final Directory baseDir;
 
-  const DetectionList({
-    super.key,
-    required this.detections,
-    this.size = DetectionListType.small,
-    required this.loadDetections,
-  });
+  const DetectionList(
+      {super.key,
+      required this.detections,
+      this.size = DetectionListType.small,
+      required this.loadDetections,
+      required this.baseDir});
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +207,10 @@ class DetectionList extends StatelessWidget {
               itemCount: detections.length,
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index) {
-                return DetectionLargeListItem(detection: detections[index]);
+                return DetectionLargeListItem(
+                  detection: detections[index],
+                  baseDir: baseDir,
+                );
               },
             ),
           ),
@@ -195,7 +223,10 @@ class DetectionList extends StatelessWidget {
               itemCount: detections.length,
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index) {
-                return DetectionSmallListItem(detection: detections[index]);
+                return DetectionSmallListItem(
+                  detection: detections[index],
+                  baseDir: baseDir,
+                );
               },
             ),
           ),
