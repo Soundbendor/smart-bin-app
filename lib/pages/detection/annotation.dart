@@ -64,6 +64,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                   .map((e) => Offset(e[0], e[1]))
                   .toList()));
           notifier.addToAllAnnotations();
+          notifier.clearCurrentAnnotation();
         }
         notifier.clearCurrentAnnotation();
         notifier.label = null;
