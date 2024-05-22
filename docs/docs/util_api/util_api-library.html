@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="model library API docs, for the Dart programming language.">
-  <title>model library - Dart API</title>
+  <meta name="description" content="api library API docs, for the Dart programming language.">
+  <title>api library - Dart API</title>
 
 
   
@@ -29,9 +29,9 @@
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../index.html">binsight_ai</a></li>
-    <li class="self-crumb">database/model.dart</li>
+    <li class="self-crumb">util/api.dart</li>
   </ol>
-  <div class="self-name">model</div>
+  <div class="self-name">api</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -53,13 +53,13 @@
     id="dartdoc-main-content"
     class="main-content"
     data-above-sidebar=""
-    data-below-sidebar="database_model&#47;database_model-library-sidebar.html">
+    data-below-sidebar="util_api&#47;util_api-library-sidebar.html">
   
     <div>
       
 
       <h1>
-        <span class="kind-library">database/model</span>
+        <span class="kind-library">util/api</span>
         library 
  
 
@@ -69,27 +69,71 @@
     
 
 
-    <section class="summary offset-anchor" id="classes">
-      <h2>Classes</h2>
 
-      <dl>
-          <dt id="Model">
-  <span class="name "><a href="../database_model/Model-class.html">Model</a></span> 
+
+
+
+
+
+
+    <section class="summary offset-anchor" id="functions">
+      <h2>Functions</h2>
+
+      <dl class="callables">
+          <dt id="fetchImageData" class="callable">
+  <span class="name"><a href="../util_api/fetchImageData.html">fetchImageData</a></span><span class="signature">(<wbr><span class="parameter" id="fetchImageData-param-deviceID"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">deviceID</span>, </span><span class="parameter" id="fetchImageData-param-afterDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span>&gt;</span></span> <span class="parameter-name">afterDate</span>, </span><span class="parameter" id="fetchImageData-param-context"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span> <span class="parameter-name">context</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
 
 </dt>
 <dd>
-  The base class for models.
+  Fetch image data from the api. Also updates the detection notifier and retrieves images.
+  
+
+</dd>
+
+          <dt id="getLatestTimestamp" class="callable">
+  <span class="name"><a href="../util_api/getLatestTimestamp.html">getLatestTimestamp</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Get last detection in local database
+  
+
+</dd>
+
+          <dt id="retrieveImages" class="callable">
+  <span class="name"><a href="../util_api/retrieveImages.html">retrieveImages</a></span><span class="signature">(<wbr><span class="parameter" id="retrieveImages-param-deviceID"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">deviceID</span>, </span><span class="parameter" id="retrieveImages-param-imageList"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">imageList</span>, </span><span class="parameter" id="retrieveImages-param-context"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span> <span class="parameter-name">context</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Retrieve images from the api
+  
+
+</dd>
+
+          <dt id="transformMap" class="callable">
+  <span class="name"><a href="../util_api/transformMap.html">transformMap</a></span><span class="signature">(<wbr><span class="parameter" id="transformMap-param-map"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">map</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Adjust new json map recieved from api to match existing schema
+  
+
 </dd>
 
       </dl>
     </section>
-
-
-
-
-
-
-
 
 
 
@@ -105,7 +149,7 @@
 
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../index.html">binsight_ai</a></li>
-    <li class="self-crumb">database/model.dart</li>
+    <li class="self-crumb">util/api.dart</li>
 </ol>
 
 
@@ -168,7 +212,7 @@
   </div>
 
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
-    <h5>model library</h5>
+    <h5>api library</h5>
   </div><!--/sidebar-offcanvas-right-->
 
 </main>

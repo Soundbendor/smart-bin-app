@@ -108,7 +108,8 @@ method, as in <code>super.initState()</code>.</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 void initState() {
-  loadDetectionFuture = loadDetections(context, showSnackBar: false);
+  loadDetectionFuture =
+      loadDetections(context, showSnackBar: false, forceRefresh: false);
   getDirectory();
   super.initState();
 }</code></pre>
