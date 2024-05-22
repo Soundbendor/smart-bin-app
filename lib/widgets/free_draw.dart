@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:binsight_ai/util/image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
@@ -71,6 +72,16 @@ class _FreeDrawState extends State<FreeDraw> {
     });
   }
 
+  void onDrawEnd() {
+    setState(() {
+      currentDrawingSegment = null;
+    });
+  }
+
+  bool isDrawing() {
+    return currentDrawingSegment != null;
+  }
+
   @override
   Widget build(BuildContext context) {
     File? image = getImage(widget.imageLink, widget.baseDir);
@@ -88,12 +99,8 @@ class _FreeDrawState extends State<FreeDraw> {
             onVerticalDragUpdate: (details) => onDrawUpdate(details, notifier),
             onPanUpdate: (details) => onDrawUpdate(details, notifier),
             // When the user lifts their finger, stop updating the current drawing segment
-            onVerticalDragEnd: (_) {
-              currentDrawingSegment = null;
-            },
-            onPanEnd: (_) {
-              currentDrawingSegment = null;
-            },
+            onVerticalDragEnd: (_) => onDrawEnd(),
+            onPanEnd: (_) => onDrawEnd(),
             // Render the drawing on top of the image
             child: Stack(
               children: [
@@ -106,6 +113,7 @@ class _FreeDrawState extends State<FreeDraw> {
                     allSegments: notifier.oldAnnotations,
                   ),
                 ),
+                if (!isDrawing()) const FreeDrawText()
               ],
             ),
           ),
@@ -120,6 +128,39 @@ class _FreeDrawState extends State<FreeDraw> {
         imageKey.currentContext!.findRenderObject() as RenderBox;
     Rect imageBounds = renderBox.paintBounds;
     return imageBounds.contains(point);
+  }
+}
+
+class FreeDrawText extends StatelessWidget {
+  const FreeDrawText({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<AnnotationNotifier>(builder: (context, notifier, child) {
+      final textTheme = Theme.of(context).textTheme;
+      return Stack(
+        children: notifier.allAnnotations.map((annotation) {
+          return Positioned(
+            left: annotation["xy_coord_list"][0][0],
+            top: annotation["xy_coord_list"][0][1],
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: const Color(0xaaffffff),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Text(
+                annotation["object_name"],
+                style: textTheme.labelMedium,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }).toList(),
+      );
+    });
   }
 }
 
