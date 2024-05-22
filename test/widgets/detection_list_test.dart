@@ -1,4 +1,6 @@
 // Flutter imports:
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -7,6 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/widgets/detections.dart';
+import 'package:path_provider/path_provider.dart';
 import '../shared.dart';
 
 /// Tests for the detection list
@@ -15,6 +18,7 @@ void main() {
 
   testWidgets("Detection list (incomplete) displays correct title",
       (widgetTester) async {
+    Directory dir = await getApplicationDocumentsDirectory();
     final detection = Detection.fromMap(
       {
         "imageId": "foo-2",
@@ -49,7 +53,7 @@ void main() {
       size: const Size(800, 600),
       child: DetectionLargeListItem(
         detection: detection,
-        baseDir: null,
+        baseDir: dir,
       ),
     ));
     expect(
@@ -60,6 +64,7 @@ void main() {
 
   testWidgets("Detection list (complete) displays correct title",
       (widgetTester) async {
+    Directory dir = await getApplicationDocumentsDirectory();
     final detection = Detection.fromMap(
       {
         "imageId": "foo",
@@ -80,15 +85,16 @@ void main() {
         "boxes": "[]"
       },
     );
+
     await widgetTester.pumpWidget(makeTestableWidget(
       size: const Size(800, 600),
-      child: DetectionSmallListItem(detection: detection, baseDir: null),
+      child: DetectionSmallListItem(detection: detection, baseDir: dir),
     ));
     expect(find.text("Detection ${detection.imageId}"), findsOneWidget);
 
     await widgetTester.pumpWidget(makeTestableWidget(
       size: const Size(800, 600),
-      child: DetectionLargeListItem(detection: detection, baseDir: null),
+      child: DetectionLargeListItem(detection: detection, baseDir: dir),
     ));
     expect(find.text("Detection ${detection.imageId}"), findsOneWidget);
   });

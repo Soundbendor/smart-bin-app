@@ -44,7 +44,9 @@ class DetectionLargeListItem extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
-    File? image = getImage(detection.postDetectImgLink!, baseDir);
+    File? image = baseDir != null
+        ? getImage(detection.postDetectImgLink!, baseDir)
+        : null;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -136,7 +138,9 @@ class DetectionSmallListItem extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
-    File? image = getImage(detection.postDetectImgLink!, baseDir);
+    File? image = baseDir != null
+        ? getImage(detection.postDetectImgLink!, baseDir)
+        : null;
 
     return Padding(
       padding: const EdgeInsets.only(left: 5.0, top: 5.0, right: 5.0),
