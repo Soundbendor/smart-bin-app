@@ -242,10 +242,12 @@ class _BinsightAiAppState extends State<BinsightAiApp>
 
   /// Adjust new json map recieved from api to match existing schema
   Map<String, dynamic> transformMap(Map<String, dynamic> map) {
+    //colorImage_2024-05-11--20-36-25.jpg, substrings to get the date section and time section
     String dateString = map["colorImage"].substring(11, 21);
     String timeString = map["colorImage"].substring(23, 31);
     String combinedDateTimeString = "${dateString}T$timeString";
     String formattedDateTimeString = combinedDateTimeString.replaceAll('-', '');
+    //Remove dashes and put a T between the date and time parts so it can be parsed as DateTime, and later, an Iso String
     return {
       'imageId': map['colorImage'],
       'timestamp': DateTime.parse(formattedDateTimeString).toIso8601String(),
