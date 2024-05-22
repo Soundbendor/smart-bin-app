@@ -188,7 +188,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: const EdgeInsets.only(top: 16),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -203,7 +203,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
                               onTap: () => GoRouter.of(context).pop(),
                             ),
                             const Heading(text: "Annotate Your Image"),
-                            // const SizedBox(height: 16),   // ?? this one
                           ],
                         ),
                       ),
@@ -221,7 +220,6 @@ class _AnnotationPageState extends State<AnnotationPage> {
                               _DrawingControlArea(
                                   detectionId: widget.detectionId,
                                   constraints: constraints),
-                              // const SizedBox(height: 16),  // ??
                             ],
                           ),
                         ),
@@ -603,7 +601,7 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text(
-        "Select A Label",
+        "Select a Label",
         textAlign: TextAlign.center,
       ),
       content: SizedBox(
@@ -623,7 +621,7 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                 searchField: TextField(
                   decoration: InputDecoration(
                     hintText: selectedLabel == null
-                        ? "Select A Label"
+                        ? "Select a Label"
                         : selectedLabel!,
                     hintStyle: selectedLabel == null
                         ? const TextStyle(color: Colors.grey)
@@ -640,7 +638,7 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                 pickedItemBuilder: (label) {
                   return const Text("");
                 },
-                //Each label has a category, we want to search the Labels
+                // Each label has a category, we want to search the Labels
                 fieldToCheck: (label) {
                   return label["Label"]["name"];
                 },
