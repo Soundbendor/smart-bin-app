@@ -15,6 +15,8 @@ import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:binsight_ai/util/providers/image_provider.dart';
 import 'package:binsight_ai/util/shared_preferences.dart';
 
+const apiEndpoint = 'http://sb-binsight.dri.oregonstate.edu:30080/api';
+
 /// Fetch image data from the api. Also updates the detection notifier and retrieves images.
 ///
 /// - [deviceID] is the device id of the device to fetch data for
@@ -29,8 +31,7 @@ Future<void> fetchImageData(
   String formattedTime = DateFormat('HH:mm:ss').format(timestamp);
   debug("FORMATTED DATE $formattedDate");
   debug("FORMATTED TIME $formattedTime");
-  const String url =
-      'http://sb-binsight.dri.oregonstate.edu:30080/api/get_image_info';
+  const String url = '$apiEndpoint/get_image_info';
   Map<String, String> queryParams = {
     'deviceID': deviceID,
     'after_date': formattedDate,
@@ -40,12 +41,9 @@ Future<void> fetchImageData(
   };
 
   final Uri uri = Uri.parse(url).replace(queryParameters: queryParams);
-  String apiKey = dotenv.env['API_KEY'] ??
-      sharedPreferences.getString(SharedPreferencesKeys.apiKey) ??
-      "";
   Map<String, String> headers = {
     'accept': 'application/json',
-    'token': apiKey,
+    'token': getApiKey(),
   };
   try {
     final http.Response response = await http.get(uri, headers: headers);
@@ -99,17 +97,12 @@ Future<void> fetchImageData(
 /// - [context] is the context to use for the provider
 Future<void> retrieveImages(
     String deviceID, List<String> imageList, BuildContext context) async {
-  String url =
-      'http://sb-binsight.dri.oregonstate.edu:30080/api/get_images?deviceID=$deviceID';
-  String apiKey = dotenv.env['API_KEY'] ??
-      sharedPreferences.getString(SharedPreferencesKeys.apiKey) ??
-      "";
-
-  var requestBody = imageList;
+  String url = '$apiEndpoint/get_images?deviceID=$deviceID';
+  final requestBody = imageList;
   debug("Image List $imageList");
   Map<String, String> headers = {
     'accept': 'application/json',
-    'token': apiKey,
+    'token': getApiKey(),
     'Content-Type': 'application/json',
   };
   try {
@@ -162,4 +155,42 @@ Future<DateTime> getLatestTimestamp() async {
   final latestDetection = await Detection.latest();
   final timeStamp = latestDetection.timestamp;
   return timeStamp;
+}
+
+/// Get API key from shared preferences
+String getApiKey() {
+  return dotenv.env['API_KEY'] ??
+      sharedPreferences.getString(SharedPreferencesKeys.apiKey) ??
+      "";
+}
+
+/// Upload annotation to the api
+Future<void> uploadAnnotation(String detectionId, List annotation) async {
+  final detection = await Detection.find(detectionId);
+  if (detection == null) return;
+  final deviceId = detection.deviceId;
+  final String url =
+      '$apiEndpoint/update_annotation?deviceID=$deviceId&img_name=$detectionId';
+  final Uri uri = Uri.parse(url);
+  Map<String, String> headers = {
+    'accept': 'application/json',
+    'Content-Type': 'application/json',
+    'token': getApiKey(),
+  };
+  try {
+    debug(url);
+    final http.Response response = await http.post(
+      uri,
+      headers: headers,
+      body: jsonEncode(annotation),
+    );
+    debug(response.body);
+    if (response.statusCode == 200) {
+      debug('POST request successful');
+    } else {
+      debug('Failed to make POST request.');
+    }
+  } catch (e) {
+    debug('Error uploading annotation: $e');
+  }
 }
