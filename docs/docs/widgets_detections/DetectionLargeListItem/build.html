@@ -147,12 +147,6 @@ Widget build(BuildContext context) {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: colorScheme.onSurface,
-                    width: 1,
-                  ),
-                ),
                 margin: const EdgeInsets.only(bottom: 12, top: 12),
                 alignment: Alignment.center,
                 child: image != null
@@ -171,7 +165,7 @@ Widget build(BuildContext context) {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(&quot;Transcription:&quot;,
+                          Text(&quot;Transcription: &quot;,
                               style: textTheme.titleMedium),
                         ],
                       ),
