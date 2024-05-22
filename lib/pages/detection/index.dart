@@ -1,6 +1,10 @@
 // Flutter imports:
 import 'dart:io';
+
+import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
@@ -188,7 +192,7 @@ class DetectionsPageState extends State<DetectionsPage> {
             duration: const Duration(seconds: 15),
             content: Text(
               areNewDetections
-                    ? "New detections found. Happy annotating!"
+                    ? "New detections found!"
                     : "No new detections found. If you're having trouble, check your Wi-Fi connection.",
                 style: Theme.of(context)
                     .textTheme
@@ -198,8 +202,12 @@ class DetectionsPageState extends State<DetectionsPage> {
               backgroundColor: areNewDetections 
               ? Theme.of(context).colorScheme.tertiary 
               : Theme.of(context).colorScheme.primary,
-              action: SnackBarAction(label: "Check Wi-Fi", onPressed: checkWifi),
-              showCloseIcon: true,
+              action: areNewDetections
+                ? SnackBarAction(
+                    label: "Annotate",
+                    onPressed: () => GoRouter.of(context).push(
+                        "/main/detection/${Provider.of<DetectionNotifier>(context, listen: false).detections.first.imageId}"))
+                : SnackBarAction(label: "Check Wi-Fi", onPressed: checkWifi),
           ),
         );
       }
