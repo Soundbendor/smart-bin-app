@@ -39,7 +39,7 @@ class _WifiCheckDialogState extends State<WifiCheckDialog> {
           deviceNotifier.device!.isConnected)) {
         return AlertDialog(
           title: Text(
-            "Connecting to Bluetooth...",
+            "Connecting to Bluetooth",
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
@@ -63,7 +63,7 @@ class _WifiCheckDialogState extends State<WifiCheckDialog> {
         getWifiStatusCharacteristic();
         return AlertDialog(
           title: Text(
-            "Checking Wifi Status...",
+            "Checking Wi-Fi Status",
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           content: const SizedBox(
@@ -84,7 +84,7 @@ class _WifiCheckDialogState extends State<WifiCheckDialog> {
           wifiConnectedToInternet != WifiConnectedToInternet.waiting) {
         return AlertDialog(
           title: Text(
-            "WiFi Connection Status",
+            "Wi-Fi Connection Status",
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           // Depending on the status of the WiFi connection, display different text
@@ -110,17 +110,16 @@ class _WifiCheckDialogState extends State<WifiCheckDialog> {
                       color: Theme.of(context)
                           .colorScheme
                           .onSurface
-                          .withAlpha(250),
-                    ),
+                          .withAlpha(250),),
               ),
             ),
             TextButton(
               onPressed: () {
-                // Take the user back to the WiFi scan setup sequence.
+                // Take the user back to the Wi-Fi scan setup sequence.
                 Navigator.of(context).pop();
                 GoRouter.of(context).pushReplacementNamed("wifi-scan");
               },
-              style: TextButton.styleFrom(backgroundColor: Colors.green),
+              style: TextButton.styleFrom(backgroundColor: const Color.fromARGB(255, 116, 193, 164)),
               child: const Text("Yes"),
             ),
           ],
@@ -128,11 +127,11 @@ class _WifiCheckDialogState extends State<WifiCheckDialog> {
       }
       // Catch-all case, should NEVER happen
       return const Text(
-          "If you reached this screen, please contact the developers.");
+          "If you reach this screen, please contact the developers via the email found in the Help menu.");
     });
   }
 
-  /// Reads and decodes the WiFi status characteristic, then updates wifiConnectedToInternet
+  /// Reads and decodes the Wi-Fi status characteristic, then updates wifiConnectedToInternet
   /// state based on the characteristic's value.
   void getWifiStatusCharacteristic() async {
     DeviceNotifier notifierProvider =
@@ -147,14 +146,14 @@ class _WifiCheckDialogState extends State<WifiCheckDialog> {
         jsonDecode(utf8.decode(statusCharacteristic!));
 
     setState(() {
-      // If the device was connected to WiFi at all
+      // If the device was connected to Wi-Fi at all
       if (statusJson["success"]) {
         // Set it to either connected or notConnected based on internet access
         wifiConnectedToInternet = (statusJson["internet_access"])
             ? WifiConnectedToInternet.connected
             : WifiConnectedToInternet.notConnected;
       } else {
-        // If the device was not connected to WiFi, it had no internet
+        // If the device was not connected to Wi-Fi, it had no internet
         wifiConnectedToInternet = WifiConnectedToInternet.notConnected;
       }
     });
