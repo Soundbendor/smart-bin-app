@@ -118,15 +118,117 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  final textTheme = Theme.of(context).textTheme.bodyMedium;
+  final textTheme = Theme.of(context).textTheme.bodyLarge;
   return Scaffold(
     body: Container(
       padding: const EdgeInsets.all(10),
       child: ListView(
         children: [
-          _buildExpansionTile(&quot;Help&quot;, &quot;Help Content&quot;, textTheme!),
-          _buildContactUsExpansionTile(textTheme),
-          _buildWifiStatusExpansionTile(textTheme),
+          &#47;&#47; Help Heading
+          const Padding(
+            padding: EdgeInsets.only(left: 10, top: 10, bottom: 5),
+            child: Heading(text: &quot;Help&quot;),
+          ),
+          &#47;&#47; Help Content
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text(
+              &quot;Have questions or need help with your bin? Please contact us for help using the email below.&quot;,
+              style: textTheme!.copyWith(fontSize: 18),
+            ),
+          ),
+          &#47;&#47; Contact Us Section
+          Padding(
+            padding: const EdgeInsets.only(left: 10, top: 10, bottom: 5),
+            child: Text(
+              &quot;Contact Us&quot;,
+              style: textTheme.copyWith(
+                  fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  &quot;Provide a detailed description of your issue so our team can assist you.&quot;,
+                  style: textTheme.copyWith(fontSize: 18),
+                ),
+                const SizedBox(height: 10.0),
+                Center(
+                  child: TextButton(
+                    onPressed: _launchEmail,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.email,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          size: 30,
+                        ),
+                        const SizedBox(width: 18.0),
+                        Text(
+                          &#39;Email&#39;,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          &#47;&#47; Wi-Fi Status Section
+          Padding(
+            padding: const EdgeInsets.only(left: 10, top: 10, bottom: 5),
+            child: Text(
+              &quot;Wi-Fi Status&quot;,
+              style: textTheme.copyWith(
+                  fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  &quot;Need to check or change your Wi-Fi connection?&quot;,
+                  style: textTheme.copyWith(fontSize: 18),
+                ),
+                const SizedBox(height: 10.0),
+                Center(
+                  child: TextButton(
+                    onPressed: DetectionsPageState().checkWifi,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.wifi,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          size: 30,
+                        ),
+                        const SizedBox(width: 18.0),
+                        Text(
+                          &#39;Check Wi-Fi&#39;,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     ),
@@ -165,7 +267,7 @@ Widget build(BuildContext context) {
 <footer>
   <span class="no-break">
     binsight_ai
-      1.0.0
+      2.0.0
   </span>
 
   

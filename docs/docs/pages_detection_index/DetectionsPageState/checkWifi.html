@@ -72,7 +72,7 @@
     
 <section class="desc markdown">
   <p>Displays a dialog that asks the user if they would like to check their
-WiFi status or not.</p>
+Wi-Fi status or not.</p>
 </section>
 
 
@@ -86,19 +86,19 @@ WiFi status or not.</p>
         return AlertDialog(
           title: Center(
             child: Text(
-              &quot;Check WiFi Connection?&quot;,
+              &quot;Check Wi-Fi Connection?&quot;,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
           content: Text(
-              &quot;Note: This will require a Bluetooth Connection to your bin.&quot;,
+              &quot;Please unplug your bin and then plug it back in again. Wait until it says that Bluetooth has been enabled, and then click &#39;Yes&#39; to check your Wi-Fi connection.&quot;,
               style: Theme.of(context).textTheme.labelLarge),
           actions: [
             TextButton(
               &#47;&#47; Style the button to match the &quot;sad path&quot; color scheme
               style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
                     backgroundColor: WidgetStateProperty.all(
-                      Theme.of(context).colorScheme.surface,
+                      Theme.of(context).colorScheme.error,
                     ),
                   ),
               onPressed: () {
@@ -106,24 +106,28 @@ WiFi status or not.</p>
                 Navigator.of(context).pop();
               },
               child: Text(
-                &quot;No&quot;,
+                &quot;Cancel&quot;,
                 style: Theme.of(context).textTheme.labelLarge!.copyWith(
                       color: Theme.of(context)
                           .colorScheme
-                          .onSurface
+                          .onPrimary
                           .withAlpha(250),
                     ),
               ),
             ),
             TextButton(
               &#47;&#47; Style the button to match the &quot;happy path&quot; color scheme
-              style: TextButton.styleFrom(backgroundColor: Colors.green),
+              style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
+                    backgroundColor: WidgetStateProperty.all(
+                      Theme.of(context).colorScheme.tertiary,
+                    ),
+                  ),
               onPressed: () {
                 Navigator.of(context).pop();
                 runSoon(() {
                   &#47;&#47; Begin connecting to the device
                   connectToDevice(context);
-                  &#47;&#47; Display the wifiStatusDialogBuilder throughout the entire WiFi status check process
+                  &#47;&#47; Display the wifiStatusDialogBuilder throughout the entire Wi-Fi status check process
                   showDialog(
                     context: context,
                     builder: wifiStatusDialogBuilder,
@@ -170,7 +174,7 @@ WiFi status or not.</p>
 <footer>
   <span class="no-break">
     binsight_ai
-      1.0.0
+      2.0.0
   </span>
 
   
