@@ -65,7 +65,8 @@
 
 <span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
 <span class="name ">loadDetections</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="loadDetections-param-context"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span> <span class="parameter-name">context</span>, </span></li>
-<li><span class="parameter" id="loadDetections-param-showSnackBar">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">showSnackBar</span> = <span class="default-value">true</span>}</span></li>
+<li><span class="parameter" id="loadDetections-param-showSnackBar">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">showSnackBar</span> = <span class="default-value">true</span>, </span></li>
+<li><span class="parameter" id="loadDetections-param-forceRefresh"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">forceRefresh</span> = <span class="default-value">true</span>}</span></li>
 </ol>)
 
       
@@ -73,9 +74,10 @@
     </section>
     
 <section class="desc markdown">
-  <p>Function that returns all detections from the database after a simulated delay.</p>
+  <p>Function that retrieves all detections from the database.</p>
 <p>If <code>showSnackBar</code> is true, the snackBar will be rendered after the refresh.
-If <code>showSnackBar</code> is false, the snackBar will not be rendered after the refresh.</p>
+If <code>showSnackBar</code> is false, the snackBar will not be rendered after the refresh.
+If <code>forceRefresh</code> is true, the detections will be re-fetched from the API.</p>
 <p>Tapping the snackBar will trigger a call to <a href="../../pages_detection_index/DetectionsPageState/checkWifi.html">checkWifi</a>.</p>
 </section>
 
@@ -83,9 +85,21 @@ If <code>showSnackBar</code> is false, the snackBar will not be rendered after t
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; loadDetections(BuildContext context,
-    {bool showSnackBar = true}) {
-  &#47;&#47; TODO: Actually fetch new content from the server
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; loadDetections(
+  BuildContext context, {
+  bool showSnackBar = true,
+  bool forceRefresh = true,
+}) async {
+  if (forceRefresh) {
+    Future&lt;DateTime&gt; timestamp = getLatestTimestamp();
+    await fetchImageData(
+      sharedPreferences.getString(SharedPreferencesKeys.deviceApiID) ??
+          dotenv.env[&#39;DEVICE_ID&#39;] ??
+          &quot;&quot;,
+      timestamp,
+      context,
+    );
+  }
   return Detection.all().then((value) async {
     &#47;&#47; Access the detections before the refresh to compare afterwards
     List&lt;Detection&gt; previousDetections = detections;
@@ -100,16 +114,22 @@ If <code>showSnackBar</code> is false, the snackBar will not be rendered after t
           duration: const Duration(seconds: 15),
           content: Text(
             areNewDetections
-                ? &quot;New detections found. Happy annotating!&quot;
-                : &quot;No new detections found. Tap here if you were expecting some.&quot;,
-            style: Theme.of(context)
-                .textTheme
-                .labelLarge
-                ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
-          ),
-          backgroundColor: areNewDetections ? Colors.green : Colors.blue,
-          action: SnackBarAction(label: &quot;Check&quot;, onPressed: checkWifi),
-          showCloseIcon: true,
+                  ? &quot;New detections found!&quot;
+                  : &quot;No new detections found. If you&#39;re having trouble, check your Wi-Fi connection.&quot;,
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge
+                  ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+            ),
+            backgroundColor: areNewDetections
+            ? Theme.of(context).colorScheme.tertiary
+            : Theme.of(context).colorScheme.primary,
+            action: areNewDetections
+              ? SnackBarAction(
+                  label: &quot;Annotate&quot;,
+                  onPressed: () =&gt; GoRouter.of(context).push(
+                      &quot;&#47;main&#47;detection&#47;${Provider.of&lt;DetectionNotifier&gt;(context, listen: false).detections.first.imageId}&quot;))
+              : SnackBarAction(label: &quot;Check Wi-Fi&quot;, onPressed: checkWifi),
         ),
       );
     }

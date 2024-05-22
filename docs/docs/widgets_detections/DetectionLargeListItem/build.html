@@ -146,22 +146,31 @@ Widget build(BuildContext context) {
                 &quot;Timestamp: ${detection.timestamp}&quot;,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: colorScheme.onSurface,
-                    width: 1,
+              Center(
+                child: Container(
+                  width: 325,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: colorScheme.onSurface,
+                      width: 1,
+                    ),
+                  ),
+                  margin: const EdgeInsets.only(bottom: 12, top: 12),
+                  alignment: Alignment.center,
+                  child: Stack(
+                    children: [
+                      image != null
+                          ? Image.file(
+                              image,
+                              width: 325,
+                            )
+                          : Container(),
+                      if (jsonDecode(detection.boxes ?? &quot;[]&quot;).isNotEmpty)
+                        Icon(Icons.bookmark_added,
+                            color: mainColorScheme.tertiary),
+                    ],
                   ),
                 ),
-                margin: const EdgeInsets.only(bottom: 12, top: 12),
-                alignment: Alignment.center,
-                child: image != null
-                    ? Image.file(
-                        image,
-                        width: 325,
-                        height: 325,
-                      )
-                    : Container(),
               ),
               SizedBox(
                 width: 250,
@@ -171,7 +180,7 @@ Widget build(BuildContext context) {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(&quot;Transcription:&quot;,
+                          Text(&quot;Transcription: &quot;,
                               style: textTheme.titleMedium),
                         ],
                       ),
