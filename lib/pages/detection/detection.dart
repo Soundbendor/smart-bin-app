@@ -218,7 +218,8 @@ class _BackToListButton extends StatelessWidget {
       child: Row(
         children: [
           const Icon(Icons.arrow_back_ios, size: 30),
-          Text("Back to list", style: textTheme.headlineSmall),
+          Text("Back to list", 
+          style: textTheme.headlineSmall),
         ],
       ),
       onTap: () => GoRouter.of(context).pop(),

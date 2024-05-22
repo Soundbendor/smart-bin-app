@@ -193,13 +193,14 @@ class _AnnotationPageState extends State<AnnotationPage> {
                             GestureDetector(
                               child: Row(
                                 children: [
-                                  const Icon(Icons.arrow_back_ios),
+                                  const Icon(Icons.arrow_back_ios, size: 30),
                                   Text("Back to Detection",
-                                      style: textTheme.labelLarge),
+                                      style: textTheme.headlineSmall),
                                 ],
                               ),
                               onTap: () => GoRouter.of(context).pop(),
                             ),
+                            const SizedBox(height: 16),
                             const Heading(text: "Annotate Your Image"),
                           ],
                         ),
@@ -692,7 +693,7 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                 createOptions: CreateOptions(
                   pickCreated: true,
                   create: (text) => {
-                    "Label": {"name": text, "category": "Undefined"}
+                    "Label": {"name": text, "category": "undefined"}
                   },
                   createBuilder: (text) => Align(
                     alignment: Alignment.centerLeft,
@@ -726,7 +727,7 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                         child: TextButton(
                           style: ButtonStyle(
                               backgroundColor:
-                                  WidgetStateProperty.all<Color>(Colors.red)),
+                                  WidgetStateProperty.all<Color>(const Color.fromRGBO(236, 106, 44, 1))),
                           onPressed: () => setState(
                             () {
                               selectedLabel = null;
