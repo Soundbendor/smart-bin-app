@@ -29,6 +29,7 @@ class NavigationShell extends StatelessWidget {
       body: child,
       drawer: const TopNavBar(),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).colorScheme.surface,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

@@ -8,9 +8,12 @@ import 'package:path_provider/path_provider.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rotating_icon_button/rotating_icon_button.dart';
 
 // Project imports:
+import 'package:binsight_ai/util/api.dart';
 import 'package:binsight_ai/util/providers/device_notifier.dart';
 import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/async_ops.dart';
@@ -57,7 +60,8 @@ class DetectionsPageState extends State<DetectionsPage> {
 
   @override
   void initState() {
-    loadDetectionFuture = loadDetections(context, showSnackBar: false);
+    loadDetectionFuture =
+        loadDetections(context, showSnackBar: false, forceRefresh: false);
     getDirectory();
     super.initState();
   }
@@ -88,7 +92,7 @@ class DetectionsPageState extends State<DetectionsPage> {
   }
 
   /// Displays a dialog that asks the user if they would like to check their
-  /// WiFi status or not.
+  /// Wi-Fi status or not.
   Future checkWifi() {
     return showDialog(
         context: context,
@@ -96,19 +100,19 @@ class DetectionsPageState extends State<DetectionsPage> {
           return AlertDialog(
             title: Center(
               child: Text(
-                "Check WiFi Connection?",
+                "Check Wi-Fi Connection?",
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
             content: Text(
-                "Note: This will require a Bluetooth Connection to your bin.",
+                "Please unplug your bin and then plug it back in again. Wait until it says that Bluetooth has been enabled, and then click 'Yes' to check your Wi-Fi connection.",
                 style: Theme.of(context).textTheme.labelLarge),
             actions: [
               TextButton(
                 // Style the button to match the "sad path" color scheme
                 style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
                       backgroundColor: WidgetStateProperty.all(
-                        Theme.of(context).colorScheme.surface,
+                        Theme.of(context).colorScheme.error,
                       ),
                     ),
                 onPressed: () {
@@ -116,24 +120,28 @@ class DetectionsPageState extends State<DetectionsPage> {
                   Navigator.of(context).pop();
                 },
                 child: Text(
-                  "No",
+                  "Cancel",
                   style: Theme.of(context).textTheme.labelLarge!.copyWith(
                         color: Theme.of(context)
                             .colorScheme
-                            .onSurface
+                            .onPrimary
                             .withAlpha(250),
                       ),
                 ),
               ),
               TextButton(
                 // Style the button to match the "happy path" color scheme
-                style: TextButton.styleFrom(backgroundColor: Colors.green),
+                style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
+                      backgroundColor: WidgetStateProperty.all(
+                        Theme.of(context).colorScheme.tertiary,
+                      ),
+                    ),
                 onPressed: () {
                   Navigator.of(context).pop();
                   runSoon(() {
                     // Begin connecting to the device
                     connectToDevice(context);
-                    // Display the wifiStatusDialogBuilder throughout the entire WiFi status check process
+                    // Display the wifiStatusDialogBuilder throughout the entire Wi-Fi status check process
                     showDialog(
                       context: context,
                       builder: wifiStatusDialogBuilder,
@@ -148,15 +156,28 @@ class DetectionsPageState extends State<DetectionsPage> {
         });
   }
 
-  /// Function that returns all detections from the database after a simulated delay.
+  /// Function that retrieves all detections from the database.
   ///
   /// If [showSnackBar] is true, the snackBar will be rendered after the refresh.
   /// If [showSnackBar] is false, the snackBar will not be rendered after the refresh.
+  /// If [forceRefresh] is true, the detections will be re-fetched from the API.
   ///
   /// Tapping the snackBar will trigger a call to [checkWifi].
-  Future<void> loadDetections(BuildContext context,
-      {bool showSnackBar = true}) {
-    // TODO: Actually fetch new content from the server
+  Future<void> loadDetections(
+    BuildContext context, {
+    bool showSnackBar = true,
+    bool forceRefresh = true,
+  }) async {
+    if (forceRefresh) {
+      Future<DateTime> timestamp = getLatestTimestamp();
+      await fetchImageData(
+        sharedPreferences.getString(SharedPreferencesKeys.deviceApiID) ??
+            dotenv.env['DEVICE_ID'] ??
+            "",
+        timestamp,
+        context,
+      );
+    }
     return Detection.all().then((value) async {
       // Access the detections before the refresh to compare afterwards
       List<Detection> previousDetections = detections;
@@ -171,21 +192,22 @@ class DetectionsPageState extends State<DetectionsPage> {
             duration: const Duration(seconds: 15),
             content: Text(
               areNewDetections
-                  ? "New detections found."
-                  : "No new detections found. Tap here if you were expecting some.",
-              style: Theme.of(context)
-                  .textTheme
-                  .labelLarge
-                  ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
-            ),
-            backgroundColor: areNewDetections ? Colors.green : Colors.blue,
-            action: areNewDetections
+                    ? "New detections found!"
+                    : "No new detections found. If you're having trouble, check your Wi-Fi connection.",
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+              ),
+              backgroundColor: areNewDetections 
+              ? Theme.of(context).colorScheme.tertiary 
+              : Theme.of(context).colorScheme.primary,
+              action: areNewDetections
                 ? SnackBarAction(
                     label: "Annotate",
                     onPressed: () => GoRouter.of(context).push(
-                        "/main/detection/${Provider.of<DetectionNotifier>(context).detections.first.imageId}"))
-                : SnackBarAction(label: "Check", onPressed: checkWifi),
-            showCloseIcon: true,
+                        "/main/detection/${Provider.of<DetectionNotifier>(context, listen: false).detections.first.imageId}"))
+                : SnackBarAction(label: "Check Wi-Fi", onPressed: checkWifi),
           ),
         );
       }

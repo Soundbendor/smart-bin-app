@@ -84,6 +84,7 @@ class _DetectionCardState extends State<_DetectionCard> {
     final colorScheme = Theme.of(context).colorScheme;
     File? image = getImage(widget.detection.postDetectImgLink!, appDocDir);
     final textTheme = Theme.of(context).textTheme;
+
     return Card(
       color: colorScheme.onPrimary,
       child: Padding(
@@ -96,12 +97,6 @@ class _DetectionCardState extends State<_DetectionCard> {
               child: Stack(
                 children: [
                   Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: colorScheme.onSurface,
-                          width: 1,
-                        ),
-                      ),
                       margin: const EdgeInsets.only(bottom: 10, top: 10),
                       child: Center(
                         child: image != null
@@ -122,12 +117,12 @@ class _DetectionCardState extends State<_DetectionCard> {
                       },
                       style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.all(
-                          Theme.of(context).colorScheme.primary.withAlpha(200),
+                          colorScheme.primary.withAlpha(200),
                         ),
                         shape: WidgetStateProperty.all(const CircleBorder()),
                       ),
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      splashColor: Theme.of(context).colorScheme.onSecondary,
+                      color: colorScheme.onPrimary,
+                      splashColor: colorScheme.onSecondary,
                     ),
                   ),
                 ],
@@ -137,23 +132,23 @@ class _DetectionCardState extends State<_DetectionCard> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildDataField("Transcription",
+                _buildDataField("Transcription: ",
                     widget.detection.transcription.toString(), textTheme),
-                _buildDataField("Temperature",
+                _buildDataField("Temperature: ",
                     widget.detection.temperature.toString(), textTheme),
-                _buildDataField(
-                    "Weight", widget.detection.weight.toString(), textTheme),
-                _buildDataField("Total Weight",
+                _buildDataField("Weight: ", 
+                    widget.detection.weight.toString(), textTheme),
+                _buildDataField("Total Weight: ",
                     widget.detection.totalWeight.toString(), textTheme),
-                _buildDataField("Humidity",
+                _buildDataField("Humidity: ",
                     widget.detection.humidity.toString(), textTheme),
-                _buildDataField("CO2 Equivalent",
+                _buildDataField("CO2 Equivalent: ",
                     widget.detection.co2.toString(), textTheme),
-                _buildDataField("Pressure",
+                _buildDataField("Pressure: ",
                     widget.detection.pressure.toString(), textTheme),
-                _buildDataField("Indoor Air Quality",
+                _buildDataField("Indoor Air Quality: ",
                     widget.detection.iaq.toString(), textTheme),
-                _buildDataField("Total Volatile Organic Compounds",
+                _buildDataField("Total VOCs: ",
                     widget.detection.vo2.toString(), textTheme),
               ],
             ),
@@ -164,15 +159,15 @@ class _DetectionCardState extends State<_DetectionCard> {
   }
 
   // Creates a row with a title and a value to build the sensor data fields.
-  Widget _buildDataField(String title, String value, TextTheme textTheme) {
+  Widget _buildDataField(String title, String value, TextTheme textStyle) {
     return Row(
       children: [
-        Text(title, style: textTheme.labelLarge),
+        Text(title, style: textStyle.titleMedium),
         const SizedBox(width: 10),
         Flexible(
           child: Text(
             value,
-            style: textTheme.bodyMedium,
+            style: textStyle.labelMedium,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
           ),
@@ -223,7 +218,8 @@ class _BackToListButton extends StatelessWidget {
       child: Row(
         children: [
           const Icon(Icons.arrow_back_ios, size: 30),
-          Text("Back to list", style: textTheme.headlineSmall),
+          Text("Back to list", 
+          style: textTheme.headlineSmall),
         ],
       ),
       onTap: () => GoRouter.of(context).pop(),

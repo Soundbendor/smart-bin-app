@@ -14,7 +14,14 @@ import 'package:binsight_ai/util/providers/annotation_notifier.dart';
 class FreeDraw extends StatefulWidget {
   /// The link for the image to be annotated
   final String imageLink;
+
+  /// The size of the widget/viewport
   final double size;
+
+  /// The scale of the image. Used to scale the values of the drawing segments between 0 and 100
+  final double scale;
+
+  /// The base directory for the image
   final Directory baseDir;
 
   const FreeDraw({
@@ -22,7 +29,7 @@ class FreeDraw extends StatefulWidget {
     required this.baseDir,
     required this.size,
     super.key,
-  });
+  }) : scale = size / 100;
 
   @override
   State<FreeDraw> createState() => _FreeDrawState();
@@ -46,9 +53,13 @@ class _FreeDrawState extends State<FreeDraw> {
   void onDrawStart(DragStartDetails details, AnnotationNotifier notifier) {
     setState(() {
       if (_isPointOnImage(details.localPosition)) {
+        final scaledPosition = Offset(
+          details.localPosition.dx / widget.scale,
+          details.localPosition.dy / widget.scale,
+        );
         currentDrawingSegment = DrawingSegment(
           id: DateTime.now().microsecondsSinceEpoch,
-          offsets: [details.localPosition],
+          offsets: [scaledPosition],
         );
         notifier.startCurrentAnnotation(currentDrawingSegment!);
         notifier.updateCurrentAnnotationHistory();
@@ -61,14 +72,28 @@ class _FreeDrawState extends State<FreeDraw> {
       if (currentDrawingSegment != null &&
           _isPointOnImage(details.localPosition)) {
         Offset localPosition = details.localPosition;
+        final scaledPosition = Offset(
+          localPosition.dx / widget.scale,
+          localPosition.dy / widget.scale,
+        );
 
         currentDrawingSegment = currentDrawingSegment?.copyWith(
-          offsets: currentDrawingSegment!.offsets..add(localPosition),
+          offsets: currentDrawingSegment!.offsets..add(scaledPosition),
         );
         notifier.updateCurrentAnnotation(currentDrawingSegment!);
         notifier.updateCurrentAnnotationHistory();
       }
     });
+  }
+
+  void onDrawEnd() {
+    setState(() {
+      currentDrawingSegment = null;
+    });
+  }
+
+  bool isDrawing() {
+    return currentDrawingSegment != null;
   }
 
   @override
@@ -88,24 +113,21 @@ class _FreeDrawState extends State<FreeDraw> {
             onVerticalDragUpdate: (details) => onDrawUpdate(details, notifier),
             onPanUpdate: (details) => onDrawUpdate(details, notifier),
             // When the user lifts their finger, stop updating the current drawing segment
-            onVerticalDragEnd: (_) {
-              currentDrawingSegment = null;
-            },
-            onPanEnd: (_) {
-              currentDrawingSegment = null;
-            },
+            onVerticalDragEnd: (_) => onDrawEnd(),
+            onPanEnd: (_) => onDrawEnd(),
             // Render the drawing on top of the image
             child: Stack(
               children: [
                 image != null
-                    ? Image.file(image, key: imageKey, fit: BoxFit.cover)
+                    ? Image.file(image, key: imageKey, fit: BoxFit.fill)
                     : Container(),
                 CustomPaint(
                   painter: DrawingPainter(
-                    activeSegments: notifier.currentAnnotation,
-                    allSegments: notifier.oldAnnotations,
+                    activeSegments: scaleSegments(notifier.currentAnnotation),
+                    allSegments: scaleSegments(notifier.oldAnnotations),
                   ),
                 ),
+                if (!isDrawing()) FreeDrawText(scale: widget.scale)
               ],
             ),
           ),
@@ -114,12 +136,62 @@ class _FreeDrawState extends State<FreeDraw> {
     );
   }
 
+  List<DrawingSegment> scaleSegments(List<DrawingSegment> segments) {
+    return segments.map((segment) {
+      return DrawingSegment(
+        id: segment.id,
+        offsets: segment.offsets
+            .map((offset) => Offset(
+                  offset.dx * widget.scale,
+                  offset.dy * widget.scale,
+                ))
+            .toList(),
+      );
+    }).toList();
+  }
+
   /// Checks whether an Offset is within the bounds of the image
   bool _isPointOnImage(Offset point) {
     RenderBox renderBox =
         imageKey.currentContext!.findRenderObject() as RenderBox;
     Rect imageBounds = renderBox.paintBounds;
     return imageBounds.contains(point);
+  }
+}
+
+class FreeDrawText extends StatelessWidget {
+  const FreeDrawText({
+    super.key,
+    required this.scale,
+  });
+
+  final double scale;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<AnnotationNotifier>(builder: (context, notifier, child) {
+      final textTheme = Theme.of(context).textTheme;
+      return Stack(
+        children: notifier.allAnnotations.map((annotation) {
+          return Positioned(
+            left: annotation["xy_coord_list"][0][0] * scale,
+            top: annotation["xy_coord_list"][0][1] * scale,
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: const Color(0xaaffffff),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Text(
+                annotation["object_name"],
+                style: textTheme.labelMedium,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }).toList(),
+      );
+    });
   }
 }
 

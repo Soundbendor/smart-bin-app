@@ -9,16 +9,16 @@ import 'package:provider/provider.dart';
 // Project imports:
 import 'package:binsight_ai/util/bluetooth_bin_data.dart';
 import 'package:binsight_ai/util/print.dart';
-import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/util/providers/device_notifier.dart';
 import 'package:binsight_ai/util/providers/setup_key_notifier.dart';
 import 'package:binsight_ai/util/providers/wifi_result_notifier.dart';
+import 'package:binsight_ai/util/shared_preferences.dart';
 import 'package:binsight_ai/util/wifi_scan.dart';
 import 'package:binsight_ai/widgets/background.dart';
 import 'package:binsight_ai/widgets/bluetooth_alert_box.dart';
 import 'package:binsight_ai/widgets/error_dialog.dart';
 
-/// Widget for configuring the wifi credentials of the compost bin
+/// Widget for configuring the Wi-Fi credentials of the compost bin
 class WifiConfigurationPage extends StatefulWidget {
   const WifiConfigurationPage({super.key});
 
@@ -30,7 +30,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
   /// The wifi scan result
   WifiScanResult? wifiResult;
 
-  /// Controller for the SSID text field
+  /// Controller for the SSID / Wi-Fi Network name text field
   final TextEditingController ssidController = TextEditingController();
 
   /// Controller for the password text field
@@ -48,7 +48,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
     });
   }
 
-  /// Sends the wifi credentials to the compost bin
+  /// Sends the Wi-Fi credentials to the compost bin
   void sendCredentials(BuildContext context) {
     showDialog(
         context: context,
@@ -116,7 +116,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: TextField(
                   controller: ssidController,
-                  decoration: const InputDecoration(labelText: 'SSID'),
+                  decoration: const InputDecoration(labelText: 'Network Name'),
                 ),
               ),
               Padding(
@@ -149,6 +149,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
                       color: Theme.of(context).colorScheme.onPrimary,
                     )),
               ),
+              const SizedBox(height: 10),
             ],
           ),
         ),

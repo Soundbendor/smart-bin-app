@@ -175,7 +175,6 @@ class _HomePageState extends State<HomePage> {
                           "Detections by Food Category",
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
-                        const SizedBox(height: 10),
                         CircleChart(
                           data: labelCounts,
                         ),

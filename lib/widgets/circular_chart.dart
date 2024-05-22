@@ -33,11 +33,15 @@ class _CircleChartState extends State<CircleChart> {
         key: graphKey,
         legend: const Legend(isVisible: true, position: LegendPosition.left),
         palette: const [
-          Color(0xFF9FDEE7),
-          Color(0xFFFF9E9E),
-          Color(0xFF9CED9A),
-          Color(0xFFF0C27C),
-          Color(0xFFD0B4CF),
+          Color.fromARGB(255, 33, 204, 231),
+          Color.fromARGB(255, 252, 154, 154),
+          Color.fromARGB(255, 115, 216, 194),
+          Color.fromARGB(255, 243, 195, 124),
+          Color.fromARGB(255, 108, 157, 235),
+          Color.fromARGB(255, 156, 240, 155),
+          Color.fromARGB(255, 237, 151, 71),
+          Color.fromARGB(255, 202, 125, 200),
+          Color.fromARGB(255, 212, 115, 185),
         ],
         series: <PieSeries<_ChartData, String>>[
           PieSeries<_ChartData, String>(
