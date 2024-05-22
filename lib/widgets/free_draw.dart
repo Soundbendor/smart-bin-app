@@ -98,7 +98,7 @@ class _FreeDrawState extends State<FreeDraw> {
             child: Stack(
               children: [
                 image != null
-                    ? Image.file(image, key: imageKey, fit: BoxFit.cover)
+                    ? Image.file(image, key: imageKey, fit: BoxFit.fill)
                     : Container(),
                 CustomPaint(
                   painter: DrawingPainter(

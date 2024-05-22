@@ -114,10 +114,8 @@ class _AnnotationPageState extends State<AnnotationPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 // Display annotation gif with border
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 1.0)),
                   child: Image.asset('assets/images/annotation.gif'),
                 ),
                 Padding(

@@ -97,12 +97,6 @@ class _DetectionCardState extends State<_DetectionCard> {
               child: Stack(
                 children: [
                   Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: colorScheme.onSurface,
-                          width: 1,
-                        ),
-                      ),
                       margin: const EdgeInsets.only(bottom: 10, top: 10),
                       child: Center(
                         child: image != null

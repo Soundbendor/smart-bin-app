@@ -60,12 +60,6 @@ class DetectionLargeListItem extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: colorScheme.onSurface,
-                        width: 1,
-                      ),
-                    ),
                     margin: const EdgeInsets.only(bottom: 12, top: 12),
                     alignment: Alignment.center,
                     child: DynamicImage(detection.postDetectImgLink!,
@@ -127,12 +121,6 @@ class DetectionSmallListItem extends StatelessWidget {
           color: colorScheme.onPrimary,
           child: ListTile(
             leading: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: colorScheme.onSurface,
-                    width: 1,
-                  ),
-                ),
                 child: DynamicImage(detection.postDetectImgLink!)),
             title: Text(formatDetectionTitle(detection),
                 style: textTheme.titleMedium),
