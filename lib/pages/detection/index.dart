@@ -1,5 +1,8 @@
 // Flutter imports:
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
@@ -48,15 +51,25 @@ class DetectionsPageState extends State<DetectionsPage> {
   /// A future that loads the initial list of detections.
   late Future loadDetectionFuture;
 
+  Directory? appDocDir;
+
   @override
   void initState() {
     loadDetectionFuture = loadDetections(context, showSnackBar: false);
+    getDirectory();
     super.initState();
   }
 
   /// Creates and controls a dialog with its own context for the WiFi status check sequence.
   Widget wifiStatusDialogBuilder(context) {
     return const WifiCheckDialog();
+  }
+
+  Future<void> getDirectory() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    setState(() {
+      appDocDir = dir;
+    });
   }
 
   /// Handles reconnecting to the user's device in order to read wifi status characteristic.
@@ -231,6 +244,7 @@ class DetectionsPageState extends State<DetectionsPage> {
                             ? DetectionListType.large
                             : DetectionListType.small,
                         detections: detections,
+                        baseDir: appDocDir!,
                         loadDetections: loadDetections);
               },
             ),

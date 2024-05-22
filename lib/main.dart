@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/intl.dart';
 
 // Project imports:
 import 'package:binsight_ai/database/models/detection.dart';
@@ -189,15 +190,18 @@ class _BinsightAiAppState extends State<BinsightAiApp>
   /// Hits the api to retrieve all detections for a certain device after a date
   Future<void> fetchImageData(
       String deviceID, Future<DateTime> afterDate) async {
-    DateTime timestamp =
-        await afterDate; // TODO: Implement when supported by upstream API
+    DateTime timestamp = await afterDate;
+    debug("LATEST TIME STAMP $timestamp");
+    String formattedDate = DateFormat('yyyy-MM-dd').format(timestamp);
+    String formattedTime = DateFormat('HH:mm:ss').format(timestamp);
     const String url =
         'http://sb-binsight.dri.oregonstate.edu:30080/api/get_image_info';
     Map<String, String> queryParams = {
       'deviceID': deviceID,
-      'after_date': "2024-5-15",
+      'after_date': formattedDate,
+      'after_time': formattedTime,
       'page': '1',
-      'size': '10',
+      'size': '50',
     };
 
     final Uri uri = Uri.parse(url).replace(queryParameters: queryParams);
@@ -214,8 +218,14 @@ class _BinsightAiAppState extends State<BinsightAiApp>
       debug(response);
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
-        debug(data);
-        List<dynamic> itemList = data['items'];
+
+        // API RETURNS ITEMS SORTED BY DATE IN ASCENDING ORDER, REVERSE FOR NEWEST FIRST
+        List<dynamic> itemList = data['items'].reversed.toList();
+        if (itemList.isNotEmpty && timestamp != DateTime(2022, 1, 1)) {
+          itemList.removeAt(0);
+        }
+        debug(
+            "IMAGES QUERIED FOR AND RECIEVED: $itemList and length ${itemList.length}");
         for (var item in itemList) {
           Map<String, dynamic> adjustedMap = transformMap(item);
           imageList.add(adjustedMap["postDetectImgLink"]);
@@ -226,7 +236,6 @@ class _BinsightAiAppState extends State<BinsightAiApp>
           Provider.of<DetectionNotifier>(context, listen: false).getAll();
         }
         try {
-          debug(imageList);
           retrieveImages(deviceID, imageList);
         } catch (e) {
           debug(e);
@@ -263,7 +272,6 @@ class _BinsightAiAppState extends State<BinsightAiApp>
       if (response.statusCode == 200) {
         debug('POST request successful');
         debug(response.body);
-        debug(response.body.length);
         if (!mounted) return;
         Provider.of<ImageNotifier>(context, listen: false)
             .saveAndExtract(response.body);
@@ -277,9 +285,15 @@ class _BinsightAiAppState extends State<BinsightAiApp>
 
   /// Adjust new json map recieved from api to match existing schema
   Map<String, dynamic> transformMap(Map<String, dynamic> map) {
+    //colorImage_2024-05-11--20-36-25.jpg, substrings to get the date section and time section
+    String dateString = map["colorImage"].substring(11, 21);
+    String timeString = map["colorImage"].substring(23, 31);
+    String combinedDateTimeString = "${dateString}T$timeString";
+    String formattedDateTimeString = combinedDateTimeString.replaceAll('-', '');
+    //Remove dashes and put a T between the date and time parts so it can be parsed as DateTime, and later, an Iso String
     return {
       'imageId': map['colorImage'],
-      'timestamp': DateTime.now().toIso8601String(),
+      'timestamp': DateTime.parse(formattedDateTimeString).toIso8601String(),
       'deviceId': map['deviceID'].toString(),
       'postDetectImgLink': map['colorImage'],
       'weight': map['weight_delta']?.toDouble(),

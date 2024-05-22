@@ -24,7 +24,6 @@ class DetectionNotifier with ChangeNotifier {
         detection.boxes = jsonEncode(annotations);
         await detection.update();
         await getAll();
-        debug("Updated annotation in DB");
       }
     } catch (error) {
       debug('Error updating annotations: $error');
