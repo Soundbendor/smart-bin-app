@@ -229,13 +229,21 @@ Widget build(BuildContext context) {
             builder: (BuildContext context, AsyncSnapshot&lt;void&gt; snapshot) {
               return snapshot.connectionState == ConnectionState.waiting
                   ? const CircularProgressIndicator()
-                  : DetectionList(
-                      size: sizeToggle
-                          ? DetectionListType.large
-                          : DetectionListType.small,
-                      detections: detections,
-                      baseDir: appDocDir!,
-                      loadDetections: loadDetections);
+                  : Consumer&lt;DetectionNotifier&gt;(
+                      builder: (context, detectionNotifier, child) {
+                        return Consumer&lt;ImageNotifier&gt;(
+                          builder: (context, imageNotifier, child) {
+                            return DetectionList(
+                                size: sizeToggle
+                                    ? DetectionListType.large
+                                    : DetectionListType.small,
+                                detections: detectionNotifier.detections,
+                                baseDir: appDocDir!,
+                                loadDetections: loadDetections);
+                          },
+                        );
+                      },
+                    );
             },
           ),
         ],
