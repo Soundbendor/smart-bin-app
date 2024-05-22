@@ -91,7 +91,7 @@ class DetectionLargeListItem extends StatelessWidget {
                             : Container(),
                         if (jsonDecode(detection.boxes ?? "[]").isNotEmpty)
                           Icon(Icons.bookmark_added,
-                              color: mainColorScheme.primary),
+                              color: mainColorScheme.tertiary),
                       ],
                     ),
                   ),
