@@ -247,7 +247,7 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
       status = WifiConfigurationStatus.verifying;
     });
     int tries = 0;
-    while (tries < 10) {
+    while (tries < 15) {
       final statusData = await device.readCharacteristic(
           serviceId: mainServiceId,
           characteristicId: wifiCredentialCharacteristicId);
@@ -264,7 +264,6 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
       String? log = statusJson["log"];
       bool success = statusJson["success"];
       debug("Status: $statusJson");
-      // check if timestamp is within ~5 seconds of now
       if (success) {
         return await verifyConnection();
       } else {
