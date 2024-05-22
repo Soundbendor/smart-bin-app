@@ -143,6 +143,8 @@ class DetectionSmallListItem extends StatelessWidget {
           color: colorScheme.onPrimary,
           child: ListTile(
             leading: Container(
+                width: 50,
+                height: 50,
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: colorScheme.onSurface,

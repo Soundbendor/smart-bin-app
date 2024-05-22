@@ -53,7 +53,11 @@ void main() {
       size: const Size(800, 600),
       child: DetectionLargeListItem(
         detection: detection,
+<<<<<<< HEAD
         baseDir: dir,
+=======
+        baseDir: Directory("/test"),
+>>>>>>> dev
       ),
     ));
     expect(
@@ -64,7 +68,11 @@ void main() {
 
   testWidgets("Detection list (complete) displays correct title",
       (widgetTester) async {
+<<<<<<< HEAD
     Directory dir = await getApplicationDocumentsDirectory();
+=======
+    Directory dir = Directory("/test");
+>>>>>>> dev
     final detection = Detection.fromMap(
       {
         "imageId": "foo",
