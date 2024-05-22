@@ -55,6 +55,11 @@ final mainTheme = ThemeData(
       fontWeight: FontWeight.bold,
       fontFamily: 'GolosText', // Specify the font family
     ),
+    bodyLarge: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.normal,
+      fontFamily: 'GolosText', // Specify the font family
+    ),
     bodyMedium: TextStyle(
       fontSize: 10,
       fontWeight: FontWeight.normal,

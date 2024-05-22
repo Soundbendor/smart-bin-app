@@ -35,7 +35,7 @@ class _CircleChartState extends State<CircleChart> {
         palette: const [
           Color.fromARGB(255, 33, 204, 231),
           Color.fromARGB(255, 252, 154, 154),
-          Color.fromARGB(255, 150, 233, 148),
+          Color.fromARGB(255, 115, 216, 194),
           Color.fromARGB(255, 243, 195, 124),
           Color.fromARGB(255, 108, 157, 235),
           Color.fromARGB(255, 156, 240, 155),

@@ -658,12 +658,14 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                 },
                 maxSelectedItems: 1,
                 searchField: TextField(
+                  style: Theme.of(context).textTheme.bodyLarge,
                   decoration: InputDecoration(
                     hintText: selectedLabel == null
-                        ? "Select a Label"
+                        ? "Search"
                         : selectedLabel!,
                     hintStyle: selectedLabel == null
-                        ? const TextStyle(color: Colors.grey)
+                        ? const TextStyle(
+                          color: Colors.grey,)
                         : const TextStyle(color: Colors.black),
                   ),
                 ),
@@ -682,7 +684,9 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                   return label["Label"]["name"];
                 },
                 itemBuilder: (label, index) {
-                  return Text(label["Label"]["name"]);
+                  return Text(
+                    label["Label"]["name"],
+                    style: Theme.of(context).textTheme.bodyLarge,);
                 },
                 pickedItemsContainerBuilder: (pickedItems) {
                   return pickedItems.isNotEmpty
@@ -690,6 +694,8 @@ class _MyAlertDialogState extends State<MyAlertDialog> {
                       : const Padding(padding: EdgeInsets.zero);
                 },
                 // Options associated with creating a new item when searched item isn't found
+                // This is not currently turned on. To enable, set isCreatable to true in 
+                // the MultipleSearchSelection.creatable widget
                 createOptions: CreateOptions(
                   pickCreated: true,
                   create: (text) => {
