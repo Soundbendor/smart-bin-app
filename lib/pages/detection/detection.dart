@@ -135,8 +135,8 @@ class _DetectionCardState extends State<_DetectionCard> {
                     widget.detection.transcription.toString(), textTheme),
                 _buildDataField("Temperature: ",
                     widget.detection.temperature.toString(), textTheme),
-                _buildDataField("Weight: ", 
-                    widget.detection.weight.toString(), textTheme),
+                _buildDataField(
+                    "Weight: ", widget.detection.weight.toString(), textTheme),
                 _buildDataField("Total Weight: ",
                     widget.detection.totalWeight.toString(), textTheme),
                 _buildDataField("Humidity: ",
@@ -147,8 +147,8 @@ class _DetectionCardState extends State<_DetectionCard> {
                     widget.detection.pressure.toString(), textTheme),
                 _buildDataField("Indoor Air Quality: ",
                     widget.detection.iaq.toString(), textTheme),
-                _buildDataField("Total VOCs: ",
-                    widget.detection.vo2.toString(), textTheme),
+                _buildDataField(
+                    "Total VOCs: ", widget.detection.vo2.toString(), textTheme),
               ],
             ),
           ],
@@ -217,8 +217,7 @@ class _BackToListButton extends StatelessWidget {
       child: Row(
         children: [
           const Icon(Icons.arrow_back_ios, size: 30),
-          Text("Back to list", 
-          style: textTheme.headlineSmall),
+          Text("Back to list", style: textTheme.headlineSmall),
         ],
       ),
       onTap: () => GoRouter.of(context).pop(),
