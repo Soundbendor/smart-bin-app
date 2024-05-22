@@ -16,9 +16,10 @@ import 'package:binsight_ai/database/models/detection.dart';
 import 'package:binsight_ai/util/async_ops.dart';
 import 'package:binsight_ai/util/bluetooth.dart';
 import 'package:binsight_ai/util/shared_preferences.dart';
+import 'package:binsight_ai/util/providers/detection_notifier.dart';
+import 'package:binsight_ai/util/providers/image_provider.dart';
 import 'package:binsight_ai/widgets/detections.dart';
 import 'package:binsight_ai/widgets/heading.dart';
-import 'package:binsight_ai/util/providers/detection_notifier.dart';
 import 'package:binsight_ai/widgets/wifi_check_dialog.dart';
 
 /// Displays the detections with padding and a size toggle button.
@@ -48,7 +49,6 @@ class DetectionsPageState extends State<DetectionsPage> {
   /// When [sizeToggle] is false, the detections are displayed in a small list format.
   bool sizeToggle = false;
 
-  /// A future that loads the initial list of detections.
   late Future loadDetectionFuture;
 
   Directory? appDocDir;
@@ -262,14 +262,19 @@ class DetectionsPageState extends State<DetectionsPage> {
                     ? const CircularProgressIndicator()
                     : Consumer<DetectionNotifier>(
                         builder: (context, detectionNotifier, child) {
-                        return DetectionList(
-                            size: sizeToggle
-                                ? DetectionListType.large
-                                : DetectionListType.small,
-                            detections: detectionNotifier.detections,
-                            baseDir: appDocDir!,
-                            loadDetections: loadDetections);
-                      });
+                          return Consumer<ImageNotifier>(
+                            builder: (context, imageNotifier, child) {
+                              return DetectionList(
+                                  size: sizeToggle
+                                      ? DetectionListType.large
+                                      : DetectionListType.small,
+                                  detections: detectionNotifier.detections,
+                                  baseDir: appDocDir!,
+                                  loadDetections: loadDetections);
+                            },
+                          );
+                        },
+                      );
               },
             ),
           ],
