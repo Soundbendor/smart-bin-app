@@ -31,7 +31,7 @@
     <li><a href="../../index.html">binsight_ai</a></li>
     <li><a href="../../pages_detection_annotation/pages_detection_annotation-library.html">pages&#47;detection&#47;annotation.dart</a></li>
     <li><a href="../../pages_detection_annotation/AnnotationPage-class.html">AnnotationPage</a></li>
-    <li class="self-crumb">AnnotationPage constructor</li>
+    <li class="self-crumb">AnnotationPage const constructor</li>
   </ol>
   <div class="self-name">AnnotationPage</div>
   <form class="search navbar-right" role="search">
@@ -61,7 +61,7 @@
 </h1></div>
 
     <section class="multi-line-signature">
-      
+      const
       <span class="name ">AnnotationPage</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="-param-key">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
 <li><span class="parameter" id="-param-detectionId"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">detectionId</span>}</span></li>
 </ol>)
@@ -73,12 +73,7 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">AnnotationPage({super.key, required this.detectionId}) {
-  imageLink = Future(() async {
-    return Detection.find(detectionId)
-        .then((detection) =&gt; detection!.preDetectImgLink);
-  });
-}</code></pre>
+  <pre class="language-dart"><code class="language-dart">const AnnotationPage({super.key, required this.detectionId});</code></pre>
 </section>
 
 
@@ -96,7 +91,7 @@
     <li><a href="../../index.html">binsight_ai</a></li>
     <li><a href="../../pages_detection_annotation/pages_detection_annotation-library.html">annotation</a></li>
     <li><a href="../../pages_detection_annotation/AnnotationPage-class.html">AnnotationPage</a></li>
-    <li class="self-crumb">AnnotationPage constructor</li>
+    <li class="self-crumb">AnnotationPage const constructor</li>
 </ol>
 
 

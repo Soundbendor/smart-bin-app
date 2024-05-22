@@ -76,8 +76,8 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Detection.createDefault()
     : imageId = &quot;1&quot;,
-      preDetectImgLink = &quot;assets&#47;images&#47;placeholder.png&quot;,
-      timestamp = DateTime.now(),
+      postDetectImgLink = &quot;assets&#47;images&#47;placeholder.png&quot;,
+      timestamp = DateTime.now().subtract(const Duration(days: 30)),
       deviceId = &quot;1&quot;;</code></pre>
 </section>
 

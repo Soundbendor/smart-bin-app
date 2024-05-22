@@ -80,10 +80,10 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">static Detection fromMap(Map&lt;String, dynamic&gt; map) {
-  &#47;&#47; Note: As of this commit, the actual server schema is not known. This is just a placeholder.
   return Detection(
-    imageId: map[&#39;imageId&#39;],
-    preDetectImgLink: map[&#39;preDetectImgLink&#39;],
+    &#47;&#47;TODO: Create new imageID instead of reusing timestamp
+    imageId:
+        &quot;${map[&#39;deviceId&#39;]}-${DateTime.parse(map[&#39;timestamp&#39;]).toIso8601String()}&quot;,
     timestamp: DateTime.parse(map[&#39;timestamp&#39;]),
     deviceId: map[&#39;deviceId&#39;],
     postDetectImgLink: map[&#39;postDetectImgLink&#39;],
@@ -95,7 +95,6 @@
     temperature: map[&#39;temperature&#39;]?.toDouble(),
     co2: map[&#39;co2&#39;]?.toDouble(),
     vo2: map[&#39;vo2&#39;]?.toDouble(),
-    totalWeight: map[&#39;totalWeight&#39;]?.toDouble(),
     pressure: map[&#39;pressure&#39;]?.toDouble(),
     iaq: map[&#39;iaq&#39;]?.toDouble(),
     boxes: map[&#39;boxes&#39;],
