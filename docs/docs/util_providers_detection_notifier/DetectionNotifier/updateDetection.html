@@ -64,7 +64,8 @@
       
 
 <span class="returntype">void</span>
-<span class="name ">updateDetection</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="updateDetection-param-detectionId"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">detectionId</span></span></li>
+<span class="name ">updateDetection</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="updateDetection-param-detectionId"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">detectionId</span>, </span></li>
+<li><span class="parameter" id="updateDetection-param-annotations"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a></span> <span class="parameter-name">annotations</span></span></li>
 </ol>)
 
       
@@ -76,26 +77,17 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">void updateDetection(String detectionId) async {
+  <pre class="language-dart"><code class="language-dart">void updateDetection(String detectionId, List&lt;dynamic&gt; annotations) async {
   try {
     final detection = await Detection.find(detectionId);
     if (detection != null) {
-      detection.boxes = &#39;&#39;&#39;
-      [{
-        &quot;object_name&quot;: &quot;Milk&quot;,
-        &quot;xy_coord_list&quot;: [
-          [11.1, 16.4],
-          [11.3, 16.5]
-        ]
-      }]&#39;&#39;&#39;;
+      detection.boxes = jsonEncode(annotations);
       await detection.update();
       await getAll();
-      debug(&quot;Updated annotation in DB&quot;);
     }
   } catch (error) {
     debug(&#39;Error updating annotations: $error&#39;);
   }
-  &#47;&#47; notifyListeners();
 }</code></pre>
 </section>
 

@@ -85,35 +85,34 @@ If <code>showSnackBar</code> is false, the snackBar will not be rendered after t
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; loadDetections(BuildContext context,
     {bool showSnackBar = true}) {
-  return Future.delayed(const Duration(seconds: 2), () {
-    return Detection.all().then((value) async {
-      &#47;&#47; Access the detections before the refresh to compare afterwards
-      List&lt;Detection&gt; previousDetections = detections;
-      setState(() {
-        detections = value;
-      });
-      &#47;&#47; If the new detections list is larger than the old one, there are new detections
-      bool areNewDetections = previousDetections.length != detections.length;
-      if (showSnackBar) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            duration: const Duration(seconds: 15),
-            content: Text(
-              areNewDetections
-                  ? &quot;New detections found. Happy annotating!&quot;
-                  : &quot;No new detections found. Tap here if you were expecting some.&quot;,
-              style: Theme.of(context)
-                  .textTheme
-                  .labelLarge
-                  ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
-            ),
-            backgroundColor: areNewDetections ? Colors.green : Colors.blue,
-            action: SnackBarAction(label: &quot;Check&quot;, onPressed: checkWifi),
-            showCloseIcon: true,
-          ),
-        );
-      }
+  &#47;&#47; TODO: Actually fetch new content from the server
+  return Detection.all().then((value) async {
+    &#47;&#47; Access the detections before the refresh to compare afterwards
+    List&lt;Detection&gt; previousDetections = detections;
+    setState(() {
+      detections = value;
     });
+    &#47;&#47; If the new detections list is larger than the old one, there are new detections
+    bool areNewDetections = previousDetections.length != detections.length;
+    if (showSnackBar) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: const Duration(seconds: 15),
+          content: Text(
+            areNewDetections
+                ? &quot;New detections found. Happy annotating!&quot;
+                : &quot;No new detections found. Tap here if you were expecting some.&quot;,
+            style: Theme.of(context)
+                .textTheme
+                .labelLarge
+                ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+          ),
+          backgroundColor: areNewDetections ? Colors.green : Colors.blue,
+          action: SnackBarAction(label: &quot;Check&quot;, onPressed: checkWifi),
+          showCloseIcon: true,
+        ),
+      );
+    }
   });
 }</code></pre>
 </section>

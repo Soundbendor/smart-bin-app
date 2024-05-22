@@ -136,7 +136,10 @@ Widget build(BuildContext context) {
             itemCount: detections.length,
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
-              return DetectionLargeListItem(detection: detections[index]);
+              return DetectionLargeListItem(
+                detection: detections[index],
+                baseDir: baseDir,
+              );
             },
           ),
         ),
@@ -149,7 +152,10 @@ Widget build(BuildContext context) {
             itemCount: detections.length,
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
-              return DetectionSmallListItem(detection: detections[index]);
+              return DetectionSmallListItem(
+                detection: detections[index],
+                baseDir: baseDir,
+              );
             },
           ),
         ),

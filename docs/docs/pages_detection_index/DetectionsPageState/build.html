@@ -234,6 +234,7 @@ Widget build(BuildContext context) {
                           ? DetectionListType.large
                           : DetectionListType.small,
                       detections: detections,
+                      baseDir: appDocDir!,
                       loadDetections: loadDetections);
             },
           ),

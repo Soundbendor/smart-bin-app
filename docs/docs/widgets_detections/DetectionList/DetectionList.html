@@ -65,7 +65,8 @@
       <span class="name ">DetectionList</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="-param-key">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
 <li><span class="parameter" id="-param-detections"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../database_models_detection/Detection-class.html">Detection</a></span>&gt;</span></span> <span class="parameter-name">detections</span>, </span></li>
 <li><span class="parameter" id="-param-size"><span class="type-annotation"><a href="../../widgets_detections/DetectionListType.html">DetectionListType</a></span> <span class="parameter-name">size</span> = <span class="default-value">DetectionListType.small</span>, </span></li>
-<li><span class="parameter" id="-param-loadDetections"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Function-class.html">Function</a></span> <span class="parameter-name">loadDetections</span>}</span></li>
+<li><span class="parameter" id="-param-loadDetections"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Function-class.html">Function</a></span> <span class="parameter-name">loadDetections</span>, </span></li>
+<li><span class="parameter" id="-param-baseDir"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-io/Directory-class.html">Directory</a></span> <span class="parameter-name">baseDir</span>}</span></li>
 </ol>)
     </section>
 
@@ -75,12 +76,12 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">const DetectionList({
-  super.key,
-  required this.detections,
-  this.size = DetectionListType.small,
-  required this.loadDetections,
-});</code></pre>
+  <pre class="language-dart"><code class="language-dart">const DetectionList(
+    {super.key,
+    required this.detections,
+    this.size = DetectionListType.small,
+    required this.loadDetections,
+    required this.baseDir});</code></pre>
 </section>
 
 
