@@ -202,7 +202,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
   Future<void> retrieveImages(String deviceID, List<String> imageList) async {
     String url =
         'http://sb-binsight.dri.oregonstate.edu:30080/api/get_images?deviceID=$deviceID';
-    await dotenv.load(fileName: ".env");
+    await dotenv.load(fileName: "assets/data/.env");
     String apiKey = dotenv.env['API_KEY']!;
 
     var requestBody = imageList;

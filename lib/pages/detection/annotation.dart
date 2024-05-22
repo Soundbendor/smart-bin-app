@@ -195,7 +195,7 @@ class _AnnotationPageState extends State<AnnotationPage> {
                               child: Row(
                                 children: [
                                   const Icon(Icons.arrow_back_ios),
-                                  Text("Back to detection",
+                                  Text("Back to Detection",
                                       style: textTheme.labelLarge),
                                 ],
                               ),
@@ -371,11 +371,26 @@ class _DrawingControlAreaState extends State<_DrawingControlArea> {
                       } else {
                         String message;
                         if (annotationNotifier.label == null) {
-                          message =
-                              "Please Enter a Label for Current Annotation";
+                          message = "Enter a Label for the Current Annotation";
                         } else {
-                          message = "Please Draw Your Annotation";
+                          message = "Draw Your Annotation";
                         }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            padding: const EdgeInsets.all(20),
+                            backgroundColor: Colors.red[400],
+                            content: Text(
+                              message,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary),
+                            ),
+                          ),
+                        );
                         debug(message);
                       }
                     },
@@ -429,7 +444,6 @@ class _BottomControlArea extends StatelessWidget {
 
                   Future.delayed(const Duration(milliseconds: 100), () {
                     annotationNotifier.reset();
-                    GoRouter.of(context).pop();
                   });
                 },
                 style: ElevatedButton.styleFrom(
@@ -455,14 +469,41 @@ class _BottomControlArea extends StatelessWidget {
                         ),
                       ),
                   onPressed: () {
-                    annotationNotifier.clearCurrentAnnotation();
-                    notifier.updateDetection(
-                        detectionId, annotationNotifier.allAnnotations);
+                    // If both label and current annotation are null, and an annotation has been saved
+                    if (annotationNotifier.isDone()) {
+                      annotationNotifier.clearCurrentAnnotation();
+                      notifier.updateDetection(
+                          detectionId, annotationNotifier.allAnnotations);
 
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      annotationNotifier.reset();
-                      GoRouter.of(context).pop();
-                    });
+                      Future.delayed(const Duration(milliseconds: 100), () {
+                        annotationNotifier.reset();
+                        GoRouter.of(context).pop();
+                      });
+                    } else {
+                      String message;
+                      //If the label or outline has been made and
+                      if (annotationNotifier.allAnnotations.isEmpty) {
+                        message = "You need to save an annotation first!";
+                      } else {
+                        message = "You have unsaved changes!";
+                      }
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          padding: const EdgeInsets.all(20),
+                          backgroundColor: Colors.red[400],
+                          content: Text(
+                            message,
+                            style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary),
+                          ),
+                        ),
+                      );
+                    }
                   },
                   child: child,
                 );
@@ -470,7 +511,7 @@ class _BottomControlArea extends StatelessWidget {
               child: Text(
                 "Done",
                 style: textTheme.labelLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.onTertiary,
+                  color: Theme.of(context).colorScheme.onPrimary
                 ),
               ),
             ),
