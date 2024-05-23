@@ -159,8 +159,8 @@ Future<DateTime> getLatestTimestamp() async {
 
 /// Get API key from shared preferences
 String getApiKey() {
-  return dotenv.env['API_KEY'] ??
-      sharedPreferences.getString(SharedPreferencesKeys.apiKey) ??
+  return sharedPreferences.getString(SharedPreferencesKeys.apiKey) ??
+      dotenv.env['API_KEY'] ??
       "";
 }
 
