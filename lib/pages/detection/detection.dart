@@ -1,5 +1,4 @@
 // Flutter imports:
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:binsight_ai/util/image.dart';
@@ -117,11 +116,7 @@ class _DetectionCardState extends State<_DetectionCard> {
                         onTap: onTap,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: ((jsonDecode(widget.detection.boxes ?? "[]")
-                                        as List)
-                                    .isNotEmpty)
-                                ? colorScheme.tertiary
-                                : colorScheme.primary,
+                            color: colorScheme.primary.withAlpha(200),
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: const [
                               BoxShadow(
@@ -135,25 +130,16 @@ class _DetectionCardState extends State<_DetectionCard> {
                           child: Row(
                             children: [
                               Text(
-                                ((jsonDecode(widget.detection.boxes ?? "[]")
-                                            as List)
-                                        .isNotEmpty)
-                                    ? "Annotated"
-                                    : "Annotate",
+                                "Annotate",
                                 style: textTheme.labelMedium!
                                     .copyWith(color: Colors.white),
                               ),
                               IconButton(
-                                icon: Icon(
-                                    ((jsonDecode(widget.detection.boxes ?? "[]")
-                                                as List)
-                                            .isNotEmpty)
-                                        ? Icons.check_box
-                                        : Icons.edit,
-                                    color: Colors.white),
+                                icon: const Icon(Icons.edit),
                                 iconSize: 30,
                                 tooltip: "Annotate Image",
                                 onPressed: onTap,
+                                color: colorScheme.onPrimary,
                                 splashColor: colorScheme.onSecondary,
                               ),
                             ],
