@@ -73,6 +73,7 @@ class DetectionLargeListItem extends StatelessWidget {
                 Center(
                   child: Container(
                     width: 325,
+                    color: (jsonDecode(detection.boxes ?? "[]").isNotEmpty) ? mainColorScheme.tertiary : null,
                     margin: const EdgeInsets.only(bottom: 12, top: 12),
                     alignment: Alignment.center,
                     child: Stack(
@@ -153,6 +154,7 @@ class DetectionSmallListItem extends StatelessWidget {
         child: Card(
           color: colorScheme.onPrimary,
           child: ListTile(
+            tileColor: ((jsonDecode(detection.boxes ?? "[]") as List).isNotEmpty) ? mainColorScheme.tertiary : null,
             leading: Container(
               width: 50,
               height: 50,
