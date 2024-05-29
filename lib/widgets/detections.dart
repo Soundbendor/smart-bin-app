@@ -55,7 +55,7 @@ class DetectionLargeListItem extends StatelessWidget {
         onTap: () => onTileTap(context, detection),
         child: Card(
           // Background color of the card
-          color: colorScheme.onPrimary,
+          color: ((jsonDecode(detection.boxes ?? "[]") as List).isNotEmpty) ? colorScheme.tertiary : colorScheme.onPrimary,
           child: Padding(
             padding: const EdgeInsets.all(11.0),
             child: Column(
