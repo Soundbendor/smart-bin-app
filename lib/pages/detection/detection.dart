@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:binsight_ai/util/image.dart';
@@ -116,7 +117,7 @@ class _DetectionCardState extends State<_DetectionCard> {
                         onTap: onTap,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: colorScheme.primary.withAlpha(200),
+                            color: ((jsonDecode(widget.detection.boxes ?? "[]") as List).isNotEmpty) ? colorScheme.tertiary : colorScheme.primary,
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: const [
                               BoxShadow(
@@ -130,16 +131,16 @@ class _DetectionCardState extends State<_DetectionCard> {
                           child: Row(
                             children: [
                               Text(
-                                "Annotate",
+                                ((jsonDecode(widget.detection.boxes ?? "[]") as List).isNotEmpty) ? 
+                                "Annotated" : "Annotate",
                                 style: textTheme.labelMedium!
                                     .copyWith(color: Colors.white),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.edit),
+                                icon: const Icon(Icons.edit, color: Colors.white),
                                 iconSize: 30,
                                 tooltip: "Annotate Image",
                                 onPressed: onTap,
-                                color: colorScheme.onPrimary,
                                 splashColor: colorScheme.onSecondary,
                               ),
                             ],
