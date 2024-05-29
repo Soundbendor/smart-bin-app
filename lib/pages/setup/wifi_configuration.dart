@@ -290,51 +290,82 @@ class _WifiConfigurationDialogState extends State<WifiConfigurationDialog> {
     setState(() {
       status = WifiConfigurationStatus.verifyingConnection;
     });
-    final device = Provider.of<DeviceNotifier>(context, listen: false).device!;
-    final statusData = await device.readCharacteristic(
-        serviceId: mainServiceId, characteristicId: wifiStatusCharacteristicId);
-    debug("Status Data 2: $statusData");
-    final Map<dynamic, dynamic> statusJson =
-        jsonDecode(utf8.decode(statusData));
-    debug("Status: $statusJson");
-    bool success = statusJson["success"];
-    bool? internetAccess = statusJson["internet_access"];
-    if (internetAccess != null && internetAccess && success) {
-      if (!mounted) return;
-      await Future.delayed(const Duration(seconds: 2));
-      fetchCredentials();
-    } else {
-      if (!mounted) return;
-      setState(() {
-        status = WifiConfigurationStatus.error;
-        error = WifiConfigurationException("No internet access");
-      });
+    int tries = 0;
+    while (tries < 10) {
+      try {
+        if (!mounted) return;
+        final device =
+            Provider.of<DeviceNotifier>(context, listen: false).device!;
+        final statusData = await device.readCharacteristic(
+            serviceId: mainServiceId,
+            characteristicId: wifiStatusCharacteristicId);
+        debug("Status Data 2: $statusData");
+        final Map<dynamic, dynamic> statusJson =
+            jsonDecode(utf8.decode(statusData));
+        debug("Status: $statusJson");
+        bool success = statusJson["success"];
+        bool? internetAccess = statusJson["internet_access"];
+        if (internetAccess != null && internetAccess && success) {
+          if (!mounted) return;
+          await Future.delayed(const Duration(seconds: 2));
+          return fetchCredentials();
+        } else {
+          debug("No internet access");
+          tries++;
+          await Future.delayed(const Duration(seconds: 2));
+        }
+      } catch (e) {
+        debug(e);
+        tries++;
+        await Future.delayed(const Duration(seconds: 2));
+      }
     }
+    if (!mounted) return;
+    setState(() {
+      status = WifiConfigurationStatus.error;
+      error = WifiConfigurationException("No internet access");
+    });
   }
 
   /// Fetches the compost bin credentials
   Future<void> fetchCredentials() async {
+    int tries = 0;
+    while (tries < 10) {
+      try {
+        if (!mounted) return;
+        setState(() {
+          status = WifiConfigurationStatus.fetchingCredentials;
+        });
+        final device =
+            Provider.of<DeviceNotifier>(context, listen: false).device!;
+        final credentialData = await device.readCharacteristic(
+            serviceId: apiServiceId, characteristicId: apiKeyCharacteristicId);
+        debug("API Data: $credentialData");
+        final Map<dynamic, dynamic> credentialJson =
+            jsonDecode(utf8.decode(credentialData));
+        debug("Status: $credentialJson");
+        await Future.delayed(const Duration(seconds: 1));
+        if (!mounted) return;
+        // Once the user has finalized their Bluetooth device choice, add it to preferences
+        Provider.of<DeviceNotifier>(context, listen: false).resetDevice();
+        sharedPreferences.setString(
+            SharedPreferencesKeys.apiKey, credentialJson["apiKey"]);
+        sharedPreferences.setString(SharedPreferencesKeys.deviceApiID,
+            credentialJson["deviceID"].toString());
+        sharedPreferences.setString(SharedPreferencesKeys.deviceID, device.id);
+        widget.onComplete();
+        return;
+      } catch (e) {
+        debug(e);
+        tries++;
+        await Future.delayed(const Duration(seconds: 2));
+      }
+    }
     if (!mounted) return;
     setState(() {
-      status = WifiConfigurationStatus.fetchingCredentials;
+      status = WifiConfigurationStatus.error;
+      error = WifiConfigurationException("Failed to fetch credentials");
     });
-    final device = Provider.of<DeviceNotifier>(context, listen: false).device!;
-    final credentialData = await device.readCharacteristic(
-        serviceId: apiServiceId, characteristicId: apiKeyCharacteristicId);
-    debug("API Data: $credentialData");
-    final Map<dynamic, dynamic> credentialJson =
-        jsonDecode(utf8.decode(credentialData));
-    debug("Status: $credentialJson");
-    await Future.delayed(const Duration(seconds: 1));
-    if (!mounted) return;
-    // Once the user has finalized their Bluetooth device choice, add it to preferences
-    Provider.of<DeviceNotifier>(context, listen: false).resetDevice();
-    sharedPreferences.setString(
-        SharedPreferencesKeys.apiKey, credentialJson["apiKey"]);
-    sharedPreferences.setString(SharedPreferencesKeys.deviceApiID,
-        credentialJson["deviceID"].toString());
-    sharedPreferences.setString(SharedPreferencesKeys.deviceID, device.id);
-    widget.onComplete();
   }
 
   @override
