@@ -90,8 +90,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
           );
           return BluetoothAlertBox(
             title: Text(
-              "Bluetooth connection complete!\n"
-              "Moving on...",
+              "Bluetooth connection complete!",
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
@@ -224,7 +223,7 @@ class _BluetoothListState extends State<BluetoothList> {
                   startScanning();
                 });
               },
-              title: "Find your bin",
+              title: "Find Your Bin",
               inProgress: isScanning,
             ),
             const SizedBox(height: 20),

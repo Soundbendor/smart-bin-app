@@ -42,11 +42,15 @@ class FAQ extends StatelessWidget {
                 {
                   "subheading": "What things don't belong in the bin?",
                   "content": [
-                    "- Large bones (like beef, lamb, or pork)",
-                    "- Large amounts of grease or oil",
+                    "- Grease or oil",
+                    "- Seafood shells",
                     "- Drugs or medications",
-                    "- Compostable plastics, packaging",
-                    "- Take-out containers, paper plates",
+                    "- Biodegradable plastics / packaging",
+                    "- Take-out containers, paper plates, paper towels, napkins",
+                    "- Pet waste",
+                    "- Diseased plants",
+                    "- Large branches, sticks",
+                    "- Wood or sawdust",
                   ],
                 },
                 {

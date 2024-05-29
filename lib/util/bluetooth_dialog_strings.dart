@@ -14,7 +14,7 @@ BleExceptionDialogStrings getStringsFromException(Exception? error) {
   if (error is BleBluetoothNotSupportedException) {
     title = "Bluetooth is not supported";
     description =
-        "This device does not support Bluetooth, which is required for this step. To still receive data, manually enter your bin's ID via the help menu.";
+        "This device does not support Bluetooth, which is required for this step. Please try again on a different device.";
   } else if (error is BleBluetoothDisabledException) {
     title = "Bluetooth is disabled";
     description = "Please enable Bluetooth to continue set up.";
@@ -34,7 +34,7 @@ The error message was: '${error.message}'.
       error is BleOperationFailureException) {
     title = "Operation failed";
     description = """
-An operation failed. Please try again. You may need to reset your bluetooth settings, restart the bin, try again, or restart the app.
+An operation failed. Please try again. You may need to reset your Bluetooth settings, restart the bin, try again, or restart the app.
 The error message was: '${error.toString()}'.
     """;
   } else {
