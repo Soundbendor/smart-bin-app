@@ -39,7 +39,7 @@ class _WifiCheckDialogState extends State<WifiCheckDialog> {
           deviceNotifier.device!.isConnected)) {
         return AlertDialog(
           title: Text(
-            "Connecting to Bluetooth",
+            "Connecting to Bluetooth...",
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
@@ -63,7 +63,7 @@ class _WifiCheckDialogState extends State<WifiCheckDialog> {
         getWifiStatusCharacteristic();
         return AlertDialog(
           title: Text(
-            "Checking Wi-Fi Status",
+            "Checking Wi-Fi Status...",
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           content: const SizedBox(
@@ -84,7 +84,7 @@ class _WifiCheckDialogState extends State<WifiCheckDialog> {
           wifiConnectedToInternet != WifiConnectedToInternet.waiting) {
         return AlertDialog(
           title: Text(
-            "Wi-Fi Connection Status",
+            "Wi-Fi Connection Status...",
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           // Depending on the status of the WiFi connection, display different text

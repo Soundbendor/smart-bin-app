@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 /// Introduction screen for explaining the usage of the app to new users.
+/// THIS SCREEN IS NOT CURRENTLY USED IN THE APP.
 class StyledIntroScreen extends StatelessWidget {
   StyledIntroScreen({super.key});
 
