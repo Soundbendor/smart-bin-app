@@ -149,6 +149,7 @@ Widget build(BuildContext context) {
               Center(
                 child: Container(
                   width: 325,
+                  color: (jsonDecode(detection.boxes ?? &quot;[]&quot;).isNotEmpty) ? mainColorScheme.tertiary : null,
                   margin: const EdgeInsets.only(bottom: 12, top: 12),
                   alignment: Alignment.center,
                   child: Stack(

@@ -132,6 +132,7 @@ Widget build(BuildContext context) {
       child: Card(
         color: colorScheme.onPrimary,
         child: ListTile(
+          tileColor: ((jsonDecode(detection.boxes ?? &quot;[]&quot;) as List).isNotEmpty) ? mainColorScheme.tertiary : null,
           leading: Container(
             width: 50,
             height: 50,
