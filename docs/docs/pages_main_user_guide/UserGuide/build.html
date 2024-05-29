@@ -121,28 +121,61 @@ Widget build(BuildContext context) {
   final textTheme = Theme.of(context).textTheme.bodyLarge;
   return Scaffold(
     body: Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(10),
       child: ListView(
         children: [
-          _buildUserGuideSection(
-            &quot;User Guide&quot;,
+          &#47;&#47; User Guide Heading
+          const Padding(
+            padding: EdgeInsets.only(left: 10, top: 10, bottom: 5),
+            child: Heading(text: &quot;User Guide&quot;),
+          ),
+          &#47;&#47; User Guide Content
+          _buildUserGuideSections(
             [
               {
-                &quot;subheading&quot;: &quot;Introduction&quot;,
-                &quot;content&quot;:
-                    &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&quot;
-              },
-              {
                 &quot;subheading&quot;: &quot;Overview&quot;,
-                &quot;content&quot;:
-                    &quot;Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.&quot;
+                &quot;content&quot;: [
+                  &quot;Welcome to the binsight.ai app, developed by Soundbendor Lab.&quot;,
+                  &quot;This guide will help you set up and use your Smart Compost Bin—enabling you to track household food waste, annotate detection images, and monitor your compost data trends over time.&quot;,
+                ],
               },
               {
-                &quot;subheading&quot;: &quot;Details&quot;,
-                &quot;content&quot;:
-                    &quot;Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?&quot;
+                &quot;subheading&quot;: &quot;Getting Started&quot;,
+                &quot;content&quot;: [
+                  &quot;Unbox your Smart Compost Bin and place it on your kitchen countertop.&quot;,
+                  &quot;Connect the bin to a power source and wait for the bin to boot up.&quot;,
+                  &quot;Note: this step may take a minute or so, but the bin will give audio feedback when it is ready to connect to your phone.&quot;,
+                ],
               },
-              &#47;&#47; Add more subheadings and paragraphs as needed
+              {
+                &quot;subheading&quot;: &quot;Connecting to Wi-Fi&quot;,
+                &quot;content&quot;: [
+                  &quot;Open the binsight.ai app and follow the on-screen instructions to connect your bin to your local Wi-Fi network.&quot;,
+                  &quot;During this connection process, your Wi-Fi credentials will be shared with the bin via a Bluetooth connection.&quot;,
+                  &quot;Keep in mind that the Bluetooth pairing mode automatically shuts down within five minutes of powering on the bin, so have your Wi-Fi credentials ready.&quot;,
+                  &quot;Once the bin is connected to Wi-Fi, you can start using the app to track your food waste.&quot;,
+                ],
+              },
+              {
+                &quot;subheading&quot;: &quot;Annotating The Images&quot;,
+                &quot;content&quot;: [
+                  &quot;Your annotations are an essential part of building a new visual dataset of food waste, which will be used to train our AI model.&quot;,
+                  &quot;To annotate an image, select the image from your gallery list and use the annotation tools to outline and label items.&quot;,
+                  &quot;Use your finger to draw an outline around the newly composted item in the image, and then tap &#39;Select Label&#39; to search for the appropriate label.&quot;,
+                  &quot;Once you have selected the label, tap &#39;Submit&#39; and note that the label now appears on the item you have outlined.&quot;,
+                  &quot;Continue this process for all newly composted items in the image.&quot;,
+                  &quot;When you are finished outlining items and labeling them, save your annotations with the &#39;Save &amp; Exit&#39; button.&quot;,
+                  &quot;Note: You can also use the &#39;Undo&#47;Redo&#39; buttons to adjust your outlines, or &#39;Clear Image&#39; to start over.&quot;,
+                ],
+              },
+              {
+                &quot;subheading&quot;: &quot;Inspecting Your Data&quot;,
+                &quot;content&quot;: [
+                  &quot;Once you have annotated your images, you can inspect your data.&quot;,
+                  &quot;Go to the &#39;Home&#39; section in the app to view a breakdown of all of the food you have composted.&quot;,
+                ],
+              },
+              &#47;&#47; Add more sections as needed
             ],
             textTheme!,
           ),

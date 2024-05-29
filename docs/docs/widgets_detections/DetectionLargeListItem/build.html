@@ -131,7 +131,7 @@ Widget build(BuildContext context) {
       onTap: () =&gt; onTileTap(context, detection),
       child: Card(
         &#47;&#47; Background color of the card
-        color: colorScheme.onPrimary,
+        color: ((jsonDecode(detection.boxes ?? &quot;[]&quot;) as List).isNotEmpty) ? colorScheme.tertiary : colorScheme.onPrimary,
         child: Padding(
           padding: const EdgeInsets.all(11.0),
           child: Column(
@@ -149,6 +149,7 @@ Widget build(BuildContext context) {
               Center(
                 child: Container(
                   width: 325,
+                  color: (jsonDecode(detection.boxes ?? &quot;[]&quot;).isNotEmpty) ? mainColorScheme.tertiary : null,
                   margin: const EdgeInsets.only(bottom: 12, top: 12),
                   alignment: Alignment.center,
                   child: Stack(
