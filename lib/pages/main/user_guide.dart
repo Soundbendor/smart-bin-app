@@ -13,28 +13,61 @@ class UserGuide extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme.bodyLarge;
     return Scaffold(
       body: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(10),
         child: ListView(
           children: [
-            _buildUserGuideSection(
-              "User Guide",
+            // User Guide Heading
+            const Padding(
+              padding: EdgeInsets.only(left: 10, top: 10, bottom: 5),
+              child: Heading(text: "User Guide"),
+            ),
+            // User Guide Content
+            _buildUserGuideSections(
               [
                 {
-                  "subheading": "Introduction",
-                  "content":
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                },
-                {
                   "subheading": "Overview",
-                  "content":
-                      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem."
+                  "content": [
+                    "Welcome to the binsight.ai app, developed by Soundbendor Lab.",
+                    "This guide will help you set up and use your Smart Compost Bin—enabling you to track household food waste, annotate detection images, and monitor your compost data trends over time.",
+                  ],
                 },
                 {
-                  "subheading": "Details",
-                  "content":
-                      "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+                  "subheading": "Getting Started",
+                  "content": [
+                    "Unbox your Smart Compost Bin and place it on your kitchen countertop.",
+                    "Connect the bin to a power source and wait for the bin to boot up.",
+                    "Note: this step may take a minute or so, but the bin will give audio feedback when it is ready to connect to your phone.",
+                  ],
                 },
-                // Add more subheadings and paragraphs as needed
+                {
+                  "subheading": "Connecting to Wi-Fi",
+                  "content": [
+                    "Open the binsight.ai app and follow the on-screen instructions to connect your bin to your local Wi-Fi network.",
+                    "During this connection process, your Wi-Fi credentials will be shared with the bin via a Bluetooth connection.",
+                    "Keep in mind that the Bluetooth pairing mode automatically shuts down within five minutes of powering on the bin, so have your Wi-Fi credentials ready.",
+                    "Once the bin is connected to Wi-Fi, you can start using the app to track your food waste.",
+                  ],
+                },
+                {
+                  "subheading": "Annotating The Images",
+                  "content": [
+                    "Your annotations are an essential part of building a new visual dataset of food waste, which will be used to train our AI model.",
+                    "To annotate an image, select the image from your gallery list and use the annotation tools to outline and label items.",
+                    "Use your finger to draw an outline around the newly composted item in the image, and then tap 'Select Label' to search for the appropriate label.",
+                    "Once you have selected the label, tap 'Submit' and note that the label now appears on the item you have outlined.",
+                    "Continue this process for all newly composted items in the image.",
+                    "When you are finished outlining items and labeling them, save your annotations with the 'Save & Exit' button.",
+                    "Note: You can also use the 'Undo/Redo' buttons to adjust your outlines, or 'Clear Image' to start over.",
+                  ],
+                },
+                {
+                  "subheading": "Inspecting Your Data",
+                  "content": [
+                    "Once you have annotated your images, you can inspect your data.",
+                    "Go to the 'Home' section in the app to view a breakdown of all of the food you have composted.",
+                  ],
+                },
+                // Add more sections as needed
               ],
               textTheme!,
             ),
@@ -44,31 +77,29 @@ class UserGuide extends StatelessWidget {
     );
   }
 
-  // Widget to build User Guide section with subheadings
-  Widget _buildUserGuideSection(
-      String title, List<Map<String, String>> sections, TextStyle textTheme) {
+  // Widget to build User Guide sections with subheadings and dropdown content
+  Widget _buildUserGuideSections(
+      List<Map<String, dynamic>> sections, TextStyle textTheme) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Heading(text: title),
-        ...sections.map((section) => Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    section["subheading"]!,
-                    style: textTheme.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    section["content"]!,
-                    style: textTheme,
-                  ),
-                ],
-              ),
-            )),
-      ],
+      children: sections
+          .map((section) => ExpansionTile(
+                shape: Border.all(color: Colors.transparent),
+                title: Text(
+                  section["subheading"],
+                  style: textTheme.copyWith(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                children: section["content"]
+                    .map<Widget>((content) => Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 4, horizontal: 16),
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(content, style: textTheme)),
+                        ))
+                    .toList(),
+              ))
+          .toList(),
     );
   }
 }
