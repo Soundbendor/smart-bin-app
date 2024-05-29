@@ -269,7 +269,7 @@ The error was: ${(error as BleOperationFailureException).message}.
                       startScanning();
                     });
                   },
-                  title: "Select Your Network!",
+                  title: "Select Your Network",
                   inProgress: isScanning,
                 ),
               ],
