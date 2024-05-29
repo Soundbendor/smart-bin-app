@@ -152,9 +152,8 @@ class DetectionSmallListItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () => onTileTap(context, detection),
         child: Card(
-          color: colorScheme.onPrimary,
+          color: ((jsonDecode(detection.boxes ?? "[]") as List).isNotEmpty) ? mainColorScheme.tertiary :colorScheme.onPrimary,
           child: ListTile(
-            tileColor: ((jsonDecode(detection.boxes ?? "[]") as List).isNotEmpty) ? mainColorScheme.tertiary : null,
             leading: Container(
               width: 50,
               height: 50,
