@@ -117,7 +117,11 @@ class _DetectionCardState extends State<_DetectionCard> {
                         onTap: onTap,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: ((jsonDecode(widget.detection.boxes ?? "[]") as List).isNotEmpty) ? colorScheme.tertiary : colorScheme.primary,
+                            color: ((jsonDecode(widget.detection.boxes ?? "[]")
+                                        as List)
+                                    .isNotEmpty)
+                                ? colorScheme.tertiary
+                                : colorScheme.primary,
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: const [
                               BoxShadow(
@@ -131,13 +135,22 @@ class _DetectionCardState extends State<_DetectionCard> {
                           child: Row(
                             children: [
                               Text(
-                                ((jsonDecode(widget.detection.boxes ?? "[]") as List).isNotEmpty) ? 
-                                "Annotated" : "Annotate",
+                                ((jsonDecode(widget.detection.boxes ?? "[]")
+                                            as List)
+                                        .isNotEmpty)
+                                    ? "Annotated"
+                                    : "Annotate",
                                 style: textTheme.labelMedium!
                                     .copyWith(color: Colors.white),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.edit, color: Colors.white),
+                                icon: Icon(
+                                    ((jsonDecode(widget.detection.boxes ?? "[]")
+                                                as List)
+                                            .isNotEmpty)
+                                        ? Icons.check_box
+                                        : Icons.edit,
+                                    color: Colors.white),
                                 iconSize: 30,
                                 tooltip: "Annotate Image",
                                 onPressed: onTap,
