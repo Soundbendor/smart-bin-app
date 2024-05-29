@@ -53,7 +53,7 @@ void main() async {
       ],
       // Skip initial set up if user has already set up a device
       child: BinsightAiApp(
-          skipSetUp:
+          skipSetup:
               sharedPreferences.getString(SharedPreferencesKeys.deviceID) !=
                   null),
     ),
@@ -62,9 +62,9 @@ void main() async {
 
 /// The root of the application. Contains the GoRouter and MaterialApp wrappers.
 class BinsightAiApp extends StatefulWidget {
-  final bool skipSetUp;
+  final bool skipSetup;
 
-  const BinsightAiApp({super.key, this.skipSetUp = true});
+  const BinsightAiApp({super.key, this.skipSetup = true});
 
   @override
   State<BinsightAiApp> createState() => _BinsightAiAppState();
@@ -109,7 +109,7 @@ class _BinsightAiAppState extends State<BinsightAiApp>
     // Defines the router to be used for the app, with set-up as the initial route
     setRoutes(getRoutes());
     router ??= GoRouter(
-        initialLocation: widget.skipSetUp ? '/main' : '/set-up',
+        initialLocation: widget.skipSetup ? '/main' : '/set-up',
         routes: routes);
 
     return ChangeNotifierProvider(

@@ -224,7 +224,7 @@ class _BluetoothListState extends State<BluetoothList> {
                   startScanning();
                 });
               },
-              title: "Find your bin",
+              title: "Find Your Bin",
               inProgress: isScanning,
             ),
             const SizedBox(height: 20),

@@ -109,7 +109,7 @@ void main() {
   testInit();
   sharedPreferences = FakeSharedPreferences();
 
-  testWidgets("Initial location is at set-up when devices don't exist",
+  testWidgets("Initial location is at set-up when a bin is not connected to the app",
       (widgetTester) async {
     final originalErrorHandler = FlutterError.onError;
     FlutterError.onError = ignoreOverflowErrors(originalErrorHandler);
@@ -134,7 +134,7 @@ void main() {
     await widgetTester.pumpWidget(makeTestableWidget(
         child: MultiProvider(
             providers: [Provider(create: (_) => SetupKeyNotifier())],
-            child: const BinsightAiApp(skipSetUp: false)),
+            child: const BinsightAiApp(skipSetup: false)),
         size: const Size(800, 600)));
     await widgetTester.pumpAndSettle(const Duration(seconds: 10));
     expect(router!.routerDelegate.currentConfiguration.last.matchedLocation,
@@ -142,7 +142,7 @@ void main() {
     FlutterError.onError = originalErrorHandler;
   });
 
-  testWidgets("Initial location is at main when devices exist",
+  testWidgets("Initial location is at main when the start-up sequence has been successful in connecting the bin to the app",
       (widgetTester) async {
     final originalErrorHandler = FlutterError.onError;
     FlutterError.onError = ignoreOverflowErrors(originalErrorHandler);
@@ -167,7 +167,7 @@ void main() {
     await widgetTester.pumpWidget(makeTestableWidget(
         child: MultiProvider(providers: [
           ChangeNotifierProvider(create: (_) => DetectionNotifier()),
-        ], child: const BinsightAiApp(skipSetUp: true)),
+        ], child: const BinsightAiApp(skipSetup: true)),
         size: const Size(800, 600)));
     await widgetTester.pumpAndSettle();
     expect(router!.routerDelegate.currentConfiguration.last.matchedLocation,

@@ -109,7 +109,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text('Connect Bin to WiFi',
+                child: Text('Connect Bin to Wi-Fi',
                     style: textTheme.headlineSmall!.copyWith(fontSize: 36)),
               ),
               Padding(
@@ -139,6 +139,7 @@ class _WifiConfigurationPageState extends State<WifiConfigurationPage> {
                   obscureText: hidePassword,
                 ),
               ),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   // Send the values entered in ssid/password field to the bin
