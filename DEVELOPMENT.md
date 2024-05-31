@@ -30,6 +30,24 @@ The project structure looks like so:
 
 The `flutter_native_splash` and `flutter_launcher_icons` packages are used to generate the app icon and splash screen. However, there are some custom changes in the `android` directories that should be noted. These changes are there to ensure that the app icon and splash screen are displayed correctly and should not be overridden accidentally.
 
+## `.env` Files
+
+For development purposes, it can be helpful to have an `.env` files when testing features related to the API. To do so, place an `.env` file at `assets/data/.env`. The required fields are `API_KEY`, which is the key for accessing the API and `DEVICE_ID`, which is the identifier for a Smart Compost Bin.
+
+## Developing API Features and Main Section
+
+Often, to test the API features or main section, the `main.dart` file will need to be temporarily modified to skip the set up process. We have done this by changing this line:
+
+```dart
+// From this:
+initialLocation: widget.skipSetup ? '/main' : '/set-up',
+
+// To this:
+initialLocation: !widget.skipSetup ? '/main' : '/set-up',
+```
+
+After reaching the desired screen, this should be reverted to avoid hassle later.
+
 ## Documentation
 
 We try to document the codebase as much as possible. This includes documenting functions, classes, and variables. Also, when importing packages, we sort them based on whether they are Flutter, Dart, third-party, or local packages. This makes it easier to see what packages are being used in the codebase.
