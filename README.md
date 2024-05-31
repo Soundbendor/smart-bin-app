@@ -5,7 +5,7 @@
 
 # About/Overview
 
-A cross-platform mobile app built with Flutter/Dart for users of [Soundbendor Lab's](https://www.soundbendor.org) Smart Compost Bin. 
+A cross-platform mobile app built with Flutter/Dart for users of [Soundbendor Lab's](https://www.soundbendor.org) Smart Compost Bin.
 
 <p align="center">
   <img src="./assets/images/full_app_chart.png" width="750"/>
@@ -15,6 +15,7 @@ A cross-platform mobile app built with Flutter/Dart for users of [Soundbendor La
 The binsight.ai app enables Wi-Fi connectivity for the Smart Compost Bin so that participants in a field study will be able to use their bin to track household food waste, annotate detection images, and follow their compost data trends over time.
 
 ## Table of Contents
+
 - [Repos](#repos)
 - [Purpose](#purpose)
 - [Value Proposition](#value-proposition)
@@ -58,6 +59,10 @@ git clone https://github.com/Soundbendor/smart-bin-app.git
 flutter run
 ```
 
+## Development
+
+See the [DEVELOPMENT.md](./DEVELOPMENT.md) file for more information on how to develop and debug the binsight.ai app.
+
 ## Usage
 
 To use the binsight.ai app:
@@ -85,6 +90,7 @@ The documentation for the binsight.ai app can be found in the [`docs`](./docs) d
 The documentation can also be found through GitHub Pages [here](https://soundbendor.github.io/smart-bin-app/).
 
 ## Contact Us
+
 Please feel free to reach out to our support email at:
 
 ![alt text](assets/images/email.PNG)
