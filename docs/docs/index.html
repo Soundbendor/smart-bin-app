@@ -83,9 +83,12 @@
 <h2 id="purpose">Purpose</h2>
 <p>In the face of an escalating climate crisis, finding more effective food waste disposal methods remains a pressing challenge in the field of sustainability research. To contribute valuable data to efforts in this field, the binsight.ai team pioneers one approach that is aimed at expanding our understanding of food and organic waste at the household and consumer level.</p>
 <p>Our project supports a countertop Smart Compost Bin equipped with sensors that capture images of food waste and many associated data points. These include bin internal temperature and humidity, IAQ, CO2, the weight of composted food items, thermal imaging depth maps, and VOCs.</p>
-<p>Users of the app will be presented with a fun and engaging user interface which will allow them to quickly set-up and begin using the Soundbendor Smart Compost Bin. After setting up the bin with Wi-Fi, any items the user composts will be sent to their app, enabling them to start annotating images and thus contributing to the larger dataset.</p>
+<p>To serve as the user interface to the smart compost bin, we developed a cross-platform mobile application. This user-friendly app tracks usage and informs users about their composting habits. When a new user opens the app for the first time, it guides them through a one-time setup process, using a Bluetooth pairing routine to connect their smart compost bin to the user’s Wi-Fi network. Once connected, the app serves as a portal that provides a data-driven view that tracks a user’s composting habits.</p>
+<p>Each time the user opens the app, it automatically downloads any recent images of that user’s compost from our database server. For each new image, the app tasks the user to draw an outline around each compost item in the image using their touchscreen. We save this boundary annotation alongside the transcribed categorical label to our database. These annotated boundaries allow us to train a robust semi-supervised segmentation model to automatically detect food waste. We will deploy this app for our initial data collection field  study to build a dataset of labeled and manually segmented examples. This dataset supports the training of our automatic food waste identification model, and future versions of this application will simply perform food waste detection automatically, without requiring user input.</p>
+<p>Additionally, we provide an interactive analytics dashboard to inform users about their composting habits. This dashboard highlights common behavioral trends, including graphs illustrating their most frequently discarded food items. Our mobile app provides personalized analytics to the user with the overarching goal of encouraging informed decision-making that leads to reductions in their food waste footprint.</p>
+<p>This app enables crowd-sourcing the laborious task of creating segmentation maps to label the individual items present in the commingled food waste. We acknowledge that users will not necessarily exhaustively annotate every single item they discard, but over time we will curate a large collection of labeled items. Furthermore, because we deploy our smart bin and app in a field study and we do not restrict the compostable food items users are allowed to discard, we will curate a large dataset better representative of food items that users send to compost.</p>
 <h2 id="value-proposition">Value Proposition</h2>
-<p>The binsight.ai team is pioneering their way through the field of Smart Composting and image annotation, and as such, there is no direct competition. All current solutions that are out there are working towards the same goal: Fighting the effects of food waste and climate change.</p>
+<p>The binsight.ai team is pioneering a new way in the field of Smart Composting and image annotation, and as such, there is no direct competition. All current solutions that are out there are working towards the same goal: Fighting the effects of food waste and climate change.</p>
 <h2 id="getting-started">Getting Started</h2>
 <ol>
 <li>Clone the repository to your local machine:</li>
@@ -93,11 +96,17 @@
 <pre class="language-bash"><code class="language-bash">git clone https://github.com/Soundbendor/smart-bin-app.git
 </code></pre>
 <ol start="2">
-<li>Install the Flutter SDK on your machine. Follow the instructions <a href="https://flutter.dev/docs/get-started/install">here</a>.</li>
-<li>Build and run the app on your local machine:</li>
+<li>
+<p>Install the Flutter SDK on your machine. Follow the instructions <a href="https://flutter.dev/docs/get-started/install">here</a>.</p>
+</li>
+<li>
+<p>Build and run the app on your local machine:</p>
+</li>
 </ol>
 <pre class="language-bash"><code class="language-bash">flutter run
 </code></pre>
+<h2 id="development">Development</h2>
+<p>See the <a href="./DEVELOPMENT.md">DEVELOPMENT.md</a> file for more information on how to develop and debug the binsight.ai app.</p>
 <h2 id="usage">Usage</h2>
 <p>To use the binsight.ai app:</p>
 <ol>
@@ -106,7 +115,7 @@
 <li>Open the app and complete the bin set-up process.</li>
 <li>Use the Smart Compost Bin as you would any other composting solution.</li>
 <li>After composting an item, check the detections page on your app to access and annotate your detection.</li>
-<li>Watch your composting breakdown be populated over time.</li>
+<li>Watch your composting stats change on the dashboard over time.</li>
 <li>Repeat from step 4, and have fun!</li>
 </ol>
 <h2 id="features">Features</h2>
@@ -312,14 +321,14 @@
 </dd>
 
           <dt id="image">
-  <span class="name"><a href="widgets_image/widgets_image-library.html">widgets/image</a></span> 
+  <span class="name"><a href="util_image/util_image-library.html">util/image</a></span> 
 
 </dt>
 <dd>
 </dd>
 
           <dt id="image">
-  <span class="name"><a href="util_image/util_image-library.html">util/image</a></span> 
+  <span class="name"><a href="widgets_image/widgets_image-library.html">widgets/image</a></span> 
 
 </dt>
 <dd>
@@ -333,14 +342,14 @@
 </dd>
 
           <dt id="index">
-  <span class="name"><a href="pages_detection_index/pages_detection_index-library.html">pages/detection/index</a></span> 
+  <span class="name"><a href="pages_setup_index/pages_setup_index-library.html">pages/setup/index</a></span> 
 
 </dt>
 <dd>
 </dd>
 
           <dt id="index">
-  <span class="name"><a href="pages_setup_index/pages_setup_index-library.html">pages/setup/index</a></span> 
+  <span class="name"><a href="pages_detection_index/pages_detection_index-library.html">pages/detection/index</a></span> 
 
 </dt>
 <dd>
@@ -545,11 +554,11 @@
       <li><a href="widgets_heading/widgets_heading-library.html">widgets/heading</a></li>
       <li><a href="pages_main_help/pages_main_help-library.html">pages/main/help</a></li>
       <li><a href="pages_main_home/pages_main_home-library.html">pages/main/home</a></li>
-      <li><a href="widgets_image/widgets_image-library.html">widgets/image</a></li>
       <li><a href="util_image/util_image-library.html">util/image</a></li>
+      <li><a href="widgets_image/widgets_image-library.html">widgets/image</a></li>
       <li><a href="util_providers_image_provider/util_providers_image_provider-library.html">util/providers/image_provider</a></li>
-      <li><a href="pages_detection_index/pages_detection_index-library.html">pages/detection/index</a></li>
       <li><a href="pages_setup_index/pages_setup_index-library.html">pages/setup/index</a></li>
+      <li><a href="pages_detection_index/pages_detection_index-library.html">pages/detection/index</a></li>
       <li><a href="pages_setup_intro_sequence/pages_setup_intro_sequence-library.html">pages/setup/intro_sequence</a></li>
       <li><a href="pages_detection_label/pages_detection_label-library.html">pages/detection/label</a></li>
       <li><a href="widgets_line_chart/widgets_line_chart-library.html">widgets/line_chart</a></li>
