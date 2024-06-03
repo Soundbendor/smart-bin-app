@@ -38,11 +38,18 @@ In the face of an escalating climate crisis, finding more effective food waste d
 
 Our project supports a countertop Smart Compost Bin equipped with sensors that capture images of food waste and many associated data points. These include bin internal temperature and humidity, IAQ, CO2, the weight of composted food items, thermal imaging depth maps, and VOCs.
 
-Users of the app will be presented with a fun and engaging user interface which will allow them to quickly set-up and begin using the Soundbendor Smart Compost Bin. After setting up the bin with Wi-Fi, any items the user composts will be sent to their app, enabling them to start annotating images and thus contributing to the larger dataset.
+To serve as the user interface to the smart compost bin, we developed a cross-platform mobile application. This user-friendly app tracks usage and informs users about their composting habits. When a new user opens the app for the first time, it guides them through a one-time setup process, using a Bluetooth pairing routine to connect their smart compost bin to the user’s Wi-Fi network. Once connected, the app serves as a portal that provides a data-driven view that tracks a user’s composting habits.
+
+Each time the user opens the app, it automatically downloads any recent images of that user’s compost from our database server. For each new image, the app tasks the user to draw an outline around each compost item in the image using their touchscreen. We save this boundary annotation alongside the transcribed categorical label to our database. These annotated boundaries allow us to train a robust semi-supervised segmentation model to automatically detect food waste. We will deploy this app for our initial data collection field  study to build a dataset of labeled and manually segmented examples. This dataset supports the training of our automatic food waste identification model, and future versions of this application will simply perform food waste detection automatically, without requiring user input.
+
+Additionally, we provide an interactive analytics dashboard to inform users about their composting habits. This dashboard highlights common behavioral trends, including graphs illustrating their most frequently discarded food items. Our mobile app provides personalized analytics to the user with the overarching goal of encouraging informed decision-making that leads to reductions in their food waste footprint.
+
+This app enables crowd-sourcing the laborious task of creating segmentation maps to label the individual items present in the commingled food waste. We acknowledge that users will not necessarily exhaustively annotate every single item they discard, but over time we will curate a large collection of labeled items. Furthermore, because we deploy our smart bin and app in a field study and we do not restrict the compostable food items users are allowed to discard, we will curate a large dataset better representative of food items that users send to compost.
+
 
 ## Value Proposition
 
-The binsight.ai team is pioneering their way through the field of Smart Composting and image annotation, and as such, there is no direct competition. All current solutions that are out there are working towards the same goal: Fighting the effects of food waste and climate change.
+The binsight.ai team is pioneering a new way in the field of Smart Composting and image annotation, and as such, there is no direct competition. All current solutions that are out there are working towards the same goal: Fighting the effects of food waste and climate change.
 
 ## Getting Started
 
@@ -53,6 +60,7 @@ git clone https://github.com/Soundbendor/smart-bin-app.git
 ```
 
 2. Install the Flutter SDK on your machine. Follow the instructions [here](https://flutter.dev/docs/get-started/install).
+
 3. Build and run the app on your local machine:
 
 ```bash
@@ -72,7 +80,7 @@ To use the binsight.ai app:
 3. Open the app and complete the bin set-up process.
 4. Use the Smart Compost Bin as you would any other composting solution.
 5. After composting an item, check the detections page on your app to access and annotate your detection.
-6. Watch your composting breakdown be populated over time.
+6. Watch your composting stats change on the dashboard over time.
 7. Repeat from step 4, and have fun!
 
 ## Features
